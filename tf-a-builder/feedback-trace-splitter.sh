@@ -81,7 +81,8 @@ done
 
 # List the elf files
 find ${ELF_ARTIFACTS_DIR} -name '*.elf' > elfs.txt
-elfs=($(cat elfs.txt))
+grep -w "bl1\|bl2\|bl31" elfs.txt > tf-a-elfs.txt
+elfs=($(cat tf-a-elfs.txt))
 
 # Populate elfs config elements
 for elf in ${elfs[@]::${#elfs[@]}-1}; do
