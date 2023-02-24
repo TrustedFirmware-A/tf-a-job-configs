@@ -35,13 +35,12 @@ wait_lava_job() {
 # at most more N-times with a pause of M-seconds until success.
 resilient_cmd() {
     set +x
-    local cmd="$*"
     local max_wait=10
     local sleep_body=2
     local iter=0
 
     while true; do
-        if ${cmd}; then
+        if "$@"; then
             break
         fi
 
@@ -123,7 +122,7 @@ if [ -n "${QA_SERVER_VERSION}" ]; then
                 exit 1
             else
                 # Retrieve the test job plain log which is a yaml format file from LAVA
-                resilient_cmd lavacli jobs logs --raw ${LAVAJOB_ID} > "${WORKSPACE}/lava-raw.log"
+                resilient_cmd sh -c "lavacli jobs logs --raw ${LAVAJOB_ID} > ${WORKSPACE}/lava-raw.log"
 
                 # Fetch and store LAVA job result (1 failure, 0 success)
                 resilient_cmd lavacli results ${LAVAJOB_ID} | tee "${WORKSPACE}/lava.results"
