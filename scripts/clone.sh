@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Copyright (c) 2021-2022 Arm Limited. All rights reserved.
+# Copyright (c) 2021-2023 Arm Limited. All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #
@@ -93,8 +93,8 @@ for repo in ${repos[@]}; do
     if [ ! -d ${SHARE_FOLDER}/${REPO_NAME} ]; then
         git clone ${GIT_CLONE_PARAMS} ${REPO_URL} ${SHARE_FOLDER}/${REPO_NAME}
 
-        # Repo synchronization
-        if [ -n "${GERRIT_TOPIC}" -a "${REPO_HOST}" = "${GERRIT_HOST}" ]; then
+        # If the Gerrit review that triggered the CI had a topic, it will be used to synchronize the other repositories
+        if [ -n "${GERRIT_TOPIC}" -a "${REPO_HOST}" = "${GERRIT_HOST}" -a "${GERRIT_PROJECT}" != "${REPO_PROJECT}" ]; then
             echo "Got Gerrit Topic: ${GERRIT_TOPIC}"
             REPO_REFSPEC="$(ssh ${SSH_PARAMS} ${CI_BOT_USERNAME}@${REPO_HOST#https://} gerrit query ${GERRIT_QUERY_PARAMS} \
                             project:${REPO_PROJECT} topic:${GERRIT_TOPIC} | ${SHARE_FOLDER}/${JOBS_REPO_NAME}/scripts/parse_refspec.py || true)"
