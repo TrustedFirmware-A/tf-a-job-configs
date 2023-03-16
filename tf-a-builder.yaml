@@ -164,11 +164,11 @@
                                         break
                                     fi
                                 done
+                                tf-a-job-configs/tf-a-builder/lava-log-process.sh
                                 if [ $passed -eq 0 ]; then
                                     echo "LAVA JOB RESULT: 1"
                                 else
                                     echo "LAVA JOB RESULT: 0"
-                                    tf-a-job-configs/tf-a-builder/lava-log-process.sh
                                 fi
                 - postbuildscript:
                     builders:
@@ -190,16 +190,10 @@
                     artifacts: lava-raw-debug.log
                     latest-only: false
                     allow-empty: true
-        - conditional-publisher:
-          - condition-kind: file-exists
-            on-evaluation-failure: dont-run
-            condition-filename: lava.log
-            condition-basedir: workspace
-            action:
-                - archive:
-                    artifacts: lava.log, lava-*.log, feedback.log, config_file.json, covtrace-*.log, trace_report/**
-                    latest-only: false
-                    allow-empty: true
+        - archive:
+            artifacts: lava.log, lava-*.log, feedback.log, config_file.json, covtrace-*.log, trace_report/**
+            latest-only: false
+            allow-empty: true
         - groovy-postbuild:
             script:
                 !include-raw:
