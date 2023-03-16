@@ -14,11 +14,11 @@ def description = ""
 def rootUrl = manager.hudson.getRootUrl()
 
 // Add a LAVA job link to the description
-def matcher = manager.getLogMatcher("TEST JOB URL: (?<url>.*?) TEST JOB ID: (?<jobid>\\d+)")
+def matcher = manager.getLogMatcher("LAVA URL: (?<url>.*?) LAVA JOB ID: (?<jobid>\\d+)")
 if (matcher?.matches()) {
     def testJobId = matcher.group('jobid')
     def testJobUrl = matcher.group('url')
-    description += "&nbsp;Test Job Id: <a href='${testJobUrl}'>${testJobId}</a>"
+    description += "&nbsp;LAVA Job Id: <a href='${testJobUrl}'>${testJobId}</a>"
 
     def lavaLogUrl = "${rootUrl}${manager.build.url}artifact/lava.log"
     description += "<br >&nbsp;LAVA log: <a href='${lavaLogUrl}'>lava.log</a>"
