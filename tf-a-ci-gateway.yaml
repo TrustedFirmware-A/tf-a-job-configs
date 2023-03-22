@@ -62,10 +62,10 @@
         default: false
     - string:
         name: QA_TOOLS_REPO
-        default: 'https://git.trustedfirmware.org/ci/qa-tools.git'
+        default: 'https://git.gitlab.arm.com/tooling/qa-tools.git'
     - string:
         name: QA_TOOLS_BRANCH
-        default: 'openci'
+        default: 'master'
     - string:
             name: SHARE_FOLDER
             default: '/srv/shared/${JOB_NAME}/${BUILD_NUMBER}'
