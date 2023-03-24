@@ -47,5 +47,5 @@ if (connection.responseCode == 200) {
   summary.appendText("Here's a summary of the analysis coverage:", false)
   summary.appendText("<pre>" + summaryContent + "</pre>", false)
 } else {
-  log("Connection response code: ${connection.responseCode}")
+  log("tf-a-coverity/postbuild.groovy: Connection response code: ${connection.responseCode} for ${realUrl}")
 }
