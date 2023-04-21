@@ -74,6 +74,7 @@
       - project: tf-a-ci-gateway
         block: true
         property-file: env.param
+        current-parameters: true
         # Do not trigger tf-a-ci-gateway if env.param file does not exist,
         # which is the case here for TF-A Tests repository
         property-file-fail-on-missing: True
