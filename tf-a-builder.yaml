@@ -141,6 +141,7 @@
             condition-basedir: workspace
             action:
                 - postbuildscript:
+                    mark-unstable-if-failed: true
                     builders:
                         - role: SLAVE
                           build-on:
@@ -169,6 +170,7 @@
                                 tf-a-job-configs/tf-a-builder/lava-log-process.sh
                                 if [ $passed -eq 0 ]; then
                                     echo "LAVA JOB RESULT: 1"
+                                    exit 1
                                 else
                                     echo "LAVA JOB RESULT: 0"
                                 fi
