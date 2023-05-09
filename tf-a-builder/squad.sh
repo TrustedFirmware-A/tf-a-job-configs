@@ -48,6 +48,7 @@ resilient_cmd() {
 
         iter=$(( iter + 1 ))
         if [ ${iter} -ge ${max_wait} ]; then
+            echo "ERROR: Command '$@' failed ${iter} times in row" 1>&2
             set -x
             return 1
         fi
