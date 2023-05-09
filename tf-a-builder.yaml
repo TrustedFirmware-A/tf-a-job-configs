@@ -103,6 +103,8 @@
                 credential-id: LAVA_TOKEN_TF
                 variable: LAVA_TOKEN
     builders:
+        - shell: |
+            aarch64-none-elf-gcc -v || true
         - shell:
             !include-raw: scripts/clone.sh
         - shell:
