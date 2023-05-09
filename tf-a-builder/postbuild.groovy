@@ -42,7 +42,7 @@ if (causes[0] instanceof hudson.model.Cause.UpstreamCause) {
     def jobName = upstreamProject
     def jobConfiguration = upstreamProject
     def jobUrl = "${rootUrl}job/${upstreamProject}/${upstreamBuild}"
-    description += "<br>&nbsp;Build <a href='${jobUrl}'>${upstreamProject} #${upstreamBuild}</a>"
+    description += "<br>&nbsp;Top build: <a href='${jobUrl}'>${upstreamProject} #${upstreamBuild}</a>"
 }
 
 // Set accumulated description
