@@ -121,34 +121,31 @@ else
 fi
 
 
-if true; then
-    if true; then
-        # check that rest query at least get non-empty value
-        if [ -n "${LAVAJOB_ID}" ]; then
+# check that rest query at least get non-empty value
+if [ -n "${LAVAJOB_ID}" ]; then
 
-            echo "LAVA URL: https://${LAVA_SERVER}/scheduler/job/${LAVAJOB_ID} LAVA JOB ID: ${LAVAJOB_ID}"
+    echo "LAVA URL: https://${LAVA_SERVER}/scheduler/job/${LAVAJOB_ID} LAVA JOB ID: ${LAVAJOB_ID}"
 
 
-            # if timeout on waiting for LAVA to complete, create an 'artificial' lava.log indicating
-            # job ID and timeout seconds
-            if ! wait_lava_job ${LAVAJOB_ID}; then
-                echo "Stopped monitoring LAVA JOB ${LAVAJOB_ID}, likely stuck or timeout too short?" | tee "${WORKSPACE}/lava.log"
-                exit 1
-            else
-                # Retrieve the test job plain log which is a yaml format file from LAVA
-                resilient_cmd sh -c "lavacli jobs logs --raw ${LAVAJOB_ID} > ${WORKSPACE}/lava-raw.log"
+    # if timeout on waiting for LAVA to complete, create an 'artificial' lava.log indicating
+    # job ID and timeout seconds
+    if ! wait_lava_job ${LAVAJOB_ID}; then
+        echo "Stopped monitoring LAVA JOB ${LAVAJOB_ID}, likely stuck or timeout too short?" | tee "${WORKSPACE}/lava.log"
+        exit 1
+    else
+        # Retrieve the test job plain log which is a yaml format file from LAVA
+        resilient_cmd sh -c "lavacli jobs logs --raw ${LAVAJOB_ID} > ${WORKSPACE}/lava-raw.log"
 
-                # Fetch and store LAVA job result (1 failure, 0 success)
-                resilient_cmd lavacli results ${LAVAJOB_ID} | tee "${WORKSPACE}/lava.results"
-                if grep -q '\[fail\]' "${WORKSPACE}/lava.results"; then
-                    exit 1
-                else
-                    exit 0
-                fi
-            fi
+        # Fetch and store LAVA job result (1 failure, 0 success)
+        resilient_cmd lavacli results ${LAVAJOB_ID} | tee "${WORKSPACE}/lava.results"
+        if grep -q '\[fail\]' "${WORKSPACE}/lava.results"; then
+            exit 1
         else
-            echo "LAVA Job ID could not be obtained"
-	    exit 1
+            exit 0
         fi
     fi
+else
+    echo "LAVA Job ID could not be obtained"
+    exit 1
 fi
+
