@@ -2,7 +2,7 @@
 
 set -xe
 
-USE_SQUAD=1
+USE_SQUAD=0
 
 # Wait for the LAVA job to finished
 # By default, timeout at 5400 secs (1.5 hours) and monitor every 60 seconds
