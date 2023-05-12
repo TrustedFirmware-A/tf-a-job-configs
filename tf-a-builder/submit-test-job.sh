@@ -2,6 +2,8 @@
 
 set -xe
 
+USE_SQUAD=1
+
 # Wait for the LAVA job to finished
 # By default, timeout at 5400 secs (1.5 hours) and monitor every 60 seconds
 wait_lava_job() {
@@ -59,7 +61,11 @@ resilient_cmd() {
 
 ls -l ${WORKSPACE}
 
-if [ -n "${QA_SERVER_VERSION}" ]; then
+lavacli identities add --username ${LAVA_USER} --token ${LAVA_TOKEN} --uri "https://${LAVA_SERVER}/RPC2" default
+
+if [ $USE_SQUAD -ne 0 -a -n "${QA_SERVER_VERSION}" ]; then
+    # Submit via SQUAD
+
     if [ -n "${GERRIT_CHANGE_NUMBER}" ] && [ -n "${GERRIT_PATCHSET_NUMBER}" ]; then
         curl \
             --fail \
@@ -108,13 +114,20 @@ if [ -n "${QA_SERVER_VERSION}" ]; then
 
             iter=$(( iter + 1 ))
         done
+    fi
+else
+    # Submit directly to LAVA
+    LAVAJOB_ID=$(resilient_cmd lavacli jobs submit artefacts-lava/job.yaml)
+fi
 
+
+if true; then
+    if true; then
         # check that rest query at least get non-empty value
         if [ -n "${LAVAJOB_ID}" ]; then
 
             echo "LAVA URL: https://${LAVA_SERVER}/scheduler/job/${LAVAJOB_ID} LAVA JOB ID: ${LAVAJOB_ID}"
 
-            resilient_cmd lavacli identities add --username ${LAVA_USER} --token ${LAVA_TOKEN} --uri "https://${LAVA_SERVER}/RPC2" default
 
             # if timeout on waiting for LAVA to complete, create an 'artificial' lava.log indicating
             # job ID and timeout seconds
