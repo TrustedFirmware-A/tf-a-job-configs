@@ -37,7 +37,7 @@ wait_lava_job() {
 # at most more N-times with a pause of M-seconds until success.
 resilient_cmd() {
     set +x
-    local max_wait=10
+    local max_retries=10
     local sleep_body=2
     local iter=0
 
@@ -49,7 +49,7 @@ resilient_cmd() {
         sleep ${sleep_body}
 
         iter=$(( iter + 1 ))
-        if [ ${iter} -ge ${max_wait} ]; then
+        if [ ${iter} -ge ${max_retries} ]; then
             echo "ERROR: Command '$@' failed ${iter} times in row" 1>&2
             set -x
             return 1
