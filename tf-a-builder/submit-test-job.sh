@@ -47,6 +47,12 @@ resilient_cmd() {
         fi
 
         sleep ${sleep_body}
+        # Exponential backoff
+        sleep_body=$(( sleep_body * 2 ))
+        if [ ${sleep_body} -ge 60 ]; then
+            sleep_body=60
+            echo "WARNING: Command '$@' still not successful on retry #${iter}, exp backoff already limited" 1>&2
+        fi
 
         iter=$(( iter + 1 ))
         if [ ${iter} -ge ${max_retries} ]; then
