@@ -278,6 +278,14 @@
           kill-phase-on: NEVER
           predefined-parameters: TEST_GROUPS=tf-l1-boot-tests-plat
           property-file: tf-a-env.param
+        # Platform-specific self-tests.
+        # These tests run from the BL31 image then halt the target.
+        - name: tf-a-ci-gateway
+          alias: tf-plat-tests
+          current-parameters: true
+          kill-phase-on: NEVER
+          predefined-parameters: TEST_GROUPS=tf-plat-tests
+          property-file: tf-a-env.param
     - multijob:
         name: Code coverage
         condition: COMPLETED
