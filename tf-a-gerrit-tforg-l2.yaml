@@ -100,7 +100,7 @@
         - kill-phase-on: NEVER
           name: tf-a-ci-gateway
           predefined-parameters: |
-            TEST_GROUPS=tf-l1-boot-tests-aarch32 tf-l1-boot-tests-bl2_el3 tf-l1-boot-tests-cortex tf-l1-boot-tests-foundation tf-l1-boot-tests-gicv2 tf-l1-boot-tests-misc tf-plat-tests
+            TEST_GROUPS=tf-l1-boot-tests-aarch32 tf-l1-boot-tests-bl2_el3 tf-l1-boot-tests-cortex tf-l1-boot-tests-foundation tf-l1-boot-tests-gicv2 tf-l1-boot-tests-misc tf-plat-tests tf-l1-boot-tests-plat
             TF_REFSPEC=$GERRIT_REFSPEC
           property-file: env.param
     - multijob:
