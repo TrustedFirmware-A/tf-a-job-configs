@@ -54,7 +54,7 @@ fi
 
 mkdir -p ${WORKSPACE}/nfs/downloads/mbedtls
 cd ${WORKSPACE}/nfs/downloads/mbedtls
-curl --connect-timeout 5 --retry 5 --retry-delay 1 -sLSO -k -C - ${MBEDTLS_URL}
+curl --fail --connect-timeout 5 --retry 5 -sLSO -k -C - ${MBEDTLS_URL}
 export mbedtls_archive=${WORKSPACE}/nfs/downloads/mbedtls/$(ls -1 mbedtls-*.tar.gz)
 
 # Path to root of CI repository
