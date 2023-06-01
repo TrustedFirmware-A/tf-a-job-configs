@@ -85,7 +85,7 @@
         EOF
     - trigger-builds:
       - project:
-        - tf-a-builder
+        - tf-a-lts2.8-builder
         block: true
         property-file: share.param
         current-parameters: true
