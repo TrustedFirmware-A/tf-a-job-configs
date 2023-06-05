@@ -1,6 +1,6 @@
 - job:
     name: tf-a-lts2.8-gerrit-tforg-l1
-    node: docker-amd64-tf-a-bionic
+    node: docker-amd64-tf-a-lts2.8-jammy
     project-type: multijob
     concurrent: true
     disabled: false
@@ -109,7 +109,7 @@
         name: Run doc build check
         projects:
         - kill-phase-on: NEVER
-          name: tf-a-ci-gateway
+          name: tf-a-lts2.8-ci-gateway
           current-parameters: true
           predefined-parameters: |
             TEST_GROUPS=tf-l1-check-docs
@@ -119,7 +119,7 @@
         name: Run build tests
         projects:
         - kill-phase-on: NEVER
-          name: tf-a-ci-gateway
+          name: tf-a-lts2.8-ci-gateway
           current-parameters: true
           predefined-parameters: |
             TEST_GROUPS=tf-l1-build-fvp tf-l1-build-juno tf-l1-build-clang tf-l1-build-plat spm-l1-build-tests
