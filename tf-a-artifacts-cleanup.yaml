@@ -1,0 +1,24 @@
+- job:
+    name: tf-a-artifacts-cleanup
+    node: master
+    project-type: freestyle
+    concurrent: true
+    disabled: false
+    defaults: global
+    Description: |
+      Gradually cleanup artifacts in TF-A builds
+    properties:
+        - build-discarder:
+            days-to-keep: 50
+            num-to-keep: 50
+        - authorization:
+            !include: authorization.yaml.inc
+    triggers:
+        - timed: 'H 0 * * *'
+    wrappers:
+        - timestamps
+    builders:
+        - shell: |
+            #!/bin/bash
+
+            find /var/lib/jenkins/jobs/tf-a-builder/builds -name build.log -mtime +6 | head -n100 | xargs -i -n1 bash -c "echo {}; gzip -9 {}"
