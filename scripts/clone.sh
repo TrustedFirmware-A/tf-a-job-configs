@@ -37,6 +37,8 @@ GERRIT_QUERY_PARAMS="--format=JSON --patch-sets --current-patch-set status:open"
 
 # Defaults Projects
 TF_GERRIT_PROJECT="${TF_GERRIT_PROJECT:-TF-A/trusted-firmware-a}"
+TF_M_TESTS_GERRIT_PROJECT="${TF_GERRIT_PROJECT:-TF-M/tf-m-tests}"
+TF_M_EXTRAS_GERRIT_PROJECT="${TF_GERRIT_PROJECT:-TF-M/tf-m-extras}"
 TFTF_GERRIT_PROJECT="${TFTF_GERRIT_PROJECT:-TF-A/tf-a-tests}"
 CI_GERRIT_PROJECT="${CI_GERRIT_PROJECT:-ci/tf-a-ci-scripts}"
 JOBS_PROJECT="${JOBS_PROJECT:-ci/tf-a-job-configs.git}"
@@ -56,6 +58,8 @@ repos=(
     "${GERRIT_HOST};${CI_GERRIT_PROJECT};tf-a-ci-scripts;${CI_REFSPEC}"
     "${GERRIT_HOST};${TF_GERRIT_PROJECT};trusted-firmware-a;${TF_GERRIT_REFSPEC}"
     "${GERRIT_HOST};${TFTF_GERRIT_PROJECT};tf-a-tests;${TFTF_GERRIT_REFSPEC}"
+    "${GERRIT_HOST};${TF_M_TESTS_GERRIT_PROJECT};tf-m-tests;${TF_M_TESTS_GERRIT_REFSPEC}"
+    "${GERRIT_HOST};${TF_M_EXTRAS_GERRIT_PROJECT};tf-m-extras;${TF_M_EXTRAS_GERRIT_REFSPEC}"
 )
 
 # Take into consideration non-CI runs where SHARE_FOLDER variable
