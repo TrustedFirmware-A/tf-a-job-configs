@@ -37,8 +37,8 @@ GERRIT_QUERY_PARAMS="--format=JSON --patch-sets --current-patch-set status:open"
 
 # Defaults Projects
 TF_GERRIT_PROJECT="${TF_GERRIT_PROJECT:-TF-A/trusted-firmware-a}"
-TF_M_TESTS_GERRIT_PROJECT="${TF_GERRIT_PROJECT:-TF-M/tf-m-tests}"
-TF_M_EXTRAS_GERRIT_PROJECT="${TF_GERRIT_PROJECT:-TF-M/tf-m-extras}"
+TF_M_TESTS_GERRIT_PROJECT="${TF_M_TESTS_GERRIT_PROJECT:-TF-M/tf-m-tests}"
+TF_M_EXTRAS_GERRIT_PROJECT="${TF_M_EXTRAS_GERRIT_PROJECT:-TF-M/tf-m-extras}"
 TFTF_GERRIT_PROJECT="${TFTF_GERRIT_PROJECT:-TF-A/tf-a-tests}"
 CI_GERRIT_PROJECT="${CI_GERRIT_PROJECT:-ci/tf-a-ci-scripts}"
 JOBS_PROJECT="${JOBS_PROJECT:-ci/tf-a-job-configs.git}"
