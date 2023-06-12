@@ -43,6 +43,9 @@
             name: TFTF_GERRIT_REFSPEC
             default: '+refs/heads/master:refs/remotes/origin/master'
         - string:
+            name: CI_REFSPEC
+            default: '+refs/heads/master:refs/remotes/origin/master'
+        - string:
             name: DOCKER_REGISTRY
             default: '987685672616.dkr.ecr.us-east-1.amazonaws.com'
         - string:
