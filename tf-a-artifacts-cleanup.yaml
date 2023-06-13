@@ -14,7 +14,7 @@
         - authorization:
             !include: authorization.yaml.inc
     triggers:
-        - timed: 'H 0 * * *'
+        - timed: 'H H/8 * * *'
     wrappers:
         - timestamps
     builders:
