@@ -116,6 +116,7 @@
             properties-file: artefacts/env
         - shell: |
             ln -s "artefacts/${BIN_MODE:-release}" "artefacts-lava"
+            echo ${BIN_MODE:-release} >lava-binmode.txt
         - conditional-step:
             condition-kind: file-exists
             on-evaluation-failure: dont-run
@@ -134,7 +135,7 @@
                 EOF
     publishers:
         - archive:
-            artifacts: artefacts/**, artefacts-lava/**
+            artifacts: artefacts/**, lava-binmode.txt
             latest-only: false
             allow-empty: true
         - conditional-publisher:
