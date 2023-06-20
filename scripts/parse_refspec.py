@@ -47,8 +47,7 @@ changes.pop()
 
 if not changes:
     raise Exception("Can not find anything.")
-
-if len(changes) > 1:
-   print_topic_tip(changes)
+elif len(changes) > 1:
+    print_topic_tip(changes)
 else:
     print(changes[0]["currentPatchSet"]["ref"])
