@@ -46,7 +46,7 @@ except:
 changes.pop()
 
 if not changes:
-    raise Exception("Can not find anything.")
+    print("Warning: no changes found, returning empty string", file=sys.stderr)
 elif len(changes) > 1:
     print_topic_tip(changes)
 else:
