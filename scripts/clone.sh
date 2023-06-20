@@ -103,7 +103,7 @@ for repo in ${repos[@]}; do
         if [ -n "${GERRIT_TOPIC}" -a "${REPO_HOST}" = "${GERRIT_HOST}" -a "${GERRIT_PROJECT}" != "${REPO_PROJECT}" ]; then
             echo "Got Gerrit Topic: ${GERRIT_TOPIC}"
             REPO_REFSPEC="$(ssh ${SSH_PARAMS} ${CI_BOT_USERNAME}@${REPO_HOST#https://} gerrit query ${GERRIT_QUERY_PARAMS} \
-                            project:${REPO_PROJECT} topic:${GERRIT_TOPIC} | ${SHARE_FOLDER}/${JOBS_REPO_NAME}/scripts/parse_refspec.py || true)"
+                            project:${REPO_PROJECT} topic:${GERRIT_TOPIC} | ${SHARE_FOLDER}/${JOBS_REPO_NAME}/scripts/parse_refspec.py)"
             if [ -z "${REPO_REFSPEC}" ]; then
                 REPO_REFSPEC="${REPO_DEFAULT_REFSPEC}"
                 echo "Roll back to \"${REPO_REFSPEC}\" for \"${REPO_PROJECT}\""
