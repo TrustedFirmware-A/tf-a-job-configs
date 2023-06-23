@@ -1,0 +1,60 @@
+- job:
+    name: tf-a-weekly.yaml
+    node: docker-amd64-tf-a-bionic
+    project-type: freestyle
+    concurrent: false
+    disabled: false
+    description: Triggers tf-a-ci-coverage-gateway.yaml(coverage) for the TF-A project.
+    properties:
+    - build-discarder:
+        days-to-keep: 14
+        num-to-keep: 60
+    - authorization:
+        !include: authorization.yaml.inc
+    parameters:
+        - string:
+            name: TF_GERRIT_PROJECT
+            default: 'TF-A/trusted-firmware-a'
+        - string:
+            name: TF_GERRIT_BRANCH
+            default: 'refs/heads/integration'
+        - string:
+            name: TF_GERRIT_REFSPEC
+            default: '+refs/heads/integration:refs/remotes/origin/integration'
+        - string:
+            name: TFTF_GERRIT_PROJECT
+            default: 'TF-A/tf-a-tests'
+        - string:
+            name: TFTF_GERRIT_BRANCH
+            default: 'refs/heads/master'
+        - string:
+            name: TFTF_GERRIT_REFSPEC
+            default: '+refs/heads/master:refs/remotes/origin/master'
+        - string:
+            name: CI_REFSPEC
+            default: '+refs/heads/master:refs/remotes/origin/master'
+        - string:
+            name: LAVA_PRIORITY
+            default: 'low'
+        - string:
+            name: SHARE_FOLDER
+            default: '/srv/shared/staging/${JOB_NAME}/${BUILD_NUMBER}'
+            description: 'Folder containing shared repositories for downstream pipeline jobs'
+    wrappers:
+        - timestamps
+    builders:
+        - shell:
+            !include-raw: scripts/clone.sh
+        - shell: |
+            #!/bin/bash
+            set -e
+            cat << EOF > share.param
+            SHARE_FOLDER=${SHARE_FOLDER}
+            EOF
+        - trigger-builds:
+            - project:
+                - tf-a-ci-coverage-gateway.yaml
+              block: true
+              current-parameters: true
+    triggers:
+        - timed: '59 23 * * 7'

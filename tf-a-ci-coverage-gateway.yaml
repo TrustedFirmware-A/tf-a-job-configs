@@ -1,0 +1,127 @@
+- job:
+    name: tf-a-ci-coverage-gateway.yaml
+    node: docker-amd64-tf-a-jammy
+    project-type: freestyle
+    concurrent: true
+    disabled: false
+    defaults: global
+    description: |
+      Main job entry point for a Trusted Firmware A with coverage focus(TF-A) CI.
+    properties:
+    - build-discarder:
+        days-to-keep: 15
+    - throttle:
+        option: project
+        enabled: true
+        max-per-node: 3
+        max-total: 10
+    - authorization:
+        !include: authorization.yaml.inc
+    wrappers:
+    - credentials-binding:
+      - ssh-user-private-key:
+          credential-id: TFA_CI_BOT_USER_SSH_KEY
+          key-file-variable: CI_BOT_KEY
+          username-variable: CI_BOT_USERNAME
+          passphrase-variable: ''
+    - workspace-cleanup
+    - timeout:
+        timeout: 240
+        fail: true
+    - timestamps
+    parameters:
+    - string:
+        name: TEST_GROUPS
+        default: tf-l3-code-coverage
+        description: |
+          White space separated list of test configs: can be mix of specific
+          test configs (e.g., <code>l1/fvp-default:fvp-linux-default</code>) and
+          group names (e.g., <code>l1 l2</code>).
+    - string:
+        name: TF_GERRIT_REFSPEC
+        default: '+refs/heads/master:refs/remotes/origin/master'
+        description: |
+          trusted-firmware-a refspec to use. The master branch is used by default.
+    - string:
+        name: TFTF_GERRIT_REFSPEC
+        default: '+refs/heads/master:refs/remotes/origin/master'
+        description: |
+          tf-a-tests refspec to use. The master branch is used by default.
+    - string:
+        name: TF_M_TESTS_GERRIT_REFSPEC
+        default: '+refs/heads/master:refs/remotes/origin/master'
+        description: |
+          tf-m-tests refspec to use. The master branch is used by default.
+    - string:
+        name: TF_M_EXTRAS_GERRIT_REFSPEC
+        default: '+refs/heads/master:refs/remotes/origin/master'
+        description: |
+          tf-m-extras refspec to use. The master branch is used by default.
+    - string:
+       name: SPM_REFSPEC
+       default: '+refs/heads/master:refs/remotes/origin/master'
+       description: |
+         SPM(Hafnium) refspec to use. The master branch is used by default.
+    - string:
+        name: CI_REFSPEC
+        default: '+refs/heads/master:refs/remotes/origin/master'
+        description: |
+          tf-a-ci-scripts refspec to use. The master branch is used by default.
+    - bool:
+        name: ENABLE_STATIC_CHECK
+        default: false
+    - string:
+        name: QA_TOOLS_REPO
+        default: 'https://git.gitlab.arm.com/tooling/qa-tools.git'
+    - string:
+        name: QA_TOOLS_BRANCH
+        default: 'master'
+    - string:
+            name: SHARE_FOLDER
+            default: '/srv/shared/${JOB_NAME}/${BUILD_NUMBER}'
+            description: 'Folder containing shared repositories for downstream pipeline jobs'
+    builders:
+    - shell:
+        !include-raw: scripts/clone.sh
+    - shell: |
+        #!/bin/bash
+        set -e
+        CI_ROOT=${PWD}/tf-a-ci-scripts
+        export workspace=$PWD
+        export test_groups=$TEST_GROUPS
+        $CI_ROOT/script/gen_test_desc.py
+        cat << EOF > share.param
+        SHARE_FOLDER=${SHARE_FOLDER}
+        EOF
+    - trigger-builds:
+      - project:
+        - tf-a-builder
+        block: true
+        property-file: share.param
+        current-parameters: true
+        property-file-fail-on-missing: false
+        parameter-factories:
+        - factory: filebuild
+          file-pattern: '*.testprop'
+          no-files-found-action: FAIL
+    publishers:
+        - postbuildscript:
+            builders:
+                - role: SLAVE
+                  build-on:
+                      - SUCCESS
+                      - FAILURE
+                      - UNSTABLE
+                      - ABORTED
+                      - NOT_BUILT
+                  build-steps:
+                      - shell: |-
+                          #!/bin/bash -e
+                          export CI_ROOT=${PWD}/tf-a-ci-scripts
+                          bash "$CI_ROOT/job/tf-ci-gateway/generate_report.sh"
+        - archive:
+            artifacts: report.json, report.html, merge/outdir/**
+        - groovy-postbuild:
+            script:
+                !include-raw:
+                  - tf-a-ci-gateway/postbuild.groovy
