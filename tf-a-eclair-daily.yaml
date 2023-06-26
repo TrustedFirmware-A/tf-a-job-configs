@@ -125,6 +125,7 @@
         detachLicense 5400
         trap "returnLicense" EXIT
         tf-a-ci-scripts/eclair/analyze.sh ${TF_CONFIG}
+        tf-ci-scripts/eclair/analyze_index_html.sh
     publishers:
         - archive:
             artifacts: 'ECLAIR/**, index.html'
