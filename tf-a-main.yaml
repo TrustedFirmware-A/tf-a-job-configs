@@ -294,6 +294,7 @@
         condition: COMPLETED
         projects:
         - name: tf-a-ci-gateway
+          alias: tf-l3-code-coverage
           current-parameters: true
           kill-phase-on: NEVER
           predefined-parameters: TEST_GROUPS=tf-l3-code-coverage
@@ -303,6 +304,7 @@
         condition: COMPLETED
         projects:
         - name: tf-a-ci-gateway
+          alias: tf-l1-check-docs
           current-parameters: true
           kill-phase-on: NEVER
           predefined-parameters: TEST_GROUPS=tf-l1-check-docs
