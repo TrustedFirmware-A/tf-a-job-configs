@@ -122,9 +122,23 @@
             (cd $(basename ${GERRIT_PROJECT}); git checkout $(git rev-list -n1 --before="today" HEAD))
         fi
         (cd $(basename ${GERRIT_PROJECT}); git log -n1)
+
+        export ECLAIR_CONFIG_DIR=$PWD/tf-a-ci-scripts/eclair
+        . tf-ci-scripts/eclair/utils.sh
+        # TODO
+        #. tf-a-ci-scripts/eclair/utils_tfa.sh
+
         detachLicense 5400
         trap "returnLicense" EXIT
-        tf-a-ci-scripts/eclair/analyze.sh ${TF_CONFIG}
+
+        #tf-a-ci-scripts/eclair/analyze.sh ${TF_CONFIG}
+        . tf-a-ci-scripts/eclair/analyze_common.sh
+        export ECLAIR_ANALYSIS=ECLAIR
+        eclair_prepare
+        eclair_analyze tf-a-ci-scripts/eclair/build-tfa.sh ${TF_CONFIG}
+        eclair_make_ecd
+        eclair_make_reports
+
         tf-ci-scripts/eclair/analyze_index_html.sh
     publishers:
         - archive:
