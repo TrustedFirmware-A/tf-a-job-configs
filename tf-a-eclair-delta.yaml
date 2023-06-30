@@ -111,6 +111,8 @@
         pwd
         env | grep GERRIT
         git clone https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
+        git clone https://git.trustedfirmware.org/ci/tf-ci-scripts.git
+
         git clone https://${GERRIT_HOST}/${GERRIT_PROJECT} -b ${GERRIT_BRANCH}
         if [ -n "${GERRIT_REFSPEC}" ]; then
         (
@@ -119,6 +121,7 @@
         )
         fi
         (cd trusted-firmware-a; git log --oneline -n5)
+
         detachLicense 9000
         trap "returnLicense || true" EXIT
         tf-a-ci-scripts/eclair/analyze_delta.sh ${TF_CONFIG}
