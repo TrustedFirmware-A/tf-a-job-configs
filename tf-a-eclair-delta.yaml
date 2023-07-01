@@ -122,9 +122,39 @@
         fi
         (cd trusted-firmware-a; git log --oneline -n5)
 
+        export ECLAIR_CONFIG_DIR=$PWD/tf-a-ci-scripts/eclair
+        . tf-ci-scripts/eclair/utils.sh
+        # TODO
+        #. tf-a-ci-scripts/eclair/utils_tfa.sh
+
         detachLicense 9000
         trap "returnLicense || true" EXIT
-        tf-a-ci-scripts/eclair/analyze_delta.sh ${TF_CONFIG}
+
+        . tf-a-ci-scripts/eclair/analyze_common.sh
+
+        export ECLAIR_ANALYSIS=ECLAIR
+        eclair_prepare
+        eclair_analyze tf-a-ci-scripts/eclair/build-tfa.sh ${TF_CONFIG}
+        eclair_make_ecd
+        eclair_make_reports
+
+        echo "========= Building base revision ========="
+
+        (
+            cd $(basename ${GERRIT_PROJECT})
+            git checkout HEAD^
+            git log --oneline -n5
+        )
+
+        export ECLAIR_ANALYSIS=ECLAIR_BASE
+        eclair_prepare
+        eclair_analyze tf-a-ci-scripts/eclair/build-tfa.sh ${TF_CONFIG}
+        eclair_make_ecd
+        eclair_make_reports
+
+        eclair_make_delta_report ECLAIR_BASE ECLAIR
+        tf-ci-scripts/eclair/eclair_diff_report.py diff_output > misra_delta.txt
+
         returnLicense
         tf-a-ci-scripts/eclair/post_gerrit_comment.sh
     publishers:
