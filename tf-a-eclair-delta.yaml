@@ -156,6 +156,7 @@
         tf-ci-scripts/eclair/eclair_diff_report.py diff_output > misra_delta.txt
 
         returnLicense
+        tf-ci-scripts/eclair/analyze_delta_index_html.sh
         tf-ci-scripts/eclair/post_gerrit_comment.sh
     publishers:
         - archive:
