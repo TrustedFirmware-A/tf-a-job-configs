@@ -132,7 +132,6 @@
         detachLicense 5400
         trap "returnLicense" EXIT
 
-        #tf-a-ci-scripts/eclair/analyze.sh ${TF_CONFIG}
         . tf-a-ci-scripts/eclair/analyze_common.sh
         export ECLAIR_ANALYSIS=ECLAIR
         eclair_prepare
