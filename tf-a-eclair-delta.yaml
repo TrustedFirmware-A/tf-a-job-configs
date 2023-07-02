@@ -156,7 +156,7 @@
         tf-ci-scripts/eclair/eclair_diff_report.py diff_output > misra_delta.txt
 
         returnLicense
-        tf-a-ci-scripts/eclair/post_gerrit_comment.sh
+        tf-ci-scripts/eclair/post_gerrit_comment.sh
     publishers:
         - archive:
             artifacts: 'ECLAIR*/**, diff_output/**, misra_delta.txt, *issues_html/**, index.html'
