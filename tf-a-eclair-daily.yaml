@@ -138,6 +138,7 @@
         eclair_analyze tf-a-ci-scripts/eclair/build-tfa.sh ${TF_CONFIG}
         eclair_make_ecd
         eclair_make_reports
+        eclair_compress_db
 
         tf-ci-scripts/eclair/analyze_index_html.sh
     publishers:
