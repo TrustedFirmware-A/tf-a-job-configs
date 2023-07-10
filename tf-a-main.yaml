@@ -270,6 +270,12 @@
           predefined-parameters: TEST_GROUPS=tf-l3-boot-tests-misc
           property-file: tf-a-env.param
         - name: tf-a-ci-gateway
+          alias: tf-l3-boot-tests-n1sdp
+          current-parameters: true
+          kill-phase-on: NEVER
+          predefined-parameters: TEST_GROUPS=tf-l3-boot-tests-n1sdp
+          property-file: tf-a-env.param
+        - name: tf-a-ci-gateway
           alias: spm-l3-boot-tests
           current-parameters: true
           kill-phase-on: NEVER
