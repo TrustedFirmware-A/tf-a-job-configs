@@ -15,7 +15,7 @@
         curl -X POST -d "branches=$RTD_BRANCHES" -d "token=$RTD_TOKEN" https://readthedocs.org/api/v2/webhook/trustedfirmware-a/87181/
     properties:
     - build-discarder:
-        days-to-keep: 7
+        days-to-keep: 60
         num-to-keep: 10
     triggers:
     - gerrit:
