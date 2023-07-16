@@ -1,7 +1,7 @@
 - job:
     name: tf-a-tftf-main
     description: Main CI job for the Trusted Firmware-A Test Framework.
-    node: docker-amd64-tf-a-bionic
+    node: docker-amd64-tf-a-jammy
     project-type: multijob
     concurrent: true
     disabled: false
