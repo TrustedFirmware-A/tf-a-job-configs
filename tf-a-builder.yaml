@@ -85,10 +85,6 @@
             name: QA_TOOLS_BRANCH
             default: 'master'
         - string:
-            name: CLEAN_UP_ARTIFACTS
-            default: 1
-            description: 'Set to 1 to remove artifacts not needed for automated testing, 0 to archive all artifacts (for debugging, etc.)'
-        - string:
             name: SHARE_FOLDER
             default: '/srv/shared/${JOB_NAME}/${BUILD_NUMBER}'
             description: 'Folder containing shared repositories for downstream pipeline jobs'
@@ -121,10 +117,6 @@
         - shell: |
             ln -s "artefacts/${BIN_MODE:-release}" "artefacts-lava"
             echo ${BIN_MODE:-release} >lava-binmode.txt
-            if [ "${CLEAN_UP_ARTIFACTS}" == "1" ]; then
-                find artefacts -name '*.elf' | xargs rm
-                # TODO: Remove other "superfluous" artifacts as needed
-            fi
         - conditional-step:
             condition-kind: file-exists
             on-evaluation-failure: dont-run
