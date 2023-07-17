@@ -121,7 +121,7 @@
         - shell: |
             ln -s "artefacts/${BIN_MODE:-release}" "artefacts-lava"
             echo ${BIN_MODE:-release} >lava-binmode.txt
-            if [ "${CLEAN_UP_ARTIFACTS}" = "1" ]; then
+            if [ "${CLEAN_UP_ARTIFACTS}" == "1" ]; then
                 find artefacts -name '*.elf' | xargs rm
                 # TODO: Remove other "superfluous" artifacts as needed
             fi
