@@ -33,6 +33,9 @@
             name: GERRIT_CHANGE_NUMBER
             default: ''
         - string:
+            name: TF_GERRIT_REFSPEC
+            default: '+refs/heads/lts-v2.8:refs/remotes/origin/lts-v2.8'
+        - string:
             name: TFTF_GERRIT_REFSPEC
             default: ${GERRIT_REFSPEC}
             description: 'Parameter only used by the clone script'
