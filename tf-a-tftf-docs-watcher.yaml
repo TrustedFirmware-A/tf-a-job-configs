@@ -1,6 +1,6 @@
 - job:
     name: tf-a-tftf-docs-watcher
-    node: docker-amd64-tf-a-bionic
+    node: docker-amd64-tf-a-jammy
     project-type: freestyle
     concurrent: false
     description:
