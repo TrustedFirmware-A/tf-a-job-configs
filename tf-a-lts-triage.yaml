@@ -6,7 +6,7 @@
     disabled: false
     defaults: global
     Description: |
-      Job which triges incoming TF-A patches for suitability for LTS branch (https://linaro.atlassian.net/browse/TFC-395)
+      Job which triages incoming TF-A patches for suitability for LTS branch (https://linaro.atlassian.net/browse/TFC-395)
     properties:
         - build-discarder:
             days-to-keep: 45
