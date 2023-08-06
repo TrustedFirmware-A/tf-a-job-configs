@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'docker-amd64-tf-a-bionic'
+        label 'docker-amd64-tf-a-jammy'
     }
 
     parameters {
