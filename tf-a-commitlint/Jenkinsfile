@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'docker-amd64-tf-a-bionic'
+        label 'docker-amd64-tf-a-jammy'
     }
 
     parameters {
@@ -46,12 +46,12 @@ pipeline {
             steps {
                 script {
                     if (fileExists('.nvmrc')) {
-                        sh "bash -c 'nvm install'"
+                        sh "bash --norc -c 'nvm install'"
                     }
                 }
 
-                sh "bash -c 'npm install --no-save commitlint'"
-                sh "bash -c 'npx commitlint --from=${mergeBase}'"
+                sh "bash --norc -c 'npm install --no-save commitlint'"
+                sh "bash --norc -c 'npx commitlint --from=${mergeBase}'"
             }
         }
     }
