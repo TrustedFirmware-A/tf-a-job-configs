@@ -1,0 +1,82 @@
+- job:
+    name: tf-a-windows-builder
+    node: tf-a-windows
+    project-type: matrix
+    concurrent: true
+    disabled: false
+    description: |
+      Trusted Firmware A (TF-A) Windows hosted builder
+    properties:
+      - throttle:
+          enabled: true
+          max-per-node: 10
+          max-total: 10
+          option: project
+      - build-discarder:
+          days-to-keep: 15
+          artifact-num-to-keep: 40000
+    axes:
+      - axis:
+          name: DEBUG
+          type: user-defined
+          values: ['0', '1']
+      - axis:
+          name: label
+          type: slave
+          values:
+            - tf-a-windows
+    builders:
+      - batch: |
+          make CROSS_COMPILE=aarch64-none-elf- PLAT=fvp DEBUG=%DEBUG% V=1 -j all
+    parameters:
+      - string:
+          name: TF_GERRIT_PROJECT
+          default: TF-A/trusted-firmware-a
+      - string:
+          name: TF_GERRIT_BRANCH
+          default: refs/heads/master
+      - string:
+          name: TF_SRC_REPO_URL
+          default: https://review.trustedfirmware.org/TF-A/trusted-firmware-a
+      - string:
+          name: TF_GERRIT_REFSPEC
+          default: +refs/heads/master:refs/remotes/origin/master
+      - string:
+          name: ARMLMD_LICENSE_FILE
+          default: 27000@flexnet.trustedfirmware.org
+      - string:
+          name: MBEDTLS_URL
+          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.3.0.tar.gz
+      - string:
+          name: PARAMS
+          description: Debug parameters for make
+      - string:
+          name: SHARE_FOLDER
+          default: /srv/shared/${JOB_NAME}/${BUILD_NUMBER}
+          description: Folder containing shared repositories for downstream pipeline jobs
+    wrappers:
+      - timestamps
+      - workspace-cleanup
+      - timeout:
+          timeout: 120
+          fail: true
+      - credentials-binding:
+          - text:
+              credential-id: QA_REPORTS_TOKEN
+              variable: QA_REPORTS_TOKEN
+    publishers:
+      - archive:
+          artifacts: build/**/*
+          excludes: build/**/*.o,build/**/*.d
+    scm:
+      - git:
+          url: ${TF_SRC_REPO_URL}
+          refspec: ${TF_GERRIT_REFSPEC}
+          branches:
+            - ${TF_GERRIT_BRANCH}
+          choosing-strategy: gerrit
+          skip-tag: true
+          shallow-clone: true
+          wipe-workspace: false
+          honor-refspec: true
+          allow-empty: true
