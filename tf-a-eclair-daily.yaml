@@ -81,8 +81,8 @@
             name: SHARE_FOLDER
             default: '/srv/shared/${JOB_NAME}/${BUILD_NUMBER}'
             description: 'Folder containing shared repositories for downstream pipeline jobs'
-#    triggers:
-#    - timed : 'H 2 * * *'
+    triggers:
+    - timed : 'H 2 * * *'
 #    - gerrit:
 #        silent: true
 #        server-name: 'review.trustedfirmware.org'
