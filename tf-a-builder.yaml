@@ -86,7 +86,7 @@
             default: 'master'
         - string:
             name: LAVA_RETRIES
-            default: 3
+            default: 2
             description: |
               Number of tries submitting job to LAVA in case it fails (stopgap measure against nondeterministic failures)
         - string:
