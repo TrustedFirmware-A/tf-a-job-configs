@@ -47,7 +47,7 @@
             default: 'https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.4.1.tar.gz'
         - string:
             name: LAVA_RETRIES
-            default: 3
+            default: 2
             description: |
               Number of tries submitting job to LAVA in case it fails (stopgap measure against nondeterministic failures)
         - string:
