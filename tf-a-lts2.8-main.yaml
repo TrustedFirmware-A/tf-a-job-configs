@@ -44,7 +44,7 @@
             default: '+refs/heads/lts-v2.8:refs/remotes/origin/lts-v2.8'
         - string:
             name: MBEDTLS_URL
-            default: 'https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-2.28.1.tar.gz'
+            default: 'https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-2.28.5.tar.gz'
         - string:
             name: SHARE_FOLDER
             default: '/srv/shared/${JOB_NAME}/${BUILD_NUMBER}'
