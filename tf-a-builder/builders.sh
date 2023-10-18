@@ -119,6 +119,8 @@ mkdir -p /arm/warehouse/Distributions/FA/ARMCompiler/6.18/19/standalone-linux-x8
 ln -s ${TOOLS_DIR}/armclang-6.18/bin \
       /arm/warehouse/Distributions/FA/ARMCompiler/6.18/19/standalone-linux-x86_64-rel/bin
 
+${TOOLS_DIR}/armclang-6.18/bin/armclang --vsn
+
 # Mandatory workspace
 export workspace="${workspace:-${WORKSPACE}/workspace}"
 
