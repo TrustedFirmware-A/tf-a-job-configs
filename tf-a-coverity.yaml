@@ -57,14 +57,6 @@
             set -e
             set -x
 
-            # Install crypto library
-            CRYPTOCELL_LIB_PATH=/arm/projectscratch/ssg/trusted-fw
-            mkdir -p ${CRYPTOCELL_LIB_PATH}
-            cd ${CRYPTOCELL_LIB_PATH}
-            curl --connect-timeout 5 --retry 5 --retry-delay 1 \
-                 -sLSO -C - https://downloads.trustedfirmware.org/tf-a/dummy-crypto-lib.tar
-            tar xf dummy-crypto-lib.tar
-
             # Fetch coverity tool and untar it
             cd ${WORKSPACE}
             wget https://downloads.trustedfirmware.org/tf-a/tf-a-coverity/coverity_tool.tgz

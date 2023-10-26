@@ -68,14 +68,6 @@ export nfs_volume="${WORKSPACE}/nfs"
 project_filer="${nfs_volume}/projectscratch/ssg/trusted-fw"
 mkdir -p ${project_filer}
 
-# FIXME: place below code in above loop
-# fetch https://downloads.trustedfirmware.org/tf-a/dummy-crypto-lib.tar
-cd ${project_filer}
-resilient_cmd curl --connect-timeout 5 --retry 5 --retry-delay 1 -fsSLo \
-     dummy-crypto-lib.tar \
-     https://downloads.trustedfirmware.org/tf-a/dummy-crypto-lib.tar
-tar xf dummy-crypto-lib.tar
-
 # fetch Juno rootfs, required by fvp
 linaro_2001_release="/nfs/downloads/linaro/20.01"
 cd ${linaro_2001_release}
@@ -101,13 +93,6 @@ mkdir -p /arm/pdsw/downloads/scp-models/tools/gcc-arm-none-eabi-10-2020-q4-major
 ln -s \
    ${TOOLS_DIR}/gnu-rm/bin \
    /arm/pdsw/downloads/scp-models/tools/gcc-arm-none-eabi-10-2020-q4-major/bin
-
-# /arm/projectscratch/ssg/trusted-fw/dummy-crypto-lib
-mkdir -p /arm/projectscratch/ssg/trusted-fw
-ln -s \
-   ${project_filer}/dummy-crypto-lib \
-   /arm/projectscratch/ssg/trusted-fw/dummy-crypto-lib
-
 
 # /arm/pdsw/tools/gcc-linaro-6.2.1-2016.11-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
 mkdir -p /arm/pdsw/tools/gcc-linaro-6.2.1-2016.11-x86_64_aarch64-linux-gnu
