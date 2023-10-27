@@ -48,7 +48,7 @@
     wrappers:
         - timestamps
         - timeout:
-            timeout: 180
+            timeout: 240
             fail: true
     builders:
     - shell:
