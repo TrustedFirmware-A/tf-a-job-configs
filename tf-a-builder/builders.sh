@@ -120,6 +120,12 @@ ln -s ${TOOLS_DIR}/armclang-6.18/bin \
       /arm/warehouse/Distributions/FA/ARMCompiler/6.18/19/standalone-linux-x86_64-rel/bin
 
 ${TOOLS_DIR}/armclang-6.18/bin/armclang --vsn
+# Activate and verify UBL license
+if [ -n "${ARMCLANG_UBL_CODE}" ]; then
+    ${TOOLS_DIR}/armclang-6.18/bin/armlm activate --code ${ARMCLANG_UBL_CODE}
+    ${TOOLS_DIR}/armclang-6.18/bin/armlm inspect
+    ${TOOLS_DIR}/armclang-6.18/bin/armclang --vsn
+fi
 
 # Mandatory workspace
 export workspace="${workspace:-${WORKSPACE}/workspace}"
