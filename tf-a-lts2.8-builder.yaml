@@ -102,6 +102,10 @@
             - text:
                 credential-id: LAVA_TOKEN_TF
                 variable: LAVA_TOKEN
+        - credentials-binding:
+            - text:
+                credential-id: ARMCLANG_UBL_CODE
+                variable: ARMCLANG_UBL_CODE
     builders:
         - shell: |
             aarch64-none-elf-gcc -v || true
