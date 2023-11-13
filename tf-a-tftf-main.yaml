@@ -90,6 +90,7 @@
             - current-parameters: true
               kill-phase-on: NEVER
               name: tf-a-ci-gateway
+              alias: tftf-l1-build
               predefined-parameters: |-
                 TEST_GROUPS=tftf-l1-build
               property-file: tf-a-tests-env.param
@@ -100,6 +101,7 @@
             - current-parameters: true
               kill-phase-on: NEVER
               name: tf-a-ci-gateway
+              alias: tftf-l2-fwu
               predefined-parameters: |-
                 TEST_GROUPS=tftf-l2-fwu
               property-file: tf-a-tests-env.param
@@ -110,14 +112,30 @@
             - current-parameters: true
               kill-phase-on: NEVER
               name: tf-a-ci-gateway
+              alias: tftf-l1-fvp tftf-l1-juno
               predefined-parameters: |-
-                TEST_GROUPS=tftf-l1-fvp tftf-l1-juno tftf-l2-fvp-auxiliary tftf-l2-fvp-dynamiq
+                TEST_GROUPS=tftf-l1-fvp tftf-l1-juno
               property-file: tf-a-tests-env.param
             - current-parameters: true
               kill-phase-on: NEVER
               name: tf-a-ci-gateway
+              alias: tftf-l2-fvp-auxiliary tftf-l2-fvp-dynamiq
               predefined-parameters: |-
-                TEST_GROUPS=spm-l2-boot-tests spm-l3-boot-tests tf-l2-boot-tests-spm-mm tf-l3-boot-tests-spm-mm
+                TEST_GROUPS=tftf-l2-fvp-auxiliary tftf-l2-fvp-dynamiq
+              property-file: tf-a-tests-env.param
+            - current-parameters: true
+              kill-phase-on: NEVER
+              name: tf-a-ci-gateway
+              alias: spm-l2-boot-tests tf-l2-boot-tests-spm-mm
+              predefined-parameters: |-
+                TEST_GROUPS=spm-l2-boot-test tf-l2-boot-tests-spm-mm
+              property-file: tf-a-tests-env.param
+            - current-parameters: true
+              kill-phase-on: NEVER
+              name: tf-a-ci-gateway
+              alias: spm-l3-boot-tests tf-l3-boot-tests-spm-mm
+              predefined-parameters: |-
+                TEST_GROUPS=spm-l3-boot-tests tf-l3-boot-tests-spm-mm
               property-file: tf-a-tests-env.param
       - multijob:
           condition: SUCCESSFUL
@@ -126,6 +144,7 @@
             - current-parameters: true
               kill-phase-on: FAILURE
               name: tf-a-ci-gateway
+              alias: tftf-l2-extensive-tests-fvp
               predefined-parameters: |-
                 TEST_GROUPS=tftf-l2-extensive-tests-fvp
               property-file: tf-a-tests-env.param
