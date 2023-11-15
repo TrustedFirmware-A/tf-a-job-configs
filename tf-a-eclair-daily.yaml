@@ -136,7 +136,7 @@
         export ECLAIR_PROJECT_ROOT="${WORKSPACE}/trusted-firmware-a"
 
         detachLicense 600
-        trap "returnLicense" EXIT
+        trap "returnLicense || true" EXIT
 
         export ECLAIR_ANALYSIS=ECLAIR
         eclair_prepare
