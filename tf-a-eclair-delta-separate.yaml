@@ -1,11 +1,11 @@
 - job:
-    name: tf-a-eclair-delta
+    name: tf-a-eclair-delta-separate
     project-type: matrix
     concurrent: true
     disabled: false
     defaults: global
     Description: |
-      ECLAIR (MISRA compliance) testing of TF-A patches
+      ECLAIR (MISRA compliance) testing of TF-A patches (different configs built independently/separately)
     properties:
         - build-discarder:
             days-to-keep: 45
