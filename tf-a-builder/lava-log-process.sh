@@ -7,9 +7,10 @@ if [ -f "${WORKSPACE}/lava-raw.log" ]; then
                 # Split the UART messages to the corresponding log files
                 ${WORKSPACE}/tf-a-job-configs/tf-a-builder/log-splitter.py "${WORKSPACE}/lava-raw.log"
 
+                PROJECT_WORKSPACE=${WORKSPACE}
                 # Take possible code coverage trace data from the LAVA log
                 ${WORKSPACE}/tf-a-job-configs/tf-a-builder/feedback-trace-splitter.sh \
-                            ${WORKSPACE}/trusted-firmware-a \
+                            ${PROJECT_WORKSPACE} \
                             ${WORKSPACE} \
                             ${WORKSPACE}/artefacts-lava/ \
                             ${TF_GERRIT_REFSPEC}
@@ -22,7 +23,7 @@ if [ -f "${WORKSPACE}/lava-raw.log" ]; then
                     cd ${WORKSPACE}/qa-tools/coverage-tool/coverage-reporting
                     ./branch_coverage.sh \
                                 --config ${WORKSPACE}/config_file.json \
-                                --workspace ${WORKSPACE}/trusted-firmware-a \
+                                --workspace ${PROJECT_WORKSPACE} \
                                 --outdir ${WORKSPACE}/trace_report
                     find ${WORKSPACE}/trace_report
                 fi

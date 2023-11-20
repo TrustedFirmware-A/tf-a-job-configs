@@ -158,7 +158,13 @@ export BUILD_CONFIG="$build_config"
 export RUN_CONFIG="$run_config"
 export TEST_CONFIG="$test_config"
 export TEST_GROUP="$test_group"
-export COVERAGE_ON=$(echo "$RUN_CONFIG" | grep -qE 'bmcov' && echo 1 || echo 0)
+# Conditions for code coverage is that the run config has 'bmcov' is its name
+# or the test group parameter has 'code-coverage' contained in its name.
+export COVERAGE_ON=$((echo "$RUN_CONFIG" | grep -v 'aarch32' |
+                      grep -qE 'bmcov' && echo 1) ||
+										(echo "${TEST_GROUP}" | grep -v 'aarch32' |
+                    grep -qE 'code-coverage' && echo 1) ||
+										echo 0)
 
 # Run this script bash -x, and it gets passed downstream for debugging
 if echo "$-" | grep -q "x"; then

@@ -63,7 +63,21 @@ cat > ${CONFIG_JSON} <<EOF
                     "COMMIT": "",
                     "REFSPEC": "${TF_GERRIT_REFSPEC}",
                     "LOCATION": "trusted-firmware-a"
-                    }
+                  },
+                  {
+                  "type": "git",
+                  "URL":  "https://review.trustedfirmware.org/hafnium/hafnium",
+                  "COMMIT": "",
+                  "REFSPEC": "${SPM_REFSPEC}",
+                  "LOCATION": "workspace/spm"
+                },
+                {
+                 "type": "http",
+                 "URL":  "$MBEDTLS_URL",
+                 "COMPRESSION": "xz",
+                 "EXTRA_PARAMS": "--strip-components=1",
+                 "LOCATION": "workspace/mbedtls"
+                }
                 ],
         "workspace": "${PROJECT_ROOT}",
         "output_file": "${OUTPUT_JSON}"
