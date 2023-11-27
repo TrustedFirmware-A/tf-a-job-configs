@@ -1,0 +1,69 @@
+- job:
+    name: tf-a-lts-release-mail
+    node: docker-amd64-tf-a-jammy
+    project-type: freestyle
+    concurrent: true
+    disabled: false
+    defaults: global
+    Description: |
+      Render TF-A LTS release email template.
+    properties:
+        - build-discarder:
+            days-to-keep: 45
+            num-to-keep: 200
+            artifact-num-to-keep: 100
+        - authorization:
+            !include: authorization.yaml.inc
+    parameters:
+        - string:
+            name: RELEASE_TAG
+            default: '--latest'
+            description: |
+              Release git tag, e.g. 'lts-v2.8.10', or '--latest' to get latest tag.
+#    triggers:
+#    - gerrit:
+#        silent: true
+#        server-name: 'review.trustedfirmware.org'
+#        projects:
+#        - branches:
+#          - branch-compare-type: PLAIN
+#            branch-pattern: integration
+#          project-compare-type: PLAIN
+#          project-pattern: 'TF-A/trusted-firmware-a'
+#        trigger-on:
+#        - patchset-created-event
+    wrappers:
+    - timestamps
+    - timeout:
+        timeout: 5
+        fail: true
+    builders:
+    - shell: |
+        #!/bin/bash
+        set -ex
+
+        git clone https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
+        ./tf-a-ci-scripts/lts/lts-release-mail.py ${RELEASE_TAG} >email.txt
+        awk -F": " '/Subject:/ {print $2}' email.txt >subject.txt
+        # Remove email headers, put in a seperate file.
+        sed '0,/^$/d' email.txt >body.txt
+        set +x
+        echo "======================================================================="
+        cat email.txt
+        echo "======================================================================="
+    publishers:
+        - archive:
+            artifacts: email.txt
+            latest-only: false
+            allow-empty: true
+        - conditional-publisher:
+          - condition-kind: file-exists
+            on-evaluation-failure: dont-run
+            condition-filename: email.txt
+            condition-basedir: workspace
+            action:
+            - email-ext:
+                always: true
+                subject: '${FILE, path="subject.txt"}'
+                body: '${FILE, path="body.txt"}'
+                recipients: paul.sokolovsky@linaro.org
