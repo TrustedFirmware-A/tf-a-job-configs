@@ -60,7 +60,7 @@ repos=(
     "${GERRIT_HOST};${CI_GERRIT_PROJECT};tf-a-ci-scripts;${CI_REFSPEC}"
     "${GERRIT_HOST};${TF_GERRIT_PROJECT};trusted-firmware-a;${TF_GERRIT_REFSPEC}"
     "${GERRIT_HOST};${TFTF_GERRIT_PROJECT};tf-a-tests;${TFTF_GERRIT_REFSPEC}"
-    "${GERRIT_HOST};${SPM_GERRIT_PROJECT};hafnium;${SPM_REFSPEC}"
+    "${GERRIT_HOST};${SPM_GERRIT_PROJECT};spm;${SPM_REFSPEC}"
     "${GERRIT_HOST};${TF_M_TESTS_GERRIT_PROJECT};tf-m-tests;${TF_M_TESTS_GERRIT_REFSPEC}"
     "${GERRIT_HOST};${TF_M_EXTRAS_GERRIT_PROJECT};tf-m-extras;${TF_M_EXTRAS_GERRIT_REFSPEC}"
 )
@@ -118,6 +118,9 @@ for repo in ${repos[@]}; do
         cd ${SHARE_FOLDER}/${REPO_NAME}
         git fetch ${REPO_URL} ${REPO_REFSPEC}
         git checkout FETCH_HEAD
+        if [ "$REPO_NAME" == "spm" ]; then
+                git submodule update --init
+        fi
         echo "Freshly cloned ${REPO_URL} (refspec ${REPO_REFSPEC}):"
         git log -1
         cd $OLDPWD
