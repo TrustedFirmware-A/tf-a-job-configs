@@ -128,7 +128,7 @@
               name: tf-a-ci-gateway
               alias: spm-l2-boot-tests tf-l2-boot-tests-spm-mm
               predefined-parameters: |-
-                TEST_GROUPS=spm-l2-boot-test tf-l2-boot-tests-spm-mm
+                TEST_GROUPS=spm-l2-boot-tests tf-l2-boot-tests-spm-mm
               property-file: tf-a-tests-env.param
             - current-parameters: true
               kill-phase-on: NEVER
