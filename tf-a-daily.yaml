@@ -54,6 +54,7 @@
         - trigger-builds:
             - project:
                 - tf-a-main
+                - tf-a-windows-builder
                 - tf-a-coverity
               block: true
               current-parameters: true
