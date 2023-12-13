@@ -1,5 +1,5 @@
 - job:
-    name: tf-a-weekly.yaml
+    name: tf-a-weekly
     node: docker-amd64-tf-a-jammy
     project-type: freestyle
     concurrent: false
@@ -53,7 +53,7 @@
             EOF
         - trigger-builds:
             - project:
-                - tf-a-ci-coverage-gateway.yaml
+                - tf-a-ci-coverage-gateway
               block: true
               current-parameters: true
     triggers:
