@@ -118,9 +118,6 @@ for repo in ${repos[@]}; do
         cd ${SHARE_FOLDER}/${REPO_NAME}
         git fetch ${REPO_URL} ${REPO_REFSPEC}
         git checkout FETCH_HEAD
-        if [ "$REPO_NAME" == "spm" ]; then
-                git submodule update --init
-        fi
         echo "Freshly cloned ${REPO_URL} (refspec ${REPO_REFSPEC}):"
         git log -1
         cd $OLDPWD
