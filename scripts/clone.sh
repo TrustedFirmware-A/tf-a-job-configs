@@ -65,6 +65,8 @@ repos=(
     "${GERRIT_HOST};${TF_M_EXTRAS_GERRIT_PROJECT};tf-m-extras;${TF_M_EXTRAS_GERRIT_REFSPEC}"
 )
 
+df -h
+
 # Take into consideration non-CI runs where SHARE_FOLDER variable
 # may not be present
 if [ -z "${SHARE_FOLDER}" ]; then
