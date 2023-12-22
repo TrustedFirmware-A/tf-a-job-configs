@@ -4,7 +4,7 @@
     project-type: freestyle
     concurrent: false
     disabled: false
-    description: Triggers tf-main and tf-coverity for the TF-A project.
+    description: Triggers tf-a-windows-builder, tf-main and tf-coverity for the TF-A project.
     properties:
     - build-discarder:
         days-to-keep: 14
@@ -53,8 +53,11 @@
             EOF
         - trigger-builds:
             - project:
-                - tf-a-main
                 - tf-a-windows-builder
+              block: true
+              current-parameters: true
+            - project:
+                - tf-a-main
                 - tf-a-coverity
               block: true
               current-parameters: true
