@@ -90,6 +90,11 @@
             description: |
               Number of tries submitting job to LAVA in case it fails (stopgap measure against nondeterministic failures)
         - string:
+            name: USE_TUXSUITE_FVP
+            default: 0
+            description: |
+              Whether to submit FVP tests to TuxSuite
+        - string:
             name: SHARE_FOLDER
             default: '/srv/shared/${JOB_NAME}/${BUILD_NUMBER}'
             description: 'Folder containing shared repositories for downstream pipeline jobs'
@@ -110,6 +115,10 @@
             - text:
                 credential-id: LAVA_TOKEN_TF
                 variable: LAVA_TOKEN
+        - credentials-binding:
+            - text:
+                credential-id: TUXSUITE_TOKEN
+                variable: TUXSUITE_TOKEN
         - credentials-binding:
             - text:
                 credential-id: ARMCLANG_UBL_CODE
@@ -195,7 +204,7 @@
                     latest-only: false
                     allow-empty: true
         - archive:
-            artifacts: lava.log, lava-*.log, feedback.log, config_file.json, covtrace-*.log, trace_report/**
+            artifacts: lava.log, lava-*.log, tux.id, feedback.log, config_file.json, covtrace-*.log, trace_report/**
             latest-only: false
             allow-empty: true
         - groovy-postbuild:
