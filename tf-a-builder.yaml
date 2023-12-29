@@ -165,7 +165,7 @@
                             - shell: |
                                 #!/bin/bash -x
 
-                                tf-a-job-configs/pfalcon-tf-a-builder/submit-test-job.sh
+                                tf-a-job-configs/tf-a-builder/submit-test-job.sh
                                 status=$?
                                 tf-a-job-configs/tf-a-builder/lava-log-process.sh
                                 if [ $status -ne 0 ]; then
