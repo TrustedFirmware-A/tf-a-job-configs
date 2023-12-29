@@ -67,6 +67,8 @@ resilient_cmd() {
 
 ls -l ${WORKSPACE}
 
+function submit_via_lava_or_squad() {
+
 lavacli identities add --username ${LAVA_USER} --token ${LAVA_TOKEN} --uri "https://${LAVA_SERVER}/RPC2" default
 
 if [ $USE_SQUAD -ne 0 -a -n "${QA_SERVER_VERSION}" ]; then
@@ -145,9 +147,9 @@ if [ -n "${LAVAJOB_ID}" ]; then
         # Fetch and store LAVA job result (1 failure, 0 success)
         resilient_cmd lavacli results ${LAVAJOB_ID} | tee "${WORKSPACE}/lava.results"
         if grep -q '\[fail\]' "${WORKSPACE}/lava.results"; then
-            exit 1
+            return 1
         else
-            exit 0
+            return 0
         fi
     fi
 else
@@ -155,3 +157,26 @@ else
     exit 1
 fi
 
+}
+
+# FIXME: Juno and FVP jobs may fail due to non-related users changes,
+# so CI needs to resubmit the job, at most three times:
+# Juno jobs may fail due to LAVA lab infrastructure issues (see
+# https://projects.linaro.org/browse/LSS-2128)
+# FVP jobs may hang at some particular TFTF test (see
+# https://linaro.atlassian.net/browse/TFC-176)
+
+# UPDATE: We want to keep retrying for LAVA for historical reasons,
+# but we want to start from clean page with TuxSuite, so don't
+# retry for it for now, and see how it goes.
+
+status=1
+for i in $(seq 1 ${LAVA_RETRIES:-3}); do
+    echo "# LAVA submission iteration #$i"
+    if submit_via_lava_or_squad; then
+        status=0
+        break
+    fi
+done
+
+exit ${status}

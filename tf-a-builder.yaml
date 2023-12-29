@@ -163,25 +163,12 @@
                             - inject:
                                 properties-file: ${WORKSPACE}/lava.param
                             - shell: |
-                                #!/bin/bash
+                                #!/bin/bash -x
 
-                                submit_job='tf-a-job-configs/tf-a-builder/submit-test-job.sh'
-                                # FIXME: Juno and FVP jobs may fail due to non-related users changes,
-                                # so CI needs to resubmit the job, at most three times:
-                                # Juno jobs may fail due to LAVA lab infrastructure issues (see
-                                # https://projects.linaro.org/browse/LSS-2128)
-                                # FVP jobs may hang at some particular TFTF test (see
-                                # https://linaro.atlassian.net/browse/TFC-176)
-                                passed=0
-                                for i in $(seq 1 ${LAVA_RETRIES:-3}); do
-                                    echo "# LAVA submission iteration #$i"
-                                    if $submit_job; then
-                                        passed=1
-                                        break
-                                    fi
-                                done
+                                tf-a-job-configs/pfalcon-tf-a-builder/submit-test-job.sh
+                                status=$?
                                 tf-a-job-configs/tf-a-builder/lava-log-process.sh
-                                if [ $passed -eq 0 ]; then
+                                if [ $status -ne 0 ]; then
                                     echo "LAVA JOB RESULT: 1"
                                     exit 1
                                 else
