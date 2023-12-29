@@ -3,6 +3,23 @@
 set -xe
 
 USE_SQUAD=0
+USE_TUXSUITE_FVP=${USE_TUXSUITE_FVP:-0}
+
+# Get LAVA device type from a job file
+get_lava_device_type() {
+    local job_file=$1
+    awk '/^device_type:/ {print $2}' ${job_file}
+}
+
+setup_tuxsuite() {
+    mkdir -p ~/.config/tuxsuite/
+    cat > ~/.config/tuxsuite/config.ini <<EOF
+[default]
+token=$TUXSUITE_TOKEN
+group=tfc
+project=ci
+EOF
+}
 
 # Wait for the LAVA job to finished
 # By default, timeout at 5400 secs (1.5 hours) and monitor every 60 seconds
@@ -66,6 +83,30 @@ resilient_cmd() {
 }
 
 ls -l ${WORKSPACE}
+
+DEVICE=$(get_lava_device_type artefacts-lava/job.yaml)
+
+if [ "${DEVICE}" == "fvp" -a "${USE_TUXSUITE_FVP}" -ne 0 ]; then
+    setup_tuxsuite
+    set -o pipefail
+    if python3 -u -m tuxsuite test submit --device fvp-lava --job-definition artefacts-lava/job.yaml | tee tuxsuite-submit.out; then
+        status=0
+    else
+        status=$?
+        echo "TuxSuite test failed, status: ${status}"
+    fi
+    TUXID=$(awk '/^uid:/ {print $2}' tuxsuite-submit.out)
+    echo "TuxSuite test ID: ${TUXID}"
+    echo ${TUXID} > ${WORKSPACE}/tux.id
+    tuxsuite test logs --raw ${TUXID} > ${WORKSPACE}/lava-raw.log
+
+    if tuxsuite test results --raw ${TUXID} | python3 -m json.tool | grep -q '"result": "fail"'; then
+        echo "tuxsuite test submit status was: ${status}, failing testcases found, setting as 1 (failed)"
+        status=1
+    fi
+
+    exit ${status}
+fi
 
 function submit_via_lava_or_squad() {
 
