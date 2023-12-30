@@ -34,6 +34,16 @@ if (matcher?.matches()) {
     }
 }
 
+// Add a TuxSuite job link to the description
+matcher = manager.getLogMatcher("TuxSuite test ID: (?<tuxid>[A-Za-z0-9]+)")
+if (matcher?.matches()) {
+    def tuxId = matcher.group('tuxid')
+    def abbrTuxId = "..." + tuxId.substring(19)
+    description += "Tux Id: <a href='https://tuxapi.tuxsuite.com/v1/groups/tfc/projects/ci/tests/${tuxId}'>${abbrTuxId}</a>\n"
+    description += "<a href='https://tuxapi.tuxsuite.com/v1/groups/tfc/projects/ci/tests/${tuxId}/logs?format=html'>log</a>\n"
+}
+
+
 def causes = manager.build.getAction(hudson.model.CauseAction.class).getCauses()
 if (causes[0] instanceof hudson.model.Cause.UpstreamCause) {
     def rootCause = getUpstreamRoot(causes[0])
