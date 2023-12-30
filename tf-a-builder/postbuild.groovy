@@ -18,10 +18,10 @@ def matcher = manager.getLogMatcher("LAVA URL: (?<url>.*?) LAVA JOB ID: (?<jobid
 if (matcher?.matches()) {
     def testJobId = matcher.group('jobid')
     def testJobUrl = matcher.group('url')
-    description += "&nbsp;LAVA Job Id: <a href='${testJobUrl}'>${testJobId}</a>"
+    description += "LAVA Job Id: <a href='${testJobUrl}'>${testJobId}</a>\n"
 
     def lavaLogUrl = "${rootUrl}${manager.build.url}artifact/lava.log"
-    description += "<br >&nbsp;LAVA log: <a href='${lavaLogUrl}'>lava.log</a>"
+    description += "<br>LAVA log: <a href='${lavaLogUrl}'>lava.log</a>\n"
 
     // Verify LAVA jobs results, all tests must pass, otherwise turn build into UNSTABLE
     def testMatcher = manager.getLogMatcher("LAVA JOB RESULT: (?<result>\\d+)")
@@ -52,7 +52,7 @@ if (causes[0] instanceof hudson.model.Cause.UpstreamCause) {
     def jobName = upstreamProject
     def jobConfiguration = upstreamProject
     def jobUrl = "${rootUrl}job/${upstreamProject}/${upstreamBuild}"
-    description += "<br>&nbsp;Top build: <a href='${jobUrl}'>${upstreamProject} #${upstreamBuild}</a>"
+    description += "<br>Top build: <a href='${jobUrl}'>${upstreamProject} #${upstreamBuild}</a>"
 }
 
 // Set accumulated description
