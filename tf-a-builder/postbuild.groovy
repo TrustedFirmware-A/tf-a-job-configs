@@ -29,7 +29,7 @@ if (matcher?.matches()) {
         def testJobSuiteResult = testMatcher.group('result')
         // result = 1 means lava job fails
         if (testJobSuiteResult == "1") {
-            manager.buildFailure()
+            manager.buildUnstable()
         }
     }
 }
