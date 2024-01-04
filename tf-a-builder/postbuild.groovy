@@ -21,7 +21,7 @@ if (matcher?.matches()) {
     description += "LAVA Job Id: <a href='${testJobUrl}'>${testJobId}</a>\n"
 
     def lavaLogUrl = "${rootUrl}${manager.build.url}artifact/lava.log"
-    description += "<br>LAVA log: <a href='${lavaLogUrl}'>lava.log</a>\n"
+    description += " | <a href='${lavaLogUrl}'>log</a>\n"
 
     // Verify LAVA jobs results, all tests must pass, otherwise turn build into UNSTABLE
     def testMatcher = manager.getLogMatcher("LAVA JOB RESULT: (?<result>\\d+)")
@@ -40,7 +40,7 @@ if (matcher?.matches()) {
     def tuxId = matcher.group('tuxid')
     def abbrTuxId = "..." + tuxId.substring(19)
     description += "Tux Id: <a href='https://tuxapi.tuxsuite.com/v1/groups/tfc/projects/ci/tests/${tuxId}'>${abbrTuxId}</a>\n"
-    description += "<a href='https://tuxapi.tuxsuite.com/v1/groups/tfc/projects/ci/tests/${tuxId}/logs?format=html'>log</a>\n"
+    description += " | <a href='https://tuxapi.tuxsuite.com/v1/groups/tfc/projects/ci/tests/${tuxId}/logs?format=html'>log</a>\n"
 }
 
 
