@@ -40,7 +40,7 @@ if (matcher?.matches()) {
     def tuxId = matcher.group('tuxid')
     def abbrTuxId = "..." + tuxId.substring(19)
     description += "Tux Id: <a href='https://tuxapi.tuxsuite.com/v1/groups/tfc/projects/ci/tests/${tuxId}'>${abbrTuxId}</a>\n"
-    description += " | <a href='https://tuxapi.tuxsuite.com/v1/groups/tfc/projects/ci/tests/${tuxId}/logs?format=html'>log</a>\n"
+    description += " | <a href='https://storage.tuxsuite.com/public/tfc/ci/tests/${tuxId}/lava-logs.html'>log</a>\n"
 }
 
 
