@@ -1,6 +1,6 @@
 - job:
     name: tf-a-eclair-delta
-    node: docker-tf-a-eclair-3.12
+    node: docker-tf-a-eclair-3.13
     project-type: freestyle
     concurrent: true
     disabled: false
