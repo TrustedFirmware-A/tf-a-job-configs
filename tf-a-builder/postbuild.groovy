@@ -23,13 +23,13 @@ if (matcher?.matches()) {
     def lavaLogUrl = "${rootUrl}${manager.build.url}artifact/lava.log"
     description += " | <a href='${lavaLogUrl}'>log</a>\n"
 
-    // Verify LAVA jobs results, all tests must pass, otherwise turn build into UNSTABLE
+    // Verify LAVA jobs results, all tests must pass, otherwise turn build into FAILED
     def testMatcher = manager.getLogMatcher("LAVA JOB RESULT: (?<result>\\d+)")
     if (testMatcher?.matches()) {
         def testJobSuiteResult = testMatcher.group('result')
         // result = 1 means lava job fails
         if (testJobSuiteResult == "1") {
-            manager.buildUnstable()
+            manager.buildFailure()
         }
     }
 }
