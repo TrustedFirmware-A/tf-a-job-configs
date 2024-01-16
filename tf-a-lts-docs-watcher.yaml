@@ -1,0 +1,43 @@
+- job:
+    name: tf-a-lts-docs-watcher
+    node: master
+    project-type: freestyle
+    concurrent: false
+    description:
+      Triggers whenever a code change is merged into the lts branch 
+      or a lts tag is created of the TF-A repository. Executes a webhook
+      to trigger the ReadTheDocs service to build a fresh copy of the 
+      documentation for one or more branches.
+    disabled: false
+    builders:
+    - shell:
+        !include-raw: scripts/tf-a-lts-docs-watcher.sh
+    properties:
+    - build-discarder:
+        days-to-keep: 60
+        num-to-keep: 10
+    triggers:
+    - gerrit:
+        silent: true
+        server-name: 'review.trustedfirmware.org'
+        projects:
+        - branches:
+          - branch-compare-type: REG_EXP
+            branch-pattern: 'lts-v.*'
+          - branch-compare-type: REG_EXP
+            branch-pattern: refs/tags/lts-v.*
+          project-compare-type: PLAIN
+          project-pattern: 'TF-A/trusted-firmware-a'
+        trigger-on:
+        - ref-updated-event
+    wrappers:
+    - timestamps
+    - credentials-binding:
+      - text:
+          credential-id: TF-A-RTD-API-TOKEN
+          variable: RTD_API_TOKEN
+      - text:
+          credential-id: Trusted_Firmware_ReadTheDocs_Token
+          variable: RTD_WEBHOOK_SECRET
+    publishers:
+    - workspace-cleanup
