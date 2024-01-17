@@ -93,7 +93,7 @@
             name: USE_TUXSUITE_FVP
             default: 0
             description: |
-              Whether to submit FVP tests to TuxSuite
+              Whether to submit FVP tests via TuxSuite (instead of LAVA)
         - string:
             name: SHARE_FOLDER
             default: '/srv/shared/${JOB_NAME}/${BUILD_NUMBER}'
