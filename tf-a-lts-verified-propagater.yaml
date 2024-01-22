@@ -1,0 +1,74 @@
+- job:
+    name: tf-a-lts-verified-propagater
+    node: master
+    project-type: freestyle
+    concurrent: false
+    description:
+      Triggers whenever a patch in the lts branch get a Verified score.
+      It will vote the same score to the dependent patch
+    disabled: false
+    builders:
+    - shell: |-
+        #!/bin/bash
+        set -ex
+
+        echo "########################################################################"
+        echo "    Gerrit Environment"
+        env |grep '^GERRIT'
+        echo "########################################################################"
+
+        SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -p 29418 -i ${CI_BOT_KEY}"
+        GERRIT_URL="review.trustedfirmware.org"
+        GERRIT_QUERY_PARAMS="--dependencies --submit-records --format=JSON change:"
+        QUERY_DEPENDS_CMD="${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit query ${GERRIT_QUERY_PARAMS}${GERRIT_CHANGE_NUMBER}"
+        SET_VERIFIED_CMD="${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit review --verified"
+
+        change_url_base=${GERRIT_CHANGE_URL%/*}
+        patch_query=$(ssh ${QUERY_DEPENDS_CMD} | jq .)
+        dependsOn=$(echo ${patch_query} | jq -r 'select(.dependsOn)')
+        dependsOn_rev=($(echo ${dependsOn} | jq -r '.dependsOn[].revision'))
+        dependsOn_no=($(echo ${dependsOn} | jq -r '.dependsOn[].number'))
+        verified_status=$(echo ${patch_query} | jq -r 'select(.submitRecords) | .submitRecords[0].labels[] | select(.label == "Verified") | .status')
+        verified_value=0
+        if [ "${verified_status}" == "REJECT" ]; then
+            verified_value=-1
+        elif [ "${verified_status}" == "MAY" ]; then
+            verified_value=1
+        fi
+
+        for ((i=0; i<${#dependsOn_rev[@]}; i++))
+        do
+            echo "Set Verified ${verified_value} to: ${change_url_base}/${dependsOn_no[$i]}"
+            ssh ${SET_VERIFIED_CMD} ${verified_value} ${dependsOn_rev[$i]}
+        done
+    properties:
+    - build-discarder:
+        days-to-keep: 60
+        num-to-keep: 10
+    triggers:
+    - gerrit:
+        silent: true
+        server-name: 'review.trustedfirmware.org'
+        projects:
+        - branches:
+          - branch-compare-type: REG_EXP
+            branch-pattern: 'lts-v.*'
+          project-compare-type: PLAIN
+          project-pattern: 'TF-A/trusted-firmware-a'
+        trigger-on:
+        - comment-added-event:
+            approval-category: "Verified"
+            approval-value: 1
+        - comment-added-event:
+            approval-category: "Verified"
+            approval-value: -1
+    wrappers:
+    - timestamps
+    - credentials-binding:
+      - ssh-user-private-key:
+          credential-id: TFA_CI_BOT_USER_SSH_KEY
+          key-file-variable: CI_BOT_KEY
+          username-variable: CI_BOT_USERNAME
+          passphrase-variable: ''
+    publishers:
+    - workspace-cleanup
