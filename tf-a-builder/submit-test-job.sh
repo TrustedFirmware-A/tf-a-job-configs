@@ -89,12 +89,16 @@ DEVICE=$(get_lava_device_type artefacts-lava/job.yaml)
 if [ "${DEVICE}" == "fvp" -a "${USE_TUXSUITE_FVP}" -ne 0 ]; then
     setup_tuxsuite
     set -o pipefail
-    if python3 -u -m tuxsuite test submit --device fvp-lava --job-definition artefacts-lava/job.yaml | tee tuxsuite-submit.out; then
-        status=0
-    else
-        status=$?
-        echo "TuxSuite test failed, status: ${status}"
-    fi
+    for i in $(seq 1 ${LAVA_RETRIES:-3}); do
+        echo "# TuxSuite submission iteration #$i"
+        if python3 -u -m tuxsuite test submit --device fvp-lava --job-definition artefacts-lava/job.yaml | tee tuxsuite-submit.out; then
+            status=0
+            break
+        else
+            status=$?
+            echo "TuxSuite test failed, status: ${status}"
+        fi
+    done
     TUXID=$(awk '/^uid:/ {print $2}' tuxsuite-submit.out)
     echo "TuxSuite test ID: ${TUXID}"
     echo ${TUXID} > ${WORKSPACE}/tux.id
