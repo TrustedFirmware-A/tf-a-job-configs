@@ -32,7 +32,7 @@
         verified_value=0
         if [ "${verified_status}" == "REJECT" ]; then
             verified_value=-1
-        elif [ "${verified_status}" == "MAY" ]; then
+        elif [ "${verified_status}" == "OK" ]; then
             verified_value=1
         fi
 
