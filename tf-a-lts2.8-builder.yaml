@@ -83,7 +83,7 @@
             default: 'master'
         - string:
             name: USE_TUXSUITE_FVP
-            default: 0
+            default: 1
             description: |
               Whether to submit FVP tests via TuxSuite (instead of LAVA)
         - string:
