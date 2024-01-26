@@ -109,6 +109,8 @@ if [ "${DEVICE}" == "fvp" -a "${USE_TUXSUITE_FVP}" -ne 0 ]; then
         status=1
     fi
 
+    echo "TuxSuite test result: ${status}"
+
     exit ${status}
 fi
 
