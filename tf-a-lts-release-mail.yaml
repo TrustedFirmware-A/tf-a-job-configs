@@ -9,9 +9,8 @@
       Render TF-A LTS release email template.
     properties:
         - build-discarder:
-            days-to-keep: 45
-            num-to-keep: 200
-            artifact-num-to-keep: 100
+            days-to-keep: 365
+            num-to-keep: 50
         - authorization:
             !include: authorization.yaml.inc
     parameters:
