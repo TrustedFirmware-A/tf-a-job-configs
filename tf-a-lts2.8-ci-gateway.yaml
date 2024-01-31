@@ -48,6 +48,16 @@
         description: |
           tf-a-tests refspec to use. The master branch is used by default.
     - string:
+        name: TF_M_TESTS_GERRIT_REFSPEC
+        default: '+refs/heads/master:refs/remotes/origin/master'
+        description: |
+          tf-m-tests refspec to use. The master branch is used by default.
+    - string:
+        name: TF_M_EXTRAS_GERRIT_REFSPEC
+        default: '+refs/heads/master:refs/remotes/origin/master'
+        description: |
+          tf-m-extras refspec to use. The master branch is used by default.
+    - string:
        name: SPM_REFSPEC
        default: '+refs/heads/master:refs/remotes/origin/master'
        description: |
@@ -66,6 +76,11 @@
     - string:
         name: QA_TOOLS_BRANCH
         default: 'master'
+    - string:
+        name: USE_TUXSUITE_FVP
+        default: 1
+        description: |
+          Whether to submit FVP tests via TuxSuite (instead of LAVA)
     - string:
             name: SHARE_FOLDER
             default: '/srv/shared/${JOB_NAME}/${BUILD_NUMBER}'
