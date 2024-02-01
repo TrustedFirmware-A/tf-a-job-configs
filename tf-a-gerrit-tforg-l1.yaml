@@ -102,6 +102,7 @@
         projects:
         - kill-phase-on: NEVER
           name: tf-a-static-checks
+          current-parameters: true
           predefined-parameters: |-
             TEST_GROUPS=tf-l2-scan-build
             ENABLE_STATIC_CHECK=true
@@ -112,6 +113,7 @@
         projects:
         - kill-phase-on: NEVER
           name: tf-a-ci-gateway
+          current-parameters: true
           predefined-parameters: |
             TEST_GROUPS=tf-l1-check-docs
           property-file: env.param
@@ -121,6 +123,7 @@
         projects:
         - kill-phase-on: NEVER
           name: tf-a-ci-gateway
+          current-parameters: true
           predefined-parameters: |
             TEST_GROUPS=tf-l1-build-fvp tf-l1-build-juno tf-l1-build-clang tf-l1-build-plat spm-l1-build-tests
           property-file: env.param
