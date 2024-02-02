@@ -137,8 +137,8 @@
         name: Boot up to the Linux shell prompt
         projects:
         - kill-phase-on: NEVER
-          current-parameters: true
           name: tf-a-lts2.8-ci-gateway
+          current-parameters: true
           predefined-parameters: |
             TEST_GROUPS=tf-l1-boot-tests-juno tf-l2-boot-tests-aarch32 tf-l2-boot-tests-bl2_el3 tf-l2-boot-tests-cortex tf-l2-boot-tests-foundation tf-l2-boot-tests-juno tf-l2-boot-tests-latest tf-l2-boot-tests-misc tf-l2-boot-tests-rootfs tf-l2-boot-tests-spm-mm spm-l2-boot-tests
             TF_REFSPEC=$GERRIT_REFSPEC
