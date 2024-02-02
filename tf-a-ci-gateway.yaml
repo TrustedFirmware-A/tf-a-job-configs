@@ -49,14 +49,14 @@
           tf-a-tests refspec to use. The master branch is used by default.
     - string:
         name: TF_M_TESTS_GERRIT_REFSPEC
-        default: '+refs/heads/master:refs/remotes/origin/master'
+        default: '+refs/heads/main:refs/remotes/origin/main'
         description: |
-          tf-m-tests refspec to use. The master branch is used by default.
+          tf-m-tests refspec to use. The main branch is used by default.
     - string:
         name: TF_M_EXTRAS_GERRIT_REFSPEC
-        default: '+refs/heads/master:refs/remotes/origin/master'
+        default: '+refs/heads/main:refs/remotes/origin/main'
         description: |
-          tf-m-extras refspec to use. The master branch is used by default.
+          tf-m-extras refspec to use. The main branch is used by default.
     - string:
        name: SPM_REFSPEC
        default: '+refs/heads/master:refs/remotes/origin/master'
