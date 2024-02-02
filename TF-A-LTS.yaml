@@ -1,0 +1,14 @@
+- view:
+    name: TF-A-LTS
+    view-type: list
+    regex: tf-a-lts.*
+    filter-queue: true
+    filter-executors: true
+    columns:
+        - status
+        - weather
+        - job
+        - last-success
+        - last-failure
+        - last-duration
+        - build-button
