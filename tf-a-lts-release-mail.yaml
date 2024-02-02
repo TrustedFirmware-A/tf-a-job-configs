@@ -65,4 +65,4 @@
                 always: true
                 subject: '${FILE, path="subject.txt"}'
                 body: '${FILE, path="body.txt"}'
-                recipients: paul.sokolovsky@linaro.org
+                recipients: paul.sokolovsky@linaro.org, yann.gautier@st.com
