@@ -9,6 +9,7 @@
     disabled: false
     builders:
     - shell: |-
+    - shell: |-
         #!/bin/bash
         # This job is triggered by the label Verified +1 or -1 of the patch
         # it will vote the same score (Verified +1 / Verified -1) to the dependent patch
@@ -27,14 +28,15 @@
         SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -p 29418 -i ${CI_BOT_KEY}"
         GERRIT_URL="review.trustedfirmware.org"
         GERRIT_QUERY_PARAMS="--dependencies --submit-records --format=JSON change:"
-        QUERY_DEPENDS_CMD="${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit query ${GERRIT_QUERY_PARAMS}${GERRIT_CHANGE_NUMBER}"
+        QUERY_CMD="${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit query ${GERRIT_QUERY_PARAMS}"
+        QUERY_CHANGE_DEPENDS_CMD="${QUERY_CMD}${GERRIT_CHANGE_NUMBER}"
         REVIEW_MESSAGE="Propagated verified from ${GERRIT_CHANGE_URL}. By ${BUILD_URL}"
         SET_VERIFIED_CMD="${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit review --verified"
 
         change_url_base=${GERRIT_CHANGE_URL%/*}
         # Check this example https://ci.trustedfirmware.org/view/TF-A/job/tf-a-lts-verified-propagater/14/console
         # for what we get from gerrit query command
-        patch_query=$(ssh ${QUERY_DEPENDS_CMD} | jq .)
+        patch_query=$(ssh ${QUERY_CHANGE_DEPENDS_CMD} | jq .)
         dependsOn=$(echo ${patch_query} | jq -r 'select(.dependsOn)')
         # Normally, there would be just one dependent patch
         # (and that patch would in turn has another dependent patch, that's how a dependency chain is structured)
@@ -54,8 +56,14 @@
         # Vote the same Verified score to the dependent patch by loop
         for ((i=0; i<${#dependsOn_rev[@]}; i++))
         do
-            echo "Set Verified ${verified_value} to: ${change_url_base}/${dependsOn_no[$i]}"
-            ssh ${SET_VERIFIED_CMD} ${verified_value}  -m \'\"${REVIEW_MESSAGE}\"\' ${dependsOn_rev[$i]}
+            # Need to check the .status before set verified score
+            if [ $(ssh ${QUERY_CMD}${dependsOn_no[$i]} | jq -r 'select(.status)|.status') == "MERGED" ]; then
+            	echo "The dependent patch ${change_url_base}${dependsOn_no[$i]} has been merged. Don't set Verified score to it!"
+                continue
+            else
+            	echo "Set Verified ${verified_value} to: ${change_url_base}/${dependsOn_no[$i]}"
+            	ssh ${SET_VERIFIED_CMD} ${verified_value}  -m \'\"${REVIEW_MESSAGE}\"\' ${dependsOn_rev[$i]}
+            fi
         done
     properties:
     - build-discarder:
