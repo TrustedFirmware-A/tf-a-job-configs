@@ -91,6 +91,7 @@
         projects:
         - kill-phase-on: NEVER
           name: tf-a-static-checks
+          current-parameters: true
           predefined-parameters: |-
             REPO_UNDER_TEST=tf-a-tests
           property-file: env.param
@@ -100,6 +101,7 @@
         projects:
         - kill-phase-on: NEVER
           name: tf-a-lts2.10-ci-gateway
+          current-parameters: true
           predefined-parameters: |
             TEST_GROUPS=tftf-l1-check-docs
           property-file: env.param
@@ -109,6 +111,7 @@
         projects:
         - kill-phase-on: NEVER
           name: tf-a-lts2.10-ci-gateway
+          current-parameters: true
           predefined-parameters: |
             TEST_GROUPS=tftf-l1-build
           property-file: env.param
@@ -118,6 +121,7 @@
         projects:
         - kill-phase-on: NEVER
           name: tf-a-lts2.10-ci-gateway
+          current-parameters: true
           predefined-parameters: |
             TEST_GROUPS=tftf-l1-fvp
           property-file: env.param
