@@ -1,6 +1,6 @@
 - job:
     name: tf-a-lts2.10-builder
-    node: docker-amd64-tf-a-jammy
+    node: docker-amd64-tf-a-lts2.10-jammy
     project-type: freestyle
     concurrent: true
     disabled: false
