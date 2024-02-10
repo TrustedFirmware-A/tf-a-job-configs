@@ -7,7 +7,7 @@ env |grep '^GERRIT'
 echo "########################################################################"
 
 RTD_WEBHOOK_URL="https://readthedocs.org/api/v2/webhook/trustedfirmware-a/87181/"
-RTD_VER_API="https://readthedocs.org/api/v3/projects/trustedfirmware-a/versions/"
+RTD_VER_API="https://readthedocs.org/api/v3/projects/trustedfirmware-a/versions"
 RTD_WEBHOOK_SECRET_KEY=${RTD_WEBHOOK_SECRET}
 RTD_API_TOKEN=${RTD_API_TOKEN}
 
@@ -18,19 +18,29 @@ echo ${GERRIT_REFNAME} | grep -q "refs\/tags\/" && lts_branch=${refname%.*} && n
 
 function activate_version() {
     version=$1
+    max_retry_time=20
     retry=0
 
-    status=$(curl -s -X PATCH -H "Content-Type: application/json" -H "Authorization: Token ${RTD_API_TOKEN}" \
-                -d "{\"active\": true}" ${RTD_VER_API}/${version}/ | jq .detail)
+    ver_status=$(curl -s -H "Authorization: Token ${RTD_API_TOKEN}" ${RTD_VER_API}/${version}/ | \
+                 jq -r '.detail')
 
-    while [ "${status}" = "\"Not found.\"" ];
+    while [ "${ver_status}" == "Not found." ];
     do
-        [ ${retry} -gt 5 ] && echo "RTD can not find the version: ${new_tag}" && exit 1
-        sleep 10
-	    status=$(curl -s -X PATCH -H "Content-Type: application/json" -H "Authorization: Token ${RTD_API_TOKEN}" \
-                 -d "{\"active\": true}" ${RTD_VER_API}/${version}/ | jq .detail)
+        [ ${retry} -gt ${max_retry_time} ] && break 
+        sleep 30
         retry=$((retry+1))
+        ver_status=$(curl -s -H "Authorization: Token ${RTD_API_TOKEN}" ${RTD_VER_API}/${version}/ | \
+                     jq -r '.detail')
     done
+
+    if [ ${retry} -le ${max_retry_time} ]; then
+        echo "Active new version: ${version}"
+        curl -s -X PATCH -H "Content-Type: application/json" -H "Authorization: Token ${RTD_API_TOKEN}" \
+             -d "{\"active\": true, \"hidden\": false}" ${RTD_VER_API}/${version}/
+    else
+        echo "RTD can not find the version: ${version}"
+        exit 1
+    fi
 }
 
 echo "Notifying ReadTheDocs of changes on: ${lts_branch}"
