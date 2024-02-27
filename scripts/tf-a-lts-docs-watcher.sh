@@ -60,7 +60,7 @@ if [ -n "${new_tag}" ]; then
     echo -e "\nNew release tag: ${new_tag}"
     # Hide the current active and unhidden tags
     old_tags=$(curl -s -H "Authorization: Token ${RTD_API_TOKEN}" "${RTD_VER_API}/?slug=${lts_branch}&type=tag&active=true" | \
-                   jq -r '.results | map(select(.hidden == false) | .verbose_name) | .[]')
+                   jq -r '.results | map(select(.hidden == false) | .slug) | .[]')
     for t in ${old_tags};
     do
         echo "Hide old tag: ${t}"
