@@ -50,7 +50,7 @@ pipeline {
                     }
                 }
 
-                sh "bash --norc -c 'npm install --no-save commitlint'"
+                sh "bash --norc -c 'npm ci'"
                 sh "bash --norc -c 'npx commitlint --from=${mergeBase}'"
             }
         }
