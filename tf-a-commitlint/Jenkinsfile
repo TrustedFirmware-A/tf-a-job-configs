@@ -50,8 +50,8 @@ pipeline {
                     }
                 }
 
-                sh "bash --norc -c 'npm ci'"
-                sh "bash --norc -c 'npx commitlint --from=${mergeBase}'"
+                sh "bash --norc -c 'nvm exec npm ci'"
+                sh "bash --norc -c 'nvm exec npx commitlint --from=${mergeBase}'"
             }
         }
     }
