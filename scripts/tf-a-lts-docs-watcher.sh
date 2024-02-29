@@ -18,6 +18,8 @@ echo ${GERRIT_REFNAME} | grep -q "refs\/tags\/" && lts_branch=${refname%.*} && n
 
 function activate_version() {
     version=$1
+    # Convert tag to ReadTheDocs version slug
+    version=$(echo ${version} | tr '[A-Z]/' '[a-z]-')
     max_retry_time=20
     retry=0
 
