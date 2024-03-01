@@ -14,7 +14,10 @@ RTD_API_TOKEN=${RTD_API_TOKEN}
 new_tag=""
 refname=${GERRIT_REFNAME##*/}
 lts_branch=${refname}
-echo ${GERRIT_REFNAME} | grep -q "refs\/tags\/" && lts_branch=${refname%.*} && new_tag=${refname}
+if echo ${GERRIT_REFNAME} | grep -q "refs/tags/"; then
+    new_tag=${GERRIT_REFNAME#refs/tags/}
+    lts_branch=${refname%.*}
+fi
 
 function activate_version() {
     version=$1
