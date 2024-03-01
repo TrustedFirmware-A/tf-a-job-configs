@@ -70,6 +70,21 @@ function activate_version() {
     fi
 }
 
+function wait_for_build() {
+    version=$1
+    # Convert tag to ReadTheDocs version slug
+    version=$(echo ${version} | tr '[A-Z]/' '[a-z]-')
+    while true; do
+        status=$(curl -s -H "Authorization: Token ${RTD_API_TOKEN}" "${RTD_API}/builds/" | \
+                   jq -r ".results | map(select(.version==\"$version\")) | .[0].state.code")
+        echo $status
+        if [ "$status" == "finished" ]; then
+            break
+        fi
+        sleep 10
+    done
+}
+
 echo "Notifying ReadTheDocs of changes on: ${lts_branch}"
 build_trigger=$(curl -s -X POST -d "branches=${lts_branch}" -d "token=${RTD_WEBHOOK_SECRET_KEY}" ${RTD_WEBHOOK_URL} | jq .build_triggered)
 if [ "${build_trigger}" = "false" ]; then
