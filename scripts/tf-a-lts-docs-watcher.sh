@@ -6,10 +6,32 @@ echo "    Gerrit Environment"
 env |grep '^GERRIT'
 echo "########################################################################"
 
-RTD_WEBHOOK_URL="https://readthedocs.org/api/v2/webhook/trustedfirmware-a/87181/"
-RTD_VER_API="https://readthedocs.org/api/v3/projects/trustedfirmware-a/versions"
-RTD_WEBHOOK_SECRET_KEY=${RTD_WEBHOOK_SECRET}
-RTD_API_TOKEN=${RTD_API_TOKEN}
+if [ "${GERRIT_PROJECT}" == "TF-A/trusted-firmware-a" ]; then
+    # For real production project, non-sandbox run goes to production RTD project,
+    # while for sandbox run to a separate RTD project.
+    if [ "${SANDBOX_RUN}" == "false" ]; then
+        RTD_WEBHOOK_URL="https://readthedocs.org/api/v2/webhook/trustedfirmware-a/87181/"
+        RTD_API="https://readthedocs.org/api/v3/projects/trustedfirmware-a"
+        RTD_WEBHOOK_SECRET_KEY=${RTD_WEBHOOK_SECRET}
+        RTD_API_TOKEN=${RTD_API_TOKEN}
+    else
+        RTD_WEBHOOK_URL="https://readthedocs.org/api/v2/webhook/trustedfirmware-a-sandbox/263958/"
+        RTD_API="https://readthedocs.org/api/v3/projects/trustedfirmware-a-sandbox"
+        RTD_WEBHOOK_SECRET_KEY=${TFA_SANDBOX_RTD_WEBHOOK_SECRET}
+        RTD_API_TOKEN=${PFALCON_RTD_API_TOKEN}
+    fi
+elif [ "${GERRIT_PROJECT}" == "sandbox/pfalcon/trusted-firmware-a" ]; then
+    # For test project, both "production" and "sandbox" go to the same elsewhere project.
+    RTD_WEBHOOK_URL="https://readthedocs.org/api/v2/webhook/pfalcon-trustedfirmware-a-sandbox/263459/"
+    RTD_API="https://readthedocs.org/api/v3/projects/pfalcon-trustedfirmware-a-sandbox"
+    RTD_WEBHOOK_SECRET_KEY=${PFALCON_RTD_WEBHOOK_SECRET}
+    RTD_API_TOKEN=${PFALCON_RTD_API_TOKEN}
+else
+    echo "Unknown GERRIT_PROJECT: ${GERRIT_PROJECT}"
+    exit 1
+fi
+
+RTD_VER_API="${RTD_API}/versions"
 
 new_tag=""
 refname=${GERRIT_REFNAME##*/}
