@@ -35,17 +35,18 @@ RTD_API="https://readthedocs.org/api/v3/projects/${RTD_PROJECT}"
 RTD_VER_API="${RTD_API}/versions"
 
 new_tag=""
+new_slug=""
 refname=${GERRIT_REFNAME##*/}
 lts_branch=${refname}
 if echo ${GERRIT_REFNAME} | grep -q "refs/tags/"; then
     new_tag=${GERRIT_REFNAME#refs/tags/}
+    # Convert tag to ReadTheDocs version slug
+    new_slug=$(echo ${new_tag} | tr '[A-Z]/' '[a-z]-')
     lts_branch=${refname%.*}
 fi
 
 function activate_version() {
     version=$1
-    # Convert tag to ReadTheDocs version slug
-    version=$(echo ${version} | tr '[A-Z]/' '[a-z]-')
     max_retry_time=20
     retry=0
 
@@ -73,8 +74,6 @@ function activate_version() {
 
 function wait_for_build() {
     version=$1
-    # Convert tag to ReadTheDocs version slug
-    version=$(echo ${version} | tr '[A-Z]/' '[a-z]-')
     while true; do
         status=$(curl -s -H "Authorization: Token ${RTD_API_TOKEN}" "${RTD_API}/builds/" | \
                    jq -r ".results | map(select(.version==\"$version\")) | .[0].state.code")
@@ -100,7 +99,7 @@ fi
 
 # Triggered by a new tag
 if [ -n "${new_tag}" ]; then
-    echo -e "\nNew release tag: ${new_tag}"
+    echo -e "\nNew release tag: ${new_tag}, slug: ${new_slug}"
     # Hide the current active and unhidden tags
     old_tags=$(curl -s -H "Authorization: Token ${RTD_API_TOKEN}" "${RTD_VER_API}/?slug=${lts_branch}&type=tag&active=true" | \
                    jq -r '.results | map(select(.hidden == false) | .slug) | .[]')
@@ -111,7 +110,7 @@ if [ -n "${new_tag}" ]; then
                  -d "{\"hidden\": true}" ${RTD_VER_API}/${t}/
     done
     # Active the new version
-    echo "Active new version: ${new_tag}"
-    activate_version ${new_tag}
+    echo "Active new version: ${new_slug}"
+    activate_version ${new_slug}
 fi
 
