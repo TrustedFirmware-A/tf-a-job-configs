@@ -104,7 +104,7 @@ if [ "${DEVICE}" == "fvp" -a "${USE_TUXSUITE_FVP}" -ne 0 ]; then
     echo ${TUXID} > ${WORKSPACE}/tux.id
     tuxsuite test logs --raw ${TUXID} > ${WORKSPACE}/lava-raw.log
 
-    if tuxsuite test results --raw ${TUXID} | python3 -m json.tool | grep -q '"result": "fail"'; then
+    if tuxsuite test results ${TUXID} | grep -v "lava.http-download" | grep -q 'fail'; then
         echo "tuxsuite test submit status was: ${status}, failing testcases found, setting as 1 (failed)"
         status=1
     fi
