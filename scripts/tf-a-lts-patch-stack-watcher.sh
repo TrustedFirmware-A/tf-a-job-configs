@@ -118,13 +118,21 @@ case ${GERRIT_EVENT_TYPE} in
         echo "Triggered by comment-added"
         # Check eack patch. if all patches meet the submit requirements
         # merge it
-        submit_patch_stack ${GERRIT_CHANGE_NUMBER}
+        if [ "${ENABLE_PATCH_AUTO_SUBMISSION}" == "true" ]; then
+            submit_patch_stack ${GERRIT_CHANGE_NUMBER}
+        else
+            echo "Patch auto submission function is disabled"
+        fi
         ;;
     "patchset-created")
         echo "Triggered by patchset-created"
         # New patch / patch stack is created
         # Set Allow-CI on the top of it
-        trigger_allow_ci_on_top_of_patch_stack ${GERRIT_CHANGE_NUMBER}
+        if [ "${ENABLE_AUTO_ALLOW_CI_JOB}" == "true" ]; then
+            trigger_allow_ci_on_top_of_patch_stack ${GERRIT_CHANGE_NUMBER}
+        else
+            echo "Allow-CI job auto submission function is disabled"
+        fi
         ;;
 esac
 rm -f ${err_msg}

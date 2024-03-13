@@ -9,6 +9,16 @@
         will merge the patch
     disabled: false
     parameters:
+    - bool:
+        name: ENABLE_PATCH_AUTO_SUBMISSION
+        description: |
+          Enable patch auto submission function
+        default: true
+    - bool:
+        name: ENABLE_AUTO_ALLOW_CI_JOB
+        description: |
+          Enable auto submit Allow-CI job
+        default: true
     - string:
         name: ALLOW_CI_JOB
         description: |
