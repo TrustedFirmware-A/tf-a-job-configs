@@ -294,15 +294,6 @@
           predefined-parameters: TEST_GROUPS=tf-l1-boot-tests-plat
           property-file: tf-a-env.param
     - multijob:
-        name: Code coverage
-        condition: COMPLETED
-        projects:
-        - name: tf-a-lts2.8-ci-gateway
-          current-parameters: true
-          kill-phase-on: NEVER
-          predefined-parameters: TEST_GROUPS=tf-l3-code-coverage
-          property-file: tf-a-env.param
-    - multijob:
         name: Run doc build check
         condition: COMPLETED
         projects:

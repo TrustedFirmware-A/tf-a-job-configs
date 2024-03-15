@@ -32,7 +32,7 @@
     parameters:
     - string:
         name: TEST_GROUPS
-        default: tf-l3-code-coverage-extensive
+        default: tf-l3-code-coverage
         description: |
           White space separated list of test configs: can be mix of specific
           test configs (e.g., <code>l1/fvp-default:fvp-linux-default</code>) and
