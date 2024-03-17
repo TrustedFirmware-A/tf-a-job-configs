@@ -15,11 +15,13 @@
     - gerrit:
         server-name: 'review.trustedfirmware.org'
         projects:
-#        - branches:
-#          - branch-compare-type: REG_EXP
-#            branch-pattern: refs/tags/lts-v.*
-#          project-compare-type: PLAIN
-#          project-pattern: 'TF-A/trusted-firmware-a'
+        - branches:
+          - branch-compare-type: REG_EXP
+            branch-pattern: refs/tags/lts-v.*
+          - branch-compare-type: REG_EXP
+            branch-pattern: refs/tags/sandbox/lts-v.*
+          project-compare-type: PLAIN
+          project-pattern: 'TF-A/trusted-firmware-a'
         - branches:
           - branch-compare-type: REG_EXP
             branch-pattern: refs/tags/lts-v.*
