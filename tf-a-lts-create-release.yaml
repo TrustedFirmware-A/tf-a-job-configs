@@ -29,8 +29,11 @@
             name: SANDBOX_RUN
             default: true
             description: |
-              Run sandbox simulation of a release. Uncheck this only after
-              running simulation and checking that everything is correct!
+              Run sandbox simulation of a release. A tag will be created in
+              separate "sandbox" namespace, and further actions like docs
+              publishing or release email sending will be also sandboxed.
+              Uncheck this only after running a simulation and verifying that
+              everything is correct!
     wrappers:
         - credentials-binding:
           - ssh-user-private-key:
