@@ -112,5 +112,8 @@ if [ -n "${new_tag}" ]; then
     # Active the new version
     echo "Active new version: ${new_slug}"
     activate_version ${new_slug}
+
+    wait_for_build ${new_slug}
+    echo "Docs for the new release are available at: https://${RTD_PROJECT}.readthedocs.io/en/${new_slug}/"
 fi
 
