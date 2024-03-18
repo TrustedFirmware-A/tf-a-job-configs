@@ -74,6 +74,7 @@ function activate_version() {
 
 function wait_for_build() {
     version=$1
+    retry=0
     while true; do
         status=$(curl -s -H "Authorization: Token ${RTD_API_TOKEN}" "${RTD_API}/builds/" | \
                    jq -r ".results | map(select(.version==\"$version\")) | .[0].state.code")
@@ -81,7 +82,14 @@ function wait_for_build() {
         if [ "$status" == "finished" ]; then
             break
         fi
-        sleep 10
+
+        retry=$((retry + 1))
+        if [ $retry -gt 40 ]; then
+            echo "Could not confirm that ReadTheDoc slug ${version} was built in the alloted time."
+            break
+        fi
+
+        sleep 15
     done
 }
 
