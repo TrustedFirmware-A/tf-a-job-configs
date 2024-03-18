@@ -89,7 +89,7 @@ function wait_for_build() {
             break
         fi
 
-        sleep 15
+        sleep 30
     done
 }
 
