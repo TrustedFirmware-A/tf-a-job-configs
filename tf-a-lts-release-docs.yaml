@@ -49,12 +49,12 @@
         timeout: 60
         fail: true
     - credentials-binding:
-#      - text:
-#          credential-id: TF-A-RTD-API-TOKEN
-#          variable: RTD_API_TOKEN
-#      - text:
-#          credential-id: Trusted_Firmware_ReadTheDocs_Token
-#          variable: RTD_WEBHOOK_SECRET
+      - text:
+          credential-id: TF-A-RTD-API-TOKEN
+          variable: RTD_API_TOKEN
+      - text:
+          credential-id: Trusted_Firmware_ReadTheDocs_Token
+          variable: RTD_WEBHOOK_SECRET
       - text:
           credential-id: TFA_SANDBOX_RTD_WEBHOOK_SECRET
           variable: TFA_SANDBOX_RTD_WEBHOOK_SECRET
