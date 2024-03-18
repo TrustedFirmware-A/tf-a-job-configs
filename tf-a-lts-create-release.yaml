@@ -66,7 +66,7 @@
             f="$(git rev-parse --git-dir)/hooks/commit-msg"; curl -o "$f" https://review.trustedfirmware.org/tools/hooks/commit-msg ; chmod +x "$f"
 
             if [ "$SANDBOX_RUN" == "true" ]; then
-                git commit -a -m "fix(readme): dummy commit for sandbox release"
+                git commit -a -s -m "fix(readme): dummy commit for sandbox release"
             fi
 
             python3 $WORKSPACE/tf-a-ci-scripts/lts/lts-mangle-change-log.py remove-prefix docs/change-log.md >docs/change-log.md.tmp
@@ -78,7 +78,7 @@
             RELEASE=$(grep release docs/conf.py | sed -r -e 's/release = "(.*)"/\1/')
 
             git diff
-            git commit -a -m "docs(changelog): changelog for lts-v${RELEASE} release"
+            git commit -a -s -m "docs(changelog): changelog for lts-v${RELEASE} release"
             if [ "$SANDBOX_RUN" == "true" ]; then
                 TAG="sandbox/lts-v${RELEASE}-$(date +%Y%m%dT%H%M)"
             else
