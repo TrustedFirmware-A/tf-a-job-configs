@@ -92,9 +92,16 @@
 
             #git push ssh://$CI_BOT_USERNAME@$GERRIT_HOST:29418/$GERRIT_PROJECT HEAD:refs/for/$GERRIT_BRANCH
 
-            # Push to the LTS branch
             if [ "$SANDBOX_RUN" == "false" ]; then
+                # Push to the LTS branch
                 git push ssh://$CI_BOT_USERNAME@$GERRIT_HOST:29418/$GERRIT_PROJECT
+            else
+                # If it's sandbox run, we still need to push commit to some branch,
+                # because otherwise the tag won't be visible in Gerrit (due to ACL
+                # model Gerrit uses: it resolve tag to a branch it belongs to, then
+                # checks ACLs on branch to see if a user has access to it; no branch
+                # == problems).
+                git push ssh://${CI_BOT_USERNAME}@${GERRIT_HOST}:29418/${GERRIT_PROJECT} HEAD:refs/heads/${TAG}-br
             fi
             # Push tag
             git push ssh://$CI_BOT_USERNAME@$GERRIT_HOST:29418/$GERRIT_PROJECT $TAG
