@@ -67,11 +67,11 @@
         sed '0,/^$/d' email.txt >body.txt
 
         if [ "$SANDBOX_RUN" == "true" ]; then
-            echo "paul.sokolovsky+sandbox@linaro.org" >recipients.txt
+            echo "paul.sokolovsky+sandbox@linaro.org, Bipin.Ravi@arm.com, vwadekar@nvidia.com, okash@google.com, jidong@google.com, yann.gautier@st.com" >recipients.txt
             echo -n "[SANDBOX] " | cat - subject.txt > subject.txt.tmp
             mv subject.txt.tmp subject.txt
         else
-            echo "paul.sokolovsky@linaro.org, yann.gautier@st.com" >recipients.txt
+            echo "paul.sokolovsky@linaro.org, Bipin.Ravi@arm.com, vwadekar@nvidia.com, okash@google.com, jidong@google.com, yann.gautier@st.com" >recipients.txt
         fi
 
         set +x
