@@ -4,11 +4,17 @@
     project-type: freestyle
     concurrent: false
     description:
+      This job was superceded by tf-a-lts-release-docs as part of
+      larger-scale release automation efforts
+      (https://linaro.atlassian.net/browse/TFC-545). It is expected
+      to be removed after new setup is better tested (tentatively
+      by 2024-06-01).
+      ---
       Triggers whenever a code change is merged into the lts branch 
       or a lts tag is created of the TF-A repository. Executes a webhook
       to trigger the ReadTheDocs service to build a fresh copy of the 
       documentation for one or more branches.
-    disabled: false
+    disabled: true
     builders:
     - shell:
         !include-raw: scripts/tf-a-lts-docs-watcher.sh
