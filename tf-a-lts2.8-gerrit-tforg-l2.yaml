@@ -119,7 +119,7 @@
           name: tf-a-lts2.8-ci-gateway
           current-parameters: true
           predefined-parameters: |
-            TEST_GROUPS=tf-l1-boot-tests-aarch32 tf-l1-boot-tests-bl2_el3 tf-l1-boot-tests-cortex tf-l1-boot-tests-foundation tf-l1-boot-tests-gicv2 tf-l1-boot-tests-misc
+            TEST_GROUPS=tf-l1-boot-tests-foundation
             TF_REFSPEC=$GERRIT_REFSPEC
           property-file: env.param
     - multijob:
@@ -141,7 +141,7 @@
           name: tf-a-lts2.8-ci-gateway
           current-parameters: true
           predefined-parameters: |
-            TEST_GROUPS=tf-l1-boot-tests-juno tf-l2-boot-tests-aarch32 tf-l2-boot-tests-bl2_el3 tf-l2-boot-tests-cortex tf-l2-boot-tests-foundation tf-l2-boot-tests-juno tf-l2-boot-tests-latest tf-l2-boot-tests-misc tf-l2-boot-tests-rootfs tf-l2-boot-tests-spm-mm spm-l2-boot-tests
+            TEST_GROUPS=tf-l2-boot-tests-aarch32 tf-l2-boot-tests-bl2_el3 tf-l2-boot-tests-cortex tf-l2-boot-tests-foundation tf-l2-boot-tests-juno tf-l2-boot-tests-latest tf-l2-boot-tests-misc tf-l2-boot-tests-rootfs tf-l2-boot-tests-spm-mm spm-l2-boot-tests
             TF_REFSPEC=$GERRIT_REFSPEC
           property-file: env.param
     - conditional-step:

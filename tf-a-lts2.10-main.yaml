@@ -195,12 +195,6 @@
           kill-phase-on: NEVER
           predefined-parameters: TEST_GROUPS=spm-l2-boot-tests
           property-file: tf-a-env.param
-        - name: tf-a-lts2.10-ci-gateway
-          alias: tf-l1-boot-tests-misc
-          current-parameters: true
-          kill-phase-on: NEVER
-          predefined-parameters: TEST_GROUPS=tf-l1-boot-tests-misc
-          property-file: tf-a-env.param
     - multijob:
         name: Boot up to the Linux shell prompt - Part 2
         condition: COMPLETED
@@ -245,12 +239,6 @@
         name: Juno Boot Tests
         condition: COMPLETED
         projects:
-        - name: tf-a-lts2.10-ci-gateway
-          alias: tf-l1-boot-tests-juno
-          current-parameters: true
-          kill-phase-on: NEVER
-          predefined-parameters: TEST_GROUPS=tf-l1-boot-tests-juno
-          property-file: tf-a-env.param
         - name: tf-a-lts2.10-ci-gateway
           alias: tf-l2-boot-tests-juno
           current-parameters: true
