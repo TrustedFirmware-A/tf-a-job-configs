@@ -280,18 +280,18 @@
           predefined-parameters: TEST_GROUPS=spm-l3-boot-tests
           property-file: tf-a-env.param
         - name: tf-a-ci-gateway
-          alias: tf-l1-boot-tests-plat
+          alias: tf-l2-boot-tests-partner-boards
           current-parameters: true
           kill-phase-on: NEVER
-          predefined-parameters: TEST_GROUPS=tf-l1-boot-tests-plat
+          predefined-parameters: TEST_GROUPS=tf-l2-boot-tests-partner-boards
           property-file: tf-a-env.param
         # Platform-specific self-tests.
         # These tests run from the BL31 image then halt the target.
         - name: tf-a-ci-gateway
-          alias: tf-plat-tests
+          alias: tf-l2-boot-tests-arm-plats
           current-parameters: true
           kill-phase-on: NEVER
-          predefined-parameters: TEST_GROUPS=tf-plat-tests
+          predefined-parameters: TEST_GROUPS=tf-l2-boot-tests-arm-plats
           property-file: tf-a-env.param
     - multijob:
         name: Run doc build check

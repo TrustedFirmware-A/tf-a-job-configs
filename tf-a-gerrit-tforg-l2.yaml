@@ -117,7 +117,7 @@
         - kill-phase-on: NEVER
           name: tf-a-ci-gateway
           predefined-parameters: |
-            TEST_GROUPS=tf-plat-tests tf-l1-boot-tests-plat
+            TEST_GROUPS=tf-l2-boot-tests-arm-plats tf-l2-boot-tests-partner-boards
             TF_REFSPEC=$GERRIT_REFSPEC
           property-file: env.param
     - multijob:
