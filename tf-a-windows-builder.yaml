@@ -26,8 +26,9 @@
           values:
             - tf-a-windows
     builders:
-      - batch: |
-          make CROSS_COMPILE=aarch64-none-elf- PLAT=fvp DEBUG=%DEBUG% V=1 -j all
+      - shell:  |
+          #!C:\msys64\usr\bin\env.exe OSTYPE="msys" bash -x
+          make -j $(nproc) CROSS_COMPILE=aarch64-none-elf- PLAT=fvp DEBUG=$DEBUG V=1 all
     parameters:
       - string:
           name: TF_GERRIT_PROJECT
