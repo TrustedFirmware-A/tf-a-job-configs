@@ -50,16 +50,16 @@ function activate_version() {
     max_retry_time=20
     retry=0
 
-    ver_status=$(curl -s -H "Authorization: Token ${RTD_API_TOKEN}" ${RTD_VER_API}/${version}/ | \
-                 jq -r '.detail')
+    ver_slug=$(curl -s -H "Authorization: Token ${RTD_API_TOKEN}" ${RTD_VER_API}/${version}/ | \
+                 jq -r '.slug')
 
-    while [ "${ver_status}" == "Not found." ];
+    while [ "${ver_slug}" != "${version}" ];
     do
         [ ${retry} -gt ${max_retry_time} ] && break 
         sleep 30
         retry=$((retry+1))
-        ver_status=$(curl -s -H "Authorization: Token ${RTD_API_TOKEN}" ${RTD_VER_API}/${version}/ | \
-                     jq -r '.detail')
+        ver_slug=$(curl -s -H "Authorization: Token ${RTD_API_TOKEN}" ${RTD_VER_API}/${version}/ | \
+                     jq -r '.slug')
     done
 
     if [ ${retry} -le ${max_retry_time} ]; then
