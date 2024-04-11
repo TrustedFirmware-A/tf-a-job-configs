@@ -3,7 +3,7 @@
     node: docker-amd64-tf-a-jammy
     project-type: freestyle
     concurrent: true
-    disabled: false
+    disabled: true
     defaults: global
     Description: |
       Job which triages incoming TF-A patches for suitability for LTS branch (https://linaro.atlassian.net/browse/TFC-395)
