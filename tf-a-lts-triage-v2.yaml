@@ -69,14 +69,14 @@
         cd ${START_PATH}
         rm -rf ${LTS_TMP_DIR}
     publishers:
-        - archive:
-            artifacts: '*.csv'
         - conditional-publisher:
           - condition-kind: file-exists
             on-evaluation-failure: dont-run
             condition-filename: got_report.txt
             condition-basedir: workspace
             action:
+            - archive:
+                artifacts: '*.csv'
             - email-ext:
                 always: true
                 recipients: "okash@google.com, paul.sokolovsky@linaro.org, bipin.ravi@arm.com, vwadekar@nvidia.com, joanna.farley@arm.com, lauren.wehrmeister@arm.com, arthur.she@linaro.org"
