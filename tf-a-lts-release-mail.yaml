@@ -71,7 +71,7 @@
             echo -n "[SANDBOX] " | cat - subject.txt > subject.txt.tmp
             mv subject.txt.tmp subject.txt
         else
-            echo "paul.sokolovsky@linaro.org, Bipin.Ravi@arm.com, vwadekar@nvidia.com, okash@google.com, jidong@google.com, yann.gautier@st.com" >recipients.txt
+            echo "tfa-lts@lists.trustedfirmware.org, tf-a@lists.trustedfirmware.org, paul.sokolovsky@linaro.org" >recipients.txt
         fi
 
         set +x
