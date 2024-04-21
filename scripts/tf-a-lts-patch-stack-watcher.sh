@@ -13,7 +13,6 @@ QUERY_DEPENDENCY_CMD="${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit quer
 ALLOW_CI_COMMENT="Trigger Allow-CI job by ${BUILD_URL}"
 VOTE_ALLOW_CI_CMD="${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit review --label ${ALLOW_CI_JOB} -m \"${ALLOW_CI_COMMENT}\" ${GERRIT_PATCHSET_REVISION}"
 SUBMIT_COMMENT="Submit patch by ${BUILD_URL}"
-SUBMIT_CMD="${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit review -m \"${SUBMIT_COMMENT}\" --submit"
 err_msg=$(mktemp)
 
 function get_top_patch() {
@@ -90,7 +89,7 @@ function submit_patch_stack() {
         # Check the patch stack agein to ensure it hasn't been merged yet
         if [ $(ssh ${QUERY_DEPENDENCY_CMD}${top_patch_no} | jq -r 'select(.status)|.status') != "MERGED" ];then
             echo "The whole patch stack meets the submit requirements, merge it"
-            ssh ${SUBMIT_CMD} ${top_patch_rev} 2> /dev/null
+            ssh ${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit review ${top_patch_rev} --message "\"${SUBMIT_COMMENT}\"" --submit
         else
             echo "The whole patch stack has been merged!"
         fi
