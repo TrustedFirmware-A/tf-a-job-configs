@@ -53,6 +53,10 @@
             EOF
         - trigger-builds:
             - project:
+                - tf-a-windows-builder
+              block: true
+              current-parameters: true
+            - project:
                 - tf-a-main
                 - tf-a-coverity
               block: true

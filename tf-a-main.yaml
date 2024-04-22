@@ -127,11 +127,6 @@
           kill-phase-on: NEVER
           predefined-parameters: TEST_GROUPS=tf-l1-build-clang
           property-file: tf-a-env.param
-        - name: tf-a-windows-builder
-          alias: tf-a-windows-build
-          current-parameters: true
-          kill-phase-on: NEVER
-          property-file: tf-a-env.param
     - multijob:
         name: TFTF Tests for FVP
         condition: COMPLETED
