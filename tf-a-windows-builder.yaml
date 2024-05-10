@@ -47,7 +47,7 @@
           default: 27000@flexnet.trustedfirmware.org
       - string:
           name: MBEDTLS_URL
-          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.3.0.tar.gz
+          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.0.tar.gz
       - string:
           name: PARAMS
           description: Debug parameters for make
