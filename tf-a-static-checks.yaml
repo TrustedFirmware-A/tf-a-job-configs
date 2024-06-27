@@ -42,6 +42,9 @@
             description: |-
                 Repository to run static checks on.
         - string:
+            name: GERRIT_BRANCH
+            default: ''
+        - string:
             name: SHARE_FOLDER
             default: '/srv/shared/${JOB_NAME}/${BUILD_NUMBER}'
             description: 'Folder containing shared repositories for downstream pipeline jobs'
