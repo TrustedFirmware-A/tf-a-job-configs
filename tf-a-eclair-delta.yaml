@@ -93,7 +93,7 @@
     wrappers:
     - timestamps
     - timeout:
-        timeout: 250
+        timeout: 300
         fail: true
     - credentials-binding:
       - ssh-user-private-key:
