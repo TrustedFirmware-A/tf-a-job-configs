@@ -95,7 +95,7 @@ done
 
 # List the elf files
 find ${ELF_ARTIFACTS_DIR} -name '*.elf' > elfs.txt
-grep -w "bl1\|bl2\|bl31" elfs.txt > tf-a-elfs.txt
+grep -w "bl1\|bl2\|bl31\|secure_hafnium" elfs.txt > tf-a-elfs.txt
 elfs=($(cat tf-a-elfs.txt))
 
 # Populate elfs config elements
