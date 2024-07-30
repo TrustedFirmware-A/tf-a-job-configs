@@ -1,0 +1,91 @@
+pipeline {
+    agent {
+        label 'docker-amd64-tf-a-jammy'
+    }
+
+    parameters {
+        string(name: 'TF_GERRIT_URL',
+            description: 'Git repository URL.',
+            defaultValue: 'https://review.trustedfirmware.org/TF-A/trusted-firmware-a')
+
+        string(name: 'USER_REFSPEC',
+            defaultValue: '+refs/heads/master:refs/remotes/origin/master',
+            description: 'Trusted Firmware-A refspec to use (default is master).')
+
+        string(name: 'USER_REFNAME',
+            defaultValue: 'origin/master',
+            description: 'Trusted Firmware-A refname to use (default is origin/master).')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    def refspec = params.GERRIT_REFSPEC ?: params.USER_REFSPEC
+                    def refname = params.GERRIT_PATCHSET_REVISION ?: params.USER_REFNAME
+
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[ name: refname ]],
+                        userRemoteConfigs: [
+                            [ url: params.TF_GERRIT_URL, refspec: refspec]
+                        ]
+                    ])
+               }
+            }
+        }
+
+        stage('Install') {
+            steps {
+                dir('tools/tlc') {
+                    sh 'poetry install'
+                }
+            }
+        }
+
+        stage('Codestyle') {
+            parallel {
+                stage('Style') {
+                    steps {
+                        dir('tools/tlc') {
+                            sh 'poetry run isort --diff --check-only --settings-path pyproject.toml ./'
+                            sh 'poetry run black --diff --check --config pyproject.toml ./'
+                            sh 'poetry run darglint --verbosity 2 tlc tests'
+                        }
+                    }
+                }
+
+                stage('Static Checks') {
+                    steps {
+                        dir('tools/tlc') {
+                            sh 'poetry run mypy --config-file pyproject.toml ./'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir('tools/tlc') {
+                    sh "poetry run pytest -c pyproject.toml --cov-report=xml --cov=tlc tests/"
+
+                    recordCoverage(
+                        tools: [[parser: 'COBERTURA', pattern: "coverage.xml"]],
+                        id: 'cobertura', name: 'Code Coverage',
+                        sourceCodeRetention: 'EVERY_BUILD',
+                    )
+                }
+            }
+      }
+
+        stage('Build') {
+            steps {
+                dir('tools/tlc') {
+                    sh 'poetry build'
+                    archiveArtifacts artifacts: 'dist/**', fingerprint: true
+                }
+            }
+        }
+    }
+}
