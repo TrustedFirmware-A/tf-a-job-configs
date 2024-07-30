@@ -43,9 +43,6 @@
           name: TF_GERRIT_REFSPEC
           default: +refs/heads/master:refs/remotes/origin/master
       - string:
-          name: ARMLMD_LICENSE_FILE
-          default: 27000@flexnet.trustedfirmware.org
-      - string:
           name: MBEDTLS_URL
           default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.0.tar.gz
       - string:
