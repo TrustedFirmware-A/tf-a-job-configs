@@ -49,9 +49,6 @@
             name: DOCKER_REGISTRY
             default: '987685672616.dkr.ecr.us-east-1.amazonaws.com'
         - string:
-            name: ARMLMD_LICENSE_FILE
-            default: '27000@flexnet.trustedfirmware.org'
-        - string:
             name: JUNO_ROOTFS_URL
             default: 'http://releases.linaro.org/openembedded/aarch64/17.01/linaro-image-minimal-genericarmv8-20170127-888.rootfs.tar.gz'
         - string:
