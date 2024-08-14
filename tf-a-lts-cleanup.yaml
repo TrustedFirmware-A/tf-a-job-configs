@@ -1,0 +1,33 @@
+- job:
+    name: tf-a-lts-cleanup
+    node: docker-amd64-tf-a-jammy
+    project-type: freestyle
+    concurrent: false
+    disabled: false
+    description: Cleanup stale LTS sandbox tags/branches
+    properties:
+    - build-discarder:
+        days-to-keep: 180
+        num-to-keep: 30
+    - authorization:
+        !include: authorization.yaml.inc
+    wrappers:
+        - credentials-binding:
+          - ssh-user-private-key:
+              credential-id: TFA_CI_BOT_USER_SSH_KEY
+              key-file-variable: CI_BOT_KEY
+              username-variable: CI_BOT_USERNAME
+              passphrase-variable: ''
+        - timestamps
+    builders:
+        - shell: |
+            #!/bin/bash
+            set -ex
+
+            mkdir -p ~/.ssh/
+            ssh-keyscan -p 29418 review.trustedfirmware.org >> ~/.ssh/known_hosts
+            export GIT_SSH_COMMAND="ssh -i $CI_BOT_KEY -o 'PubkeyAcceptedKeyTypes +ssh-rsa'"
+
+            git clone https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
+            cd tf-a-ci-scripts/lts
+            ./lts-cleanup-sandbox-refs.py --dry-run --user $CI_BOT_USERNAME --limit 1
