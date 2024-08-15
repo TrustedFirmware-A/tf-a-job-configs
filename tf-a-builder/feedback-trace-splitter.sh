@@ -69,14 +69,14 @@ cat > ${CONFIG_JSON} <<EOF
                   "URL":  "https://review.trustedfirmware.org/hafnium/hafnium",
                   "COMMIT": "",
                   "REFSPEC": "${SPM_REFSPEC}",
-                  "LOCATION": "workspace/spm"
+                  "LOCATION": "spm"
                 },
                 {
                  "type": "http",
                  "URL":  "$MBEDTLS_URL",
                  "COMPRESSION": "xz",
                  "EXTRA_PARAMS": "--strip-components=1",
-                 "LOCATION": "workspace/mbedtls"
+                 "LOCATION": "mbedtls"
                 }
                 ],
         "workspace": "${PROJECT_ROOT}",
