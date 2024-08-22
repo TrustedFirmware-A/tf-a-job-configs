@@ -103,6 +103,7 @@
     - shell: |
         #!/bin/bash
         set -ex
+        export PATH=~/.local/bin:$PATH
         pwd
         git clone https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
         git clone https://git.trustedfirmware.org/ci/tf-ci-scripts.git
