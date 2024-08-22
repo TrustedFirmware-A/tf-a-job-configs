@@ -105,6 +105,7 @@
     - shell: |
         #!/bin/bash
         set -ex
+        export PATH=~/.local/bin:$PATH
         pwd
         env | grep GERRIT
         git clone https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
