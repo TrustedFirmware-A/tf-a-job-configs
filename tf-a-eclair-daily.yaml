@@ -97,7 +97,7 @@
     wrappers:
         - timestamps
         - timeout:
-            timeout: 400
+            timeout: 420
             fail: true
     builders:
     - shell: |
