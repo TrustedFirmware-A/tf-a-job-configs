@@ -12,7 +12,7 @@
     - authorization:
         !include: authorization.yaml.inc
     triggers:
-        - timed: 'H 3 * * *'
+        - timed: 'H 3 * * 0,3'
     wrappers:
         - credentials-binding:
           - ssh-user-private-key:
