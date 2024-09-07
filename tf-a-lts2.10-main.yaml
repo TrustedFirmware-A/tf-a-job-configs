@@ -70,7 +70,7 @@
             default: '/srv/shared/${JOB_NAME}/${BUILD_NUMBER}'
             description: 'Folder containing shared repositories for downstream pipeline jobs'
     triggers:
-        - timed: 'H H(0-7) * * 4,7'
+        - timed: 'H H(0-7) * * 1,3,5'
     wrappers:
       - credentials-binding:
           - ssh-user-private-key:
