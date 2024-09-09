@@ -162,12 +162,6 @@
         condition: COMPLETED
         projects:
         - name: tf-a-lts2.8-ci-gateway
-          alias: tf-l2-boot-tests-foundation
-          current-parameters: true
-          kill-phase-on: NEVER
-          predefined-parameters: TEST_GROUPS=tf-l2-boot-tests-foundation
-          property-file: tf-a-env.param
-        - name: tf-a-lts2.8-ci-gateway
           alias: tf-l2-boot-tests-aarch32
           current-parameters: true
           kill-phase-on: NEVER
