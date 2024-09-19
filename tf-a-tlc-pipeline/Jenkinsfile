@@ -38,7 +38,7 @@ pipeline {
         stage('Install') {
             steps {
                 dir('tools/tlc') {
-                    sh 'poetry install'
+                    sh 'poetry install --with dev'
                 }
             }
         }
