@@ -103,6 +103,12 @@ for repo in ${repos[@]}; do
     REPO_REFSPEC="${REPO_DEFAULT_REFSPEC}"
     REPO_SSH_URL="ssh://${CI_BOT_USERNAME}@${REPO_HOST#https://}:29418/${REPO_PROJECT}"
 
+    # if a list of repos is provided via the CLONE_REPOS build param, only clone
+    # those in the list - otherwise all are cloned by default
+    if [[ -n "${CLONE_REPOS}" && "${CLONE_REPOS}" != *"${REPO_NAME}"* ]]; then
+      continue
+    fi
+
     # clone and checkout in case it does not exist
     if [ ! -d ${SHARE_FOLDER}/${REPO_NAME} ]; then
         git clone ${GIT_CLONE_PARAMS} ${REPO_URL} ${SHARE_FOLDER}/${REPO_NAME}
