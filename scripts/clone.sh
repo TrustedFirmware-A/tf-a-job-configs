@@ -101,6 +101,7 @@ for repo in ${repos[@]}; do
     REPO_DEFAULT_REFSPEC="$(echo "${repo}" | awk -F ';' '{print $4}')"
     REPO_URL="${REPO_HOST}/${REPO_PROJECT}"
     REPO_REFSPEC="${REPO_DEFAULT_REFSPEC}"
+    REPO_SSH_URL="ssh://${CI_BOT_USERNAME}@${REPO_HOST#https://}:29418/${REPO_PROJECT}"
 
     # clone and checkout in case it does not exist
     if [ ! -d ${SHARE_FOLDER}/${REPO_NAME} ]; then
@@ -120,7 +121,13 @@ for repo in ${repos[@]}; do
 
         # fetch and checkout the corresponding refspec
         cd ${SHARE_FOLDER}/${REPO_NAME}
-        git fetch ${REPO_URL} ${REPO_REFSPEC}
+
+        if [[ ${FETCH_SSH} ]]; then
+            GIT_SSH_COMMAND="ssh ${SSH_PARAMS}" git fetch ${REPO_SSH_URL} ${REPO_REFSPEC}
+        else
+            git fetch ${REPO_URL} ${REPO_REFSPEC}
+        fi
+
         git checkout FETCH_HEAD
         echo "Freshly cloned ${REPO_URL} (refspec ${REPO_REFSPEC}):"
         git log -1
