@@ -49,14 +49,14 @@
           tf-a-tests refspec to use. The master branch is used by default.
     - string:
         name: TF_M_TESTS_GERRIT_REFSPEC
-        default: '5da74a4aef63d879b6ef48ced617d6acaa5aeefa'
+        default: '+refs/heads/tfa_ci_dep_revision:refs/remotes/origin/tfa_ci_dep_revision'
         description: |
-          tf-m-tests refspec to use. Use stable SHA by default.
+          tf-m-tests refspec to use. The tfa_ci_dep_revision branch is used by default.
     - string:
         name: TF_M_EXTRAS_GERRIT_REFSPEC
-        default: 'b2fe49b96ea77416e0f849be73f71a7a2acd3f50'
+        default: '+refs/heads/tfa_ci_dep_revision:refs/remotes/origin/tfa_ci_dep_revision'
         description: |
-          tf-m-extras refspec to use. Use stable SHA by default.
+          tf-m-extras refspec to use. The tfa_ci_dep_revision branch is used by default.
     - string:
        name: SPM_REFSPEC
        default: '+refs/heads/master:refs/remotes/origin/master'
