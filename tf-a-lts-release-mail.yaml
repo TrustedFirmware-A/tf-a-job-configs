@@ -5,7 +5,7 @@
     concurrent: true
     disabled: false
     defaults: global
-    Description: |
+    description: |
       Render TF-A LTS release email template.
     properties:
         - build-discarder:

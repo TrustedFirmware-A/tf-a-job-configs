@@ -5,7 +5,7 @@
     concurrent: true
     disabled: false
     defaults: global
-    Description: |
+    description: |
       Trusted Firmware A (TF-A) builder for Next
     properties:
         - build-discarder:

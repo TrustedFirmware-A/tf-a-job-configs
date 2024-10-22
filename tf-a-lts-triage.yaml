@@ -5,7 +5,7 @@
     concurrent: true
     disabled: true
     defaults: global
-    Description: |
+    description: |
       Job which triages incoming TF-A patches for suitability for LTS branch (https://linaro.atlassian.net/browse/TFC-395)
     properties:
         - build-discarder:

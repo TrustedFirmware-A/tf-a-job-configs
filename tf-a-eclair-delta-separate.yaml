@@ -4,7 +4,7 @@
     concurrent: true
     disabled: true
     defaults: global
-    Description: |
+    description: |
       ECLAIR (MISRA compliance) testing of TF-A patches (different configs built independently/separately)
     properties:
         - build-discarder:

@@ -5,8 +5,8 @@
     concurrent: true
     disabled: false
     defaults: global
-    Description: |
-      Generat LTS triage report every Friday
+    fescription: |
+      Generate LTS triage report every Friday
     properties:
         - build-discarder:
             days-to-keep: 45

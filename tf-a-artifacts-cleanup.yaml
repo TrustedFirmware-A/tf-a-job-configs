@@ -5,7 +5,7 @@
     concurrent: true
     disabled: false
     defaults: global
-    Description: |
+    description: |
       Gradually cleanup artifacts in TF-A builds
     properties:
         - build-discarder:

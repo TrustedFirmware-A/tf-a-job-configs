@@ -5,7 +5,7 @@
     concurrent: true
     disabled: false
     defaults: global
-    Description: |
+    description: |
       Publish TF-A LTS docs for a release on ReadTheDocs site.
     properties:
         - build-discarder:

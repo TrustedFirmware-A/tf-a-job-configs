@@ -5,8 +5,8 @@
     concurrent: true
     disabled: false
     defaults: global
-    Description: |
-      Trusted Firmware A (TF-A) builder
+    description: |
+      Trusted Firmware A (TF-A) LTS2.10 builder
     properties:
         - build-discarder:
             days-to-keep: 15
