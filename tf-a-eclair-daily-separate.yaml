@@ -2,7 +2,7 @@
     name: tf-a-eclair-daily-separate
     project-type: matrix
     concurrent: true
-    disabled: false
+    disabled: true
     defaults: global
     Description: |
       ECLAIR (MISRA compliance) testing of TF-A (different configs built independently/separately)

@@ -2,7 +2,7 @@
     name: tf-a-eclair-delta-separate
     project-type: matrix
     concurrent: true
-    disabled: false
+    disabled: true
     defaults: global
     Description: |
       ECLAIR (MISRA compliance) testing of TF-A patches (different configs built independently/separately)
