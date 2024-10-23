@@ -15,7 +15,6 @@
         num-to-keep: 60
     triggers:
     - gerrit:
-        silent: true
         server-name: 'review.trustedfirmware.org'
         projects:
         - branches:
@@ -30,6 +29,14 @@
                 exclude-no-code-change: true
                 exclude-private: true
                 exclude-wip: true
+        override-votes: true
+        gerrit-build-started-verified-value: 0
+        gerrit-build-successful-verified-value: 1
+        gerrit-build-failed-verified-value: -1
+        gerrit-build-unstable-verified-value: -1
+        gerrit-build-notbuilt-verified-value: 0
+        silent: false
+        silent-start: false
     parameters:
         # GERRIT_{PROJECT,BRANCH,REFSPEC} are set when triggered by a Gerrit
         # patchset - defaults below are for manual triggers
@@ -62,7 +69,7 @@
             name: CI_REFSPEC
             default: '+refs/heads/tfa-next:refs/remotes/origin/tfa-next'
             description: |
-              'Refs to fetch for the tf-a-ci-scripts repo'
+              'Refs to fetch for the tf-a-ci-scripts repo e.g. refs/changes/13/31138/1'
         - string:
             name: SHARE_FOLDER
             default: '/srv/shared/${JOB_NAME}/${BUILD_NUMBER}'
