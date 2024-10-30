@@ -29,17 +29,14 @@
                 exclude-no-code-change: true
                 exclude-private: true
                 exclude-wip: true
+            - comment-added-contains-event:
+                comment-contains-value: '^RUN_CI$'
         override-votes: true
         gerrit-build-started-verified-value: 0
         gerrit-build-successful-verified-value: 1
         gerrit-build-failed-verified-value: -1
         gerrit-build-unstable-verified-value: -1
         gerrit-build-notbuilt-verified-value: 0
-        gerrit-build-started-codereview-value: 0
-        gerrit-build-successful-codereview-value: 0
-        gerrit-build-failed-codereview-value: 0
-        gerrit-build-unstable-codereview-value: 0
-        gerrit-build-notbuilt-codereview-value: 0
         silent: false
         silent-start: false
     parameters:
