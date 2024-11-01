@@ -115,6 +115,14 @@
         SHARE_FOLDER=${SHARE_FOLDER}
         EOF
     - multijob:
+        name: Code formatting, static checks and lints
+        condition: COMPLETED
+        projects:
+        - name: tf-a-static-tfa-next
+          current-parameters: true
+          kill-phase-on: NEVER
+          property-file: tf-a-env.param
+    - multijob:
         name: Build Trusted Firmware
         condition: COMPLETED
         projects:
