@@ -37,6 +37,13 @@
         gerrit-build-failed-verified-value: -1
         gerrit-build-unstable-verified-value: -1
         gerrit-build-notbuilt-verified-value: 0
+        # without explicitly setting these values to 0, the plugin will by
+        # default leave Code Review votes
+        gerrit-build-started-codereview-value: 0
+        gerrit-build-successful-codereview-value: 0
+        gerrit-build-failed-codereview-value: 0
+        gerrit-build-unstable-codereview-value: 0
+        gerrit-build-notbuilt-codereview-value: 0
         silent: false
         silent-start: false
     parameters:
