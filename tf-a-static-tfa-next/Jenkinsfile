@@ -1,0 +1,83 @@
+pipeline {
+    agent {
+        label 'docker-amd64-tf-a-jammy'
+    }
+
+    parameters {
+        string(
+            name: 'URL',
+            defaultValue: 'ssh://review.trustedfirmware.org:29418/TF-A/trusted-firmware-a',
+            description: 'Repository URL.')
+
+        string(
+            name: 'REFSPEC',
+            defaultValue: '+refs/heads/*:refs/remotes/origin/*',
+            description: 'Git refspec used when fetching.')
+
+        string(
+            name: 'REFNAME',
+            defaultValue: 'origin/master',
+            description: 'Git refname of the last commit to lint.')
+
+        string(
+            name: 'REFNAME_BASE',
+            defaultValue: 'origin/master',
+            description: 'Git refname of the parent of the first commit to lint.')
+
+        credentials(
+            name: 'SSH_KEY',
+            description: '',
+            credentialType: 'com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey',
+            defaultValue: 'TFA_CI_BOT_USER_SSH_KEY')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                withCredentials([sshUserPrivateKey(
+                    credentialsId: params.SSH_KEY,
+                    usernameVariable: 'GERRIT_USER',
+                    keyFileVariable: 'GERRIT_IDENTITY_FILE')])
+                {
+                    sh 'mkdir -p ~/.ssh && chmod 0700 ~/.ssh'
+                    sh 'touch ~/.ssh/config && chmod 0600 ~/.ssh/config'
+
+                    sh """\
+                        cat >> ~/.ssh/config <<EOF
+                        Host review.trustedfirmware.org
+                            User ${GERRIT_USER}
+                            IdentityFile ${GERRIT_IDENTITY_FILE}
+                            StrictHostKeyChecking no
+                            PubkeyAcceptedKeyTypes +ssh-rsa
+                        EOF
+                    """.stripIndent()
+
+                    checkout([$class: 'GitSCM',
+                        branches: [[name: params.REFNAME]],
+                        userRemoteConfigs: [[
+                            url: params.URL,
+                            refspec: params.REFSPEC]]])
+
+                    script {
+                        mergeBase = sh(
+                            returnStdout: true,
+                            script: "git merge-base ${params.REFNAME_BASE} HEAD").trim()
+                    }
+                }
+            }
+        }
+
+        stage('Lint') {
+            steps {
+                script {
+                    if (fileExists('.nvmrc')) {
+                        sh "bash --norc -c 'nvm install'"
+                    }
+                }
+
+                sh "bash --norc -c 'nvm exec npm ci'"
+                sh "bash --norc -c 'nvm exec npx commitlint --from=${mergeBase}'"
+            }
+        }
+    }
+}
