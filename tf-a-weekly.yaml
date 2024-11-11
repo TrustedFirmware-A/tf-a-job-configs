@@ -1,11 +1,15 @@
 - job:
     name: tf-a-weekly
     node: docker-amd64-tf-a-jammy
-    project-type: freestyle
-    concurrent: false
+    project-type: multijob
+    concurrent: true
     disabled: false
-    description: Triggers tf-a-ci-coverage-gateway.yaml(coverage) for the TF-A project.
+    description: Main CI job for Trusted Firmware.
     properties:
+    - throttle:
+        option: project
+        enabled: true
+        max-total: 5
     - build-discarder:
         days-to-keep: 14
         num-to-keep: 60
@@ -29,6 +33,11 @@
             name: TFTF_GERRIT_REFSPEC
             default: '+refs/heads/master:refs/remotes/origin/master'
         - string:
+           name: SPM_REFSPEC
+           default: '+refs/heads/master:refs/remotes/origin/master'
+           description: |
+             SPM(Hafnium) refspec to use. The master branch is used by default.
+        - string:
             name: CI_REFSPEC
             default: '+refs/heads/master:refs/remotes/origin/master'
         - string:
@@ -40,24 +49,61 @@
             name: LAVA_PRIORITY
             default: 'low'
         - string:
+            name: MBEDTLS_URL
+            default: 'https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.1.tar.gz'
+        - string:
+            name: LAVA_RETRIES
+            default: 2
+            description: |
+              Number of tries submitting job to LAVA in case it fails (stopgap measure against nondeterministic failures)
+        - string:
+            name: USE_TUXSUITE_FVP
+            default: 1
+            description: |
+              Whether to submit FVP tests via TuxSuite (instead of LAVA)
+        - string:
             name: SHARE_FOLDER
-            default: '/srv/shared/staging/${JOB_NAME}/${BUILD_NUMBER}'
+            default: '/srv/shared/${JOB_NAME}/${BUILD_NUMBER}'
             description: 'Folder containing shared repositories for downstream pipeline jobs'
     wrappers:
-        - timestamps
+      - workspace-cleanup
+      - timestamps
     builders:
-        - shell:
-            !include-raw: scripts/clone.sh
-        - shell: |
-            #!/bin/bash
-            set -e
-            cat << EOF > share.param
-            SHARE_FOLDER=${SHARE_FOLDER}
-            EOF
-        - trigger-builds:
-            - project:
-                - tf-a-ci-coverage-gateway
-              block: true
-              current-parameters: true
+    - shell:
+        !include-raw: scripts/clone.sh
+    - shell: |
+        #!/bin/bash
+        set -e
+        cat << EOF > tf-a-env.param
+        GERRIT_PROJECT=${TF_GERRIT_PROJECT}
+        GERRIT_BRANCH=${TF_GERRIT_BRANCH}
+        GERRIT_REFSPEC=${TF_GERRIT_REFSPEC}
+        QA_SERVER_PROJECT=${JOB_NAME}
+        QA_SERVER_VERSION=${BUILD_NUMBER}
+        SHARE_FOLDER=${SHARE_FOLDER}
+        EOF
+        cat << EOF > tf-a-tests-env.param
+        GERRIT_PROJECT=${TFTF_GERRIT_PROJECT}
+        GERRIT_BRANCH=${TFTF_GERRIT_BRANCH}
+        GERRIT_REFSPEC=${TFTF_GERRIT_REFSPEC}
+        QA_SERVER_PROJECT=${JOB_NAME}
+        QA_SERVER_VERSION=${BUILD_NUMBER}
+        SHARE_FOLDER=${SHARE_FOLDER}
+        EOF
+    - multijob:
+        name: TFTF Fuzzing
+        condition: COMPLETED
+        projects:
+        - name: tf-a-ci-gateway
+          alias: tf-l3-fuzzing SDEI
+          current-parameters: true
+          kill-phase-on: NEVER
+          predefined-parameters: TEST_GROUPS=tf-l3-fuzzing
+          property-file: tf-a-tests-env.param
+    # participate in the job's success/failure.
+    - trigger-builds:
+        - project: tf-a-ci-coverage-gateway
+          block: true
+          current-parameters: true
     triggers:
         - timed: '59 23 * * 7'
