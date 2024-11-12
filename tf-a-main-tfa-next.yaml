@@ -25,7 +25,7 @@
         trigger-on:
             - patchset-created-event:
                 exclude-drafts: true
-                exclude-trivial-rebase: true
+                exclude-trivial-rebase: false
                 exclude-no-code-change: true
                 exclude-private: true
                 exclude-wip: true
