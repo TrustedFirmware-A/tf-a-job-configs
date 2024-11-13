@@ -148,3 +148,14 @@
           predefined-parameters: |
             TEST_GROUPS=tf-next-build
           property-file: tf-a-env.param
+    - multijob:
+        name: FVP Tests
+        condition: COMPLETED
+        projects:
+        - name: tf-a-ci-gateway-tfa-next
+          alias: rfa-fvp
+          current-parameters: true
+          kill-phase-on: NEVER
+          predefined-parameters: |
+            TEST_GROUPS=rfa-fvp
+          property-file: tf-a-env.param
