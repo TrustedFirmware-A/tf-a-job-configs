@@ -3,7 +3,7 @@ set -ex
 
 echo "########################################################################"
 echo "    Gerrit Environment"
-env |grep '^GERRIT'
+env | grep '^GERRIT'
 echo "########################################################################"
 
 if [ "${GERRIT_PROJECT}" == "TF-A/trusted-firmware-a" ]; then
