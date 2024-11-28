@@ -96,9 +96,9 @@ function wait_for_build() {
 echo "Notifying ReadTheDocs of changes on: ${lts_branch}"
 build_trigger=$(curl -s -X POST -d "branches=${lts_branch}" -d "token=${RTD_WEBHOOK_SECRET_KEY}" ${RTD_WEBHOOK_URL} | jq .build_triggered)
 if [ "${build_trigger}" = "false" ]; then
-        # The branch might be new and hasn't been known by RTD, or hasn't been activated, or both
+    # The branch might be new and hasn't been known by RTD, or hasn't been activated, or both
     # we can trigger a build for the master branch to update all branches
-        echo "The branch ${lts_branch} is now! Activate and hide it!"
+    echo "The branch ${lts_branch} is new! Activate and hide it!"
     curl -s -X POST -d "branches=master" -d "token=${RTD_WEBHOOK_SECRET_KEY}" ${RTD_WEBHOOK_URL}
     activate_version ${lts_branch}
     curl -s -X PATCH -H "Content-Type: application/json" -H "Authorization: Token ${RTD_API_TOKEN}" \
