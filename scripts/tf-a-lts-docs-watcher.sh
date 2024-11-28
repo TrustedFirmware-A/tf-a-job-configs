@@ -1,10 +1,12 @@
 #!/bin/bash
-set -ex
+set -x
 
 echo "########################################################################"
 echo "    Gerrit Environment"
 env | grep '^GERRIT'
 echo "########################################################################"
+
+set -e
 
 if [ "${GERRIT_PROJECT}" == "TF-A/trusted-firmware-a" ]; then
     # For real production project, non-sandbox run goes to production RTD project,
@@ -44,6 +46,14 @@ if echo ${GERRIT_REFNAME} | grep -q "refs/tags/"; then
     new_slug=$(echo ${new_tag} | tr '[A-Z]/' '[a-z]-')
     lts_branch=${refname%.*}
 fi
+
+function rtd_rest_api() {
+    uri="$1"
+    jqfilt="$2"
+    resp=$(curl -s -H "Authorization: Token ${RTD_API_TOKEN}" "$uri")
+    echo $resp 1>&2
+    echo $resp | jq -r "$jqfilt"
+}
 
 function activate_version() {
     version=$1
@@ -109,8 +119,7 @@ fi
 if [ -n "${new_tag}" ]; then
     echo -e "\nNew release tag: ${new_tag}, slug: ${new_slug}"
     # Hide the current active and unhidden tags
-    old_tags=$(curl -s -H "Authorization: Token ${RTD_API_TOKEN}" "${RTD_VER_API}/?slug=${lts_branch}&type=tag&active=true" | \
-                   jq -r '.results | map(select(.hidden == false) | .slug) | .[]')
+    old_tags=$(rtd_rest_api "${RTD_VER_API}/?slug=${lts_branch}&type=tag&active=true" '.results | map(select(.hidden == false) | .slug) | .[]')
     for t in ${old_tags};
     do
         echo "Hide old tag: ${t}"
