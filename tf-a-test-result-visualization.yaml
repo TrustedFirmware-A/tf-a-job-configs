@@ -48,7 +48,7 @@
           #!/bin/bash
 
           bash ${WORKSPACE}/tf-a-ci-scripts/script/graphs/tf-main-results.bash \
-              "${JENKINS_URL}job/${TARGET_BUILD}"
+              "${JENKINS_PUBLIC_URL}job/${TARGET_BUILD}"
     publishers:
       - postbuildscript:
           builders:
