@@ -162,5 +162,3 @@
             excludes: 'ECLAIR/out/.data/**'
             latest-only: false
             allow-empty: true
-        - email:
-            recipients: 'paul.sokolovsky@linaro.org'

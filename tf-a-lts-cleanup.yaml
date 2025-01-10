@@ -33,6 +33,3 @@
             git clone https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
             cd tf-a-ci-scripts/lts
             ./lts-cleanup-sandbox-refs.py --user $CI_BOT_USERNAME --limit 1
-    publishers:
-        - email:
-            recipients: 'paul.sokolovsky@linaro.org'

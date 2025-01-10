@@ -347,4 +347,4 @@
             failure-threshold: never
     publishers:
         - email:
-            recipients: okash@google.com, paul.sokolovsky@linaro.org, bipin.ravi@arm.com, vwadekar@nvidia.com, joanna.farley@arm.com
+            recipients: okash@google.com, bipin.ravi@arm.com, vwadekar@nvidia.com, joanna.farley@arm.com

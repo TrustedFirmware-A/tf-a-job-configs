@@ -94,5 +94,3 @@
             script:
                 !include-raw:
                   - tf-a-coverity/postbuild.groovy
-        - email:
-            recipients: 'paul.sokolovsky@linaro.org'
