@@ -320,20 +320,6 @@
             build-step-failure-threshold: never
             unstable-threshold: never
             failure-threshold: never
-    # If all tests passed, catch up the master branch with integration
-#    - conditional-step:
-#        condition-kind: current-status
-#        condition-best: SUCCESS
-#        condition-worst: SUCCESS
-#        steps:
-#        - shell: |-
-#            #!/bin/bash
-#            if [ $MULTIJOB_FAILED -eq 0 ]; then
-#                echo "Proceed with integration->master fast-forward merge"
-#                bash "${WORKSPACE}/tf-a-ci-scripts/script/scratch_scripts/fast-forward-master.sh"
-#            else
-#                echo "Do not proceed with integration->master merge as sub-jobs failed"
-#            fi
     publishers:
         - email:
             recipients: okash@google.com, paul.sokolovsky@linaro.org, bipin.ravi@arm.com, vwadekar@nvidia.com, joanna.farley@arm.com
