@@ -1,6 +1,6 @@
 - job:
     name: tf-a-lts-patch-stack-watcher
-    node: master
+    node: docker-amd64-tf-a-jammy
     project-type: freestyle
     concurrent: false
     description:
