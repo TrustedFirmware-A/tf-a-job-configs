@@ -56,7 +56,7 @@
             default: '+refs/heads/lts-v2.8:refs/remotes/origin/lts-v2.8'
         - string:
             name: MBEDTLS_URL
-            default: 'https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.1.tar.gz'
+            default: 'https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.2.tar.gz'
         - string:
             name: LAVA_RETRIES
             default: 2
