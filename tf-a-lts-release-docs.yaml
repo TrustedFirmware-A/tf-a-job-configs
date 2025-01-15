@@ -6,7 +6,7 @@
     disabled: false
     defaults: global
     description: |
-      Publish TF-A LTS docs for a release on ReadTheDocs site.
+      Publish TF-A LTS docs for a release on ReadTheDocs site
     properties:
         - build-discarder:
             days-to-keep: 365
