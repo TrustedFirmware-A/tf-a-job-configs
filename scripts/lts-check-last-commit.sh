@@ -3,6 +3,7 @@
 set -ex
 
 last_build=$((${BUILD_NUMBER}-1))
+JOB_URL=${JOB_URL//http:/https:}
 API_URL="${JOB_URL}/${last_build}/api/json"
 
 TO_BUILD_FILE="${WORKSPACE}/TO_BUILD"
