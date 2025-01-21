@@ -67,6 +67,11 @@
         default: '+refs/heads/master:refs/remotes/origin/master'
         description: |
           tf-a-ci-scripts refspec to use. The master branch is used by default.
+    - string:
+        name: JOBS_REFSPEC
+        default: 'refs/heads/master'
+        description: |
+          tf-a-job-configs refspec to use. The master branch is used by default.
     - bool:
         name: ENABLE_STATIC_CHECK
         default: false

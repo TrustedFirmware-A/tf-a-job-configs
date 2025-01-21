@@ -13,6 +13,11 @@
         name: CI_REFSPEC
         default: +refs/heads/master:refs/remotes/origin/master
     - string:
+        name: JOBS_REFSPEC
+        default: 'refs/heads/master'
+        description: |
+          tf-a-job-configs refspec to use. The master branch is used by default.
+    - string:
         name: TF_GERRIT_PROJECT
         default: TF-A/trusted-firmware-a
     - string:

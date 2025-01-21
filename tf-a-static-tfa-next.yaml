@@ -32,6 +32,11 @@
             name: CI_REFSPEC
             default: '+refs/heads/tfa-next:refs/remotes/origin/tfa-next'
         - string:
+            name: JOBS_REFSPEC
+            default: 'refs/heads/master'
+            description: |
+              tf-a-job-configs refspec to use. The master branch is used by default.
+        - string:
             name: GERRIT_BRANCH
             default: ''
         - string:
