@@ -3,7 +3,7 @@
     gerrit-project: 'TF-A/trusted-firmware-a'
     gerrit-branch: 'master'
     gerrit-refspec: 'refs/heads/master'
-    days-to-keep: '180'
+    days-history: '180'
     num-to-keep: '180'
     exec-node: 'docker-amd64-tf-a-jammy'
 - scm:
@@ -38,7 +38,7 @@
     defaults: global
     properties:
         - build-discarder:
-            days-to-keep: '{days-to-keep}'
+            days-to-keep: '{days-history}'
             num-to-keep: '{num-to-keep}'
     parameters:
         - string:
