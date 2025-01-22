@@ -93,6 +93,7 @@
         - name: tf-a-commitlint
           kill-phase-on: NEVER
           predefined-parameters: |
+            URL=https://review.trustedfirmware.org/${GERRIT_PROJECT}
             REFSPEC=${GERRIT_REFSPEC}
             REFNAME=${GERRIT_PATCHSET_REVISION}
             REFNAME_BASE=origin/${GERRIT_BRANCH}
