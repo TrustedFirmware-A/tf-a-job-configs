@@ -357,15 +357,15 @@
                     unstable-threshold: never
                     failure-threshold: never
     publishers:
-      - groovy-postbuild:
-          script: |
-            def currentBuild = Thread.currentThread().executable
-            def workspace = System.getenv('WORKSPACE') ?: '.'
-            def toBuildFile = new File("${workspace}/TO_BUILD")
-
-            if (!toBuildFile.exists()) {
-                currentBuild.setDescription("There are no new commits in the repositories, skip the build!")
-            }
-          on-failure: "nothing"
+      - conditional-publisher:
+          - condition-kind: shell
+            condition-command: |
+              ! test -f ${WORKSPACE}/TO_BUILD
+            action:
+              - groovy-postbuild:
+                  script: |
+                    def currentBuild = Thread.currentThread().executable
+                    currentBuild.setDescription("There are no new commits in the repositories, skip the build!")
+                  on-failure: "nothing"
       - email:
           recipients: bipin.ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, palmer@google.com, govindraj.raja@arm.com
