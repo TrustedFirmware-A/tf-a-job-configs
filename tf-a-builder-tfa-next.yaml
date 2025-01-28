@@ -127,6 +127,10 @@
                 variable: TUXSUITE_TOKEN
         - credentials-binding:
             - text:
+                credential-id: TUXPUT_ARCHIVE_TOKEN
+                variable: TUXPUT_ARCHIVE_TOKEN
+        - credentials-binding:
+            - text:
                 credential-id: ARMCLANG_UBL_CODE
                 variable: ARMCLANG_UBL_CODE
     builders:
@@ -153,8 +157,14 @@
                 DEVICE_TYPE=fvp
                 CUSTOM_YAML_URL=${BUILD_URL}/artifact/artefacts-lava/job.yaml
                 DEVICE_TYPE=$(awk -F': ' '/device_type/ {print $2}' ${WORKSPACE}/artefacts-lava/job.yaml)
+                # The job.yaml file specifies the download URL of the binaries for FVP tests.
+                # Transform this "download" URL to a "publish" URL for uploading files to the S3 bucket.
+                URL_FIP=$(grep -A1 'fip:' ${WORKSPACE}/artefacts-lava/job.yaml | grep 'url:' | sed -E 's+\s*url:\s*++' | sed -E 's+downloads.trustedfirmware.org+publish.trustedfirmware.org/upload+' | sed -E 's+/fip.bin++')
+                URL_BL1=$(grep -A1 'bl1:' ${WORKSPACE}/artefacts-lava/job.yaml | grep 'url:' | sed -E 's+\s*url:\s*++' | sed -E 's+downloads.trustedfirmware.org+publish.trustedfirmware.org/upload+' | sed -E 's+/bl1.bin++')
                 cat << EOF > ${WORKSPACE}/lava.param
                 DEVICE_TYPE=${DEVICE_TYPE}
+                URL_FIP=${URL_FIP}
+                URL_BL1=${URL_BL1}
                 LAVA_SERVER=tf.validation.linaro.org
                 EOF
     publishers:
@@ -180,6 +190,7 @@
                             - shell: |
                                 #!/bin/bash -x
 
+                                tf-a-job-configs/tf-a-builder/upload-tfa-next-artifacts.sh
                                 tf-a-job-configs/tf-a-builder/submit-test-job.sh
                                 status=$?
                                 tf-a-job-configs/tf-a-builder/lava-log-process.sh
