@@ -47,7 +47,8 @@
             default: '+refs/heads/master:refs/remotes/origin/master'
         - string:
             name: DOCKER_REGISTRY
-            default: '987685672616.dkr.ecr.us-east-1.amazonaws.com'
+            default: ${JENKINS_DOCKER_REGISTRY}
+            description: JENKINS_DOCKER_REGISTRY is a system-wide environment variable
         - string:
             name: JUNO_ROOTFS_URL
             default: 'http://releases.linaro.org/openembedded/aarch64/17.01/linaro-image-minimal-genericarmv8-20170127-888.rootfs.tar.gz'
