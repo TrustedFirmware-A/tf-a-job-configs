@@ -103,26 +103,17 @@ function wait_for_build() {
     done
 }
 
-echo "Notifying ReadTheDocs of changes on: ${lts_branch}"
-build_trigger=$(curl -s -X POST -d "branches=${lts_branch}" -d "token=${RTD_WEBHOOK_SECRET_KEY}" ${RTD_WEBHOOK_URL} | jq .build_triggered)
-if [ "${build_trigger}" = "false" ]; then
-    # The branch might be new and hasn't been known by RTD, or hasn't been activated, or both
-    # we can trigger a build for the master branch to update all branches
-    echo "The branch ${lts_branch} is new! Activate and hide it!"
-    curl -s -X POST -d "branches=master" -d "token=${RTD_WEBHOOK_SECRET_KEY}" ${RTD_WEBHOOK_URL}
-    activate_version ${lts_branch}
-    curl -s -X PATCH -H "Content-Type: application/json" -H "Authorization: Token ${RTD_API_TOKEN}" \
-         -d "{\"hidden\": true}" ${RTD_VER_API}/${lts_branch}/
-fi
+echo "Notifying ReadTheDocs of changes"
+curl -s -X POST -H "Authorization: Token ${RTD_API_TOKEN}" ${RTD_API}/sync-versions/
 
 # Triggered by a new tag
 if [ -n "${new_tag}" ]; then
     echo -e "\nNew release tag: ${new_tag}, slug: ${new_slug}"
-    # Hide the current active and unhidden tags
+    # Hide the current active and visible version
     old_tags=$(rtd_rest_api "${RTD_VER_API}/?slug=${lts_branch}&type=tag&active=true" '.results | map(select(.hidden == false) | .slug) | .[]')
     for t in ${old_tags};
     do
-        echo "Hide old tag: ${t}"
+        echo "Hide old version: ${t}"
         curl -s -X PATCH -H "Content-Type: application/json" -H "Authorization: Token ${RTD_API_TOKEN}" \
                  -d "{\"hidden\": true}" ${RTD_VER_API}/${t}/
     done
