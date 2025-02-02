@@ -346,9 +346,16 @@
         steps:
         - shell: |-
             #!/bin/bash
-            if [ $MULTIJOB_FAILED -eq 0 ]; then
-                echo "Proceed with integration->master fast-forward merge"
-                bash "${WORKSPACE}/tf-a-ci-scripts/script/scratch_scripts/fast-forward-master.sh"
+            #
+            if echo ${JENKINS_PUBLIC_URL} | grep -q "ci.trustedfirmware.org"; then
+                # Only do it on the OpenCI production site
+                echo "It's running on the OpenCI procution site"
+                if [ $MULTIJOB_FAILED -eq 0 ]; then
+                    echo "Proceed with integration->master fast-forward merge"
+                    bash "${WORKSPACE}/tf-a-ci-scripts/script/scratch_scripts/fast-forward-master.sh"
+                else
+                    echo "Do not proceed with integration->master merge as sub-jobs failed"
+                fi
             else
-                echo "Do not proceed with integration->master merge as sub-jobs failed"
+                echo "It's NOT on the OpenCI production site"
             fi
