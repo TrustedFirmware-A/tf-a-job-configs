@@ -39,19 +39,8 @@ matcher = manager.getLogMatcher("TuxSuite test ID: (?<tuxid>[A-Za-z0-9]+)")
 if (matcher?.matches()) {
     def tuxId = matcher.group('tuxid')
     def abbrTuxId = "..." + tuxId.substring(19)
-
-    // Retrieve environment variables
-    def tuxsuiteGroup = System.getenv('TUXSUITE_GROUP')
-    def tuxsuiteProject = System.getenv('TUXSUITE_PROJECT')
-
-    // Exit with an error if either variable is not set
-    if (!tuxsuiteGroup || !tuxsuiteProject) {
-        manager.buildFailure()
-        throw new RuntimeException("Error: TUXSUITE_GROUP or TUXSUITE_PROJECT environment variable is not set.")
-    }
-
-    description += "Tux Id: <a href='https://tuxapi.tuxsuite.com/v1/groups/${tuxsuiteGroup}/projects/${tuxsuiteProject}/tests/${tuxId}'>${abbrTuxId}</a>\n"
-    description += " | <a href='https://storage.tuxsuite.com/public/${tuxsuiteGroup}/${tuxsuiteProject}/tests/${tuxId}/lava-logs.html'>log</a>\n"
+    description += "Tux Id: <a href='https://tuxapi.tuxsuite.com/v1/groups/tfc/projects/ci/tests/${tuxId}'>${abbrTuxId}</a>\n"
+    description += " | <a href='https://storage.tuxsuite.com/public/tfc/ci/tests/${tuxId}/lava-logs.html'>log</a>\n"
 
     // Verify test job results set build status as FAILED if needed
     def testMatcher = manager.getLogMatcher("TuxSuite test result: (?<result>\\d+)")
