@@ -99,10 +99,10 @@ mkdir -p /arm/pdsw/tools/gcc-linaro-6.2.1-2016.11-x86_64_aarch64-linux-gnu
 ln -s ${TOOLS_DIR}/gcc-linaro-6.2.1-2016.11-x86_64_aarch64-linux-gnu/bin \
    /arm/pdsw/tools/gcc-linaro-6.2.1-2016.11-x86_64_aarch64-linux-gnu/bin
 
-# CC=/arm/warehouse/Distributions/FA/ARMCompiler/6.18/19/standalone-linux-x86_64-rel/bin/armclang
-mkdir -p /arm/warehouse/Distributions/FA/ARMCompiler/6.18/19/standalone-linux-x86_64-rel
-ln -s ${TOOLS_DIR}/armclang-6.18/bin \
-      /arm/warehouse/Distributions/FA/ARMCompiler/6.18/19/standalone-linux-x86_64-rel/bin
+# CC=/arm/warehouse/Distributions/FA/ARMCompiler/6.23/37/standalone-linux-x86_64-rel/bin/armclang
+mkdir -p /arm/warehouse/Distributions/FA/ARMCompiler/6.23/37/standalone-linux-x86_64-rel
+ln -s ${TOOLS_DIR}/armclang-6.23/bin \
+      /arm/warehouse/Distributions/FA/ARMCompiler/6.23/37/standalone-linux-x86_64-rel/bin
 
 # If build actually uses ArmClang, activate and verify UBL license
 if echo ${TEST_CONFIG} | grep -q armclang && [ -n "${ARMCLANG_UBL_CODE}" ]; then
