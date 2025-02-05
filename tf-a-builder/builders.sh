@@ -106,9 +106,9 @@ ln -s ${TOOLS_DIR}/armclang-6.18/bin \
 
 # If build actually uses ArmClang, activate and verify UBL license
 if echo ${TEST_CONFIG} | grep -q armclang && [ -n "${ARMCLANG_UBL_CODE}" ]; then
-    ${TOOLS_DIR}/armclang-6.18/bin/armlm activate --code ${ARMCLANG_UBL_CODE}
-    ${TOOLS_DIR}/armclang-6.18/bin/armlm inspect
-    ${TOOLS_DIR}/armclang-6.18/bin/armclang --vsn
+    ${TOOLS_DIR}/armclang-6.23/bin/armlm activate --code ${ARMCLANG_UBL_CODE}
+    ${TOOLS_DIR}/armclang-6.23/bin/armlm inspect
+    ${TOOLS_DIR}/armclang-6.23/bin/armclang --vsn
 fi
 
 # Mandatory workspace
