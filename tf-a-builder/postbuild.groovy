@@ -39,15 +39,16 @@ matcher = manager.getLogMatcher("TuxSuite test ID: (?<tuxid>[A-Za-z0-9]+)")
 if (matcher?.matches()) {
     def tuxId = matcher.group('tuxid')
     def abbrTuxId = "..." + tuxId.substring(19)
-
     // Retrieve environment variables
-    def tuxsuiteGroup = System.getenv('TUXSUITE_GROUP')
-    def tuxsuiteProject = System.getenv('TUXSUITE_PROJECT')
+    def envVars = manager.build.getEnvironment(manager.listener)
+    def tuxsuiteGroup = envVars.get('TUXSUITE_GROUP')
+    def tuxsuiteProject = envVars.get('TUXSUITE_PROJECT')
 
-    // Exit with an error if either variable is not set
+    // Ensure environment variables are set
     if (!tuxsuiteGroup || !tuxsuiteProject) {
+        manager.listener.logger.println("Error: TUXSUITE_GROUP or TUXSUITE_PROJECT environment variable is not set.")
         manager.buildFailure()
-        throw new RuntimeException("Error: TUXSUITE_GROUP or TUXSUITE_PROJECT environment variable is not set.")
+        throw new RuntimeException("Missing required environment variables: TUXSUITE_GROUP or TUXSUITE_PROJECT.")
     }
 
     description += "Tux Id: <a href='https://tuxapi.tuxsuite.com/v1/groups/${tuxsuiteGroup}/projects/${tuxsuiteProject}/tests/${tuxId}'>${abbrTuxId}</a>\n"
