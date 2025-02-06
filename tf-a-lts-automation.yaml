@@ -71,7 +71,7 @@
             fi
 
             # Create new LTS branch to related repositories
-            repos="hafnium TF-A/tf-a-tests ci/tf-a-ci-scripts"
+            repos="hafnium/hafnium TF-A/tf-a-tests ci/tf-a-ci-scripts"
             for r in ${repos};
             do
                 echo "Create branch \"${new_branch}\" from tag \"${forked_tag}\" in the \"${r}\" project"
