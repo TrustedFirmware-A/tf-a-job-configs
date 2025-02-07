@@ -15,7 +15,7 @@
         - string:
             name: EMAIL_RECIPIENT
             default: |
-              bipin.ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, palmer@google.com, govindraj.raja@arm.com arthur.she@linaro.org
+              bipin.ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, palmer@google.com, govindraj.raja@arm.com, arthur.she@linaro.org
             description: |
               The notification recipients
     wrappers:
