@@ -83,12 +83,17 @@
             echo "Create new download space for \"${new_branch}\""
             aws s3 sync s3://trustedfirmware-prod-storage/tf-a s3://trustedfirmware-prod-storage/tf-a-${new_branch}
 
+            echo "CI Environment Setup for ${new_branch} branch Completed" > subject.txt
             cat << EOF >email.txt
             Hello,
             The new LTS branch "${new_branch}" has been created in the following repositoris
             ${repos}
 
             And the new download space is ready on https://downloads.trustedfirmware.org/tf-a-${new_branch}
+
+            Please check the job log for the details
+            ${BUILD_URL}console
+
             EOF
 
             echo "--------- email body ----------"
@@ -97,10 +102,12 @@
     publishers:
       - conditional-publisher:
           - condition-kind: file-exists
+            on-evaluation-failure: dont-run
             condition-filename: email.txt
             condition-basedir: workspace
             action:
-              - email:
+              - email-ext:
+                  always: true
                   recipients: ${EMAIL_RECIPIENT}
-                  subject: "Build Success: ${JOB_NAME} #${BUILD_NUMBER}"
-                  body: ${FILE,path="email.txt"}
+                  subject: '${FILE,path="subject.txt"}'
+                  body: '${FILE,path="email.txt"}'
