@@ -84,6 +84,7 @@ if [ ! -d ${SHARE_FOLDER}/${JOBS_REPO_NAME} ]; then
     git clone ${GIT_CLONE_PARAMS} ${GIT_REPO}/${JOBS_PROJECT} ${SHARE_FOLDER}/${JOBS_REPO_NAME}
     cd ${SHARE_FOLDER}/${JOBS_REPO_NAME}
     git fetch origin ${JOBS_REFSPEC}
+    git checkout FETCH_HEAD
 else
     cd ${SHARE_FOLDER}/${JOBS_REPO_NAME}
 fi
