@@ -11,8 +11,6 @@
         - build-discarder:
             days-to-keep: 50
             num-to-keep: 50
-        - authorization:
-            !include: authorization.yaml.inc
     triggers:
         - timed: 'H H/8 * * *'
     wrappers:

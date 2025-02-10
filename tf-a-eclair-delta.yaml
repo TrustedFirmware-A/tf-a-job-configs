@@ -12,8 +12,6 @@
             days-to-keep: 45
             num-to-keep: 200
             artifact-num-to-keep: 80
-        - authorization:
-            !include: authorization.yaml.inc
     parameters:
         - string:
             name: TF_CONFIG_LIST

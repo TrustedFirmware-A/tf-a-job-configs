@@ -5,7 +5,6 @@
     node: docker-amd64-tf-a-jammy
     concurrent: true
     properties:
-    - authorization: !include: authorization.yaml.inc
     - build-discarder:
         days-to-keep: 30
     parameters:

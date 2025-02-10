@@ -15,8 +15,6 @@
     - build-discarder:
         days-to-keep: 90
         num-to-keep: 15
-    - authorization:
-        !include: authorization.yaml.inc
     parameters:
         - string:
             name: GERRIT_PROJECT

@@ -8,7 +8,6 @@
     dsl: !include-raw: tf-a-tlc-pipeline/Jenkinsfile
 
     properties:
-      - authorization: !include: authorization.yaml.inc
       - build-discarder:
           days-to-keep: 14
 

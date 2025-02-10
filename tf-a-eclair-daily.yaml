@@ -10,8 +10,6 @@
     properties:
         - build-discarder:
             days-to-keep: 40
-        - authorization:
-            !include: authorization.yaml.inc
     parameters:
         - string:
             name: TF_CONFIG_LIST

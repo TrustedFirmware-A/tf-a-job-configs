@@ -13,8 +13,6 @@
     properties:
         - build-discarder:
             days-to-keep: 14
-        - authorization:
-            !include: authorization.yaml.inc
     parameters:
         - string:
             name: TF_GERRIT_PROJECT

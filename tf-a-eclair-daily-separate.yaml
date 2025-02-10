@@ -9,8 +9,6 @@
     properties:
         - build-discarder:
             days-to-keep: 40
-        - authorization:
-            !include: authorization.yaml.inc
         - throttle:
             option: category
             categories: [eclair-daily]

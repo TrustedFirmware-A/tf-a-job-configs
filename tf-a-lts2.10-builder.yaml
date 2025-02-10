@@ -11,8 +11,6 @@
         - build-discarder:
             days-to-keep: 15
             artifact-num-to-keep: 40000
-        - authorization:
-            !include: authorization.yaml.inc
     parameters:
         - string:
             name: import_cc

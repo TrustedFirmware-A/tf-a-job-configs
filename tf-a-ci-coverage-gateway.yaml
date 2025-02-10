@@ -15,8 +15,6 @@
         enabled: true
         max-per-node: 3
         max-total: 10
-    - authorization:
-        !include: authorization.yaml.inc
     wrappers:
     - credentials-binding:
       - ssh-user-private-key:

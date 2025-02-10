@@ -6,8 +6,6 @@
     concurrent: true
     disabled: false
     properties:
-      - authorization:
-          !include: authorization.yaml.inc
       - build-discarder:
           days-to-keep: 14
           num-to-keep: 60
