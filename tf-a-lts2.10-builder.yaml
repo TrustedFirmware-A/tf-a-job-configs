@@ -130,7 +130,7 @@
         - shell:
             !include-raw: scripts/clone.sh
         - shell:
-            !include-raw: tf-a-builder/builders.sh
+            !include-raw: tf-a-builder/lts-builders.sh
         - inject:
             properties-file: artefacts/env
         - shell: |
