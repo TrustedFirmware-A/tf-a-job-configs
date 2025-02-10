@@ -89,7 +89,7 @@
             The new LTS branch "${new_branch}" has been created in the following repositoris
             ${repos}
 
-            And the new download space is ready on https://downloads.trustedfirmware.org/tf-a-${new_branch}
+            And the new download space is ready on ${DOWNLOAD_SERVER_URL}/tf-a-${new_branch}
 
             Please check the job log for the details
             ${BUILD_URL}console

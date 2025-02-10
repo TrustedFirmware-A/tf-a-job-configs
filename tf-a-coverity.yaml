@@ -62,7 +62,7 @@
 
             # Fetch coverity tool and untar it
             cd ${WORKSPACE}
-            wget https://downloads.trustedfirmware.org/tf-a/tf-a-coverity/coverity_tool.tgz
+            wget ${DOWNLOAD_SERVER_URL}/tf-a/tf-a-coverity/coverity_tool.tgz
             tar -xzf coverity_tool.tgz
             mv cov-analysis-linux64-${COVERITY_VERSION} coverity
             export PATH=${WORKSPACE}/coverity/bin:${PATH}
