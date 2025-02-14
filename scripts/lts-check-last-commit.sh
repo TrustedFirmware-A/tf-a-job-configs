@@ -16,7 +16,7 @@ else
     last_build_ts=$((${last_build_ts}/1000))
     last_build_result=$(echo ${last_build} | jq -r '.result')
 
-    if [ "${FORCE_TO_BUILD}" = "true" -o "${last_build_result}" = "FAILURE" ]; then
+    if [ "${FORCE_TO_BUILD}" = "true" -o "${last_build_result}" != "SUCCESS" ]; then
         touch ${TO_BUILD_FILE}
     else
         for r in ${repos_to_check}
