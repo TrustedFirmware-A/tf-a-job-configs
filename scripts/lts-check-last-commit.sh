@@ -4,8 +4,8 @@ set -ex
 
 TO_BUILD_FILE="${WORKSPACE}/TO_BUILD"
 JOB_URL=${JOB_URL//http:/https:}
-API_URL="${JOB_URL}/${last_build}/api/json"
 last_build=$((${BUILD_NUMBER}-1))
+API_URL="${JOB_URL}/${last_build}/api/json"
 if [ ${last_build} -eq 0 ]; then
     echo "This is the first build"
     touch ${TO_BUILD_FILE}
