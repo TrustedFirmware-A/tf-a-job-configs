@@ -63,8 +63,11 @@
             git -C "${_workdir}" init > /dev/null 2>&1
 
             # Check if the job is triggered by a new LTS branch creation
-            new_lts_branch=1
-            git -C "${_workdir}" fetch ${gerrit_host}/${GERRIT_PROJECT} ${new_branch} || new_lts_branch=-1
+            new_lts_branch=-1
+            # Verify if the branch already exists in the Hafnium project.
+            git -C "${_workdir}" ls-remote --exit-code ${gerrit_host}/hafnium/hafnium ${new_branch} || new_lts_branch=1
+            # Check if the job is not triggered by delete branch
+            git -C "${_workdir}" ls-remote --exit-code ${gerrit_host}/${GERRIT_PROJECT} ${new_branch} || new_lts_branch=-1
             if [ ${new_lts_branch} -eq -1 ]; then
                 echo "No new LTS branch created! exit job"
             	exit 0
