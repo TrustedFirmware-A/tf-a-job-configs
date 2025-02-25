@@ -25,12 +25,8 @@
                 sudo ./aws/install
             fi
 
-            aws configure list
-            ECR=987685672616.dkr.ecr.us-east-1.amazonaws.com
-            aws ecr get-login-password --region us-east-1|docker login --username AWS --password-stdin $ECR
-
             # All tfa-next related files should be under "artifacts" on the S3 bucket.
-            ROOT=s3://trustedfirmware-prod-storage/
+            ROOT=s3://${TUXPUB_S3_BUCKET}/
             for OBJECT in $(aws s3 ls $ROOT --recursive | grep artifacts | awk '{print $4}');
             do
                 echo "Current object: ${ROOT}${OBJECT}"
