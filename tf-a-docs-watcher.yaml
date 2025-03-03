@@ -11,8 +11,9 @@
     builders:
     - shell: |-
         #!/bin/bash -e
-        echo "Notifying ReadTheDocs of changes on: $RTD_BRANCHES"
-        curl -X POST -d "branches=$RTD_BRANCHES" -d "token=$RTD_TOKEN" https://readthedocs.org/api/v2/webhook/trustedfirmware-a/87181/
+        echo "Trigger ReadTheDocs build on branch: $RTD_BRANCHES"
+        RTD_API="https://readthedocs.org/api/v3/projects/trustedfirmware-a"
+        curl -s -X POST -H "Authorization: Token ${RTD_TOKEN}" ${RTD_API}/versions/$RTD_BRANCHES/builds/ | jq .
     properties:
     - build-discarder:
         days-to-keep: 60
@@ -33,7 +34,7 @@
     - timestamps
     - credentials-binding:
       - text:
-          credential-id: Trusted_Firmware_ReadTheDocs_Token
+          credential-id: TF-A-RTD-API-TOKEN
           variable: RTD_TOKEN
     parameters:
     - string:
