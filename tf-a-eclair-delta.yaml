@@ -59,7 +59,7 @@
             default: ''
         - string:
             name: MBEDTLS_URL
-            default: 'https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.0.tar.gz'
+            default: 'https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.2.tar.gz'
             description: |
               URL of mbedTLS library to use in build (only for some configurations)
         - string:
