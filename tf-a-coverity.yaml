@@ -33,7 +33,7 @@
                 tf-a-job-configs refspec to use. The master branch is used by default.
         - string:
             name: COVERITY_VERSION
-            default: '2023.6.2'
+            default: '2024.6.1'
         - bool:
             name: UPLOAD_TO_COVERITY_SCAN_ONLINE
             default: true
