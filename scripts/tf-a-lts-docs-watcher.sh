@@ -60,6 +60,9 @@ function activate_version() {
     max_retry_time=20
     retry=0
 
+    # Check whether we need to activate a tag or a branch. If it's a tag, create a branch variable
+    echo ${version} | grep -q "lts-v[0-9].*\.[0-9].*\.[0-9].*" && branch=${version%.*}
+
     ver_slug=$(curl -s -H "Authorization: Token ${RTD_API_TOKEN}" ${RTD_VER_API}/${version}/ | \
                  jq -r '.slug')
 
@@ -71,6 +74,12 @@ function activate_version() {
         ver_slug=$(curl -s -H "Authorization: Token ${RTD_API_TOKEN}" ${RTD_VER_API}/${version}/ | \
                      jq -r '.slug')
     done
+
+    # activate and hide the branch
+    if [ -n "${branch}" ]; then
+        curl -s -X PATCH -H "Content-Type: application/json" -H "Authorization: Token ${RTD_API_TOKEN}" \
+             -d "{\"active\": true, \"hidden\": true}" ${RTD_VER_API}/${branch}/
+    fi
 
     if [ ${retry} -le ${max_retry_time} ]; then
         echo "Active new version: ${version}"
@@ -104,7 +113,7 @@ function wait_for_build() {
 }
 
 echo "Notifying ReadTheDocs of changes"
-curl -s -X POST -H "Authorization: Token ${RTD_API_TOKEN}" ${RTD_API}/sync-versions/
+curl -s -X POST -H "Authorization: Token ${RTD_API_TOKEN}" ${RTD_VER_API}/${lts_branch}/builds/
 
 # Triggered by a new tag
 if [ -n "${new_tag}" ]; then
