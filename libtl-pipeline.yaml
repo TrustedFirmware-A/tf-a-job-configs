@@ -1,0 +1,31 @@
+- job:
+    name: libtl-pipeline
+    description: |
+      Job triggered for every Transfer List Library (LibTL) patch, verifying code
+      style, building the module, and running unit tests.
+    project-type: pipeline
+    sandbox: true
+    dsl: !include-raw: libtl-pipeline/Jenkinsfile
+
+    properties:
+      - build-discarder:
+          days-to-keep: 4
+
+    triggers:
+      - gerrit:
+          server-name: review.trustedfirmware.org
+          trigger-on:
+            - comment-added-event:
+                approval-category: "Allow-CI"
+                approval-value: 1
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: shared/transfer-list-library
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: main
+          override-votes: true
+          gerrit-build-started-verified-value: 0
+          gerrit-build-successful-verified-value: 1
+          gerrit-build-failed-verified-value: -1
+          gerrit-build-unstable-verified-value: -1

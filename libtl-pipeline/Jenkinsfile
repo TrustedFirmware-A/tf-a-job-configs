@@ -1,0 +1,162 @@
+/*
+ * Copyright (c) 2025, Arm Limited and Contributors. All rights reserved.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
+pipeline {
+    agent {
+        label 'docker-amd64-tf-a-jammy'
+    }
+
+    parameters {
+        string(name: 'REPO_URL',
+            defaultValue: 'https://review.trustedfirmware.org/shared/transfer-list-library',
+            description: 'Git repository URL.')
+
+        string(
+            name: 'REPO_REFSPEC',
+            defaultValue: '+refs/heads/main:refs/remotes/origin/main',
+            description: 'Refspec to fetch from the repository.'
+        )
+
+        string(
+            name: 'REPO_REFNAME',
+            defaultValue: 'origin/main',
+            description: 'Branch or reference to check out.'
+        )
+
+        string(name: 'BASE_REF',
+            defaultValue: 'origin/main',
+            description: 'Git base reference for formatting comparison.')
+
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    def refspec = params.GERRIT_REFSPEC ?: params.REPO_REFSPEC
+                    def refname = params.GERRIT_PATCHSET_REVISION ?: params.REPO_REFNAME
+
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[ name: refname ]],
+                        userRemoteConfigs: [
+                            [ url: params.REPO_URL, refspec: refspec]
+                        ]
+                    ])
+               }
+            }
+        }
+
+        stage('Code style') {
+            steps {
+                script {
+                    sh "git-clang-format ${params.BASE_REF} HEAD --diff -q | tee formatted.patch"
+                    sh "[ -s formatted.patch ] || rm formatted.patch"
+
+                    if (fileExists('formatted.patch')) {
+                        archiveArtifacts artifacts: "formatted.patch", fingerprint: true
+                        error("Code style check failed. See 'formatted.patch' for suggested changes.")
+                    }
+                }
+           }
+        }
+
+        stage('Build') {
+            matrix {
+                axes {
+                    axis {
+                        name 'COMPILER'
+                        values 'aarch64-clang', 'aarch64-gcc', 'aarch32-clang', 'aarch32-gcc', 'clang', 'gcc'
+                    }
+                    axis {
+                        name 'BUILD_TYPE'
+                        values 'Debug', 'Release', 'RelWithDebInfo', 'MinSizeRel'
+                    }
+                }
+
+                stages {
+                    stage('Compile') {
+                        steps {
+                            script {
+                                def toolchains = [
+                                    'gcc': [
+                                        cc: 'gcc',
+                                        cmakeArgs: [],
+                                    ],
+
+                                    'clang': [
+                                        cc: 'clang',
+                                        cmakeArgs: [],
+                                    ],
+
+                                    'aarch32-gcc': [
+                                        cc: 'arm-none-eabi-gcc',
+                                        cmakeArgs: ['-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY'],
+                                    ],
+
+                                    'aarch64-gcc': [
+                                        cc: 'aarch64-none-elf-gcc',
+                                        cmakeArgs: ['-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY'],
+                                    ],
+
+                                    'aarch32-clang': [
+                                        cc: 'clang',
+                                        clangTarget: 'arm-none-eabi',
+                                        cmakeArgs: ['-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY'],
+                                    ],
+
+                                    'aarch64-clang': [
+                                        cc: 'clang',
+                                        clangTarget: 'aarch64-none-elf',
+                                        cmakeArgs: ['-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY'],
+                                    ],
+                                ]
+
+                                def buildDir = "build/${COMPILER}/${BUILD_TYPE}"
+                                def cmakeArgs = toolchains[COMPILER].cmakeArgs
+
+                                cmakeArgs << "-DCMAKE_C_COMPILER=${toolchains[COMPILER].cc}"
+
+                                if (toolchains[COMPILER].clangTarget) {
+                                    def sysroot = sh(
+                                        script: "${toolchains[COMPILER].clangTarget}-gcc -print-sysroot",
+                                        returnStdout: true
+                                    ).trim()
+
+                                    cmakeArgs << "-DCMAKE_C_COMPILER_TARGET=${toolchains[COMPILER].clangTarget}"
+                                    cmakeArgs << "-DCMAKE_SYSROOT=${sysroot}"
+                                }
+
+                                sh """
+                                    cmake -B ${buildDir} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ${cmakeArgs.join(' ')}
+                                    cmake --build ${buildDir}
+                                """
+
+                                archiveArtifacts artifacts: "${buildDir}/**", fingerprint: true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                script {
+                    def testDir = "build/test"
+
+                    sh """
+                        cmake -B ${testDir} -DTARGET_GROUP=test
+                        cmake --build ${testDir}
+                        cmake --build ${testDir} -- test
+                    """
+
+                    archiveArtifacts artifacts: "${testDir}/**", fingerprint: true
+                }
+            }
+        }
+    }
+}
