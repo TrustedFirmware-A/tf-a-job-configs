@@ -44,7 +44,7 @@
           default: +refs/heads/master:refs/remotes/origin/master
       - string:
           name: MBEDTLS_URL
-          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.2.tar.gz
+          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.3.tar.gz
       - string:
           name: PARAMS
           description: Debug parameters for make
