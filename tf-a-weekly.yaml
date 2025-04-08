@@ -64,7 +64,7 @@
         - string:
             name: SHARE_FOLDER
             default: '/srv/shared/${JOB_NAME}/${BUILD_NUMBER}'
-            description: 'Folder containing shared repositories for downstream pipeline jobs'
+            description: 'Folder containing shared repositories for downstream pipeline jobs.'
     wrappers:
       - workspace-cleanup
       - timestamps
