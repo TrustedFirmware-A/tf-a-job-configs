@@ -66,6 +66,11 @@
         description: |
           tf-a-ci-scripts refspec to use. The master branch is used by default.
     - string:
+        name: RMM_REFSPEC
+        default: '+refs/heads/main:refs/remotes/origin/main'
+        description: |
+          tf-rmm refspec to use. The main branch is used by default.
+    - string:
         name: JOBS_REFSPEC
         default: 'refs/heads/master'
         description: |

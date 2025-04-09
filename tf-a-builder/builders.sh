@@ -122,6 +122,7 @@ export dont_clean="${dont_clean:-1}"
 export tf_root="${tf_root:-${WORKSPACE}/trusted-firmware-a}"
 export tftf_root="${tftf_root:-${WORKSPACE}/tf-a-tests}"
 export spm_root="${spm_root:-${WORKSPACE}/spm}"
+export rmm_root="${rmm_root:-${WORKSPACE}/tf-rmm}"
 
 # We'd need to see the terminals during development runs, so no need for
 # automation.
