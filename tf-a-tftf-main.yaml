@@ -43,6 +43,11 @@
           default: "+refs/heads/master:refs/remotes/origin/master"
           description: "Git refspec for the Trusted Firmware-A CI scripts."
       - string:
+          name: RMM_REFSPEC
+          default: '+refs/heads/main:refs/remotes/origin/main'
+          description: |
+            tf-rmm refspec to use. The main branch is used by default.
+      - string:
           name: JOBS_REFSPEC
           default: 'refs/heads/master'
           description: |
