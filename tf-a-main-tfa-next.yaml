@@ -138,6 +138,14 @@
           kill-phase-on: NEVER
           property-file: tf-a-env.param
     - multijob:
+        name: Platform independent tests
+        condition: COMPLETED
+        projects:
+        - name: tf-a-generic-tfa-next
+          current-parameters: true
+          kill-phase-on: NEVER
+          property-file: tf-a-env.param
+    - multijob:
         name: Build Trusted Firmware
         condition: COMPLETED
         projects:

@@ -1,0 +1,83 @@
+- job:
+    name: tf-a-generic-tfa-next
+    node: docker-amd64-tf-a-jammy
+    project-type: freestyle
+    concurrent: true
+    disabled: false
+    defaults: global
+    description: Run platform independent tests
+    properties:
+        - build-discarder:
+            days-to-keep: 14
+    parameters:
+        - string:
+            name: TF_GERRIT_PROJECT
+            default: 'TF-A/trusted-firmware-a'
+        - string:
+            name: TF_GERRIT_BRANCH
+            default: 'refs/heads/tfa-next'
+        - string:
+            name: TF_GERRIT_REFSPEC
+            default: '+refs/heads/tfa-next:refs/remotes/origin/tfa-next'
+        - string:
+            name: TFTF_GERRIT_PROJECT
+            default: 'TF-A/tf-a-tests'
+        - string:
+            name: TFTF_GERRIT_BRANCH
+            default: 'refs/heads/master'
+        - string:
+            name: TFTF_GERRIT_REFSPEC
+            default: '+refs/heads/master:refs/remotes/origin/master'
+        - string:
+            name: CI_REFSPEC
+            default: '+refs/heads/tfa-next:refs/remotes/origin/tfa-next'
+        - string:
+            name: JOBS_REFSPEC
+            default: 'refs/heads/master'
+            description: |
+              tf-a-job-configs refspec to use. The master branch is used by default.
+        - string:
+            name: GERRIT_BRANCH
+            default: ''
+        - string:
+            name: SHARE_FOLDER
+            default: '/srv/shared/${JOB_NAME}/${BUILD_NUMBER}'
+            description: 'Folder containing shared repositories for downstream pipeline jobs'
+    wrappers:
+        - credentials-binding:
+            - ssh-user-private-key:
+                credential-id: TFA_CI_BOT_USER_SSH_KEY
+                key-file-variable: CI_BOT_KEY
+                username-variable: CI_BOT_USERNAME
+                passphrase-variable: ''
+        - timestamps
+        - timeout:
+            timeout: 240
+            fail: true
+    builders:
+    - shell:
+        !include-raw: scripts/clone.sh
+    - shell: |
+       #!/bin/bash
+       set -e
+       cat << EOF > env.param
+       QA_SERVER_PROJECT=${JOB_NAME}
+       QA_SERVER_VERSION=${BUILD_NUMBER}
+       GERRIT_PROJECT=${TF_GERRIT_PROJECT}
+       GERRIT_BRANCH=${TF_GERRIT_BRANCH}
+       GERRIT_REFSPEC=${TF_GERRIT_REFSPEC}
+       EOF
+       cd ${WORKSPACE}/trusted-firmware-a
+       # Executed project-related next checks: platform independent tests with a generic platform.
+       IS_CONTINUOUS_INTEGRATION=1 ${WORKSPACE}/tf-a-ci-scripts/script/next-checks/next-checks-generic-tests.sh
+    publishers:
+        - archive:
+            artifacts: 'trusted-firmware-a/next-generic-checks.log'
+        # TODO: it is not possible to give this groovy script the
+        #       auth/permissions required to access next-generic-checks.log
+        #       * uncomment this once the job is made public
+        #       * create the required postbuild.groovy file based on tf-a-static-tfa-next/postbuild.groovy
+        # - groovy-postbuild:
+        #     script:
+        #         !include-raw:
+        #           - tf-a-generic-tfa-next/postbuild.groovy
