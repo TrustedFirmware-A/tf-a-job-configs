@@ -137,8 +137,8 @@ for repo in ${repos[@]}; do
 
     # clone and checkout in case it does not exist
     if [ ! -d ${SHARE_FOLDER}/${REPO_NAME} ]; then
-        git clone --recurse-submodules ${GIT_CLONE_PARAMS} ${REPO_URL} ${SHARE_FOLDER}/${REPO_NAME}
-
+        git clone ${GIT_CLONE_PARAMS} ${REPO_URL} ${SHARE_FOLDER}/${REPO_NAME} \
+                    --depth 1 --recurse-submodules --shallow-submodules
         # If the Gerrit review that triggered the CI had a topic, it will be used to synchronize the other repositories
         if [ -n "${GERRIT_TOPIC}" -a "${REPO_HOST}" = "${GERRIT_HOST}" -a "${GERRIT_PROJECT}" != "${REPO_PROJECT}" ]; then
             echo "Got Gerrit Topic: ${GERRIT_TOPIC}"
@@ -160,8 +160,7 @@ for repo in ${repos[@]}; do
             git fetch ${REPO_URL} ${REPO_REFSPEC}
         fi
 
-        git checkout FETCH_HEAD
-        git submodule update --init --recursive
+        git checkout --recurse-submodules FETCH_HEAD
         echo "Freshly cloned ${REPO_URL} (refspec ${REPO_REFSPEC}):"
         git log -1
         cd $OLDPWD
