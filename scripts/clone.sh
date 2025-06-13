@@ -28,6 +28,7 @@
 set -ex
 
 # Global defaults
+CLONE_REPOS=${CLONE_REPOS:-trusted-firmware-a,tf-a-ci-scripts,tf-rmm,spm}
 REFSPEC_MASTER="refs/heads/master"
 REFSPEC_MAIN="refs/heads/main"
 REFSPEC_TF_M_TESTS="refs/heads/tfa_ci_dep_revision"
@@ -75,22 +76,37 @@ JOBS_REFSPEC="${JOBS_REFSPEC:-${REFSPEC_MASTER}}"
 JOBS_REPO_NAME="tf-a-job-configs"
 
 # Array containing "<repo host>;<project>;<repo name>;<refspec>" elements
-repos=(
-    "${GERRIT_HOST};${CI_GERRIT_PROJECT};tf-a-ci-scripts;${CI_REFSPEC}"
-    "${GERRIT_HOST};${TF_GERRIT_PROJECT};trusted-firmware-a;${TF_GERRIT_REFSPEC}"
-    "${GERRIT_HOST};${TFTF_GERRIT_PROJECT};tf-a-tests;${TFTF_GERRIT_REFSPEC}"
-    "${GERRIT_HOST};${SPM_GERRIT_PROJECT};spm;${SPM_REFSPEC}"
-    "${GERRIT_HOST};${RMM_GERRIT_PROJECT};tf-rmm;${RMM_REFSPEC}"
-    "${GERRIT_HOST};${TF_M_TESTS_GERRIT_PROJECT};tf-m-tests;${TF_M_TESTS_GERRIT_REFSPEC}"
-    "${GERRIT_HOST};${TF_M_EXTRAS_GERRIT_PROJECT};tf-m-extras;${TF_M_EXTRAS_GERRIT_REFSPEC}"
-    "${GERRIT_HOST};${ARM_FFA_GERRIT_PROJECT};arm-ffa;${ARM_FFA_GERRIT_REFSPEC}"
-    "${GERRIT_HOST};${ARM_PL011_UART_GERRIT_PROJECT};arm-pl011-uart;${ARM_PL011_UART_GERRIT_REFSPEC}"
-    "${GERRIT_HOST};${ARM_PSCI_GERRIT_PROJECT};arm-psci;${ARM_PSCI_GERRIT_REFSPEC}"
-    "${GERRIT_HOST};${ARM_FVP_BASE_PAC_GERRIT_PROJECT};arm-fvp-base-pac;${ARM_FVP_BASE_PAC_GERRIT_REFSPEC}"
-    "${GERRIT_HOST};${ARM_SP805_GERRIT_PROJECT};arm-sp805;${ARM_SP805_GERRIT_REFSPEC}"
-    "${GERRIT_HOST};${ARM_XLAT_GERRIT_PROJECT};arm-xlat;${ARM_XLAT_GERRIT_REFSPEC}"
-    "${GERRIT_HOST};${ARM_FW_DEV_GUIDE_GERRIT_PROJECT};firmware-development-guide;${ARM_FW_DEV_GUIDE_REFSPEC}"
+declare -A repos_map=(
+  ["tf-a-ci-scripts"]="${GERRIT_HOST};${CI_GERRIT_PROJECT};${CI_REFSPEC}"
+  ["trusted-firmware-a"]="${GERRIT_HOST};${TF_GERRIT_PROJECT};${TF_GERRIT_REFSPEC}"
+  ["tf-a-tests"]="${GERRIT_HOST};${TFTF_GERRIT_PROJECT};${TFTF_GERRIT_REFSPEC}"
+  ["spm"]="${GERRIT_HOST};${SPM_GERRIT_PROJECT};${SPM_REFSPEC}"
+  ["tf-rmm"]="${GERRIT_HOST};${RMM_GERRIT_PROJECT};${RMM_REFSPEC}"
+  ["tf-m-tests"]="${GERRIT_HOST};${TF_M_TESTS_GERRIT_PROJECT};${TF_M_TESTS_GERRIT_REFSPEC}"
+  ["tf-m-extras"]="${GERRIT_HOST};${TF_M_EXTRAS_GERRIT_PROJECT};${TF_M_EXTRAS_GERRIT_REFSPEC}"
+  ["arm-ffa"]="${GERRIT_HOST};${ARM_FFA_GERRIT_PROJECT};${ARM_FFA_GERRIT_REFSPEC}"
+  ["arm-pl011-uart"]="${GERRIT_HOST};${ARM_PL011_UART_GERRIT_PROJECT};${ARM_PL011_UART_GERRIT_REFSPEC}"
+  ["arm-psci"]="${GERRIT_HOST};${ARM_PSCI_GERRIT_PROJECT};${ARM_PSCI_GERRIT_REFSPEC}"
+  ["arm-gic"]="${GERRIT_HOST};${ARM_GIC_GERRIT_PROJECT};${ARM_GIC_GERRIT_REFSPEC}"
+  ["arm-fvp-base-pac"]="${GERRIT_HOST};${ARM_FVP_BASE_PAC_GERRIT_PROJECT};${ARM_FVP_BASE_PAC_GERRIT_REFSPEC}"
+  ["arm-sp805"]="${GERRIT_HOST};${ARM_SP805_GERRIT_PROJECT};${ARM_SP805_GERRIT_REFSPEC}"
+  ["arm-xlat"]="${GERRIT_HOST};${ARM_XLAT_GERRIT_PROJECT};${ARM_XLAT_GERRIT_REFSPEC}"
+  ["firmware-development-guide"]="${GERRIT_HOST};${ARM_FW_DEV_GUIDE_GERRIT_PROJECT};${ARM_FW_DEV_GUIDE_REFSPEC}"
 )
+
+test_desc="${test_desc:-$TEST_DESC}"
+if [ -n "${test_desc}" ]; then
+    build_config="$(echo "${test_desc%%:*}" | cut -d'%' -f3)"
+    # Read config fields into array safely
+    IFS=',' read -ra config_fields <<< "$build_config"
+
+    declare -A build_configs=(
+        ["trusted-firmware-a"]="${config_fields[0]}"
+        ["tf-a-tests"]="${config_fields[1]}"
+        ["spm"]="${config_fields[4]}"
+        ["tf-rmm"]="${config_fields[5]}"
+    )
+fi
 
 df -h
 
@@ -118,13 +134,18 @@ cd $OLDPWD
 cp -a -f ${SHARE_FOLDER}/${JOBS_REPO_NAME} ${PWD}/${JOBS_REPO_NAME}
 
 # clone git repos
-for repo in ${repos[@]}; do
+for repo in ${!repos_map[@]}; do
+    if [[ -v build_configs["$repo"] ]]; then
+        val="${build_configs[$repo]}"
+        if [[ -z "$val" || "$val" == *"nil"* ]]; then
+            continue
+        fi
+    fi
 
     # parse the repo elements
-    REPO_HOST="$(echo "${repo}" | awk -F ';' '{print $1}')"
-    REPO_PROJECT="$(echo "${repo}" | awk -F ';' '{print $2}')"
-    REPO_NAME="$(echo "${repo}" | awk -F ';' '{print $3}')"
-    REPO_DEFAULT_REFSPEC="$(echo "${repo}" | awk -F ';' '{print $4}')"
+    IFS=';' read -r REPO_HOST REPO_PROJECT REPO_DEFAULT_REFSPEC <<< "${repos_map[${repo}]}"
+
+    REPO_NAME="$repo"
     REPO_URL="${REPO_HOST}/${REPO_PROJECT}"
     REPO_REFSPEC="${REPO_DEFAULT_REFSPEC}"
     REPO_SSH_URL="ssh://${CI_BOT_USERNAME}@${REPO_HOST#https://}:29418/${REPO_PROJECT}"
