@@ -65,7 +65,7 @@
         sed '0,/^$/d' email.txt >body.txt
 
         if [ "$SANDBOX_RUN" == "true" ]; then
-            echo "Bipin.Ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, palmer@google.com, govindraj.raja@arm.com" >recipients.txt
+            echo "Bipin.Ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, jidong@google.com, govindraj.raja@arm.com" >recipients.txt
             echo -n "[SANDBOX] " | cat - subject.txt > subject.txt.tmp
             mv subject.txt.tmp subject.txt
         else

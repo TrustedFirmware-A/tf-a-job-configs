@@ -98,4 +98,4 @@
                 always: true
                 subject: "TF-A LTS Triage Email"
                 body: '${FILE, path="email.txt"}'
-                recipients: okash@google.com, bipin.ravi@arm.com, vwadekar@nvidia.com, joanna.farley@arm.com, lauren.wehrmeister@arm.com palmer@google.com
+                recipients: okash@google.com, bipin.ravi@arm.com, vwadekar@nvidia.com, joanna.farley@arm.com, lauren.wehrmeister@arm.com jidong@google.com

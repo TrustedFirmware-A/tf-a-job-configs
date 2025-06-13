@@ -348,4 +348,4 @@
                     currentBuild.setDescription("There are no new commits in the repositories, skip the build!")
                   on-failure: "nothing"
       - email:
-          recipients: bipin.ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, palmer@google.com, govindraj.raja@arm.com
+          recipients: bipin.ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, jidong@google.com, govindraj.raja@arm.com
