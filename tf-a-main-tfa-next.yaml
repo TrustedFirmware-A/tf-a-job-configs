@@ -144,6 +144,9 @@
         - name: generic-lib-testing
           current-parameters: true
           kill-phase-on: NEVER
+          predefined-parameters: |
+            TEST_REPO_NAME=trusted-firmware-a
+            TEST_REPO_PROJECT=TF-A
           property-file: tf-a-env.param
     - multijob:
         name: Build Trusted Firmware
