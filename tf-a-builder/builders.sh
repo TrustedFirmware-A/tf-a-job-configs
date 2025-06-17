@@ -170,6 +170,7 @@ if echo "$-" | grep -q "x"; then
 fi
 
 mkdir -p "${workspace}"
+ln -sfn "${workspace}/artefacts" "${WORKSPACE}/artefacts"
 bash $bash_opts "$ci_root/script/build_package.sh"
 
 # compress rootfs.bin file
@@ -178,5 +179,3 @@ for a in $(find ${workspace} -type d -name artefacts); do
 	d=$(dirname $r); b=$(basename $r); cd "$d" && gzip "$b"
     done
 done
-
-cp -a $(find ${workspace} -type d -name artefacts) ${WORKSPACE}/
