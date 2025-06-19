@@ -47,6 +47,7 @@ TFTF_GERRIT_PROJECT="${TFTF_GERRIT_PROJECT:-TF-A/tf-a-tests}"
 SPM_GERRIT_PROJECT="${SPM_GERRIT_PROJECT:-hafnium/hafnium}"
 RMM_GERRIT_PROJECT="${RMM_GERRIT_PROJECT:-TF-RMM/tf-rmm}"
 CI_GERRIT_PROJECT="${CI_GERRIT_PROJECT:-ci/tf-a-ci-scripts}"
+RF_GERRIT_PROJECT="${RF_GERRIT_PROJECT:-RF-A/rusted-firmware-a}"
 ARM_FFA_GERRIT_PROJECT="${ARM_FFA_GERRIT_PROJECT:-rust-spmc/arm-ffa}"
 ARM_PL011_UART_GERRIT_PROJECT="${ARM_PL011_UART_GERRIT_PROJECT:-rust-spmc/arm-pl011-uart}"
 ARM_PSCI_GERRIT_PROJECT="${ARM_PSCI_GERRIT_PROJECT:-rust-spmc/arm-psci}"
@@ -64,6 +65,7 @@ RMM_REFSPEC="${RMM_REFSPEC:-${REFSPEC_MAIN}}"
 TF_M_TESTS_GERRIT_REFSPEC="${TF_M_TESTS_GERRIT_REFSPEC:-${REFSPEC_TF_M_TESTS}}"
 TF_M_EXTRAS_GERRIT_REFSPEC="${TF_M_EXTRAS_GERRIT_REFSPEC:-${REFSPEC_TF_M_EXTRAS}}"
 CI_REFSPEC="${CI_REFSPEC:-${REFSPEC_MASTER}}"
+RF_GERRIT_REFSPEC="${RF_GERRIT_REFSPEC:-${REFSPEC_MAIN}}"
 ARM_FFA_GERRIT_REFSPEC="${ARM_FFA_GERRIT_REFSPEC:-${REFSPEC_MAIN}}"
 ARM_PL011_UART_GERRIT_REFSPEC="${ARM_PL011_UART_GERRIT_REFSPEC:-${REFSPEC_MAIN}}"
 ARM_PSCI_GERRIT_REFSPEC="${ARM_PSCI_GERRIT_REFSPEC:-${REFSPEC_MAIN}}"
@@ -84,6 +86,7 @@ declare -A repos_map=(
   ["tf-rmm"]="${GERRIT_HOST};${RMM_GERRIT_PROJECT};${RMM_REFSPEC}"
   ["tf-m-tests"]="${GERRIT_HOST};${TF_M_TESTS_GERRIT_PROJECT};${TF_M_TESTS_GERRIT_REFSPEC}"
   ["tf-m-extras"]="${GERRIT_HOST};${TF_M_EXTRAS_GERRIT_PROJECT};${TF_M_EXTRAS_GERRIT_REFSPEC}"
+  ["rusted-firmware-a"]="${GERRIT_HOST};${RF_GERRIT_PROJECT};${RF_GERRIT_REFSPEC}"
   ["arm-ffa"]="${GERRIT_HOST};${ARM_FFA_GERRIT_PROJECT};${ARM_FFA_GERRIT_REFSPEC}"
   ["arm-pl011-uart"]="${GERRIT_HOST};${ARM_PL011_UART_GERRIT_PROJECT};${ARM_PL011_UART_GERRIT_REFSPEC}"
   ["arm-psci"]="${GERRIT_HOST};${ARM_PSCI_GERRIT_PROJECT};${ARM_PSCI_GERRIT_REFSPEC}"
@@ -93,6 +96,7 @@ declare -A repos_map=(
   ["arm-xlat"]="${GERRIT_HOST};${ARM_XLAT_GERRIT_PROJECT};${ARM_XLAT_GERRIT_REFSPEC}"
   ["firmware-development-guide"]="${GERRIT_HOST};${ARM_FW_DEV_GUIDE_GERRIT_PROJECT};${ARM_FW_DEV_GUIDE_REFSPEC}"
 )
+
 
 test_desc="${test_desc:-$TEST_DESC}"
 if [ -n "${test_desc}" ]; then
@@ -158,8 +162,14 @@ for repo in ${!repos_map[@]}; do
 
     # clone and checkout in case it does not exist
     if [ ! -d ${SHARE_FOLDER}/${REPO_NAME} ]; then
-        git clone ${GIT_CLONE_PARAMS} ${REPO_URL} ${SHARE_FOLDER}/${REPO_NAME} \
+        if [[ ${FETCH_SSH} ]]; then
+            GIT_SSH_COMMAND="ssh ${SSH_PARAMS}" git clone ${GIT_CLONE_PARAMS} ${REPO_SSH_URL} ${SHARE_FOLDER}/${REPO_NAME} \
                     --depth 1 --recurse-submodules --shallow-submodules
+        else
+            git clone ${GIT_CLONE_PARAMS} ${REPO_URL} ${SHARE_FOLDER}/${REPO_NAME} \
+                    --depth 1 --recurse-submodules --shallow-submodules
+        fi
+
         # If the Gerrit review that triggered the CI had a topic, it will be used to synchronize the other repositories
         if [ -n "${GERRIT_TOPIC}" -a "${REPO_HOST}" = "${GERRIT_HOST}" -a "${GERRIT_PROJECT}" != "${REPO_PROJECT}" ]; then
             echo "Got Gerrit Topic: ${GERRIT_TOPIC}"
