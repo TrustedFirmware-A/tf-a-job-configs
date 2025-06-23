@@ -86,6 +86,7 @@ declare -A repos_map=(
   ["tf-rmm"]="${GERRIT_HOST};${RMM_GERRIT_PROJECT};${RMM_REFSPEC}"
   ["tf-m-tests"]="${GERRIT_HOST};${TF_M_TESTS_GERRIT_PROJECT};${TF_M_TESTS_GERRIT_REFSPEC}"
   ["tf-m-extras"]="${GERRIT_HOST};${TF_M_EXTRAS_GERRIT_PROJECT};${TF_M_EXTRAS_GERRIT_REFSPEC}"
+  ["rusted-firmware-a"]="${GERRIT_HOST};${RF_GERRIT_PROJECT};${RF_GERRIT_REFSPEC}"
   ["arm-ffa"]="${GERRIT_HOST};${ARM_FFA_GERRIT_PROJECT};${ARM_FFA_GERRIT_REFSPEC}"
   ["arm-pl011-uart"]="${GERRIT_HOST};${ARM_PL011_UART_GERRIT_PROJECT};${ARM_PL011_UART_GERRIT_REFSPEC}"
   ["arm-psci"]="${GERRIT_HOST};${ARM_PSCI_GERRIT_PROJECT};${ARM_PSCI_GERRIT_REFSPEC}"
@@ -155,8 +156,8 @@ for repo in ${!repos_map[@]}; do
 
     # if a list of repos is provided via the CLONE_REPOS build param, only clone
     # those in the list - otherwise all are cloned by default
-    if [[ -n "${CLONE_REPOS}" && "${CLONE_REPOS}" != *"${REPO_NAME}"* ]]; then
-      continue
+    if [[ -n "${CLONE_REPOS}" ]] && ! grep -qw "${REPO_NAME}" <<< "${CLONE_REPOS}"; then
+        continue
     fi
 
     # clone and checkout in case it does not exist
