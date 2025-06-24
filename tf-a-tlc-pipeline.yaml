@@ -6,33 +6,31 @@
     project-type: pipeline
     sandbox: true
     dsl: !include-raw: tf-a-tlc-pipeline/Jenkinsfile
-
     properties:
       - build-discarder:
           days-to-keep: 14
-
     triggers:
-    - gerrit:
-        server-name: review.trustedfirmware.org
-        trigger-on:
-          - patchset-created-event
-        projects:
-          - project-compare-type: PLAIN
-            project-pattern: TF-A/trusted-firmware-a
-            file-paths:
-              - compare-type: "ANT"
-                pattern: "tools/tlc/**"
-            branches:
-              - branch-compare-type: PLAIN
-                branch-pattern: integration
-        override-votes: true
-        gerrit-build-started-verified-value: 0
-        gerrit-build-successful-verified-value: 1
-        gerrit-build-failed-verified-value: -1
-        gerrit-build-unstable-verified-value: -1
-        gerrit-build-notbuilt-verified-value: 0
-        gerrit-build-started-codereview-value: 0
-        gerrit-build-successful-codereview-value: 0
-        gerrit-build-failed-codereview-value: 0
-        gerrit-build-unstable-codereview-value: 0
-        gerrit-build-notbuilt-codereview-value: 0
+      - gerrit:
+          server-name: review.trustedfirmware.org
+          trigger-on:
+            - patchset-created-event
+          projects:
+            - project-compare-type: PLAIN
+              project-pattern: TF-A/trusted-firmware-a
+              file-paths:
+                - compare-type: ANT
+                  pattern: tools/tlc/**
+              branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: integration
+          override-votes: true
+          gerrit-build-started-verified-value: 0
+          gerrit-build-successful-verified-value: 1
+          gerrit-build-failed-verified-value: -1
+          gerrit-build-unstable-verified-value: -1
+          gerrit-build-notbuilt-verified-value: 0
+          gerrit-build-started-codereview-value: 0
+          gerrit-build-successful-codereview-value: 0
+          gerrit-build-failed-codereview-value: 0
+          gerrit-build-unstable-codereview-value: 0
+          gerrit-build-notbuilt-codereview-value: 0

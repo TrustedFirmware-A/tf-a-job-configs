@@ -7,92 +7,91 @@
     defaults: global
     description: Run platform independent tests
     properties:
-        - build-discarder:
-            days-to-keep: 14
+      - build-discarder:
+          days-to-keep: 14
     parameters:
-    - string:
-        name: TF_GERRIT_PROJECT
-        default: 'TF-A/trusted-firmware-a'
-    - string:
-        name: TF_GERRIT_BRANCH
-        default: 'refs/heads/tfa-next'
-    - string:
-        name: TF_GERRIT_REFSPEC
-        default: '+refs/heads/tfa-next:refs/remotes/origin/tfa-next'
-    - string:
-        name: CI_REFSPEC
-        default: 'refs/changes/58/39058/5'
-    - string:
-        name: JOBS_REFSPEC
-        default: 'refs/heads/master'
-        description: |
+      - string:
+          name: TF_GERRIT_PROJECT
+          default: TF-A/trusted-firmware-a
+      - string:
+          name: TF_GERRIT_BRANCH
+          default: refs/heads/tfa-next
+      - string:
+          name: TF_GERRIT_REFSPEC
+          default: +refs/heads/tfa-next:refs/remotes/origin/tfa-next
+      - string:
+          name: CI_REFSPEC
+          default: refs/changes/58/39058/5
+      - string:
+          name: JOBS_REFSPEC
+          default: refs/heads/master
+          description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
-    - string:
-        name: FETCH_SSH
-        default: 1
-        description: |
+      - string:
+          name: FETCH_SSH
+          default: 1
+          description: |
             Fetch branches with authenticated SSH instead of anonymous HTTPS
-    - string:
-        name: GERRIT_BRANCH
-        default: ''
-    - string:
-        name: CLONE_REPOS
-        default: "tf-a-ci-scripts"
-        description: |
+      - string:
+          name: GERRIT_BRANCH
+          default: ""
+      - string:
+          name: CLONE_REPOS
+          default: tf-a-ci-scripts
+          description: |
             Optional arg to clone only specific projects from default list (tf-a-ci-scripts,trusted-firmware-a,tf-a-tests,spm,tf-m-tests,tf-m-extras,etc.)
-    - string:
-        name: JOBS_REFSPEC
-        default: 'refs/heads/master'
-        description: |
+      - string:
+          name: JOBS_REFSPEC
+          default: refs/heads/master
+          description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
-    - string:
-        name: TEST_REPO_PROJECT
-        default: 'rust-spmc'
-    - string:
-        name: TEST_REPO_NAME
-    - string:
-        name: TEST_FEATURES
-        description: 'Features against which the library will be tested'
-    - string:
-        name: SHARE_FOLDER
-        default: '/srv/shared/${JOB_NAME}/${BUILD_NUMBER}'
-        description: 'Folder containing shared repositories for downstream pipeline jobs'
+      - string:
+          name: TEST_REPO_PROJECT
+          default: rust-spmc
+      - string:
+          name: TEST_REPO_NAME
+      - string:
+          name: TEST_FEATURES
+          description: Features against which the library will be tested
+      - string:
+          name: SHARE_FOLDER
+          default: /srv/shared/${JOB_NAME}/${BUILD_NUMBER}
+          description: Folder containing shared repositories for downstream pipeline jobs
     wrappers:
-        - credentials-binding:
-            - ssh-user-private-key:
-                credential-id: TFA_CI_BOT_USER_SSH_KEY
-                key-file-variable: CI_BOT_KEY
-                username-variable: CI_BOT_USERNAME
-                passphrase-variable: ''
-        - timestamps
-        - timeout:
-            timeout: 240
-            fail: true
+      - credentials-binding:
+          - ssh-user-private-key:
+              credential-id: TFA_CI_BOT_USER_SSH_KEY
+              key-file-variable: CI_BOT_KEY
+              username-variable: CI_BOT_USERNAME
+              passphrase-variable: ""
+      - timestamps
+      - timeout:
+          timeout: 240
+          fail: true
     builders:
-    - shell:
-        !include-raw: scripts/clone.sh
-    - shell: |
-        #!/bin/bash
-        set -e
-        cat << EOF > env.param
-        QA_SERVER_PROJECT=${JOB_NAME}
-        QA_SERVER_VERSION=${BUILD_NUMBER}
-        GERRIT_PROJECT=${TF_GERRIT_PROJECT}
-        GERRIT_BRANCH=${TF_GERRIT_BRANCH}
-        GERRIT_REFSPEC=${TF_GERRIT_REFSPEC}
-        EOF
+      - shell: !include-raw: scripts/clone.sh
+      - shell: |
+          #!/bin/bash
+          set -e
+          cat << EOF > env.param
+          QA_SERVER_PROJECT=${JOB_NAME}
+          QA_SERVER_VERSION=${BUILD_NUMBER}
+          GERRIT_PROJECT=${TF_GERRIT_PROJECT}
+          GERRIT_BRANCH=${TF_GERRIT_BRANCH}
+          GERRIT_REFSPEC=${TF_GERRIT_REFSPEC}
+          EOF
 
-        cd ${WORKSPACE}
-        # Executed project-related next checks: platform independent tests with a generic platform.
-        IS_CONTINUOUS_INTEGRATION=1 ${WORKSPACE}/tf-a-ci-scripts/script/next-checks/next-checks-generic-tests.sh ${TEST_REPO_PROJECT} ${TEST_REPO_NAME}
+          cd ${WORKSPACE}
+          # Executed project-related next checks: platform independent tests with a generic platform.
+          IS_CONTINUOUS_INTEGRATION=1 ${WORKSPACE}/tf-a-ci-scripts/script/next-checks/next-checks-generic-tests.sh ${TEST_REPO_PROJECT} ${TEST_REPO_NAME}
     publishers:
-        - archive:
-            artifacts: 'next-generic-checks.log'
-        # TODO: it is not possible to give this groovy script the
-        #       auth/permissions required to access next-generic-checks.log
-        #       * uncomment this once the job is made public
-        #       * create the required postbuild.groovy file based on generic-lib-testing/postbuild.groovy
-        # - groovy-postbuild:
-        #     script:
-        #         !include-raw:
-        #           - tf-a-generic-tfa-next/postbuild.groovy
+      - archive:
+          artifacts: next-generic-checks.log
+    # TODO: it is not possible to give this groovy script the
+    #       auth/permissions required to access next-generic-checks.log
+    #       * uncomment this once the job is made public
+    #       * create the required postbuild.groovy file based on generic-lib-testing/postbuild.groovy
+    # - groovy-postbuild:
+    #     script:
+    #         !include-raw:
+    #           - tf-a-generic-tfa-next/postbuild.groovy

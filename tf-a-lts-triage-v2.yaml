@@ -8,78 +8,78 @@
     description: |
       Generate LTS triage report every Friday
     properties:
-        - build-discarder:
-            days-to-keep: 45
-            num-to-keep: 200
-            artifact-num-to-keep: 100
+      - build-discarder:
+          days-to-keep: 45
+          num-to-keep: 200
+          artifact-num-to-keep: 100
     parameters:
-        - string:
-            name: TFA_REPO
-            default: 'https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git'
-            description: The trusted-firmware-a repo to clone from
-        - string:
-            name: TFA_CI_SCRIPT_REPO
-            default: 'https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git'
-            description: The tf-a-ci-script repo to clone from
-        - string:
-            name: LTS_BRANCHES
-            default: 'lts-v2.8 lts-v2.10 lts-v2.12'
-            description: |
-              LTS branch
+      - string:
+          name: TFA_REPO
+          default: https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git
+          description: The trusted-firmware-a repo to clone from
+      - string:
+          name: TFA_CI_SCRIPT_REPO
+          default: https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
+          description: The tf-a-ci-script repo to clone from
+      - string:
+          name: LTS_BRANCHES
+          default: lts-v2.8 lts-v2.10 lts-v2.12
+          description: |
+            LTS branch
     triggers:
-    - timed: "H 5 * * 5"    # Run the job at 00:00 every Friday @CTS timezone
+      - timed: H 5 * * 5 # Run the job at 00:00 every Friday @CTS timezone
     wrappers:
-    - timestamps
-    - timeout:
-        timeout: 30
-        fail: true
-    - credentials-binding:
-      - ssh-user-private-key:
-          credential-id: TFA_CI_BOT_USER_SSH_KEY
-          key-file-variable: CI_BOT_KEY
-          username-variable: CI_BOT_USERNAME
-          passphrase-variable: ''
+      - timestamps
+      - timeout:
+          timeout: 30
+          fail: true
+      - credentials-binding:
+          - ssh-user-private-key:
+              credential-id: TFA_CI_BOT_USER_SSH_KEY
+              key-file-variable: CI_BOT_KEY
+              username-variable: CI_BOT_USERNAME
+              passphrase-variable: ""
     builders:
-    - shell: |
-        #!/bin/bash
-        set -ex
+      - shell: |
+          #!/bin/bash
+          set -ex
 
-        DATE=$(date +'%Y-%m-%d')
-        START_PATH=$(pwd)
-        LTS_TMP_DIR=$(mktemp -d -p ./)
-        cd $LTS_TMP_DIR
+          DATE=$(date +'%Y-%m-%d')
+          START_PATH=$(pwd)
+          LTS_TMP_DIR=$(mktemp -d -p ./)
+          cd $LTS_TMP_DIR
 
-        git clone ${TFA_CI_SCRIPT_REPO}
+          git clone ${TFA_CI_SCRIPT_REPO}
 
-        TFA_TMP_DIR=$(mktemp -d -p ./)
-        cd ${TFA_TMP_DIR}
-        git clone ${TFA_REPO} -b integration ./
-        LTS_REPO_PATH=$(pwd)
-        cd -
-        for b in ${LTS_BRANCHES};
-        do
-            CSV_REPORT="${b}_${DATE}.csv"
-            git -C ${LTS_REPO_PATH} checkout -b ${b} origin/${b}
+          TFA_TMP_DIR=$(mktemp -d -p ./)
+          cd ${TFA_TMP_DIR}
+          git clone ${TFA_REPO} -b integration ./
+          LTS_REPO_PATH=$(pwd)
+          cd -
+          for b in ${LTS_BRANCHES};
+          do
+              CSV_REPORT="${b}_${DATE}.csv"
+              git -C ${LTS_REPO_PATH} checkout -b ${b} origin/${b}
 
-            python3 tf-a-ci-scripts/lts/lts-triage-v2.py --repo ${LTS_REPO_PATH} --csv_path ${START_PATH}/${CSV_REPORT} \
-            --lts ${b} --gerrit_user ${CI_BOT_USERNAME} --ssh_keyfile ${CI_BOT_KEY} --debug
-            [ -f "${START_PATH}/${CSV_REPORT}" ] && echo "${CSV_REPORT}" >> ${START_PATH}/got_report.txt
-        done
+              python3 tf-a-ci-scripts/lts/lts-triage-v2.py --repo ${LTS_REPO_PATH} --csv_path ${START_PATH}/${CSV_REPORT} \
+              --lts ${b} --gerrit_user ${CI_BOT_USERNAME} --ssh_keyfile ${CI_BOT_KEY} --debug
+              [ -f "${START_PATH}/${CSV_REPORT}" ] && echo "${CSV_REPORT}" >> ${START_PATH}/got_report.txt
+          done
 
-        cd ${START_PATH}
-        rm -rf ${LTS_TMP_DIR}
+          cd ${START_PATH}
+          rm -rf ${LTS_TMP_DIR}
     publishers:
-        - conditional-publisher:
+      - conditional-publisher:
           - condition-kind: file-exists
             on-evaluation-failure: dont-run
             condition-filename: got_report.txt
             condition-basedir: workspace
             action:
-            - archive:
-                artifacts: '*.csv'
-            - email-ext:
-                always: true
-                recipients: "arthur.she@linaro.org, bipin.ravi@arm.com, vwadekar@nvidia.com, joanna.farley@arm.com, lauren.wehrmeister@arm.com, yann.gautier@st.com, jidong@google.com, olivier.deprez@arm.com, Govindraj.Raja@arm.com"
-                subject: "TF-A LTS Triage report"
-                body: "Attached is the CSV report from the TF-A LTS Triage job this week."
-                attachments: "*.csv"
+              - archive:
+                  artifacts: '*.csv'
+              - email-ext:
+                  always: true
+                  recipients: arthur.she@linaro.org, bipin.ravi@arm.com, vwadekar@nvidia.com, joanna.farley@arm.com, lauren.wehrmeister@arm.com, yann.gautier@st.com, jidong@google.com, olivier.deprez@arm.com, Govindraj.Raja@arm.com
+                  subject: TF-A LTS Triage report
+                  body: Attached is the CSV report from the TF-A LTS Triage job this week.
+                  attachments: '*.csv'

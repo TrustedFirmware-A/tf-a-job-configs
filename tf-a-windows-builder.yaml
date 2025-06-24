@@ -19,14 +19,16 @@
       - axis:
           name: DEBUG
           type: user-defined
-          values: ['0', '1']
+          values:
+            - "0"
+            - "1"
       - axis:
           name: label
           type: slave
           values:
             - tf-a-windows
     builders:
-      - shell:  |
+      - shell: |
           #!C:\msys64\usr\bin\env.exe OSTYPE="msys" bash -x
           make -j $(nproc) CROSS_COMPILE=aarch64-none-elf- PLAT=fvp DEBUG=$DEBUG V=1 all
     parameters:

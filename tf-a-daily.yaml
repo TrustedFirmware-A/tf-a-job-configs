@@ -6,82 +6,81 @@
     disabled: false
     description: Triggers tf-a-windows-builder, tf-main and tf-coverity for the TF-A project.
     properties:
-    - build-discarder:
-        days-to-keep: 14
-        num-to-keep: 60
+      - build-discarder:
+          days-to-keep: 14
+          num-to-keep: 60
     parameters:
-        - string:
-            name: TF_GERRIT_PROJECT
-            default: 'TF-A/trusted-firmware-a'
-        - string:
-            name: TF_GERRIT_BRANCH
-            default: 'refs/heads/integration'
-        - string:
-            name: TF_GERRIT_REFSPEC
-            default: '+refs/heads/integration:refs/remotes/origin/integration'
-        - string:
-            name: TFTF_GERRIT_PROJECT
-            default: 'TF-A/tf-a-tests'
-        - string:
-            name: TFTF_GERRIT_BRANCH
-            default: 'refs/heads/master'
-        - string:
-            name: TFTF_GERRIT_REFSPEC
-            default: '+refs/heads/master:refs/remotes/origin/master'
-        - string:
-            name: SPM_REFSPEC
-            default: '+refs/heads/master:refs/remotes/origin/master'
-            description: |
-                SPM(Hafnium) refspec to use. The master branch is used by default.
-        - string:
-            name: RMM_REFSPEC
-            default: '+refs/heads/main:refs/remotes/origin/main'
-            description: |
-                tf-rmm refspec to use. The main branch is used by default.
-        - string:
-            name: CI_REFSPEC
-            default: '+refs/heads/master:refs/remotes/origin/master'
-        - string:
-            name: JOBS_REFSPEC
-            default: 'refs/heads/master'
-            description: |
-                tf-a-job-configs refspec to use. The master branch is used by default.
-        - string:
-            name: MBEDTLS_URL
-            default: 'https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.3.tar.gz'
-        - string:
-            name: LAVA_PRIORITY
-            default: 'low'
-        - string:
-            name: SHARE_FOLDER
-            default: '/srv/shared/${JOB_NAME}/${BUILD_NUMBER}'
-            description: 'Folder containing shared repositories for downstream pipeline jobs'
+      - string:
+          name: TF_GERRIT_PROJECT
+          default: TF-A/trusted-firmware-a
+      - string:
+          name: TF_GERRIT_BRANCH
+          default: refs/heads/integration
+      - string:
+          name: TF_GERRIT_REFSPEC
+          default: +refs/heads/integration:refs/remotes/origin/integration
+      - string:
+          name: TFTF_GERRIT_PROJECT
+          default: TF-A/tf-a-tests
+      - string:
+          name: TFTF_GERRIT_BRANCH
+          default: refs/heads/master
+      - string:
+          name: TFTF_GERRIT_REFSPEC
+          default: +refs/heads/master:refs/remotes/origin/master
+      - string:
+          name: SPM_REFSPEC
+          default: +refs/heads/master:refs/remotes/origin/master
+          description: |
+            SPM(Hafnium) refspec to use. The master branch is used by default.
+      - string:
+          name: RMM_REFSPEC
+          default: +refs/heads/main:refs/remotes/origin/main
+          description: |
+            tf-rmm refspec to use. The main branch is used by default.
+      - string:
+          name: CI_REFSPEC
+          default: +refs/heads/master:refs/remotes/origin/master
+      - string:
+          name: JOBS_REFSPEC
+          default: refs/heads/master
+          description: |
+            tf-a-job-configs refspec to use. The master branch is used by default.
+      - string:
+          name: MBEDTLS_URL
+          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.3.tar.gz
+      - string:
+          name: LAVA_PRIORITY
+          default: low
+      - string:
+          name: SHARE_FOLDER
+          default: /srv/shared/${JOB_NAME}/${BUILD_NUMBER}
+          description: Folder containing shared repositories for downstream pipeline jobs
     wrappers:
-        - timestamps
+      - timestamps
     builders:
-        - shell:
-            !include-raw: scripts/clone.sh
-        - shell: |
-            #!/bin/bash
-            set -e
-            cat << EOF > share.param
-            SHARE_FOLDER=${SHARE_FOLDER}
-            EOF
-        - trigger-builds:
-            - project:
-                - tf-a-main
-              block: true
-              current-parameters: true
-              property-file: share.param
-            - project:
-                - tf-a-coverity
-              block: true
-              current-parameters: true
-              property-file: share.param
-            - project:
-                - tf-a-windows-builder
-              block: true
-              current-parameters: true
-              property-file: share.param
+      - shell: !include-raw: scripts/clone.sh
+      - shell: |
+          #!/bin/bash
+          set -e
+          cat << EOF > share.param
+          SHARE_FOLDER=${SHARE_FOLDER}
+          EOF
+      - trigger-builds:
+          - project:
+              - tf-a-main
+            block: true
+            current-parameters: true
+            property-file: share.param
+          - project:
+              - tf-a-coverity
+            block: true
+            current-parameters: true
+            property-file: share.param
+          - project:
+              - tf-a-windows-builder
+            block: true
+            current-parameters: true
+            property-file: share.param
     triggers:
-        - timed: 'H 22 * * *'
+      - timed: H 22 * * *

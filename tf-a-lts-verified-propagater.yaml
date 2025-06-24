@@ -3,96 +3,94 @@
     node: docker-amd64-tf-a-jammy
     project-type: freestyle
     concurrent: false
-    description:
-      Triggers whenever a patch in the lts branch get a Verified score.
-      It will vote the same score to the dependent patch
+    description: Triggers whenever a patch in the lts branch get a Verified score. It will vote the same score to the dependent patch
     disabled: false
     builders:
-    - shell: |-
-    - shell: |-
-        #!/bin/bash
-        # This job is triggered by the label Verified +1 or -1 of the patch
-        # it will vote the same score (Verified +1 / Verified -1) to the dependent patch
-        # , if there is any.
-        # For example, P5 -> P4 -> P3 -> P2 -> P1. P5 dependents on P4, and so on
-        # When P5 gets Verified +1, this job will be triggered and set Verified +1 to P4.
-        # P4 gets Verified +1 triggers an other job to set Verified +1 to P3, and so on.
-        # That is how we propagate the Verified score to the entire patch stack
-        set -ex
+      - shell: ""
+      - shell: |-
+          #!/bin/bash
+          # This job is triggered by the label Verified +1 or -1 of the patch
+          # it will vote the same score (Verified +1 / Verified -1) to the dependent patch
+          # , if there is any.
+          # For example, P5 -> P4 -> P3 -> P2 -> P1. P5 dependents on P4, and so on
+          # When P5 gets Verified +1, this job will be triggered and set Verified +1 to P4.
+          # P4 gets Verified +1 triggers an other job to set Verified +1 to P3, and so on.
+          # That is how we propagate the Verified score to the entire patch stack
+          set -ex
 
-        echo "########################################################################"
-        echo "    Gerrit Environment"
-        env |grep '^GERRIT'
-        echo "########################################################################"
+          echo "########################################################################"
+          echo "    Gerrit Environment"
+          env |grep '^GERRIT'
+          echo "########################################################################"
 
-        SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -p 29418 -i ${CI_BOT_KEY}"
-        GERRIT_URL="review.trustedfirmware.org"
-        GERRIT_QUERY_PARAMS="--dependencies --submit-records --format=JSON change:"
-        QUERY_CMD="${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit query ${GERRIT_QUERY_PARAMS}"
-        QUERY_CHANGE_DEPENDS_CMD="${QUERY_CMD}${GERRIT_CHANGE_NUMBER}"
-        REVIEW_MESSAGE="Propagated verified from ${GERRIT_CHANGE_URL}. By ${BUILD_URL}"
-        SET_VERIFIED_CMD="${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit review --verified"
+          SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -p 29418 -i ${CI_BOT_KEY}"
+          GERRIT_URL="review.trustedfirmware.org"
+          GERRIT_QUERY_PARAMS="--dependencies --submit-records --format=JSON change:"
+          QUERY_CMD="${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit query ${GERRIT_QUERY_PARAMS}"
+          QUERY_CHANGE_DEPENDS_CMD="${QUERY_CMD}${GERRIT_CHANGE_NUMBER}"
+          REVIEW_MESSAGE="Propagated verified from ${GERRIT_CHANGE_URL}. By ${BUILD_URL}"
+          SET_VERIFIED_CMD="${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit review --verified"
 
-        change_url_base=${GERRIT_CHANGE_URL%/*}
-        # Check this example https://ci.trustedfirmware.org/view/TF-A/job/tf-a-lts-verified-propagater/14/console
-        # for what we get from gerrit query command
-        patch_query=$(ssh ${QUERY_CHANGE_DEPENDS_CMD} | jq .)
-        dependsOn=$(echo ${patch_query} | jq -r 'select(.dependsOn)')
-        # Normally, there would be just one dependent patch
-        # (and that patch would in turn has another dependent patch, that's how a dependency chain is structured)
-        # But Gerrit data model has a list of dependent patches, so we process all just in case
-        dependsOn_rev=($(echo ${dependsOn} | jq -r '.dependsOn[].revision'))
-        dependsOn_no=($(echo ${dependsOn} | jq -r '.dependsOn[].number'))
-        verified_status=$(echo ${patch_query} | jq -r 'select(.submitRecords) | .submitRecords[0].labels[] | select(.label == "Verified") | .status')
-        # Verified label status and value mapping
-        # REJECT: -1
-        # OK: 1
-        verified_value=0
-        if [ "${verified_status}" == "REJECT" ]; then
-            verified_value=-1
-        elif [ "${verified_status}" == "OK" ]; then
-            verified_value=1
-        fi
-        # Vote the same Verified score to the dependent patch by loop
-        for ((i=0; i<${#dependsOn_rev[@]}; i++))
-        do
-            # Need to check the .status before set verified score
-            if [ $(ssh ${QUERY_CMD}${dependsOn_no[$i]} | jq -r 'select(.status)|.status') == "MERGED" ]; then
-            	echo "The dependent patch ${change_url_base}${dependsOn_no[$i]} has been merged. Don't set Verified score to it!"
-                continue
-            else
-            	echo "Set Verified ${verified_value} to: ${change_url_base}/${dependsOn_no[$i]}"
-            	ssh ${SET_VERIFIED_CMD} ${verified_value}  -m \'\"${REVIEW_MESSAGE}\"\' ${dependsOn_rev[$i]}
-            fi
-        done
+          change_url_base=${GERRIT_CHANGE_URL%/*}
+          # Check this example https://ci.trustedfirmware.org/view/TF-A/job/tf-a-lts-verified-propagater/14/console
+          # for what we get from gerrit query command
+          patch_query=$(ssh ${QUERY_CHANGE_DEPENDS_CMD} | jq .)
+          dependsOn=$(echo ${patch_query} | jq -r 'select(.dependsOn)')
+          # Normally, there would be just one dependent patch
+          # (and that patch would in turn has another dependent patch, that's how a dependency chain is structured)
+          # But Gerrit data model has a list of dependent patches, so we process all just in case
+          dependsOn_rev=($(echo ${dependsOn} | jq -r '.dependsOn[].revision'))
+          dependsOn_no=($(echo ${dependsOn} | jq -r '.dependsOn[].number'))
+          verified_status=$(echo ${patch_query} | jq -r 'select(.submitRecords) | .submitRecords[0].labels[] | select(.label == "Verified") | .status')
+          # Verified label status and value mapping
+          # REJECT: -1
+          # OK: 1
+          verified_value=0
+          if [ "${verified_status}" == "REJECT" ]; then
+              verified_value=-1
+          elif [ "${verified_status}" == "OK" ]; then
+              verified_value=1
+          fi
+          # Vote the same Verified score to the dependent patch by loop
+          for ((i=0; i<${#dependsOn_rev[@]}; i++))
+          do
+              # Need to check the .status before set verified score
+              if [ $(ssh ${QUERY_CMD}${dependsOn_no[$i]} | jq -r 'select(.status)|.status') == "MERGED" ]; then
+              	echo "The dependent patch ${change_url_base}${dependsOn_no[$i]} has been merged. Don't set Verified score to it!"
+                  continue
+              else
+              	echo "Set Verified ${verified_value} to: ${change_url_base}/${dependsOn_no[$i]}"
+              	ssh ${SET_VERIFIED_CMD} ${verified_value}  -m \'\"${REVIEW_MESSAGE}\"\' ${dependsOn_rev[$i]}
+              fi
+          done
     properties:
-    - build-discarder:
-        days-to-keep: 60
-        num-to-keep: 10
+      - build-discarder:
+          days-to-keep: 60
+          num-to-keep: 10
     triggers:
-    - gerrit:
-        silent: true
-        server-name: 'review.trustedfirmware.org'
-        projects:
-        - branches:
-          - branch-compare-type: REG_EXP
-            branch-pattern: 'lts-v.*'
-          project-compare-type: PLAIN
-          project-pattern: 'TF-A/trusted-firmware-a'
-        trigger-on:
-        - comment-added-event:
-            approval-category: "Verified"
-            approval-value: 1
-        - comment-added-event:
-            approval-category: "Verified"
-            approval-value: -1
+      - gerrit:
+          silent: true
+          server-name: review.trustedfirmware.org
+          projects:
+            - branches:
+                - branch-compare-type: REG_EXP
+                  branch-pattern: lts-v.*
+              project-compare-type: PLAIN
+              project-pattern: TF-A/trusted-firmware-a
+          trigger-on:
+            - comment-added-event:
+                approval-category: Verified
+                approval-value: 1
+            - comment-added-event:
+                approval-category: Verified
+                approval-value: -1
     wrappers:
-    - timestamps
-    - credentials-binding:
-      - ssh-user-private-key:
-          credential-id: TFA_CI_BOT_USER_SSH_KEY
-          key-file-variable: CI_BOT_KEY
-          username-variable: CI_BOT_USERNAME
-          passphrase-variable: ''
+      - timestamps
+      - credentials-binding:
+          - ssh-user-private-key:
+              credential-id: TFA_CI_BOT_USER_SSH_KEY
+              key-file-variable: CI_BOT_KEY
+              username-variable: CI_BOT_USERNAME
+              passphrase-variable: ""
     publishers:
-    - workspace-cleanup
+      - workspace-cleanup

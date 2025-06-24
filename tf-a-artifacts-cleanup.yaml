@@ -8,15 +8,15 @@
     description: |
       Gradually cleanup artifacts in TF-A builds
     properties:
-        - build-discarder:
-            days-to-keep: 50
-            num-to-keep: 50
+      - build-discarder:
+          days-to-keep: 50
+          num-to-keep: 50
     triggers:
-        - timed: 'H H/8 * * *'
+      - timed: H H/8 * * *
     wrappers:
-        - timestamps
+      - timestamps
     builders:
-        - shell: |
-            #!/bin/bash
+      - shell: |
+          #!/bin/bash
 
-            find /var/lib/jenkins/jobs/tf-a-builder/builds -name build.log -mtime +5 | head -n1000 | xargs -i -n1 bash -c "echo {}; gzip -9 {}"
+          find /var/lib/jenkins/jobs/tf-a-builder/builds -name build.log -mtime +5 | head -n1000 | xargs -i -n1 bash -c "echo {}; gzip -9 {}"

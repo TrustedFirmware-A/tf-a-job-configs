@@ -6,102 +6,102 @@
     disabled: false
     description: Create a new TF-A LTS release from a tip of an LTS branch.
     properties:
-    - build-discarder:
-        days-to-keep: 365
-        num-to-keep: 30
+      - build-discarder:
+          days-to-keep: 365
+          num-to-keep: 30
     parameters:
-        - string:
-            name: GERRIT_HOST
-            default: 'review.trustedfirmware.org'
-        - string:
-            name: GERRIT_PROJECT
-            default: 'TF-A/trusted-firmware-a'
-            description: |
-              TF-A Git project
-        - string:
-            name: GERRIT_BRANCH
-            default: 'lts-v2.10'
-            description: |
-              Git branch to release from (lts-v2.8, lts-v2.10, etc.)
-        - bool:
-            name: SANDBOX_RUN
-            default: true
-            description: |
-              Run sandbox simulation of a release. A tag will be created in
-              separate "sandbox" namespace, and further actions like docs
-              publishing or release email sending will be also sandboxed.
-              Uncheck this only after running a simulation and verifying that
-              everything is correct!
+      - string:
+          name: GERRIT_HOST
+          default: review.trustedfirmware.org
+      - string:
+          name: GERRIT_PROJECT
+          default: TF-A/trusted-firmware-a
+          description: |
+            TF-A Git project
+      - string:
+          name: GERRIT_BRANCH
+          default: lts-v2.10
+          description: |
+            Git branch to release from (lts-v2.8, lts-v2.10, etc.)
+      - bool:
+          name: SANDBOX_RUN
+          default: true
+          description: |
+            Run sandbox simulation of a release. A tag will be created in
+            separate "sandbox" namespace, and further actions like docs
+            publishing or release email sending will be also sandboxed.
+            Uncheck this only after running a simulation and verifying that
+            everything is correct!
     wrappers:
-        - credentials-binding:
+      - credentials-binding:
           - ssh-user-private-key:
               credential-id: TFA_CI_BOT_USER_SSH_KEY
               key-file-variable: CI_BOT_KEY
               username-variable: CI_BOT_USERNAME
-              passphrase-variable: ''
-        - timestamps
+              passphrase-variable: ""
+      - timestamps
     builders:
-        - shell: |
-            #!/bin/bash
-            set -ex
-            env | grep GERRIT
-            echo SANDBOX_RUN=$SANDBOX_RUN
-            git clone https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
-            git clone https://$GERRIT_HOST/$GERRIT_PROJECT
-            DIR=$(basename $GERRIT_PROJECT)
-            cd $DIR
-            git checkout $GERRIT_BRANCH
-            set +x
-            nvm install
-            set -x
-            npm install --no-save standard-version
-            #git tag
+      - shell: |
+          #!/bin/bash
+          set -ex
+          env | grep GERRIT
+          echo SANDBOX_RUN=$SANDBOX_RUN
+          git clone https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
+          git clone https://$GERRIT_HOST/$GERRIT_PROJECT
+          DIR=$(basename $GERRIT_PROJECT)
+          cd $DIR
+          git checkout $GERRIT_BRANCH
+          set +x
+          nvm install
+          set -x
+          npm install --no-save standard-version
+          #git tag
 
-            echo "" >> readme.rst
-            git config user.email "ci@trustedfirmware.org"
-            git config user.name "Release CI"
-            # Install Change-Id hook
-            f="$(git rev-parse --git-dir)/hooks/commit-msg"; curl -o "$f" https://review.trustedfirmware.org/tools/hooks/commit-msg ; chmod +x "$f"
+          echo "" >> readme.rst
+          git config user.email "ci@trustedfirmware.org"
+          git config user.name "Release CI"
+          # Install Change-Id hook
+          f="$(git rev-parse --git-dir)/hooks/commit-msg"; curl -o "$f" https://review.trustedfirmware.org/tools/hooks/commit-msg ; chmod +x "$f"
 
-            if [ "$SANDBOX_RUN" == "true" ]; then
-                git commit -a -s -m "fix(readme): dummy commit for sandbox release"
-            fi
+          if [ "$SANDBOX_RUN" == "true" ]; then
+              git commit -a -s -m "fix(readme): dummy commit for sandbox release"
+          fi
 
-            python3 $WORKSPACE/tf-a-ci-scripts/lts/lts-mangle-change-log.py remove-prefix docs/change-log.md >docs/change-log.md.tmp
-            mv docs/change-log.md.tmp docs/change-log.md
-            npm run release -- --release-as patch --tag-prefix lts-v
-            python3 $WORKSPACE/tf-a-ci-scripts/lts/lts-mangle-change-log.py add-prefix docs/change-log.md >docs/change-log.md.tmp
-            mv docs/change-log.md.tmp docs/change-log.md
+          python3 $WORKSPACE/tf-a-ci-scripts/lts/lts-mangle-change-log.py remove-prefix docs/change-log.md >docs/change-log.md.tmp
+          mv docs/change-log.md.tmp docs/change-log.md
+          npm run release -- --release-as patch --tag-prefix lts-v
+          python3 $WORKSPACE/tf-a-ci-scripts/lts/lts-mangle-change-log.py add-prefix docs/change-log.md >docs/change-log.md.tmp
+          mv docs/change-log.md.tmp docs/change-log.md
 
-            RELEASE=$(grep release docs/conf.py | sed -r -e 's/release = "(.*)"/\1/')
+          RELEASE=$(grep release docs/conf.py | sed -r -e 's/release = "(.*)"/\1/')
 
-            git diff
-            git commit -a -s -m "docs(changelog): changelog for lts-v${RELEASE} release"
-            if [ "$SANDBOX_RUN" == "true" ]; then
-                TAG="sandbox/lts-v${RELEASE}-$(date +%Y%m%dT%H%M)"
-            else
-                TAG="lts-v${RELEASE}"
-            fi
-            git tag $TAG
+          git diff
+          git commit -a -s -m "docs(changelog): changelog for lts-v${RELEASE} release"
+          if [ "$SANDBOX_RUN" == "true" ]; then
+              TAG="sandbox/lts-v${RELEASE}-$(date +%Y%m%dT%H%M)"
+          else
+              TAG="lts-v${RELEASE}"
+          fi
+          git tag $TAG
 
-            mkdir -p ~/.ssh/
-            ssh-keyscan -p 29418 $GERRIT_HOST >> ~/.ssh/known_hosts
-            export GIT_SSH_COMMAND="ssh -i $CI_BOT_KEY -o 'PubkeyAcceptedKeyTypes +ssh-rsa'"
+          mkdir -p ~/.ssh/
+          ssh-keyscan -p 29418 $GERRIT_HOST >> ~/.ssh/known_hosts
+          export GIT_SSH_COMMAND="ssh -i $CI_BOT_KEY -o 'PubkeyAcceptedKeyTypes +ssh-rsa'"
 
-            #git push ssh://$CI_BOT_USERNAME@$GERRIT_HOST:29418/$GERRIT_PROJECT HEAD:refs/for/$GERRIT_BRANCH
+          #git push ssh://$CI_BOT_USERNAME@$GERRIT_HOST:29418/$GERRIT_PROJECT HEAD:refs/for/$GERRIT_BRANCH
 
-            if [ "$SANDBOX_RUN" == "false" ]; then
-                # Push to the LTS branch
-                git push ssh://$CI_BOT_USERNAME@$GERRIT_HOST:29418/$GERRIT_PROJECT
-            else
-                # If it's sandbox run, we still need to push commit to some branch,
-                # because otherwise the tag won't be visible in Gerrit (due to ACL
-                # model Gerrit uses: it resolve tag to a branch it belongs to, then
-                # checks ACLs on branch to see if a user has access to it; no branch
-                # == problems).
-                git push ssh://${CI_BOT_USERNAME}@${GERRIT_HOST}:29418/${GERRIT_PROJECT} HEAD:refs/heads/${TAG}-br
-            fi
-            # Push tag
-            git push ssh://$CI_BOT_USERNAME@$GERRIT_HOST:29418/$GERRIT_PROJECT $TAG
+          if [ "$SANDBOX_RUN" == "false" ]; then
+              # Push to the LTS branch
+              git push ssh://$CI_BOT_USERNAME@$GERRIT_HOST:29418/$GERRIT_PROJECT
+          else
+              # If it's sandbox run, we still need to push commit to some branch,
+              # because otherwise the tag won't be visible in Gerrit (due to ACL
+              # model Gerrit uses: it resolve tag to a branch it belongs to, then
+              # checks ACLs on branch to see if a user has access to it; no branch
+              # == problems).
+              git push ssh://${CI_BOT_USERNAME}@${GERRIT_HOST}:29418/${GERRIT_PROJECT} HEAD:refs/heads/${TAG}-br
+          fi
+          # Push tag
+          git push ssh://$CI_BOT_USERNAME@$GERRIT_HOST:29418/$GERRIT_PROJECT $TAG
 
-            echo Release tag is created. Further processing happens in the job ${JENKINS_PUBLIC_URL}job/tf-a-lts-release-tagged
+          echo Release tag is created. Further processing happens in the job ${JENKINS_PUBLIC_URL}job/tf-a-lts-release-tagged

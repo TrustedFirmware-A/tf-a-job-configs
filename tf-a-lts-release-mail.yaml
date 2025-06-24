@@ -8,87 +8,87 @@
     description: |
       Render TF-A LTS release email template.
     properties:
-        - build-discarder:
-            days-to-keep: 365
-            num-to-keep: 50
+      - build-discarder:
+          days-to-keep: 365
+          num-to-keep: 50
     parameters:
-        - string:
-            name: GERRIT_HOST
-            default: 'review.trustedfirmware.org'
-        - string:
-            name: GERRIT_PROJECT
-            default: 'TF-A/trusted-firmware-a'
-            description: |
-              TF-A Git project
-        - string:
-            name: GERRIT_BRANCH
-            default: ''
-            description: |
-              Git branch (e.g. lts-v2.8) to search for the latest tag in case of --latest is used for RELEASE_TAG
-        - string:
-            name: RELEASE_TAG
-            default: '--latest'
-            description: |
-              Release git tag, e.g. 'lts-v2.8.10', or '--latest' to get latest tag in GERRIT_BRANCH
-        - bool:
-            name: SANDBOX_RUN
-            default: true
-            description: |
-              Run sandbox simulation of a release. Uncheck this only after
-              running simulation and checking that everything is correct!
-#    triggers:
-#    - gerrit:
-#        silent: true
-#        server-name: 'review.trustedfirmware.org'
-#        projects:
-#        - branches:
-#          - branch-compare-type: PLAIN
-#            branch-pattern: integration
-#          project-compare-type: PLAIN
-#          project-pattern: 'TF-A/trusted-firmware-a'
-#        trigger-on:
-#        - patchset-created-event
+      - string:
+          name: GERRIT_HOST
+          default: review.trustedfirmware.org
+      - string:
+          name: GERRIT_PROJECT
+          default: TF-A/trusted-firmware-a
+          description: |
+            TF-A Git project
+      - string:
+          name: GERRIT_BRANCH
+          default: ""
+          description: |
+            Git branch (e.g. lts-v2.8) to search for the latest tag in case of --latest is used for RELEASE_TAG
+      - string:
+          name: RELEASE_TAG
+          default: --latest
+          description: |
+            Release git tag, e.g. 'lts-v2.8.10', or '--latest' to get latest tag in GERRIT_BRANCH
+      - bool:
+          name: SANDBOX_RUN
+          default: true
+          description: |
+            Run sandbox simulation of a release. Uncheck this only after
+            running simulation and checking that everything is correct!
+          #    triggers:
+          #    - gerrit:
+          #        silent: true
+          #        server-name: 'review.trustedfirmware.org'
+          #        projects:
+          #        - branches:
+          #          - branch-compare-type: PLAIN
+          #            branch-pattern: integration
+          #          project-compare-type: PLAIN
+          #          project-pattern: 'TF-A/trusted-firmware-a'
+          #        trigger-on:
+          #        - patchset-created-event
     wrappers:
-    - timestamps
-    - timeout:
-        timeout: 5
-        fail: true
+      - timestamps
+      - timeout:
+          timeout: 5
+          fail: true
     builders:
-    - shell: |
-        #!/bin/bash
-        set -ex
+      - shell: |
+          #!/bin/bash
+          set -ex
 
-        git clone https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
-        ./tf-a-ci-scripts/lts/lts-release-mail.py --url https://${GERRIT_HOST}/${GERRIT_PROJECT} --branch "${GERRIT_BRANCH}" ${RELEASE_TAG} >email.txt
-        awk -F": " '/Subject:/ {print $2}' email.txt >subject.txt
-        # Remove email headers, put in a seperate file.
-        sed '0,/^$/d' email.txt >body.txt
+          git clone https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
+          ./tf-a-ci-scripts/lts/lts-release-mail.py --url https://${GERRIT_HOST}/${GERRIT_PROJECT} --branch "${GERRIT_BRANCH}" ${RELEASE_TAG} >email.txt
+          awk -F": " '/Subject:/ {print $2}' email.txt >subject.txt
+          # Remove email headers, put in a seperate file.
+          sed '0,/^$/d' email.txt >body.txt
 
-        if [ "$SANDBOX_RUN" == "true" ]; then
-            echo "Bipin.Ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, jidong@google.com, govindraj.raja@arm.com" >recipients.txt
-            echo -n "[SANDBOX] " | cat - subject.txt > subject.txt.tmp
-            mv subject.txt.tmp subject.txt
-        else
-            echo "tfa-lts@lists.trustedfirmware.org, tf-a@lists.trustedfirmware.org" >recipients.txt
-        fi
+          if [ "$SANDBOX_RUN" == "true" ]; then
+              echo "Bipin.Ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, jidong@google.com, govindraj.raja@arm.com" >recipients.txt
+              echo -n "[SANDBOX] " | cat - subject.txt > subject.txt.tmp
+              mv subject.txt.tmp subject.txt
+          else
+              echo "tfa-lts@lists.trustedfirmware.org, tf-a@lists.trustedfirmware.org" >recipients.txt
+          fi
 
-        set +x
-        echo "======================================================================="
-        cat email.txt
-        echo "======================================================================="
+          set +x
+          echo "======================================================================="
+          cat email.txt
+          echo "======================================================================="
     publishers:
-        - archive:
-            artifacts: email.txt
-            latest-only: false
-            allow-empty: true
-        - conditional-publisher:
+      - archive:
+          artifacts: email.txt
+          latest-only: false
+          allow-empty: true
+      - conditional-publisher:
           - condition-kind: file-exists
             on-evaluation-failure: dont-run
             condition-filename: email.txt
             condition-basedir: workspace
             action:
-            - email-ext:
-                always: true
-                subject: '${FILE, path="subject.txt"}'
-                body: '${FILE, path="body.txt"}'
-                recipients: '${FILE, path="recipients.txt"}'
+              - email-ext:
+                  always: true
+                  subject: ${FILE, path="subject.txt"}
+                  body: ${FILE, path="body.txt"}
+                  recipients: ${FILE, path="recipients.txt"}

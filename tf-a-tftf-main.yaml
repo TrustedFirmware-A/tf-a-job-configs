@@ -16,46 +16,46 @@
     parameters:
       - string:
           name: TF_GERRIT_PROJECT
-          default: "TF-A/trusted-firmware-a"
-          description: "Gerrit project name for Trusted Firmware-A."
+          default: TF-A/trusted-firmware-a
+          description: Gerrit project name for Trusted Firmware-A.
       - string:
           name: TF_GERRIT_BRANCH
-          default: "refs/heads/integration"
-          description: "Git project branch for Trusted Firmware-A."
+          default: refs/heads/integration
+          description: Git project branch for Trusted Firmware-A.
       - string:
           name: TF_GERRIT_REFSPEC
-          default: "+refs/heads/integration:refs/remotes/origin/integration"
-          description: "Git refspec for Trusted Firmware-A."
+          default: +refs/heads/integration:refs/remotes/origin/integration
+          description: Git refspec for Trusted Firmware-A.
       - string:
           name: TFTF_GERRIT_PROJECT
-          default: "TF-A/tf-a-tests"
-          description: "Gerrit project name for the Trusted Firmware-A Test Framework."
+          default: TF-A/tf-a-tests
+          description: Gerrit project name for the Trusted Firmware-A Test Framework.
       - string:
           name: TFTF_GERRIT_BRANCH
-          default: "refs/heads/master"
-          description: "Git branch for the Trusted Firmware-A Test Framework."
+          default: refs/heads/master
+          description: Git branch for the Trusted Firmware-A Test Framework.
       - string:
           name: TFTF_GERRIT_REFSPEC
-          default: "+refs/heads/master:refs/remotes/origin/master"
-          description: "Git refspec for the Trusted Firmware-A Test Framework."
+          default: +refs/heads/master:refs/remotes/origin/master
+          description: Git refspec for the Trusted Firmware-A Test Framework.
       - string:
           name: CI_REFSPEC
-          default: "+refs/heads/master:refs/remotes/origin/master"
-          description: "Git refspec for the Trusted Firmware-A CI scripts."
+          default: +refs/heads/master:refs/remotes/origin/master
+          description: Git refspec for the Trusted Firmware-A CI scripts.
       - string:
           name: RMM_REFSPEC
-          default: '+refs/heads/main:refs/remotes/origin/main'
+          default: +refs/heads/main:refs/remotes/origin/main
           description: |
             tf-rmm refspec to use. The main branch is used by default.
       - string:
           name: JOBS_REFSPEC
-          default: 'refs/heads/master'
+          default: refs/heads/master
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
       - string:
           name: SHARE_FOLDER
-          default: "/srv/shared/${JOB_NAME}/${BUILD_NUMBER}"
-          description: "Folder containing shared repositories for downstream pipeline jobs."
+          default: /srv/shared/${JOB_NAME}/${BUILD_NUMBER}
+          description: Folder containing shared repositories for downstream pipeline jobs.
     triggers:
       - timed: H H(0-6) * * 1-5
     wrappers:
@@ -68,8 +68,7 @@
       - workspace-cleanup
       - timestamps
     builders:
-      - shell:
-          !include-raw: scripts/clone.sh
+      - shell: !include-raw: scripts/clone.sh
       - shell: |
           #!/bin/bash
 
@@ -89,8 +88,7 @@
               kill-phase-on: NEVER
               name: tf-a-static-checks
               alias: tftf-static-checks
-              predefined-parameters: |-
-                REPO_UNDER_TEST=tf-a-tests
+              predefined-parameters: REPO_UNDER_TEST=tf-a-tests
               property-file: tf-a-tests-env.param
       - multijob:
           condition: COMPLETED
@@ -100,8 +98,7 @@
               kill-phase-on: NEVER
               name: tf-a-ci-gateway
               alias: tftf-l1-build
-              predefined-parameters: |-
-                TEST_GROUPS=tftf-l1-build
+              predefined-parameters: TEST_GROUPS=tftf-l1-build
               property-file: tf-a-tests-env.param
       - multijob:
           condition: COMPLETED
@@ -111,8 +108,7 @@
               kill-phase-on: NEVER
               name: tf-a-ci-gateway
               alias: tftf-l2-fwu
-              predefined-parameters: |-
-                TEST_GROUPS=tftf-l2-fwu
+              predefined-parameters: TEST_GROUPS=tftf-l2-fwu
               property-file: tf-a-tests-env.param
       - multijob:
           condition: COMPLETED
@@ -122,29 +118,25 @@
               kill-phase-on: NEVER
               name: tf-a-ci-gateway
               alias: tftf-l1-fvp tftf-l1-juno
-              predefined-parameters: |-
-                TEST_GROUPS=tftf-l1-fvp tftf-l1-juno
+              predefined-parameters: TEST_GROUPS=tftf-l1-fvp tftf-l1-juno
               property-file: tf-a-tests-env.param
             - current-parameters: true
               kill-phase-on: NEVER
               name: tf-a-ci-gateway
               alias: tftf-l2-fvp-auxiliary tftf-l2-fvp-dynamiq
-              predefined-parameters: |-
-                TEST_GROUPS=tftf-l2-fvp-auxiliary tftf-l2-fvp-dynamiq
+              predefined-parameters: TEST_GROUPS=tftf-l2-fvp-auxiliary tftf-l2-fvp-dynamiq
               property-file: tf-a-tests-env.param
             - current-parameters: true
               kill-phase-on: NEVER
               name: tf-a-ci-gateway
               alias: spm-l2-boot-tests tf-l2-boot-tests-spm-mm
-              predefined-parameters: |-
-                TEST_GROUPS=spm-l2-boot-tests tf-l2-boot-tests-spm-mm
+              predefined-parameters: TEST_GROUPS=spm-l2-boot-tests tf-l2-boot-tests-spm-mm
               property-file: tf-a-tests-env.param
             - current-parameters: true
               kill-phase-on: NEVER
               name: tf-a-ci-gateway
               alias: spm-l3-boot-tests tf-l3-boot-tests-spm-mm
-              predefined-parameters: |-
-                TEST_GROUPS=spm-l3-boot-tests tf-l3-boot-tests-spm-mm
+              predefined-parameters: TEST_GROUPS=spm-l3-boot-tests tf-l3-boot-tests-spm-mm
               property-file: tf-a-tests-env.param
       - multijob:
           condition: SUCCESSFUL
@@ -154,6 +146,5 @@
               kill-phase-on: FAILURE
               name: tf-a-ci-gateway
               alias: tftf-l2-extensive-tests-fvp
-              predefined-parameters: |-
-                TEST_GROUPS=tftf-l2-extensive-tests-fvp
+              predefined-parameters: TEST_GROUPS=tftf-l2-extensive-tests-fvp
               property-file: tf-a-tests-env.param

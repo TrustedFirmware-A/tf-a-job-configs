@@ -8,148 +8,147 @@
       Job that triggers for every TF-A-Tests patch approved with the Allow-CI+2
       label on review.trustedfirmware.org.
     properties:
-    - throttle:
-        option: project
-        enabled: true
-        max-total: 5
-    - build-discarder:
-        days-to-keep: 14
+      - throttle:
+          option: project
+          enabled: true
+          max-total: 5
+      - build-discarder:
+          days-to-keep: 14
     parameters:
-        - string:
-            name: GERRIT_PROJECT
-            default: 'TF-A/tf-a-tests'
-        - string:
-            name: GERRIT_BRANCH
-            default: 'refs/heads/lts-v2.10'
-        - string:
-            name: GERRIT_REFSPEC
-            default: '+refs/heads/lts-v2.10:refs/remotes/origin/lts-v2.10'
-        - string:
-            name: GERRIT_PATCHSET_NUMBER
-            default: ''
-        - string:
-            name: GERRIT_CHANGE_NUMBER
-            default: ''
-        - string:
-            name: TF_GERRIT_BRANCH
-            default: 'refs/heads/lts-v2.10'
-            description: "Git project branch for Trusted Firmware-A."
-        - string:
-            name: TF_GERRIT_REFSPEC
-            default: '+refs/heads/lts-v2.10:refs/remotes/origin/lts-v2.10'
-            description: "Git refspec for Trusted Firmware-A."
-        - string:
-            name: TFTF_GERRIT_REFSPEC
-            default: ${GERRIT_REFSPEC}
-            description: 'Parameter only used by the clone script'
-        - string:
-           name: SPM_REFSPEC
-           default: 'v2.10'
-           description: |
-             SPM (Hafnium) refspec to use.
-        - string:
-            name: CI_REFSPEC
-            default: '+refs/heads/lts-v2.10:refs/remotes/origin/lts-v2.10'
-        - string:
-            name: JOBS_REFSPEC
-            default: 'refs/heads/master'
-            description: |
-              tf-a-job-configs refspec to use. The master branch is used by default.
-        - string:
-            name: MBEDTLS_URL
-            default: 'https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.3.tar.gz'
-        - string:
-            name: SHARE_FOLDER
-            default: '/srv/shared/${JOB_NAME}/${BUILD_NUMBER}'
-            description: 'Folder containing shared repositories for downstream pipeline jobs'
+      - string:
+          name: GERRIT_PROJECT
+          default: TF-A/tf-a-tests
+      - string:
+          name: GERRIT_BRANCH
+          default: refs/heads/lts-v2.10
+      - string:
+          name: GERRIT_REFSPEC
+          default: +refs/heads/lts-v2.10:refs/remotes/origin/lts-v2.10
+      - string:
+          name: GERRIT_PATCHSET_NUMBER
+          default: ""
+      - string:
+          name: GERRIT_CHANGE_NUMBER
+          default: ""
+      - string:
+          name: TF_GERRIT_BRANCH
+          default: refs/heads/lts-v2.10
+          description: Git project branch for Trusted Firmware-A.
+      - string:
+          name: TF_GERRIT_REFSPEC
+          default: +refs/heads/lts-v2.10:refs/remotes/origin/lts-v2.10
+          description: Git refspec for Trusted Firmware-A.
+      - string:
+          name: TFTF_GERRIT_REFSPEC
+          default: ${GERRIT_REFSPEC}
+          description: Parameter only used by the clone script
+      - string:
+          name: SPM_REFSPEC
+          default: v2.10
+          description: |
+            SPM (Hafnium) refspec to use.
+      - string:
+          name: CI_REFSPEC
+          default: +refs/heads/lts-v2.10:refs/remotes/origin/lts-v2.10
+      - string:
+          name: JOBS_REFSPEC
+          default: refs/heads/master
+          description: |
+            tf-a-job-configs refspec to use. The master branch is used by default.
+      - string:
+          name: MBEDTLS_URL
+          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.3.tar.gz
+      - string:
+          name: SHARE_FOLDER
+          default: /srv/shared/${JOB_NAME}/${BUILD_NUMBER}
+          description: Folder containing shared repositories for downstream pipeline jobs
     wrappers:
       - credentials-binding:
           - ssh-user-private-key:
               credential-id: TFA_CI_BOT_USER_SSH_KEY
               key-file-variable: CI_BOT_KEY
               username-variable: CI_BOT_USERNAME
-              passphrase-variable: ''
+              passphrase-variable: ""
       - workspace-cleanup
       - timestamps
     builders:
-    - shell:
-        !include-raw: scripts/clone.sh
-    - shell: |
-        #!/bin/bash
-        set -e
-        cat << EOF > env.param
-        GERRIT_PATCHSET_NUMBER=${GERRIT_PATCHSET_NUMBER}
-        GERRIT_CHANGE_NUMBER=${GERRIT_CHANGE_NUMBER}
-        GERRIT_HOST=${GERRIT_HOST}
-        QA_SERVER_PROJECT=${JOB_NAME}
-        QA_SERVER_VERSION=${BUILD_NUMBER}
-        TFTF_GERRIT_PROJECT=${GERRIT_PROJECT}
-        TFTF_GERRIT_BRANCH=${GERRIT_BRANCH}
-        TFTF_GERRIT_REFSPEC=${GERRIT_REFSPEC}
-        SHARE_FOLDER=${SHARE_FOLDER}
-        EOF
-    - multijob:
-        condition: COMPLETED
-        name: Carry out level 1 tests
-        projects:
-        - kill-phase-on: NEVER
-          name: tf-a-lts2.10-tftf-gerrit-tforg-l1
-          current-parameters: true
-          property-file: env.param
-    - multijob:
-        condition: COMPLETED
-        name: Run Firmware Update Tests
-        projects:
-        - kill-phase-on: NEVER
-          name: tf-a-lts2.10-ci-gateway
-          current-parameters: true
-          predefined-parameters: |-
-            TEST_GROUPS=tftf-l2-fwu
-            TFTF_REFSPEC=$GERRIT_REFSPEC
-          property-file: env.param
-    - multijob:
-        condition: COMPLETED
-        name: Run Level 2 testing of TF-A-Tests
-        projects:
-        - kill-phase-on: NEVER
-          name: tf-a-lts2.10-ci-gateway
-          current-parameters: true
-          predefined-parameters: |-
-            TEST_GROUPS=tftf-l2-fvp-auxiliary tftf-l2-juno tf-l2-boot-tests-spm-mm tftf-l2-fvp-dynamiq spm-l2-boot-tests
-            TFTF_REFSPEC=$GERRIT_REFSPEC
-          property-file: env.param
-    - multijob:
-        condition: COMPLETED
-        name: Run extensive TF-A-Tests
-        projects:
-        - kill-phase-on: NEVER
-          name: tf-a-lts2.10-ci-gateway
-          current-parameters: true
-          predefined-parameters: |-
-            TEST_GROUPS=tftf-l2-extensive-tests-fvp
-            TFTF_REFSPEC=$GERRIT_REFSPEC
-          property-file: env.param
+      - shell: !include-raw: scripts/clone.sh
+      - shell: |
+          #!/bin/bash
+          set -e
+          cat << EOF > env.param
+          GERRIT_PATCHSET_NUMBER=${GERRIT_PATCHSET_NUMBER}
+          GERRIT_CHANGE_NUMBER=${GERRIT_CHANGE_NUMBER}
+          GERRIT_HOST=${GERRIT_HOST}
+          QA_SERVER_PROJECT=${JOB_NAME}
+          QA_SERVER_VERSION=${BUILD_NUMBER}
+          TFTF_GERRIT_PROJECT=${GERRIT_PROJECT}
+          TFTF_GERRIT_BRANCH=${GERRIT_BRANCH}
+          TFTF_GERRIT_REFSPEC=${GERRIT_REFSPEC}
+          SHARE_FOLDER=${SHARE_FOLDER}
+          EOF
+      - multijob:
+          condition: COMPLETED
+          name: Carry out level 1 tests
+          projects:
+            - kill-phase-on: NEVER
+              name: tf-a-lts2.10-tftf-gerrit-tforg-l1
+              current-parameters: true
+              property-file: env.param
+      - multijob:
+          condition: COMPLETED
+          name: Run Firmware Update Tests
+          projects:
+            - kill-phase-on: NEVER
+              name: tf-a-lts2.10-ci-gateway
+              current-parameters: true
+              predefined-parameters: |-
+                TEST_GROUPS=tftf-l2-fwu
+                TFTF_REFSPEC=$GERRIT_REFSPEC
+              property-file: env.param
+      - multijob:
+          condition: COMPLETED
+          name: Run Level 2 testing of TF-A-Tests
+          projects:
+            - kill-phase-on: NEVER
+              name: tf-a-lts2.10-ci-gateway
+              current-parameters: true
+              predefined-parameters: |-
+                TEST_GROUPS=tftf-l2-fvp-auxiliary tftf-l2-juno tf-l2-boot-tests-spm-mm tftf-l2-fvp-dynamiq spm-l2-boot-tests
+                TFTF_REFSPEC=$GERRIT_REFSPEC
+              property-file: env.param
+      - multijob:
+          condition: COMPLETED
+          name: Run extensive TF-A-Tests
+          projects:
+            - kill-phase-on: NEVER
+              name: tf-a-lts2.10-ci-gateway
+              current-parameters: true
+              predefined-parameters: |-
+                TEST_GROUPS=tftf-l2-extensive-tests-fvp
+                TFTF_REFSPEC=$GERRIT_REFSPEC
+              property-file: env.param
     triggers:
-    - gerrit:
-        server-name: review.trustedfirmware.org
-        projects:
-        - branches:
-          - branch-compare-type: PLAIN
-            branch-pattern: lts-v2.10
-          project-compare-type: PLAIN
-          project-pattern: TF-A/tf-a-tests
-        trigger-on:
-          - comment-added-event:
-              approval-category: "Allow-CI"
-              approval-value: 2
-        override-votes: true
-        gerrit-build-started-verified-value: 0
-        gerrit-build-successful-verified-value: 1
-        gerrit-build-failed-verified-value: -1
-        gerrit-build-unstable-verified-value: -1
-        gerrit-build-notbuilt-verified-value: 0
-        gerrit-build-started-codereview-value: 0
-        gerrit-build-successful-codereview-value: 0
-        gerrit-build-failed-codereview-value: 0
-        gerrit-build-unstable-codereview-value: 0
-        gerrit-build-notbuilt-codereview-value: 0
+      - gerrit:
+          server-name: review.trustedfirmware.org
+          projects:
+            - branches:
+                - branch-compare-type: PLAIN
+                  branch-pattern: lts-v2.10
+              project-compare-type: PLAIN
+              project-pattern: TF-A/tf-a-tests
+          trigger-on:
+            - comment-added-event:
+                approval-category: Allow-CI
+                approval-value: 2
+          override-votes: true
+          gerrit-build-started-verified-value: 0
+          gerrit-build-successful-verified-value: 1
+          gerrit-build-failed-verified-value: -1
+          gerrit-build-unstable-verified-value: -1
+          gerrit-build-notbuilt-verified-value: 0
+          gerrit-build-started-codereview-value: 0
+          gerrit-build-successful-codereview-value: 0
+          gerrit-build-failed-codereview-value: 0
+          gerrit-build-unstable-codereview-value: 0
+          gerrit-build-notbuilt-codereview-value: 0

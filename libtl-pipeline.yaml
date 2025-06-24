@@ -6,17 +6,15 @@
     project-type: pipeline
     sandbox: true
     dsl: !include-raw: libtl-pipeline/Jenkinsfile
-
     properties:
       - build-discarder:
           days-to-keep: 4
-
     triggers:
       - gerrit:
           server-name: review.trustedfirmware.org
           trigger-on:
             - comment-added-event:
-                approval-category: "Allow-CI"
+                approval-category: Allow-CI
                 approval-value: 1
           projects:
             - project-compare-type: PLAIN

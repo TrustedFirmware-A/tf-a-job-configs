@@ -1,11 +1,9 @@
 - job:
     name: tf-a-commitlint
     description: Lint commit messages.
-
     project-type: pipeline
     sandbox: true
     dsl: !include-raw: tf-a-commitlint/Jenkinsfile
-
     properties:
       - build-discarder:
           days-to-keep: 14

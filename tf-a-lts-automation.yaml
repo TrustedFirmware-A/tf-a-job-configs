@@ -9,99 +9,97 @@
       It helps to create corrosponding branch in the tf-a-test, hafnium, and tf-a-ci-scripts repositories, as well as set up a new download
       space for the new LTS branch.
     properties:
-        - build-discarder:
-            days-to-keep: 15
+      - build-discarder:
+          days-to-keep: 15
     parameters:
-        - string:
-            name: EMAIL_RECIPIENT
-            default: |
-              bipin.ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, jidong@google.com, govindraj.raja@arm.com, arthur.she@linaro.org
-            description: |
-              The notification recipients
+      - string:
+          name: EMAIL_RECIPIENT
+          default: |
+            bipin.ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, jidong@google.com, govindraj.raja@arm.com, arthur.she@linaro.org
+          description: |
+            The notification recipients
     wrappers:
-        - timestamps
-        - timeout:
-            timeout: 120
-            fail: true
-        - credentials-binding:
-            - ssh-user-private-key:
-                credential-id: TFA_CI_BOT_USER_SSH_KEY
-                key-file-variable: CI_BOT_KEY
-                username-variable: CI_BOT_USERNAME
-                passphrase-variable: ''
+      - timestamps
+      - timeout:
+          timeout: 120
+          fail: true
+      - credentials-binding:
+          - ssh-user-private-key:
+              credential-id: TFA_CI_BOT_USER_SSH_KEY
+              key-file-variable: CI_BOT_KEY
+              username-variable: CI_BOT_USERNAME
+              passphrase-variable: ""
     triggers:
-        - gerrit:
-            silent: true
-            server-name: 'review.trustedfirmware.org'
-            projects:
+      - gerrit:
+          silent: true
+          server-name: review.trustedfirmware.org
+          projects:
             - branches:
                 - branch-compare-type: REG_EXP
-                  branch-pattern: 'lts-v.*'
+                  branch-pattern: lts-v.*
               project-compare-type: PLAIN
-              project-pattern: 'TF-A/trusted-firmware-a'
-            trigger-on:
+              project-pattern: TF-A/trusted-firmware-a
+          trigger-on:
             - ref-updated-event
-
     builders:
-        - shell: |
-            echo "***************************************"
-            env | grep GERRIT
-            echo "***************************************"
-        - shell: |
-            #!/bin/bash
-            set -ex
+      - shell: |
+          echo "***************************************"
+          env | grep GERRIT
+          echo "***************************************"
+      - shell: |
+          #!/bin/bash
+          set -ex
 
-            SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa"
-            export GIT_SSH_COMMAND="ssh -p 29418 -i $CI_BOT_KEY ${SSH_PARAMS}"
-            gerrit_host="ssh://${CI_BOT_USERNAME}@${GERRIT_HOST}:29418"
-            new_branch=${GERRIT_REFNAME}
-            forked_tag=${new_branch##*-}
+          SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa"
+          export GIT_SSH_COMMAND="ssh -p 29418 -i $CI_BOT_KEY ${SSH_PARAMS}"
+          gerrit_host="ssh://${CI_BOT_USERNAME}@${GERRIT_HOST}:29418"
+          new_branch=${GERRIT_REFNAME}
+          forked_tag=${new_branch##*-}
 
-            _workdir=$(mktemp -d)
-            rm -f email.txt || true
-            trap '[ -d "${_workdir}" ] && rm -rf "${_workdir}"' EXIT
-            git -C "${_workdir}" init > /dev/null 2>&1
+          _workdir=$(mktemp -d)
+          rm -f email.txt || true
+          trap '[ -d "${_workdir}" ] && rm -rf "${_workdir}"' EXIT
+          git -C "${_workdir}" init > /dev/null 2>&1
 
-            # Check if the job is triggered by a new LTS branch creation
-            new_lts_branch=-1
-            # Verify if the branch already exists in the Hafnium project.
-            git -C "${_workdir}" ls-remote --exit-code ${gerrit_host}/hafnium/hafnium ${new_branch} || new_lts_branch=1
-            # Check if the job is not triggered by delete branch
-            git -C "${_workdir}" ls-remote --exit-code ${gerrit_host}/${GERRIT_PROJECT} ${new_branch} || new_lts_branch=-1
-            if [ ${new_lts_branch} -eq -1 ]; then
-                echo "No new LTS branch created! exit job"
-            	exit 0
-            fi
+          # Check if the job is triggered by a new LTS branch creation
+          new_lts_branch=-1
+          # Verify if the branch already exists in the Hafnium project.
+          git -C "${_workdir}" ls-remote --exit-code ${gerrit_host}/hafnium/hafnium ${new_branch} || new_lts_branch=1
+          # Check if the job is not triggered by delete branch
+          git -C "${_workdir}" ls-remote --exit-code ${gerrit_host}/${GERRIT_PROJECT} ${new_branch} || new_lts_branch=-1
+          if [ ${new_lts_branch} -eq -1 ]; then
+              echo "No new LTS branch created! exit job"
+          	exit 0
+          fi
 
-            # Create new LTS branch to related repositories
-            repos="hafnium/hafnium TF-A/tf-a-tests ci/tf-a-ci-scripts ci/tf-a-job-configs"
-            for r in ${repos};
-            do
-                echo "Create branch \"${new_branch}\" from tag \"${forked_tag}\" in the \"${r}\" project"
-                git -C "${_workdir}" fetch ${gerrit_host}/${r} ${forked_tag}
-                git -C "${_workdir}" push ${gerrit_host}/${r} FETCH_HEAD^{commit}:refs/heads/${new_branch}
-            done
+          # Create new LTS branch to related repositories
+          repos="hafnium/hafnium TF-A/tf-a-tests ci/tf-a-ci-scripts ci/tf-a-job-configs"
+          for r in ${repos};
+          do
+              echo "Create branch \"${new_branch}\" from tag \"${forked_tag}\" in the \"${r}\" project"
+              git -C "${_workdir}" fetch ${gerrit_host}/${r} ${forked_tag}
+              git -C "${_workdir}" push ${gerrit_host}/${r} FETCH_HEAD^{commit}:refs/heads/${new_branch}
+          done
 
-            # Create new download space
-            echo "Create new download space for \"${new_branch}\""
-            aws s3 sync s3://trustedfirmware-prod-storage/tf-a s3://openci-trustedfirmware-storage-prod/tf-a-${new_branch}
+          # Create new download space
+          echo "Create new download space for \"${new_branch}\""
+          aws s3 sync s3://trustedfirmware-prod-storage/tf-a s3://openci-trustedfirmware-storage-prod/tf-a-${new_branch}
 
-            echo "CI Environment Setup for ${new_branch} branch Completed" > subject.txt
-            cat << EOF >email.txt
-            Hello,
-            The new LTS branch "${new_branch}" has been created in the following repositoris
-            ${repos}
+          echo "CI Environment Setup for ${new_branch} branch Completed" > subject.txt
+          cat << EOF >email.txt
+          Hello,
+          The new LTS branch "${new_branch}" has been created in the following repositoris
+          ${repos}
 
-            And the new download space is ready on ${DOWNLOAD_SERVER_URL}/tf-a-${new_branch}
+          And the new download space is ready on ${DOWNLOAD_SERVER_URL}/tf-a-${new_branch}
 
-            Please check the job log for the details
-            ${BUILD_URL}console
+          Please check the job log for the details
+          ${BUILD_URL}console
 
-            EOF
+          EOF
 
-            echo "--------- email body ----------"
-            cat email.txt
-
+          echo "--------- email body ----------"
+          cat email.txt
     publishers:
       - conditional-publisher:
           - condition-kind: file-exists
@@ -112,5 +110,5 @@
               - email-ext:
                   always: true
                   recipients: ${EMAIL_RECIPIENT}
-                  subject: '${FILE,path="subject.txt"}'
-                  body: '${FILE,path="email.txt"}'
+                  subject: ${FILE,path="subject.txt"}
+                  body: ${FILE,path="email.txt"}

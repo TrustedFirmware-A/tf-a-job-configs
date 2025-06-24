@@ -11,70 +11,69 @@
       <br/>
       This job runs <b>every weekday</b> and by default uses the <b>integration</b> branch on trustedfirmware.org.
     properties:
-        - build-discarder:
-            days-to-keep: 14
+      - build-discarder:
+          days-to-keep: 14
     parameters:
-        - string:
-            name: TF_GERRIT_PROJECT
-            default: 'TF-A/trusted-firmware-a'
-        - string:
-            name: TF_GERRIT_BRANCH
-            default: 'refs/heads/integration'
-        - string:
-            name: TF_GERRIT_REFSPEC
-            default: '+refs/heads/integration:refs/remotes/origin/integration'
-        - string:
-            name: CI_REFSPEC
-            default: '+refs/heads/master:refs/remotes/origin/master'
-        - string:
-            name: JOBS_REFSPEC
-            default: 'refs/heads/master'
-            description: |
-                tf-a-job-configs refspec to use. The master branch is used by default.
-        - string:
-            name: COVERITY_VERSION
-            default: '2024.6.1'
-        - bool:
-            name: UPLOAD_TO_COVERITY_SCAN_ONLINE
-            default: true
-            description: |-
-              Whether the resulting tarball should be automatically uploaded to Coverity Scan Online.
-              <p>
-              <b style="color:red;">The number of uploads allowed on Coverity Scan Online is LIMITED.
-              Therefore, if you don't need the results to be analysed, please UNTICK this box!<b>
-        - string:
-            name: SHARE_FOLDER
-            default: '/srv/shared/${JOB_NAME}/${BUILD_NUMBER}'
-            description: 'Folder containing shared repositories for downstream pipeline jobs'
+      - string:
+          name: TF_GERRIT_PROJECT
+          default: TF-A/trusted-firmware-a
+      - string:
+          name: TF_GERRIT_BRANCH
+          default: refs/heads/integration
+      - string:
+          name: TF_GERRIT_REFSPEC
+          default: +refs/heads/integration:refs/remotes/origin/integration
+      - string:
+          name: CI_REFSPEC
+          default: +refs/heads/master:refs/remotes/origin/master
+      - string:
+          name: JOBS_REFSPEC
+          default: refs/heads/master
+          description: |
+            tf-a-job-configs refspec to use. The master branch is used by default.
+      - string:
+          name: COVERITY_VERSION
+          default: 2024.6.1
+      - bool:
+          name: UPLOAD_TO_COVERITY_SCAN_ONLINE
+          default: true
+          description: |-
+            Whether the resulting tarball should be automatically uploaded to Coverity Scan Online.
+            <p>
+            <b style="color:red;">The number of uploads allowed on Coverity Scan Online is LIMITED.
+            Therefore, if you don't need the results to be analysed, please UNTICK this box!<b>
+      - string:
+          name: SHARE_FOLDER
+          default: /srv/shared/${JOB_NAME}/${BUILD_NUMBER}
+          description: Folder containing shared repositories for downstream pipeline jobs
     wrappers:
-        - timestamps
-        - credentials-binding:
+      - timestamps
+      - credentials-binding:
           - text:
               credential-id: TF-COVERITY-SCAN-TOKEN
               variable: TF_COVERITY_SCAN_TOKEN
     builders:
-        - shell:
-            !include-raw: scripts/clone.sh
-        - shell: |
-            #!/bin/bash
-            set -e
-            set -x
+      - shell: !include-raw: scripts/clone.sh
+      - shell: |
+          #!/bin/bash
+          set -e
+          set -x
 
-            # Fetch coverity tool and untar it
-            cd ${WORKSPACE}
-            wget ${DOWNLOAD_SERVER_URL}/tf-a/tf-a-coverity/coverity_tool.tgz
-            tar -xzf coverity_tool.tgz
-            mv cov-analysis-linux64-${COVERITY_VERSION} coverity
-            export PATH=${WORKSPACE}/coverity/bin:${PATH}
+          # Fetch coverity tool and untar it
+          cd ${WORKSPACE}
+          wget ${DOWNLOAD_SERVER_URL}/tf-a/tf-a-coverity/coverity_tool.tgz
+          tar -xzf coverity_tool.tgz
+          mv cov-analysis-linux64-${COVERITY_VERSION} coverity
+          export PATH=${WORKSPACE}/coverity/bin:${PATH}
 
-            # Run coverity
-            cd ${WORKSPACE}/trusted-firmware-a
-            ${WORKSPACE}/tf-a-ci-scripts/script/tf-coverity/run_coverity_on_tf.py --tf $(pwd)
-        - conditional-step:
-            condition-kind: boolean-expression
-            condition-expression: "${UPLOAD_TO_COVERITY_SCAN_ONLINE}"
-            on-evaluation-failure: dont-run
-            steps:
+          # Run coverity
+          cd ${WORKSPACE}/trusted-firmware-a
+          ${WORKSPACE}/tf-a-ci-scripts/script/tf-coverity/run_coverity_on_tf.py --tf $(pwd)
+      - conditional-step:
+          condition-kind: boolean-expression
+          condition-expression: ${UPLOAD_TO_COVERITY_SCAN_ONLINE}
+          on-evaluation-failure: dont-run
+          steps:
             - shell: |
                 #!/bin/bash
                 set -e
@@ -91,9 +90,8 @@
                   --form description="Build ${BUILD_DISPLAY_NAME}" \
                   https://scan.coverity.com/builds?project=ARM-software%2Farm-trusted-firmware
     publishers:
-        - archive:
-            artifacts: 'trusted-firmware-a/arm-tf-coverity-results.tgz, trusted-firmware-a/tf_coverage.log'
-        - groovy-postbuild:
-            script:
-                !include-raw:
-                  - tf-a-coverity/postbuild.groovy
+      - archive:
+          artifacts: trusted-firmware-a/arm-tf-coverity-results.tgz, trusted-firmware-a/tf_coverage.log
+      - groovy-postbuild:
+          script: !include-raw:
+            - tf-a-coverity/postbuild.groovy
