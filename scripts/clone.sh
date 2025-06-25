@@ -135,7 +135,7 @@ else
 fi
 git log -1
 cd $OLDPWD
-cp -a -f ${SHARE_FOLDER}/${JOBS_REPO_NAME} ${PWD}/${JOBS_REPO_NAME}
+fpsync ${SHARE_FOLDER}/${JOBS_REPO_NAME} ${PWD}/${JOBS_REPO_NAME}
 
 # clone git repos
 for repo in ${!repos_map[@]}; do
@@ -206,6 +206,5 @@ for repo in ${!repos_map[@]}; do
 
     # copy repository into pwd dir (workspace in CI), so each job would work
     # on its own workspace
-    cp -a -f ${SHARE_FOLDER}/${REPO_NAME} ${PWD}/${REPO_NAME}
-
+    fpsync ${SHARE_FOLDER}/${REPO_NAME} ${PWD}/${REPO_NAME}
 done
