@@ -28,7 +28,7 @@
 set -ex
 
 # Global defaults
-CLONE_REPOS=${CLONE_REPOS:-trusted-firmware-a,tf-a-ci-scripts,tf-m-extras,tf-m-tests,tf-rmm,spm}
+CLONE_REPOS=${CLONE_REPOS:-trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm}
 REFSPEC_MASTER="refs/heads/master"
 REFSPEC_MAIN="refs/heads/main"
 REFSPEC_TF_M_TESTS="refs/heads/tfa_ci_dep_revision"
