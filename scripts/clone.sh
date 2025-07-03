@@ -191,7 +191,8 @@ for repo in ${!repos_map[@]}; do
             git fetch ${REPO_URL} ${REPO_REFSPEC}
         fi
 
-        git checkout --recurse-submodules FETCH_HEAD
+        git checkout FETCH_HEAD
+        git submodule update --init --recursive
         echo "Freshly cloned ${REPO_URL} (refspec ${REPO_REFSPEC}):"
         git log -1
         cd $OLDPWD
