@@ -8,8 +8,11 @@
     builders:
       - shell: |-
           #!/bin/bash -e
-          echo "Notifying ReadTheDocs of changes on: $RTD_BRANCHES"
-          curl -X POST -d "branches=$RTD_BRANCHES" -d "token=$RTD_TOKEN" https://readthedocs.org/api/v2/webhook/trustedfirmware-a-tests/104345/
+          echo "Trigger ReadTheDocs build on the $RTD_BRANCHES branch and the latest version"
+          RTD_API="https://readthedocs.org/api/v3/projects/trustedfirmware-a-tests"
+          curl -s -X POST -H "Authorization: Token ${RTD_TOKEN}" ${RTD_API}/versions/$RTD_BRANCHES/builds/ | jq .
+          echo "Trigger build latest version"
+          curl -s -X POST -H "Authorization: Token ${RTD_TOKEN}" ${RTD_API}/versions/latest/builds/ | jq .
     properties:
       - build-discarder:
           days-to-keep: 7
