@@ -188,7 +188,7 @@ for repo in ${!repos_map[@]}; do
         if [[ ${FETCH_SSH} ]]; then
             GIT_SSH_COMMAND="ssh ${SSH_PARAMS}" git fetch ${REPO_SSH_URL} ${REPO_REFSPEC}
         else
-            git fetch ${REPO_URL} ${REPO_REFSPEC}
+            git fetch --depth 1 ${REPO_URL} ${REPO_REFSPEC}
         fi
 
         git checkout FETCH_HEAD
