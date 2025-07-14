@@ -52,6 +52,7 @@ if echo "${TEST_DESC}" | grep -F -f ${blocklist} - ; then
     exit 0
 fi
 
+echo "Now cloning mbedtls"
 mkdir -p ${WORKSPACE}/nfs/downloads/mbedtls
 cd ${WORKSPACE}/nfs/downloads/mbedtls
 curl --fail --connect-timeout 5 --retry 5 -sLSO -k -C - ${MBEDTLS_URL}
@@ -174,6 +175,7 @@ fi
 mkdir -p "${workspace}"
 ln -sfn "${workspace}/artefacts" "${WORKSPACE}/artefacts"
 bash $bash_opts "$ci_root/script/build_package.sh"
+
 
 # compress rootfs.bin file
 for a in $(find ${workspace} -type d -name artefacts); do
