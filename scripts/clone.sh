@@ -124,18 +124,20 @@ if [ -z "${SHARE_FOLDER}" ]; then
     SHARE_FOLDER=${SHARE_VOLUME}/${JOB_NAME}/${BUILD_NUMBER}
 fi
 
+mkdir -p ${SHARE_FOLDER}
+
 # Clone JOBS_PROJECT first, since we need a helper script there
-if [ ! -d ${SHARE_FOLDER}/${JOBS_REPO_NAME} ]; then
-    git clone ${GIT_CLONE_PARAMS} ${GIT_REPO}/${JOBS_PROJECT} ${SHARE_FOLDER}/${JOBS_REPO_NAME}
-    cd ${SHARE_FOLDER}/${JOBS_REPO_NAME}
-    git fetch origin ${JOBS_REFSPEC}
-    git checkout FETCH_HEAD
+if [ -f ${SHARE_FOLDER}/${JOBS_REPO_NAME}.tar.gz ]; then
+    tar -xzf ${SHARE_FOLDER}/${JOBS_REPO_NAME}.tar.gz
 else
-    cd ${SHARE_FOLDER}/${JOBS_REPO_NAME}
+    git clone ${GIT_CLONE_PARAMS} ${GIT_REPO}/${JOBS_PROJECT} ${JOBS_REPO_NAME}
+    git -C ${JOBS_REPO_NAME} fetch origin ${JOBS_REFSPEC}
+    git -C ${JOBS_REPO_NAME} checkout FETCH_HEAD
+
+    tar -czf ${SHARE_FOLDER}/${JOBS_REPO_NAME}.tar.gz ${JOBS_REPO_NAME}
 fi
-git log -1
-cd $OLDPWD
-fpsync ${SHARE_FOLDER}/${JOBS_REPO_NAME} ${PWD}/${JOBS_REPO_NAME}
+
+git -C ${JOBS_REPO_NAME} log -1
 
 # clone git repos
 for repo in ${!repos_map[@]}; do
@@ -160,13 +162,16 @@ for repo in ${!repos_map[@]}; do
         continue
     fi
 
-    # clone and checkout in case it does not exist
-    if [ ! -d ${SHARE_FOLDER}/${REPO_NAME} ]; then
+    if [ -f ${SHARE_FOLDER}/${REPO_NAME}.tar.gz ]; then
+        echo "Using existing shared folder checkout for ${REPO_URL}:"
+
+        tar -xzf ${SHARE_FOLDER}/${REPO_NAME}.tar.gz
+    else
         if [[ ${FETCH_SSH} ]]; then
-            GIT_SSH_COMMAND="ssh ${SSH_PARAMS}" git clone ${GIT_CLONE_PARAMS} ${REPO_SSH_URL} ${SHARE_FOLDER}/${REPO_NAME} \
+            GIT_SSH_COMMAND="ssh ${SSH_PARAMS}" git clone ${GIT_CLONE_PARAMS} ${REPO_SSH_URL} ${REPO_NAME} \
                     --depth 1 --recurse-submodules --shallow-submodules
         else
-            git clone ${GIT_CLONE_PARAMS} ${REPO_URL} ${SHARE_FOLDER}/${REPO_NAME} \
+            git clone ${GIT_CLONE_PARAMS} ${REPO_URL} ${REPO_NAME} \
                     --depth 1 --recurse-submodules --shallow-submodules
         fi
 
@@ -174,7 +179,7 @@ for repo in ${!repos_map[@]}; do
         if [ -n "${GERRIT_TOPIC}" -a "${REPO_HOST}" = "${GERRIT_HOST}" -a "${GERRIT_PROJECT}" != "${REPO_PROJECT}" ]; then
             echo "Got Gerrit Topic: ${GERRIT_TOPIC}"
             REPO_REFSPEC="$(ssh ${SSH_PARAMS} ${CI_BOT_USERNAME}@${REPO_HOST#https://} gerrit query ${GERRIT_QUERY_PARAMS} \
-                            project:${REPO_PROJECT} topic:${GERRIT_TOPIC} | ${SHARE_FOLDER}/${JOBS_REPO_NAME}/scripts/parse_refspec.py)"
+                            project:${REPO_PROJECT} topic:${GERRIT_TOPIC} | ${JOBS_REPO_NAME}/scripts/parse_refspec.py)"
             if [ -z "${REPO_REFSPEC}" ]; then
                 REPO_REFSPEC="${REPO_DEFAULT_REFSPEC}"
                 echo "Roll back to \"${REPO_REFSPEC}\" for \"${REPO_PROJECT}\""
@@ -183,29 +188,18 @@ for repo in ${!repos_map[@]}; do
         fi
 
         # fetch and checkout the corresponding refspec
-        cd ${SHARE_FOLDER}/${REPO_NAME}
-
         if [[ ${FETCH_SSH} ]]; then
-            GIT_SSH_COMMAND="ssh ${SSH_PARAMS}" git fetch ${REPO_SSH_URL} ${REPO_REFSPEC}
+            GIT_SSH_COMMAND="ssh ${SSH_PARAMS}" git -C ${REPO_NAME} fetch ${REPO_SSH_URL} ${REPO_REFSPEC}
         else
-            git fetch --depth 1 ${REPO_URL} ${REPO_REFSPEC}
+            git -C ${REPO_NAME} fetch --depth 1 ${REPO_URL} ${REPO_REFSPEC}
         fi
 
-        git checkout FETCH_HEAD
-        git submodule update --init --recursive
+        git -C ${REPO_NAME} checkout FETCH_HEAD
+        git -C ${REPO_NAME} submodule update --init --recursive
         echo "Freshly cloned ${REPO_URL} (refspec ${REPO_REFSPEC}):"
-        git log -1
-        cd $OLDPWD
 
-    else
-        # otherwise just show the head's log
-        cd ${SHARE_FOLDER}/${REPO_NAME}
-        echo "Using existing shared folder checkout for ${REPO_URL}:"
-        git log -1
-        cd $OLDPWD
+        tar -czf ${SHARE_FOLDER}/${REPO_NAME}.tar.gz ${REPO_NAME}
     fi
 
-    # copy repository into pwd dir (workspace in CI), so each job would work
-    # on its own workspace
-    fpsync ${SHARE_FOLDER}/${REPO_NAME} ${PWD}/${REPO_NAME}
+    git -C ${REPO_NAME} log -1
 done
