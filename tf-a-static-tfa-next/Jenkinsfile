@@ -6,7 +6,7 @@ pipeline {
     parameters {
         string(
             name: 'URL',
-            defaultValue: 'ssh://review.trustedfirmware.org:29418/TF-A/trusted-firmware-a',
+            defaultValue: 'ssh://review.trustedfirmware.org:29418/RF-A/rusted-firmware-a',
             description: 'Repository URL.')
 
         string(
@@ -16,12 +16,12 @@ pipeline {
 
         string(
             name: 'REFNAME',
-            defaultValue: 'origin/master',
+            defaultValue: 'origin/main',
             description: 'Git refname of the last commit to lint.')
 
         string(
             name: 'REFNAME_BASE',
-            defaultValue: 'origin/master',
+            defaultValue: 'origin/main',
             description: 'Git refname of the parent of the first commit to lint.')
 
         credentials(

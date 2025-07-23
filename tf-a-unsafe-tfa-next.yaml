@@ -52,7 +52,7 @@
           description: |
             'e.g. refs/changes/13/31138/1'
       - string:
-          name: RF_GERRIT_REFSPEC
+          name: RFA_REFSPEC
           default: ${GERRIT_REFSPEC}
           description: |
             'do-not-amend: used by scripts/clone.sh to fetch the correct Gerrit patchset - use GERRIT_REFSPEC instead'
@@ -98,7 +98,7 @@
           set -ex
           cat << EOF > tf-a-env.param
           RF_GERRIT_PROJECT=${GERRIT_PROJECT}
-          RF_GERRIT_REFSPEC=${GERRIT_REFSPEC}
+          RFA_REFSPEC=${GERRIT_REFSPEC}
           SHARE_FOLDER=${SHARE_FOLDER}
           EOF
 
