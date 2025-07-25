@@ -1,18 +1,14 @@
 - job:
-    name: tf-a-main-tfa-next
+    name: rf-a-unsafe
     node: docker-amd64-tf-a-jammy
-    project-type: multijob
+    project-type: freestyle
     concurrent: true
     disabled: false
-    description: Main CI job for Rusted Firmware A
+    defaults: global
+    description: Check for Unsafe changes in Rusted Firmware A
     properties:
-      - throttle:
-          option: project
-          enabled: true
-          max-total: 5
       - build-discarder:
           days-to-keep: 14
-          num-to-keep: 60
     triggers:
       - gerrit:
           server-name: review.trustedfirmware.org
@@ -30,13 +26,8 @@
                 exclude-private: true
                 exclude-wip: true
             - comment-added-contains-event:
-                comment-contains-value: ^RUN_CI$
+                comment-contains-value: ^RUN_UNSAFE_CI$
           override-votes: true
-          gerrit-build-started-verified-value: 0
-          gerrit-build-successful-verified-value: 1
-          gerrit-build-failed-verified-value: -1
-          gerrit-build-unstable-verified-value: -1
-          gerrit-build-notbuilt-verified-value: 0
           # without explicitly setting these values to 0, the plugin will by
           # default leave Code Review votes
           gerrit-build-started-codereview-value: 0
@@ -66,11 +57,6 @@
           description: |
             'do-not-amend: used by scripts/clone.sh to fetch the correct Gerrit patchset - use GERRIT_REFSPEC instead'
       - string:
-          name: TF_GERRIT_REFSPEC
-          default: refs/heads/master
-          description: |
-            'Used by scripts/clone.sh to fetch the correct Gerrit patchset'
-      - string:
           name: CI_REFSPEC
           default: +refs/heads/tfa-next:refs/remotes/origin/tfa-next
           description: |
@@ -86,9 +72,9 @@
           description: Folder containing shared repositories for downstream pipeline jobs
       - string:
           name: CLONE_REPOS
-          default: tf-a-ci-scripts,trusted-firmware-a,rusted-firmware-a
+          default: rusted-firmware-a
           description: |
-            Optional arg to clone only specific projects from default list (tf-a-ci-scripts,trusted-firmware-a,tf-a-tests,spm,tf-m-tests,tf-m-extras)
+            Optional arg to clone only specific projects from default list (tf-a-ci-scripts,rusted-firmware-a,tf-a-tests,spm,tf-m-tests,tf-m-extras)
       - string:
           name: FETCH_SSH
           default: 1
@@ -101,72 +87,38 @@
               key-file-variable: CI_BOT_KEY
               username-variable: CI_BOT_USERNAME
               passphrase-variable: ""
-      - workspace-cleanup
       - timestamps
+      - timeout:
+          timeout: 240
+          fail: true
     builders:
       - shell: !include-raw: scripts/clone.sh
       - shell: |
           #!/bin/bash
-          set -e
+          set -ex
           cat << EOF > tf-a-env.param
           RF_GERRIT_PROJECT=${GERRIT_PROJECT}
-          RFA_REFSPEC=${RFA_REFSPEC}
-          GERRIT_BRANCH=${GERRIT_BRANCH}
-          TF_GERRIT_PROJECT=TF-A/trusted-firmware-a
-          TF_GERRIT_REFSPEC=${TF_GERRIT_REFSPEC}
+          RFA_REFSPEC=${GERRIT_REFSPEC}
           SHARE_FOLDER=${SHARE_FOLDER}
           EOF
-      - multijob:
-          name: Lint commit messages
-          condition: COMPLETED
-          projects:
-            - name: tf-a-commitlint-tfa-next
-              kill-phase-on: NEVER
-              predefined-parameters: |
-                REFSPEC=${GERRIT_REFSPEC}
-                REFNAME=${GERRIT_PATCHSET_REVISION}
-                REFNAME_BASE=origin/${GERRIT_BRANCH}
-      - multijob:
-          name: Code formatting, static checks and lints
-          condition: COMPLETED
-          projects:
-            - name: tf-a-static-tfa-next
-              current-parameters: true
-              kill-phase-on: NEVER
-              property-file: tf-a-env.param
-      - multijob:
-          name: Platform independent tests
-          condition: COMPLETED
-          projects:
-            - name: generic-lib-testing
-              current-parameters: true
-              kill-phase-on: NEVER
-              predefined-parameters: |
-                TEST_REPO_NAME=rusted-firmware-a
-                TEST_REPO_PROJECT=RF-A
-                RFA_REFSPEC=$RFA_REFSPEC
-              property-file: tf-a-env.param
-      - multijob:
-          name: Build Rusted Firmware A
-          condition: COMPLETED
-          projects:
-            - name: tf-a-ci-gateway-tfa-next
-              alias: rfa-build
-              current-parameters: true
-              kill-phase-on: NEVER
-              predefined-parameters: |
-                TEST_GROUPS=rfa-build
-                RFA_REFSPEC=$RFA_REFSPEC
-              property-file: tf-a-env.param
-      - multijob:
-          name: FVP Tests
-          condition: COMPLETED
-          projects:
-            - name: tf-a-ci-gateway-tfa-next
-              alias: rfa-fvp
-              current-parameters: true
-              kill-phase-on: NEVER
-              predefined-parameters: |
-                TEST_GROUPS=rfa-fvp
-                RFA_REFSPEC=$RFA_REFSPEC
-              property-file: tf-a-env.param
+
+          cd ${WORKSPACE}/rusted-firmware-a
+
+          # Vote Unsafe-Review+1 on patches not touching any unsafe code
+
+          # 1. Check if the patch touches unsafe code:
+
+          # if the grep command finds nothing, it will exit 1 and because we have set -e the program
+          # will fail. Doing || true makes it so that the final exit command is always 0 so the flow is not
+          # interrupted and we can check `diff` to know if the program was successful or not.
+          diff=$(echo $(git show -U10 --format=) | grep "unsafe" || true)
+          if [ "$diff" != "" ]; then
+              exit 1
+          fi
+
+          # 2. Cast the Unsafe-Review +1 vote if the patch does NOT touch unsafe code:
+
+          SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -p 29418 -i ${CI_BOT_KEY}"
+          GERRIT_URL="review.trustedfirmware.org"
+          SET_SAFE_CMD="${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit review --label Unsafe-Review=1 -m Safe"
+          ssh ${SET_SAFE_CMD} ${GERRIT_CHANGE_NUMBER},${GERRIT_PATCHSET_NUMBER}

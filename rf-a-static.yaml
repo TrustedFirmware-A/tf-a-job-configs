@@ -1,5 +1,5 @@
 - job:
-    name: tf-a-static-tfa-next
+    name: rf-a-static
     node: docker-amd64-tf-a-jammy
     project-type: freestyle
     concurrent: true
@@ -85,4 +85,4 @@
     # - groovy-postbuild:
     #     script:
     #         !include-raw:
-    #           - tf-a-static-tfa-next/postbuild.groovy
+    #           - rf-a-static/postbuild.groovy
