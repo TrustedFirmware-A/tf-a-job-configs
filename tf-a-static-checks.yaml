@@ -62,8 +62,6 @@
           set -e
           if [[ "${REPO_UNDER_TEST}" == trusted-firmware-a ]]; then
           cat <<EOF > env.param
-          QA_SERVER_PROJECT=${JOB_NAME}
-          QA_SERVER_VERSION=${BUILD_NUMBER}
           GERRIT_PROJECT=${TF_GERRIT_PROJECT}
           GERRIT_BRANCH=${TF_GERRIT_BRANCH}
           GERRIT_REFSPEC=${TF_GERRIT_REFSPEC}

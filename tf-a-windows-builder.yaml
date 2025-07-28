@@ -60,10 +60,6 @@
       - timeout:
           timeout: 120
           fail: true
-      - credentials-binding:
-          - text:
-              credential-id: QA_REPORTS_TOKEN
-              variable: QA_REPORTS_TOKEN
     publishers:
       - archive:
           artifacts: build/**/*
