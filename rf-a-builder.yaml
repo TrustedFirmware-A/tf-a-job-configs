@@ -1,5 +1,5 @@
 - job:
-    name: tf-a-builder-tfa-next
+    name: rf-a-builder
     node: docker-amd64-tf-a-jammy
     project-type: freestyle
     concurrent: true
@@ -170,7 +170,7 @@
                         - shell: |
                             #!/bin/bash -x
 
-                            tf-a-job-configs/tf-a-builder/upload-tfa-next-artifacts.sh
+                            tf-a-job-configs/tf-a-builder/upload-rfa-artifacts.sh
                             tf-a-job-configs/tf-a-builder/submit-test-job.sh
                             status=$?
                             tf-a-job-configs/tf-a-builder/lava-log-process.sh

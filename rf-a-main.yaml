@@ -1,5 +1,5 @@
 - job:
-    name: tf-a-main-tfa-next
+    name: rf-a-main
     node: docker-amd64-tf-a-jammy
     project-type: multijob
     concurrent: true
@@ -21,7 +21,7 @@
                 - branch-compare-type: PLAIN
                   branch-pattern: main
               project-compare-type: PLAIN
-              project-pattern: TF-A/trusted-firmware-a
+              project-pattern: RF-A/rusted-firmware-a
           trigger-on:
             - patchset-created-event:
                 exclude-drafts: true
@@ -120,7 +120,7 @@
           name: Lint commit messages
           condition: COMPLETED
           projects:
-            - name: tf-a-commitlint-tfa-next
+            - name: rf-a-commitlint
               kill-phase-on: NEVER
               predefined-parameters: |
                 REFSPEC=${GERRIT_REFSPEC}
@@ -130,7 +130,7 @@
           name: Code formatting, static checks and lints
           condition: COMPLETED
           projects:
-            - name: tf-a-static-tfa-next
+            - name: rf-a-static
               current-parameters: true
               kill-phase-on: NEVER
               property-file: tf-a-env.param
@@ -150,7 +150,7 @@
           name: Build Rusted Firmware A
           condition: COMPLETED
           projects:
-            - name: tf-a-ci-gateway-tfa-next
+            - name: rf-a-ci-gateway
               alias: rfa-build
               current-parameters: true
               kill-phase-on: NEVER
@@ -162,7 +162,7 @@
           name: FVP Tests
           condition: COMPLETED
           projects:
-            - name: tf-a-ci-gateway-tfa-next
+            - name: rf-a-ci-gateway
               alias: rfa-fvp
               current-parameters: true
               kill-phase-on: NEVER

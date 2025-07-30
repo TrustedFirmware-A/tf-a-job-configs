@@ -1,11 +1,11 @@
 - job:
-    name: tf-a-unsafe-tfa-next
+    name: rf-a-unsafe
     node: docker-amd64-tf-a-jammy
     project-type: freestyle
     concurrent: true
     disabled: false
     defaults: global
-    description: Check for Unsafe changes in Trusted Firmware Next
+    description: Check for Unsafe changes in Rusted Firmware A
     properties:
       - build-discarder:
           days-to-keep: 14
@@ -17,7 +17,7 @@
                 - branch-compare-type: PLAIN
                   branch-pattern: main
               project-compare-type: PLAIN
-              project-pattern: TF-A/trusted-firmware-a
+              project-pattern: RF-A/rusted-firmware-a
           trigger-on:
             - patchset-created-event:
                 exclude-drafts: true
