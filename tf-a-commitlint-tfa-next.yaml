@@ -1,9 +1,9 @@
 - job:
-    name: rf-a-commitlint
+    name: tf-a-commitlint-tfa-next
     description: Lint commit messages
     project-type: pipeline
     sandbox: true
-    dsl: !include-raw: rf-a-static/Jenkinsfile
+    dsl: !include-raw: tf-a-static-tfa-next/Jenkinsfile
     properties:
       - build-discarder:
           days-to-keep: 14

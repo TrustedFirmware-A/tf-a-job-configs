@@ -1,5 +1,5 @@
 - job:
-    name: rf-a-cleanup
+    name: tf-a-cleanup-tfa-next
     description: Cleanup https://downloads.trustedfirmware.org/tf-a/next/artifacts/
     node: build-amd64-private
     concurrent: false
@@ -25,7 +25,7 @@
               sudo ./aws/install
           fi
 
-          # All rfa related files should be under "artifacts" on the S3 bucket.
+          # All tfa-next related files should be under "artifacts" on the S3 bucket.
           ROOT=s3://${TUXPUB_S3_BUCKET}/
           for OBJECT in $(aws s3 ls $ROOT --recursive | grep artifacts | awk '{print $4}');
           do

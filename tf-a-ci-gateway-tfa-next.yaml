@@ -1,5 +1,5 @@
 - job:
-    name: rf-a-ci-gateway
+    name: tf-a-ci-gateway-tfa-next
     node: docker-amd64-tf-a-jammy
     project-type: freestyle
     concurrent: true
@@ -102,7 +102,7 @@
           EOF
       - trigger-builds:
           - project:
-              - rf-a-builder
+              - tf-a-builder-tfa-next
             block: true
             property-file: share.param
             current-parameters: true
