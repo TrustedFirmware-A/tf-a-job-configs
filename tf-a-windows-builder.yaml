@@ -14,7 +14,6 @@
           option: project
       - build-discarder:
           days-to-keep: 15
-          artifact-num-to-keep: 40000
     axes:
       - axis:
           name: DEBUG
