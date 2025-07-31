@@ -45,7 +45,10 @@
           description: Repository to run static checks on.
       - string:
           name: GERRIT_BRANCH
-          default: ""
+          default: master
+      - string:
+          name: GERRIT_REFSPEC
+          default: refs/heads/master
       - string:
           name: SHARE_FOLDER
           default: /srv/shared/${JOB_NAME}/${BUILD_NUMBER}
