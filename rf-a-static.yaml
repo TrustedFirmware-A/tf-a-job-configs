@@ -20,6 +20,9 @@
               rfa refspec to use. The main branch is used by default.
       - string:
           name: GERRIT_BRANCH
+          default: main
+      - string:
+          name: GERRIT_REFSPEC
           default: refs/heads/main
       - string:
           name: TF_GERRIT_PROJECT
