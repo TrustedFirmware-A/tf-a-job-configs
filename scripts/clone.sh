@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Copyright (c) 2021-2023 Arm Limited. All rights reserved.
+# Copyright (c) 2021-2025 Arm Limited. All rights reserved.
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #
@@ -107,8 +107,8 @@ if [ -n "${test_desc}" ]; then
     declare -A build_configs=(
         ["trusted-firmware-a"]="${config_fields[0]}"
         ["tf-a-tests"]="${config_fields[1]}"
-        ["spm"]="${config_fields[4]}"
-        ["tf-rmm"]="${config_fields[5]}"
+        ["spm"]="${config_fields[2]}"
+        ["tf-rmm"]="${config_fields[3]}"
     )
 fi
 
