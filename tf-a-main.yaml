@@ -131,6 +131,16 @@
               predefined-parameters: TEST_GROUPS=tf-l1-build-clang
               property-file: tf-a-env.param
       - multijob:
+          name: Build Trusted Firmware Test Framework
+          condition: COMPLETED
+          projects:
+            - current-parameters: true
+              kill-phase-on: NEVER
+              name: tf-a-ci-gateway
+              alias: tftf-l1-build
+              predefined-parameters: TEST_GROUPS=tftf-l1-build
+              property-file: tf-a-tests-env.param
+      - multijob:
           name: TFTF Tests for FVP
           condition: COMPLETED
           projects:
