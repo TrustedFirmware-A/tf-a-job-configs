@@ -124,6 +124,7 @@ export tftf_root="${tftf_root:-${WORKSPACE}/tf-a-tests}"
 export spm_root="${spm_root:-${WORKSPACE}/spm}"
 export rmm_root="${rmm_root:-${WORKSPACE}/tf-rmm}"
 export rfa_root="${rfa_root:-${WORKSPACE}/rusted-firmware-a}"
+export tfut_root="${tfut_root:-${WORKSPACE}/tf-a-unit-tests}"
 
 # We'd need to see the terminals during development runs, so no need for
 # automation.

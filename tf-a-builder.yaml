@@ -40,6 +40,12 @@
           name: TFTF_GERRIT_REFSPEC
           default: +refs/heads/master:refs/remotes/origin/master
       - string:
+          name: TFUT_GERRIT_BRANCH
+          default: refs/heads/master
+      - string:
+          name: TFUT_GERRIT_REFSPEC
+          default: +refs/heads/master:refs/remotes/origin/master
+      - string:
           name: CI_REFSPEC
           default: +refs/heads/master:refs/remotes/origin/master
       - string:
@@ -177,6 +183,24 @@
                             echo "=== Starting expect-post tests ==="
                             ./tf-a-ci-scripts/script/expect-post-runner.sh
       - conditional-publisher:
+        - condition-kind: file-exists
+          on-evaluation-failure: dont-run
+          condition-filename: artefacts/release/tfut_artefacts.txt
+          condition-basedir: workspace
+          action:
+            - postbuildscript:
+                builders:
+                  - role: SLAVE
+                    build-on:
+                      - SUCCESS
+                    build-steps:
+                      - shell: |
+                          #!/bin/bash -e
+                          echo "Found unit test executables, running unit tests now"
+                          export workspace="$(pwd)"
+                          export tfut_root="$(pwd)/tf-a-unit-tests"
+                          bash -x "$workspace/tf-a-ci-scripts/script/run_unit_tests.sh"
+      - conditional-publisher:
           - condition-kind: file-exists
             on-evaluation-failure: dont-run
             condition-filename: lava-raw-debug.log
@@ -184,6 +208,16 @@
             action:
               - archive:
                   artifacts: lava-raw-debug.log
+                  latest-only: false
+                  allow-empty: true
+      - conditional-publisher:
+          - condition-kind: file-exists
+            on-evaluation-failure: dont-run
+            condition-filename: unit_tests/run/run.sh
+            condition-basedir: workspace
+            action:
+              - archive:
+                  artifacts: unit_tests/**
                   latest-only: false
                   allow-empty: true
       - archive:
