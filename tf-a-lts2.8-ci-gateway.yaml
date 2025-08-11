@@ -57,7 +57,7 @@
             tf-m-extras refspec to use. The master branch is used by default.
       - string:
           name: SPM_REFSPEC
-          default: +refs/heads/master:refs/remotes/origin/master
+          default: +refs/heads/lts-v2.8:refs/remotes/origin/lts-v2.8
           description: |
             SPM(Hafnium) refspec to use. The master branch is used by default.
       - string:
