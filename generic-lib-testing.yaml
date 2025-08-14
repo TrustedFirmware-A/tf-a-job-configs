@@ -44,7 +44,7 @@
             tf-a-job-configs refspec to use. The master branch is used by default.
       - string:
           name: TEST_REPO_PROJECT
-          default: rust-spmc
+          default: arm-firmware-crates
           description: Name of the project where the remote repository is located.
       - string:
           name: TEST_REPO_NAME

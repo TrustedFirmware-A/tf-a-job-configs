@@ -21,7 +21,7 @@
                 - branch-compare-type: PLAIN
                   branch-pattern: main
               project-compare-type: PLAIN
-              project-pattern: rust-spmc/arm-pl011-uart
+              project-pattern: arm-firmware-crates/arm-pl011-uart
           trigger-on:
             - patchset-created-event:
                 exclude-drafts: true
@@ -51,7 +51,7 @@
       # patchset - defaults below are for manual triggers
       - string:
           name: GERRIT_PROJECT
-          default: rust-spmc/arm-pl011-uart
+          default: arm-firmware-crates/arm-pl011-uart
       - string:
           name: GERRIT_BRANCH
           default: refs/heads/main
@@ -120,6 +120,6 @@
               kill-phase-on: NEVER
               predefined-parameters: |
                 TEST_REPO_NAME=arm-pl011-uart
-                TEST_REPO_PROJECT=rust-spmc
+                TEST_REPO_PROJECT=arm-firmware-crates
                 TEST_FEATURES=${TEST_FEATURES}
               property-file: tf-a-env.param
