@@ -25,11 +25,6 @@
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
       - string:
-          name: FETCH_SSH
-          default: 1
-          description: |
-            Fetch branches with authenticated SSH instead of anonymous HTTPS
-      - string:
           name: GERRIT_BRANCH
           default: +refs/heads/main:refs/remotes/origin/main
       - string:
