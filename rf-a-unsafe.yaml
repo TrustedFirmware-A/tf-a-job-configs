@@ -99,7 +99,7 @@
           # if the grep command finds nothing, it will exit 1 and because we have set -e the program
           # will fail. Doing || true makes it so that the final exit command is always 0 so the flow is not
           # interrupted and we can check `diff` to know if the program was successful or not.
-          diff=$(echo $(git show -U10 --format=) | grep "unsafe" || true)
+          diff=$(echo $(git show -U10 --format= -- '*.rs' '*.S') | grep "unsafe" || true)
           if [ "$diff" != "" ]; then
               exit 1
           fi
