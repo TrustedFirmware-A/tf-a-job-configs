@@ -57,9 +57,9 @@
             tf-rmm refspec to use. The main branch is used by default.
       - string:
           name: CI_REFSPEC
-          default: +refs/heads/tfa-next:refs/remotes/origin/tfa-next
+          default: +refs/heads/rf-a:refs/remotes/origin/rf-a
           description: |
-            tf-a-ci-scripts refspec to use. The tfa-next branch is used by default.
+            tf-a-ci-scripts refspec to use. The rf-a branch is used by default.
       - string:
           name: JOBS_REFSPEC
           default: refs/heads/master

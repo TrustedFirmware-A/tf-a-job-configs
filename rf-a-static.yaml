@@ -35,7 +35,7 @@
           default: +refs/heads/master:refs/remotes/origin/master
       - string:
           name: CI_REFSPEC
-          default: +refs/heads/tfa-next:refs/remotes/origin/tfa-next
+          default: +refs/heads/rf-a:refs/remotes/origin/rf-a
       - string:
           name: JOBS_REFSPEC
           default: refs/heads/master

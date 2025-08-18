@@ -72,7 +72,7 @@
             'Used by scripts/clone.sh to fetch the correct Gerrit patchset'
       - string:
           name: CI_REFSPEC
-          default: +refs/heads/tfa-next:refs/remotes/origin/tfa-next
+          default: +refs/heads/rf-a:refs/remotes/origin/rf-a
           description: |
             'Refs to fetch for the tf-a-ci-scripts repo e.g. refs/changes/13/31138/1'
       - string:
