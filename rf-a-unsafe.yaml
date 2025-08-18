@@ -92,6 +92,9 @@
 
           cd ${WORKSPACE}/rusted-firmware-a
 
+          git fetch --unshallow --update-shallow origin
+          git fetch --unshallow --update-shallow origin ${GERRIT_BRANCH} ${GERRIT_REFSPEC}
+
           # Vote Unsafe-Review+1 on patches not touching any unsafe code
 
           # 1. Check if the patch touches unsafe code:
