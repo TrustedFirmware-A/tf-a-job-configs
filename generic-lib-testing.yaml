@@ -80,11 +80,11 @@
     publishers:
       - archive:
           artifacts: next-generic-checks.log
-    # TODO: it is not possible to give this groovy script the
-    #       auth/permissions required to access next-generic-checks.log
-    #       * uncomment this once the job is made public
-    #       * create the required postbuild.groovy file based on generic-lib-testing/postbuild.groovy
+    # TODO:
+    #       * Uncomment once the auth/permissions required for this groovy script to access next-generic-checks.log are
+    #         sorted out.
+    #       * Create the required postbuild.groovy file based on generic-lib-testing/postbuild.groovy
     # - groovy-postbuild:
     #     script:
     #         !include-raw:
-    #           - tf-a-generic-tfa-next/postbuild.groovy
+    #           - generic-lib-testing/postbuild.groovy

@@ -81,9 +81,10 @@
     publishers:
       - archive:
           artifacts: rusted-firmware-a/next-checks.log
-    # TODO: it is not possible to give this groovy script the
-    #       auth/permissions required to access next-checks.log
-    #       uncomment this once the job is made public
+    # TODO:
+    #       * Uncomment once the auth/permissions required for this groovy script to access next-checks.log are
+    #         sorted out.
+    #       * Create the required postbuild.groovy file based on generic-lib-testing/postbuild.groovy
     # - groovy-postbuild:
     #     script:
     #         !include-raw:
