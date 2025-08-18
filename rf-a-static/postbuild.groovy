@@ -19,7 +19,7 @@ def findRealUrl(url) {
   return url
 }
 
-def artifact = "rusted-firmware-a/next-checks.log"
+def artifact = "trusted-firmware-a/next-checks.log"
 def jobUrl = manager.hudson.getRootUrl() + "${manager.build.url}artifact/${artifact}"
 def url = new URL(jobUrl)
 def realUrl = findRealUrl(url)
