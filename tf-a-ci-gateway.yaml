@@ -72,9 +72,9 @@
             tf-rmm refspec to use. The main branch is used by default.
       - string:
           name: TFUT_GERRIT_REFSPEC
-          default: +refs/heads/master:refs/remotes/origin/master
+          default: +refs/heads/main:refs/remotes/origin/main
           description: |
-            tf-a-unit-tests refspec to use. The master branch is used by default.
+            tf-a-unit-tests refspec to use. The main branch is used by default.
       - string:
           name: JOBS_REFSPEC
           default: refs/heads/master

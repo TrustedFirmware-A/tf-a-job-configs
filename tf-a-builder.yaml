@@ -41,10 +41,10 @@
           default: +refs/heads/master:refs/remotes/origin/master
       - string:
           name: TFUT_GERRIT_BRANCH
-          default: refs/heads/master
+          default: refs/heads/main
       - string:
           name: TFUT_GERRIT_REFSPEC
-          default: +refs/heads/master:refs/remotes/origin/master
+          default: +refs/heads/main:refs/remotes/origin/main
       - string:
           name: CI_REFSPEC
           default: +refs/heads/master:refs/remotes/origin/master
