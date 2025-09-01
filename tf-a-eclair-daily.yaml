@@ -24,7 +24,6 @@
             TF-A make target
       - string:
           name: MAKE_JOBS
-          default: "16"
           description: |
             --jobs to pass to make, etc.
       - string:
