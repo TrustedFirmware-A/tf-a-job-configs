@@ -35,9 +35,10 @@ REFSPEC_TF_M_TESTS="refs/heads/tfa_ci_dep_revision"
 REFSPEC_TF_M_EXTRAS="refs/heads/tfa_ci_dep_revision"
 GIT_REPO="https://git.trustedfirmware.org"
 GERRIT_HOST="https://review.trustedfirmware.org"
-GIT_CLONE_PARAMS=""
 SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -p 29418 -i ${CI_BOT_KEY}"
 GERRIT_QUERY_PARAMS="--format=JSON --patch-sets --current-patch-set status:open"
+
+export GIT_SSH_COMMAND="ssh ${SSH_PARAMS}"
 
 # Defaults Projects
 TF_GERRIT_PROJECT="${TF_GERRIT_PROJECT:-TF-A/trusted-firmware-a}"
@@ -82,6 +83,7 @@ ARM_GIC_GERRIT_REFSPEC="${ARM_GIC_GERRIT_REFSPEC:-${REFSPEC_MAIN}}"
 JOBS_REFSPEC="${JOBS_REFSPEC:-${REFSPEC_MASTER}}"
 
 JOBS_REPO_NAME="tf-a-job-configs"
+JOBS_REPO_URL="${GIT_REPO}/${JOBS_PROJECT}"
 
 # Array containing "<repo host>;<project>;<repo name>;<refspec>" elements
 declare -A repos_map=(
@@ -138,9 +140,13 @@ mkdir -p ${SHARE_FOLDER}
 if [ -f ${SHARE_FOLDER}/${JOBS_REPO_NAME}.tar.gz ]; then
     tar -xzf ${SHARE_FOLDER}/${JOBS_REPO_NAME}.tar.gz
 else
-    git clone ${GIT_CLONE_PARAMS} ${GIT_REPO}/${JOBS_PROJECT} ${JOBS_REPO_NAME}
-    git -C ${JOBS_REPO_NAME} fetch origin ${JOBS_REFSPEC}
-    git -C ${JOBS_REPO_NAME} checkout FETCH_HEAD
+    git init --quiet -- "${JOBS_REPO_NAME}"
+    git -C "${JOBS_REPO_NAME}" remote add origin "${JOBS_REPO_URL}"
+    git -C "${JOBS_REPO_NAME}" fetch --quiet --depth 1 --no-tags \
+        --no-recurse-submodules -- origin "${JOBS_REFSPEC}"
+    git -C "${JOBS_REPO_NAME}" checkout --quiet --detach FETCH_HEAD
+    git -C "${JOBS_REPO_NAME}" submodule update --quiet --depth 1 --init \
+        --recursive
 
     tar -czf ${SHARE_FOLDER}/${JOBS_REPO_NAME}.tar.gz ${JOBS_REPO_NAME}
 fi
@@ -164,6 +170,12 @@ for repo in ${!repos_map[@]}; do
     REPO_REFSPEC="${REPO_DEFAULT_REFSPEC}"
     REPO_SSH_URL="ssh://${CI_BOT_USERNAME}@${REPO_HOST#https://}:29418/${REPO_PROJECT}"
 
+    if [[ -n "${FETCH_SSH}" ]]; then
+        REPO_GIT_URL="${REPO_SSH_URL}"
+    else
+        REPO_GIT_URL="${REPO_URL}"
+    fi
+
     # if a list of repos is provided via the CLONE_REPOS build param, only clone
     # those in the list - otherwise all are cloned by default
     if [[ -n "${CLONE_REPOS}" ]] && ! grep -qw "${REPO_NAME}" <<< "${CLONE_REPOS}"; then
@@ -175,14 +187,6 @@ for repo in ${!repos_map[@]}; do
 
         tar -xzf ${SHARE_FOLDER}/${REPO_NAME}.tar.gz
     else
-        if [[ ${FETCH_SSH} ]]; then
-            GIT_SSH_COMMAND="ssh ${SSH_PARAMS}" git clone ${GIT_CLONE_PARAMS} ${REPO_SSH_URL} ${REPO_NAME} \
-                    --depth 1 --recurse-submodules --shallow-submodules
-        else
-            git clone ${GIT_CLONE_PARAMS} ${REPO_URL} ${REPO_NAME} \
-                    --depth 1 --recurse-submodules --shallow-submodules
-        fi
-
         # If the Gerrit review that triggered the CI had a topic, it will be used to synchronize the other repositories
         if [ -n "${GERRIT_TOPIC}" -a "${REPO_HOST}" = "${GERRIT_HOST}" -a "${GERRIT_PROJECT}" != "${REPO_PROJECT}" ]; then
             echo "Got Gerrit Topic: ${GERRIT_TOPIC}"
@@ -195,15 +199,14 @@ for repo in ${!repos_map[@]}; do
             echo "Checkout refspec \"${REPO_REFSPEC}\" from repository \"${REPO_NAME}\""
         fi
 
-        # fetch and checkout the corresponding refspec
-        if [[ ${FETCH_SSH} ]]; then
-            GIT_SSH_COMMAND="ssh ${SSH_PARAMS}" git -C ${REPO_NAME} fetch ${REPO_SSH_URL} ${REPO_REFSPEC}
-        else
-            git -C ${REPO_NAME} fetch --depth 1 ${REPO_URL} ${REPO_REFSPEC}
-        fi
+        git init --quiet -- "${REPO_NAME}"
+        git -C "${REPO_NAME}" remote add origin "${REPO_GIT_URL}"
+        git -C "${REPO_NAME}" fetch --quiet --depth 1 --no-tags \
+            --no-recurse-submodules -- origin "${REPO_REFSPEC}"
+        git -C "${REPO_NAME}" checkout --quiet --detach FETCH_HEAD
+        git -C "${REPO_NAME}" submodule update --quiet --depth 1 --init \
+            --recursive
 
-        git -C ${REPO_NAME} checkout FETCH_HEAD
-        git -C ${REPO_NAME} submodule update --init --recursive
         echo "Freshly cloned ${REPO_URL} (refspec ${REPO_REFSPEC}):"
 
         tar -czf ${SHARE_FOLDER}/${REPO_NAME}.tar.gz ${REPO_NAME}
