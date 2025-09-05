@@ -1,0 +1,14 @@
+- view:
+    name: RF-A
+    view-type: list
+    regex: rf-a-.*
+    filter-queue: true
+    filter-executors: true
+    columns:
+      - status
+      - weather
+      - job
+      - last-success
+      - last-failure
+      - last-duration
+      - build-button
