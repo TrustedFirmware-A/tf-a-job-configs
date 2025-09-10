@@ -10,43 +10,46 @@ pipeline {
     }
 
     parameters {
-        string(name: 'REPO_URL',
+        string(
+            name: 'URL',
             defaultValue: 'https://review.trustedfirmware.org/shared/transfer-list-library',
-            description: 'Git repository URL.')
+            description: 'Repository URL.')
 
         string(
-            name: 'REPO_REFSPEC',
-            defaultValue: '+refs/heads/main:refs/remotes/origin/main',
-            description: 'Refspec to fetch from the repository.'
-        )
+            name: 'REFSPEC',
+            defaultValue: '+refs/heads/main',
+            description: 'Git refspec used when fetching.')
 
         string(
-            name: 'REPO_REFNAME',
-            defaultValue: 'origin/main',
-            description: 'Branch or reference to check out.'
-        )
+            name: 'REFNAME',
+            defaultValue: 'FETCH_HEAD',
+            description: 'Git refname of the first commit to check.')
 
-        string(name: 'BASE_REF',
-            defaultValue: 'origin/main',
-            description: 'Git base reference for formatting comparison.')
+        string(
+            name: 'BASE_REFSPEC',
+            defaultValue: '+refs/heads/main',
+            description: 'Git refspec of the parent of the last commit to check.')
 
+        string(
+            name: 'BASE_REFNAME',
+            defaultValue: 'FETCH_HEAD',
+            description: 'Git refname of the parent of the first last commit to check.')
     }
 
-    stages {
+   stages {
         stage('Checkout') {
             steps {
-                script {
-                    def refspec = params.GERRIT_REFSPEC ?: params.REPO_REFSPEC
-                    def refname = params.GERRIT_PATCHSET_REVISION ?: params.REPO_REFNAME
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[ name: params.REFNAME ]],
+                    // TODO: shallow clone
+                    extensions: [ cloneOption(honorRefspec: true) ],
+                    userRemoteConfigs: [
+                        [ url: params.URL, refspec: "${params.BASE_REFSPEC} ${params.REFSPEC}" ]
+                    ]
+                ])
 
-                    checkout([
-                        $class: 'GitSCM',
-                        branches: [[ name: refname ]],
-                        userRemoteConfigs: [
-                            [ url: params.REPO_URL, refspec: refspec]
-                        ]
-                    ])
-               }
+                sh "git show --no-patch HEAD" // TODO: remove me after testing
             }
         }
 
@@ -71,6 +74,7 @@ pipeline {
                         name 'COMPILER'
                         values 'aarch64-clang', 'aarch64-gcc', 'aarch32-clang', 'aarch32-gcc', 'clang', 'gcc'
                     }
+
                     axis {
                         name 'BUILD_TYPE'
                         values 'Debug', 'Release', 'RelWithDebInfo', 'MinSizeRel'
@@ -134,8 +138,12 @@ pipeline {
                                     cmake -B ${buildDir} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ${cmakeArgs.join(' ')}
                                     cmake --build ${buildDir}
                                 """
+                            }
+                        }
 
-                                archiveArtifacts artifacts: "${buildDir}/**", fingerprint: true
+                        post {
+                            always {
+                                archiveArtifacts artifacts: "build/${COMPILER}/${BUILD_TYPE}/**", fingerprint: true
                             }
                         }
                     }
@@ -149,12 +157,17 @@ pipeline {
                     def testDir = "build/test"
 
                     sh """
-                        cmake -B ${testDir} -DTARGET_GROUP=test
+                        CC=clang cmake -B ${testDir} -DTARGET_GROUP=test
                         cmake --build ${testDir}
-                        cmake --build ${testDir} -- test
                     """
+                    sh "cmake --build ${testDir} -- test"
+                }
 
-                    archiveArtifacts artifacts: "${testDir}/**", fingerprint: true
+            }
+
+            post {
+                always {
+                        archiveArtifacts artifacts: "build/test/**", fingerprint: true
                 }
             }
         }
