@@ -80,11 +80,7 @@
     publishers:
       - archive:
           artifacts: next-generic-checks.log
-    # TODO:
-    #       * Uncomment once the auth/permissions required for this groovy script to access next-generic-checks.log are
-    #         sorted out.
-    #       * Create the required postbuild.groovy file based on generic-lib-testing/postbuild.groovy
-    # - groovy-postbuild:
-    #     script:
-    #         !include-raw:
-    #           - generic-lib-testing/postbuild.groovy
+      - groovy-postbuild:
+          script:
+              !include-raw:
+                  - generic-lib-testing/postbuild.groovy

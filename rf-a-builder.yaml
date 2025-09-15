@@ -194,4 +194,4 @@
           allow-empty: true
       - groovy-postbuild:
           script: !include-raw:
-            - tf-a-builder/postbuild.groovy
+            - rf-a-builder/postbuild.groovy
