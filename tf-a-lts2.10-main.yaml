@@ -364,6 +364,7 @@
               - groovy-postbuild:
                   script: |
                     def currentBuild = Thread.currentThread().executable
+                    currentBuild.result = hudson.model.Result.SUCCESS
                     currentBuild.setDescription("There are no new commits in the repositories, skip the build!")
                   on-failure: nothing
       - email:
