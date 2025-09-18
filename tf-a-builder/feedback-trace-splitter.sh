@@ -26,8 +26,9 @@ OUTPUT_JSON=output_file.json
 # Variables aware of environment variables
 PROJECT_ROOT="${1:-${PWD}}"
 TRACES_DIR="${2:-${PWD}}"
-ELF_ARTIFACTS_DIR="${3:-${PWD}}"
-TF_GERRIT_REFSPEC="${4:-}"
+TF_GERRIT_REFSPEC="${3:-}"
+ARTEFACTS=${WORKSPACE}/artefacts
+ELF_ARTIFACTS_DIR="${ARTEFACTS}/debug"
 
 # check if LAVA feedback.log exists, if not, just quit
 if [ ! -f ${FEEDBACK} ]; then
@@ -44,7 +45,64 @@ if [ -n "$(find ${COVTRACE} -empty)" ]; then
     exit 0
 fi
 
+# List the elf files
+find ${ELF_ARTIFACTS_DIR} -maxdepth 1 -name '*.elf' > elfs.txt
+echo "Elfs found:"
+cat elfs.txt
+case "$TEST_CONFIG" in
+
+    fvp-spm*)
+      grep -w "bl1\|bl2\|bl31\|secure_hafnium" elfs.txt > tf-a-elfs.txt
+      temp_sources=$(cat <<-END
+                {
+                "type": "git",
+                "URL":  "https://review.trustedfirmware.org/TF-A/trusted-firmware-a",
+                "COMMIT": "",
+                "REFSPEC": "${TF_GERRIT_REFSPEC}",
+                "LOCATION": "trusted-firmware-a"
+                },
+                {
+                "type": "git",
+                "URL":  "https://review.trustedfirmware.org/hafnium/hafnium",
+                "COMMIT": "",
+                "REFSPEC": "${SPM_REFSPEC}",
+                "LOCATION": "spm"
+                }
+END
+      )
+      ;;
+    *) 
+      grep -w "bl1\|bl2\|bl31" elfs.txt > tf-a-elfs.txt
+      temp_sources=$(cat <<-END
+                {
+                "type": "git",
+                "URL":  "https://review.trustedfirmware.org/TF-A/trusted-firmware-a",
+                "COMMIT": "",
+                "REFSPEC": "${TF_GERRIT_REFSPEC}",
+                "LOCATION": "trusted-firmware-a"
+                }
+END
+      )
+      ;;
+esac
+
 # Generate config json file required for coverage reporting tools
+# source "${WORKSPACE}/repos.sh" # Get repos information
+_sources=""
+for repo_name in ${repos_array[@]}; do
+  _sources=$(cat <<-END
+  ${_sources}
+  {
+  "type": "git",
+  "URL":  "$(echo "${repos_array[repo_name]}" | awk -F ';' '{print $1}')",
+  "COMMIT": "$(echo "${repos_array[repo_name]}" | awk -F ';' '{print $3}')",
+  "REFSPEC": "$(echo "${repos_array[repo_name]}" | awk -F ';' '{print $2}')",
+  "LOCATION": "${repo_name}"
+},
+END
+
+)
+done
 cat > ${CONFIG_JSON} <<EOF
 {
     "configuration":
@@ -57,27 +115,8 @@ cat > ${CONFIG_JSON} <<EOF
         "objdump": "aarch64-none-elf-objdump",
         "readelf": "aarch64-none-elf-readelf",
         "sources": [
-                    {
-                    "type": "git",
-                    "URL":  "https://review.trustedfirmware.org/TF-A/trusted-firmware-a",
-                    "COMMIT": "",
-                    "REFSPEC": "${TF_GERRIT_REFSPEC}",
-                    "LOCATION": "trusted-firmware-a"
-                  },
-                  {
-                  "type": "git",
-                  "URL":  "https://review.trustedfirmware.org/hafnium/hafnium",
-                  "COMMIT": "",
-                  "REFSPEC": "${SPM_REFSPEC}",
-                  "LOCATION": "spm"
-                },
-                {
-                 "type": "http",
-                 "URL":  "$MBEDTLS_URL",
-                 "COMPRESSION": "xz",
-                 "EXTRA_PARAMS": "--strip-components=1",
-                 "LOCATION": "mbedtls"
-                }
+${_sources}
+${temp_sources}
                 ],
         "workspace": "${PROJECT_ROOT}",
         "output_file": "${OUTPUT_JSON}"
@@ -93,11 +132,8 @@ for trace_file in $(awk '{print $1}' ${COVTRACE} | uniq); do
     sed -i "s;${trace_file} ;;g" ${trace_file}
 done
 
-# List the elf files
-find ${ELF_ARTIFACTS_DIR} -name '*.elf' > elfs.txt
-grep -w "bl1\|bl2\|bl31\|secure_hafnium" elfs.txt > tf-a-elfs.txt
 elfs=($(cat tf-a-elfs.txt))
-
+declare -p elfs
 # Populate elfs config elements
 for elf in ${elfs[@]::${#elfs[@]}-1}; do
     # fill the 'elfs' elements

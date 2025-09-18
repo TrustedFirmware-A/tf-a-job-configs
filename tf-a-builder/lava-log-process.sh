@@ -12,7 +12,6 @@ if [ -f "${WORKSPACE}/lava-raw.log" ]; then
                 ${WORKSPACE}/tf-a-job-configs/tf-a-builder/feedback-trace-splitter.sh \
                             ${PROJECT_WORKSPACE} \
                             ${WORKSPACE} \
-                            ${WORKSPACE}/artefacts-lava/ \
                             ${TF_GERRIT_REFSPEC}
 
                 # Generate Code Coverate Report in case there are traces available
