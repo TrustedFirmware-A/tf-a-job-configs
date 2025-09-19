@@ -50,7 +50,7 @@
             'do-not-amend: used by scripts/clone.sh to fetch the correct Gerrit patchset - use GERRIT_REFSPEC instead'
       - string:
           name: CI_REFSPEC
-          default: +refs/heads/rf-a:refs/remotes/origin/rf-a
+          default: +refs/heads/master:refs/remotes/origin/master
           description: |
             'Refs to fetch for the tf-a-ci-scripts repo e.g. refs/changes/13/31138/1'
       - string:
