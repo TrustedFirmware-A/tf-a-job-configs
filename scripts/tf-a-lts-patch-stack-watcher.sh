@@ -89,7 +89,9 @@ function submit_patch_stack() {
         # Check the patch stack agein to ensure it hasn't been merged yet
         if [ $(ssh ${QUERY_DEPENDENCY_CMD}${top_patch_no} | jq -r 'select(.status)|.status') != "MERGED" ];then
             echo "The whole patch stack meets the submit requirements, merge it"
-            ssh ${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit review ${top_patch_rev} --message "\"${SUBMIT_COMMENT}\"" --submit
+            ssh ${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit review ${top_patch_rev} --message "\"${SUBMIT_COMMENT}\"" --submit 2>err.log || \
+            (ssh ${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit review ${top_patch_rev} \
+             --label Verified=-1 --message "\"$(cat err.log)\""; exit 1)
         else
             echo "The whole patch stack has been merged!"
         fi
