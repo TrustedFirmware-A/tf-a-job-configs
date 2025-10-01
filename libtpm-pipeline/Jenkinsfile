@@ -1,0 +1,171 @@
+/*
+ * Copyright (c) 2025, Arm Limited and Contributors.
+ * All rights reserved.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
+pipeline {
+    agent {
+        label 'docker-amd64-tf-a-jammy'
+    }
+
+    environment {
+        INSTALL_PREFIX = '/tmp/install/path'
+    }
+
+    parameters {
+        string(
+            name: 'URL',
+            defaultValue: 'https://review.trustedfirmware.org/shared/libTPM',
+            description: 'Repository URL.'
+        )
+
+        string(
+            name: 'REFSPEC',
+            defaultValue: '+refs/heads/main',
+            description: 'Git refspec used when fetching.'
+        )
+
+        string(
+            name: 'REFNAME',
+            defaultValue: 'FETCH_HEAD',
+            description: 'Git refname of the first commit to check.'
+        )
+
+        string(
+            name: 'BASE_REFSPEC',
+            defaultValue: '+refs/heads/main',
+            description: 'Git refspec of the parent of the last commit to check.'
+        )
+
+        string(
+            name: 'BASE_REFNAME',
+            defaultValue: 'FETCH_HEAD',
+            description: 'Git refname of the parent of the first last commit to check.'
+        )
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: params.REFNAME]],
+                    extensions: [cloneOption(honorRefspec: true)], // TODO: shallow clone
+                    userRemoteConfigs: [[
+                        url: params.URL,
+                        refspec: "${params.BASE_REFSPEC} ${params.REFSPEC}"
+                    ]]
+                ])
+            }
+        }
+
+        stage('Code style') {
+            steps {
+                sh "git-clang-format --diff --quiet ${params.BASE_REFNAME} > formatted.patch"
+            }
+
+            post {
+                failure {
+                    archiveArtifacts artifacts: 'formatted.patch', fingerprint: true
+
+                    script {
+                        currentBuild.description = """
+                            Code style check failed. Please apply fixes from this
+                            <a href="${env.BUILD_URL}artifact/formatted.patch">patch file</a>,
+                            or run <code>git-clang-format</code> locally and push the updated changes.
+                        """.trim()
+                    }
+                }
+            }
+        }
+
+        stage('Build') {
+            matrix {
+                axes {
+                    axis {
+                        name 'COMPILER'
+                        values 'aarch64-clang', 'aarch64-gcc', 'aarch32-clang', 'aarch32-gcc', 'clang', 'gcc'
+                    }
+                    axis {
+                        name 'BUILD_TYPE'
+                        values 'Debug', 'Release', 'RelWithDebInfo', 'MinSizeRel'
+                    }
+                }
+
+                stages {
+                    stage('Compile') {
+                        steps {
+                            script {
+                                def toolchains = [
+                                    'gcc': [
+                                        cc: 'gcc',
+                                        cmakeArgs: []
+                                    ],
+                                    'clang': [
+                                        cc: 'clang',
+                                        cmakeArgs: []
+                                    ],
+                                    'aarch32-gcc': [
+                                        cc: 'arm-none-eabi-gcc',
+                                        cmakeArgs: ['-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY']
+                                    ],
+                                    'aarch64-gcc': [
+                                        cc: 'aarch64-none-elf-gcc',
+                                        cmakeArgs: ['-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY']
+                                    ],
+                                    'aarch32-clang': [
+                                        cc: 'clang',
+                                        clangTarget: 'arm-none-eabi',
+                                        cmakeArgs: ['-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY']
+                                    ],
+                                    'aarch64-clang': [
+                                        cc: 'clang',
+                                        clangTarget: 'aarch64-none-elf',
+                                        cmakeArgs: ['-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY']
+                                    ]
+                                ]
+
+                                def buildDir = "build/${COMPILER}/${BUILD_TYPE}"
+                                def cmakeArgs = toolchains[COMPILER].cmakeArgs
+
+                                cmakeArgs << "-DCMAKE_C_COMPILER=${toolchains[COMPILER].cc}"
+
+                                if (toolchains[COMPILER].clangTarget) {
+                                    def sysroot = sh(
+                                        script: "${toolchains[COMPILER].clangTarget}-gcc -print-sysroot",
+                                        returnStdout: true
+                                    ).trim()
+
+                                    cmakeArgs << "-DCMAKE_C_COMPILER_TARGET=${toolchains[COMPILER].clangTarget}"
+                                    cmakeArgs << "-DCMAKE_SYSROOT=${sysroot}"
+                                }
+
+                                sh """
+                                    cmake -B ${buildDir} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ${cmakeArgs.join(' ')}
+                                    cmake --build ${buildDir}
+                                """
+                            }
+                        }
+
+                        post {
+                            always {
+                                archiveArtifacts
+                                    artifacts: "build/${COMPILER}/${BUILD_TYPE}/**.{a,txt,json}",
+                                    fingerprint: true
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        stage('Install and Verify') {
+            steps {
+                sh "./test/package-install/install-and-verify.sh"
+            }
+        }
+    }
+}
