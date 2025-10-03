@@ -100,6 +100,16 @@
               kill-phase-on: NEVER
               predefined-parameters: TEST_GROUPS=tf-l3-fuzzing
               property-file: tf-a-tests-env.param
+      - multijob:
+          name: TFTF Fuzzing FFA
+          condition: COMPLETED
+          projects:
+            - name: tf-a-ci-gateway
+              alias: tf-l3-fuzzing FFA
+              current-parameters: true
+              kill-phase-on: NEVER
+              predefined-parameters: TEST_GROUPS=tf-l3-fuzzing-ffa
+              property-file: tf-a-tests-env.param
       # participate in the job's success/failure.
       - trigger-builds:
           - project: tf-a-ci-coverage-gateway
