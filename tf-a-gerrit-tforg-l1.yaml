@@ -63,7 +63,7 @@
             tf-a-job-configs refspec to use. The master branch is used by default.
       - string:
           name: MBEDTLS_URL
-          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.4.tar.gz
+          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz
       - string:
           name: SHARE_FOLDER
           default: /srv/shared/${JOB_NAME}/${BUILD_NUMBER}

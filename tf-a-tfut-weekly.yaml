@@ -60,7 +60,7 @@
           default: low
       - string:
           name: MBEDTLS_URL
-          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.4.tar.gz
+          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz
       - string:
           name: LAVA_RETRIES
           default: 2
