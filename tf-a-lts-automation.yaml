@@ -8,6 +8,7 @@
       Trusted Firmware A LTS automation, this job triggered by a new LTS branch created in the trusted-firmware-a repository.
       It helps to create corrosponding branch in the tf-a-test, hafnium, and tf-a-ci-scripts repositories, as well as set up a new download
       space for the new LTS branch.
+      It will also trigger hafnium-lts-automation job, if the new LTS branch is not exist in the hafnium repository
     properties:
       - build-discarder:
           days-to-keep: 15
@@ -18,6 +19,10 @@
             bipin.ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, jidong@google.com, govindraj.raja@arm.com, arthur.she@linaro.org
           description: |
             The notification recipients
+      - string:
+          name: UPSTREAM_REFNAME
+          default: ""
+          description: "Ref name from counterpart job (e.g. lts-vX.Y or sandbox/lts-VX.Y)"
     wrappers:
       - timestamps
       - timeout:
@@ -50,11 +55,15 @@
           #!/bin/bash
           set -ex
 
+          SANDBOX_RUN="false"
+          REF="${GERRIT_REFNAME:-${UPSTREAM_REFNAME:-}}"
+          echo ${REF} | grep -q "^sandbox/" && SANDBOX_RUN="true" && echo "*** Sandbox run ***"
           SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa"
           export GIT_SSH_COMMAND="ssh -p 29418 -i $CI_BOT_KEY ${SSH_PARAMS}"
           gerrit_host="ssh://${CI_BOT_USERNAME}@${GERRIT_HOST}:29418"
-          new_branch=${GERRIT_REFNAME}
+          new_branch=${REF}
           forked_tag=${new_branch##*-}
+          [ "${SANDBOX_RUN}" = "true" ] && forked_tag="sandbox/${forked_tag}"
 
           _workdir=$(mktemp -d)
           rm -f email.txt || true
@@ -62,8 +71,12 @@
           git -C "${_workdir}" init > /dev/null 2>&1
 
           # Check if the job is triggered by a new LTS branch creation
-          if [ "${GERRIT_EVENT_TYPE:-}" = "ref-updated" -a \
-               "${GERRIT_OLDREV:-}" = "0000000000000000000000000000000000000000" ]; then
+          if [ -n "${UPSTREAM_REFNAME:-}" ]; then
+            # Triggered from hafnium-lts-automation
+            echo "New LTS branch created: ${new_branch}"
+          elif [ "${GERRIT_EVENT_TYPE:-}" = "ref-updated" -a \
+                 "${GERRIT_OLDREV:-}" = "0000000000000000000000000000000000000000" ]; then
+            # Triggered from new LTS branch creation
             echo "New branch created: ${new_branch}"
           else
             echo "Not a new LTS branch event! exit job"
@@ -71,17 +84,20 @@
           fi
 
           # Create new LTS branch to related repositories
-          repos="hafnium/hafnium TF-A/tf-a-tests ci/tf-a-ci-scripts ci/tf-a-job-configs"
+          repos="TF-A/tf-a-tests ci/tf-a-ci-scripts ci/tf-a-job-configs"
           for r in ${repos};
           do
               echo "Create branch \"${new_branch}\" from tag \"${forked_tag}\" in the \"${r}\" project"
-              git -C "${_workdir}" fetch ${gerrit_host}/${r} ${forked_tag}
+              git -C "${_workdir}" fetch ${gerrit_host}/${r} ${forked_tag} || \
+              (echo "Can not find \"${forked_tag}\" tag on ${r} repository"; exit 1)
               git -C "${_workdir}" push ${gerrit_host}/${r} FETCH_HEAD^{commit}:refs/heads/${new_branch}
           done
 
           # Create new download space
           echo "Create new download space for \"${new_branch}\""
-          aws s3 sync s3://trustedfirmware-prod-storage/tf-a s3://openci-trustedfirmware-storage-prod/tf-a-${new_branch}
+          if [ "${SANDBOX_RUN}" = "false" ]; then
+            aws s3 sync s3://trustedfirmware-prod-storage/tf-a s3://openci-trustedfirmware-storage-prod/tf-a-${new_branch}
+          fi
 
           echo "CI Environment Setup for ${new_branch} branch Completed" > subject.txt
           cat << EOF >email.txt
@@ -98,6 +114,39 @@
 
           echo "--------- email body ----------"
           cat email.txt
+          [ "${SANDBOX_RUN}" = "true" ] && rm -f email.txt
+
+      - conditional-step:
+          condition-kind: shell
+          condition-command: |
+              set -eux
+
+              COUNTERPART_PROJ="hafnium/hafnium"
+              GERRIT_HOST=${GERRIT_HOST:-review.trustedfirmware.org}
+              SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa"
+              export GIT_SSH_COMMAND="ssh -p 29418 -i $CI_BOT_KEY ${SSH_PARAMS}"
+              GERRIT_SERVER="ssh://${CI_BOT_USERNAME}@${GERRIT_HOST}:29418"
+              REF="${GERRIT_REFNAME:-}"
+              echo ${REF} | grep -q "^sandbox/" && echo "*** Sandbox run ***"
+              BRANCH="${REF#refs/heads/}"
+
+              # Must be a Gerrit ref-updated new-branch event
+              [ "${GERRIT_EVENT_TYPE:-}" = "ref-updated" -a \
+                "${GERRIT_OLDREV:-}" = "0000000000000000000000000000000000000000" ] || exit 1
+
+              # Check if branch exists already in TF-A
+              if git ls-remote --exit-code "${GERRIT_SERVER}/${COUNTERPART_PROJ}" "${BRANCH}" >/dev/null 2>&1; then
+                echo "Branch exists in ${COUNTERPART_PROJ}, do not trigger counterpart"
+                exit 1
+              fi
+              echo "Branch missing, trigger hafnium-lts-automation"
+              exit 0
+          steps:
+            - trigger-builds:
+                - project: 'hafnium-lts-automation'
+                  block: false
+                  predefined-parameters: "UPSTREAM_REFNAME=${GERRIT_REFNAME}"
+
     publishers:
       - conditional-publisher:
           - condition-kind: file-exists
