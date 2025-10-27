@@ -14,7 +14,7 @@
     builders:
       - trigger-builds:
           - project:
-              - libtpm-pipeline
+              - tf-a-libtpm-pipeline
             block: true
             current-parameters: true
             predefined-parameters: |
