@@ -151,9 +151,10 @@ pipeline {
 
                         post {
                             always {
-                                archiveArtifacts
+                                archiveArtifacts(
                                     artifacts: "build/${COMPILER}/${BUILD_TYPE}/**.{a,txt,json}",
                                     fingerprint: true
+                                )
                             }
                         }
                     }
