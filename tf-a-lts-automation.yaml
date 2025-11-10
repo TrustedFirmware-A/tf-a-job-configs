@@ -41,7 +41,7 @@
           projects:
             - branches:
                 - branch-compare-type: REG_EXP
-                  branch-pattern: lts-v.*
+                  branch-pattern: '^(sandbox/)?lts-v.*$'
               project-compare-type: PLAIN
               project-pattern: TF-A/trusted-firmware-a
           trigger-on:
