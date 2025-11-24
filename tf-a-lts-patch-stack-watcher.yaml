@@ -64,5 +64,3 @@
               key-file-variable: CI_BOT_KEY
               username-variable: CI_BOT_USERNAME
               passphrase-variable: ""
-    publishers:
-      - workspace-cleanup

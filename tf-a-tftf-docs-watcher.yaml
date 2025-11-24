@@ -41,5 +41,3 @@
           default: master
           description: |
             The branch, or branches, to rebuild the documentation for.
-    publishers:
-      - workspace-cleanup

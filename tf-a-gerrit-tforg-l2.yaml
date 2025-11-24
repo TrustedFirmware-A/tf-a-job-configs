@@ -76,7 +76,6 @@
               key-file-variable: CI_BOT_KEY
               username-variable: CI_BOT_USERNAME
               passphrase-variable: ""
-      - workspace-cleanup
       - timestamps
     builders:
       - shell: !include-raw: scripts/clone.sh

@@ -51,7 +51,6 @@
           description: Debug parameters for make
     wrappers:
       - timestamps
-      - workspace-cleanup
       - timeout:
           timeout: 120
           fail: true

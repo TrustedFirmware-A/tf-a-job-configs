@@ -67,7 +67,6 @@
           description: |
             Whether to submit FVP tests via TuxSuite (instead of LAVA)
     wrappers:
-      - workspace-cleanup
       - timestamps
     builders:
       - shell: !include-raw: scripts/clone.sh
