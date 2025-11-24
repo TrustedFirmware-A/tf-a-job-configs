@@ -64,10 +64,6 @@
           description: |
             If there are no new commits in trusted-firmware-a tf-a-tests, or tf-a-ci-scripts the build will be sikpped.
             However, you can always force to run the build
-      - string:
-          name: SHARE_FOLDER
-          default: /srv/shared/${JOB_NAME}/${BUILD_NUMBER}
-          description: Folder containing shared repositories for downstream pipeline jobs
     triggers:
       - timed: H H(0-7) * * 3,6
     wrappers:
@@ -88,13 +84,11 @@
           GERRIT_PROJECT=${TF_GERRIT_PROJECT}
           GERRIT_BRANCH=${TF_GERRIT_BRANCH}
           GERRIT_REFSPEC=${TF_GERRIT_REFSPEC}
-          SHARE_FOLDER=${SHARE_FOLDER}
           EOF
           cat << EOF > tf-a-tests-env.param
           GERRIT_PROJECT=${TFTF_GERRIT_PROJECT}
           GERRIT_BRANCH=${TFTF_GERRIT_BRANCH}
           GERRIT_REFSPEC=${TFTF_GERRIT_REFSPEC}
-          SHARE_FOLDER=${SHARE_FOLDER}
           EOF
       - shell: !include-raw: scripts/lts-check-last-commit.sh
       - conditional-step:

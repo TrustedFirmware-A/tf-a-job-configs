@@ -45,10 +45,6 @@
           name: JOBS_PROJECT
           default: ci/tf-a-job-configs.git
       - string:
-          name: SHARE_FOLDER
-          default: /srv/shared/${JOB_NAME}/${BUILD_NUMBER}
-          description: Folder containing shared repositories for downstream pipeline jobs
-      - string:
           name: CLONE_REPOS
           default: tf-a-job-configs,tf-a-ci-scripts,rusted-firmware-a
           description: |

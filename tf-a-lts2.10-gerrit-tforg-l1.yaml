@@ -59,10 +59,6 @@
       - string:
           name: MBEDTLS_URL
           default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.4.tar.gz
-      - string:
-          name: SHARE_FOLDER
-          default: /srv/shared/${JOB_NAME}/${BUILD_NUMBER}
-          description: Folder containing shared repositories for downstream pipeline jobs
     wrappers:
       - credentials-binding:
           - ssh-user-private-key:
@@ -84,7 +80,6 @@
           TF_GERRIT_PROJECT=${GERRIT_PROJECT}
           TF_GERRIT_BRANCH=${GERRIT_BRANCH}
           TF_GERRIT_REFSPEC=${GERRIT_REFSPEC}
-          SHARE_FOLDER=${SHARE_FOLDER}
           EOF
       - multijob:
           name: Lint commit messages

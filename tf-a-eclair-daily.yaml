@@ -54,10 +54,6 @@
           default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz
           description: |
             URL of mbedTLS library to use in build (only for some configurations)
-      - string:
-          name: SHARE_FOLDER
-          default: /srv/shared/${JOB_NAME}/${BUILD_NUMBER}
-          description: Folder containing shared repositories for downstream pipeline jobs
     triggers:
       - timed: H 2 * * *
         #    - gerrit:

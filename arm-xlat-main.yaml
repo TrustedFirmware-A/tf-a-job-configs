@@ -79,10 +79,6 @@
           name: TEST_FEATURES
           description: Features the arm-xlat crate will be tested against
       - string:
-          name: SHARE_FOLDER
-          default: /srv/shared/${JOB_NAME}/${BUILD_NUMBER}
-          description: Folder containing shared repositories for downstream pipeline jobs
-      - string:
           name: CLONE_REPOS
           default: tf-a-ci-scripts,arm-xlat
           description: |
@@ -104,7 +100,6 @@
           cat << EOF > tf-a-env.param
           ARM_XLAT_GERRIT_PROJECT=${GERRIT_PROJECT}
           ARM_XLAT_GERRIT_REFSPEC=${GERRIT_REFSPEC}
-          SHARE_FOLDER=${SHARE_FOLDER}
           EOF
       - multijob:
           name: Platform independent tests

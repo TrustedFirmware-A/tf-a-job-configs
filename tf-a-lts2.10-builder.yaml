@@ -82,10 +82,6 @@
           default: 1
           description: |
             Whether to submit FVP tests via TuxSuite (instead of LAVA)
-      - string:
-          name: SHARE_FOLDER
-          default: /srv/shared/${JOB_NAME}/${BUILD_NUMBER}
-          description: Folder containing shared repositories for downstream pipeline jobs
     wrappers:
       - timestamps
       - timeout:

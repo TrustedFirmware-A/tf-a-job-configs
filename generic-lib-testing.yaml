@@ -47,10 +47,6 @@
       - string:
           name: TEST_FEATURES
           description: Features against which the library will be tested
-      - string:
-          name: SHARE_FOLDER
-          default: /srv/shared/${JOB_NAME}/${BUILD_NUMBER}
-          description: Folder containing shared repositories for downstream pipeline jobs
     wrappers:
       - credentials-binding:
           - ssh-user-private-key:

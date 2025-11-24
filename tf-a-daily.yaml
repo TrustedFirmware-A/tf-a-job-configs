@@ -52,10 +52,6 @@
       - string:
           name: LAVA_PRIORITY
           default: low
-      - string:
-          name: SHARE_FOLDER
-          default: /srv/shared/${JOB_NAME}/${BUILD_NUMBER}
-          description: Folder containing shared repositories for downstream pipeline jobs
     wrappers:
       - timestamps
     builders:
@@ -63,24 +59,18 @@
       - shell: |
           #!/bin/bash
           set -e
-          cat << EOF > share.param
-          SHARE_FOLDER=${SHARE_FOLDER}
-          EOF
       - trigger-builds:
           - project:
               - tf-a-main
             block: true
             current-parameters: true
-            property-file: share.param
           - project:
               - tf-a-coverity
             block: true
             current-parameters: true
-            property-file: share.param
           - project:
               - tf-a-windows-builder
             block: true
             current-parameters: true
-            property-file: share.param
     triggers:
       - timed: H 22 * * *
