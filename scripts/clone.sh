@@ -4,26 +4,7 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #
-# Clones and checkout TF-A related repositories in case these are not present
-# under SHARE_FOLDER, otherwise copy the share repositories into current folder
-# (workspace)
-
-# The way it works is simple: the top level job sets the SHARE_FOLDER
-# parameter based on its name and number on top of the share
-# volume (/srv/shared/<job name>/<job number>) then it calls the clone
-# script (clone.sh), which in turn it fetches the repositories mentioned
-# above. Jobs triggered on behalf of the latter, share the same
-# SHARE_FOLDER value, and these in turn also call the clone script, but
-# in this case, the script detects that the folder is already populated so
-# its role is to simply copy the repositories into the job's
-# workspace. As seen, all jobs work with repositories on their own
-# workspace, which are just copies of the share folder, so there is no
-# change of a race condition, i.e every job works with its own copy. The
-# worst case scenario is where the down-level job, tf-a-builder, uses its
-# default SHARE_FOLDER value, in this case, it would simply clone its
-# own repositories without reusing any file however the current approach
-# prevents the latter unless the job is triggered manually from the
-# builder job itself.
+# Clones and checkout TF-A related repositories into the current workspace.
 
 set -ex
 
@@ -133,32 +114,14 @@ fi
 
 df -h
 
-# Take into consideration non-CI runs where SHARE_FOLDER variable
-# may not be present
-if [ -z "${SHARE_FOLDER}" ]; then
-    # Default Jenkins values
-    SHARE_VOLUME="${SHARE_VOLUME:-$PWD}"
-    JOB_NAME="${JOB_NAME:-local}"
-    BUILD_NUMBER="${BUILD_NUMBER:-0}"
-    SHARE_FOLDER=${SHARE_VOLUME}/${JOB_NAME}/${BUILD_NUMBER}
-fi
-
-mkdir -p ${SHARE_FOLDER}
-
 # Clone JOBS_PROJECT first, since we need a helper script there
-if [ -f ${SHARE_FOLDER}/${JOBS_REPO_NAME}.tar.gz ]; then
-    tar -xzf ${SHARE_FOLDER}/${JOBS_REPO_NAME}.tar.gz
-else
-    git init --quiet -- "${JOBS_REPO_NAME}"
-    git -C "${JOBS_REPO_NAME}" remote add origin "${JOBS_REPO_URL}"
-    git -C "${JOBS_REPO_NAME}" fetch --quiet --depth 1 --no-tags \
-        --no-recurse-submodules -- origin "${JOBS_REFSPEC}"
-    git -C "${JOBS_REPO_NAME}" checkout --quiet --detach FETCH_HEAD
-    git -C "${JOBS_REPO_NAME}" submodule update --quiet --depth 1 --init \
-        --recursive
-
-    tar -czf ${SHARE_FOLDER}/${JOBS_REPO_NAME}.tar.gz ${JOBS_REPO_NAME}
-fi
+git init --quiet -- "${JOBS_REPO_NAME}"
+git -C "${JOBS_REPO_NAME}" remote add origin "${JOBS_REPO_URL}"
+git -C "${JOBS_REPO_NAME}" fetch --quiet --depth 1 --no-tags \
+    --no-recurse-submodules -- origin "${JOBS_REFSPEC}"
+git -C "${JOBS_REPO_NAME}" checkout --quiet --detach FETCH_HEAD
+git -C "${JOBS_REPO_NAME}" submodule update --quiet --depth 1 --init \
+    --recursive
 
 git -C ${JOBS_REPO_NAME} log -1
 
@@ -191,35 +154,27 @@ for repo in ${!repos_map[@]}; do
         continue
     fi
 
-    if [ -f ${SHARE_FOLDER}/${REPO_NAME}.tar.gz ]; then
-        echo "Using existing shared folder checkout for ${REPO_URL}:"
-
-        tar -xzf ${SHARE_FOLDER}/${REPO_NAME}.tar.gz
-    else
-        # If the Gerrit review that triggered the CI had a topic, it will be used to synchronize the other repositories
-        if [ -n "${GERRIT_TOPIC}" -a "${REPO_HOST}" = "${GERRIT_HOST}" -a "${GERRIT_PROJECT}" != "${REPO_PROJECT}" ]; then
-            echo "Got Gerrit Topic: ${GERRIT_TOPIC}"
-            REPO_REFSPEC="$(ssh ${SSH_PARAMS} ${CI_BOT_USERNAME}@${REPO_HOST#https://} gerrit query ${GERRIT_QUERY_PARAMS} \
-                            project:${REPO_PROJECT} topic:${GERRIT_TOPIC} | ${JOBS_REPO_NAME}/scripts/parse_refspec.py)"
-            if [ -z "${REPO_REFSPEC}" ]; then
-                REPO_REFSPEC="${REPO_DEFAULT_REFSPEC}"
-                echo "Roll back to \"${REPO_REFSPEC}\" for \"${REPO_PROJECT}\""
-            fi
-            echo "Checkout refspec \"${REPO_REFSPEC}\" from repository \"${REPO_NAME}\""
+    # If the Gerrit review that triggered the CI had a topic, it will be used to synchronize the other repositories
+    if [ -n "${GERRIT_TOPIC}" -a "${REPO_HOST}" = "${GERRIT_HOST}" -a "${GERRIT_PROJECT}" != "${REPO_PROJECT}" ]; then
+        echo "Got Gerrit Topic: ${GERRIT_TOPIC}"
+        REPO_REFSPEC="$(ssh ${SSH_PARAMS} ${CI_BOT_USERNAME}@${REPO_HOST#https://} gerrit query ${GERRIT_QUERY_PARAMS} \
+                        project:${REPO_PROJECT} topic:${GERRIT_TOPIC} | ${JOBS_REPO_NAME}/scripts/parse_refspec.py)"
+        if [ -z "${REPO_REFSPEC}" ]; then
+            REPO_REFSPEC="${REPO_DEFAULT_REFSPEC}"
+            echo "Roll back to \"${REPO_REFSPEC}\" for \"${REPO_PROJECT}\""
         fi
-
-        git init --quiet -- "${REPO_NAME}"
-        git -C "${REPO_NAME}" remote add origin "${REPO_GIT_URL}"
-        git -C "${REPO_NAME}" fetch --quiet --depth 1 --no-tags \
-            --no-recurse-submodules -- origin "${REPO_REFSPEC}"
-        git -C "${REPO_NAME}" checkout --quiet --detach FETCH_HEAD
-        git -C "${REPO_NAME}" submodule update --quiet --depth 1 --init \
-            --recursive
-
-        echo "Freshly cloned ${REPO_URL} (refspec ${REPO_REFSPEC}):"
-
-        tar -czf ${SHARE_FOLDER}/${REPO_NAME}.tar.gz ${REPO_NAME}
+        echo "Checkout refspec \"${REPO_REFSPEC}\" from repository \"${REPO_NAME}\""
     fi
+
+    git init --quiet -- "${REPO_NAME}"
+    git -C "${REPO_NAME}" remote add origin "${REPO_GIT_URL}"
+    git -C "${REPO_NAME}" fetch --quiet --depth 1 --no-tags \
+        --no-recurse-submodules -- origin "${REPO_REFSPEC}"
+    git -C "${REPO_NAME}" checkout --quiet --detach FETCH_HEAD
+    git -C "${REPO_NAME}" submodule update --quiet --depth 1 --init \
+        --recursive
+
+    echo "Freshly cloned ${REPO_URL} (refspec ${REPO_REFSPEC}):"
 
     git -C ${REPO_NAME} log -1
 done
