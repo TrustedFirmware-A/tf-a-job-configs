@@ -181,9 +181,9 @@
           gerrit-build-failed-codereview-value: 0
           gerrit-build-unstable-codereview-value: 0
           gerrit-build-notbuilt-codereview-value: 0
-          failure-message: 'OpenCI: build failed'
-          successful-message: 'OpenCI: build successful'
-          unstable-message: 'OpenCI: build unstable'
-          notbuilt-message: 'OpenCI: no builds executed'
+          failure-message: "OpenCI: build failed"
+          successful-message: "OpenCI: build successful"
+          unstable-message: "OpenCI: build unstable"
+          notbuilt-message: "OpenCI: no builds executed"
           silent: false
           silent-start: false

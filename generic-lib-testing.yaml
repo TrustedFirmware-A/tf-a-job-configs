@@ -77,6 +77,5 @@
       - archive:
           artifacts: next-generic-checks.log
       - groovy-postbuild:
-          script:
-              !include-raw:
-                  - generic-lib-testing/postbuild.groovy
+          script: !include-raw:
+            - generic-lib-testing/postbuild.groovy

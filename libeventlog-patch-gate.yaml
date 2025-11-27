@@ -14,7 +14,7 @@
           days-to-keep: 10
 
     builders:
-     - trigger-builds:
+      - trigger-builds:
           - project:
               - libeventlog-pipeline
             block: true

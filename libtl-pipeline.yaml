@@ -6,4 +6,3 @@
     project-type: pipeline
     sandbox: true
     dsl: !include-raw: libtl-pipeline/Jenkinsfile
-

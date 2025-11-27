@@ -99,7 +99,7 @@
             current-parameters: true
             parameter-factories:
               - factory: filebuild
-                file-pattern: '*.testprop'
+                file-pattern: "*.testprop"
                 no-files-found-action: FAIL
     publishers:
       - postbuildscript:

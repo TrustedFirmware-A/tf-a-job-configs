@@ -41,7 +41,7 @@
           projects:
             - branches:
                 - branch-compare-type: REG_EXP
-                  branch-pattern: '^(sandbox/)?lts-v.*$'
+                  branch-pattern: "^(sandbox/)?lts-v.*$"
               project-compare-type: PLAIN
               project-pattern: TF-A/trusted-firmware-a
           trigger-on:
@@ -119,31 +119,31 @@
       - conditional-step:
           condition-kind: shell
           condition-command: |
-              set -eux
+            set -eux
 
-              COUNTERPART_PROJ="hafnium/hafnium"
-              GERRIT_HOST=${GERRIT_HOST:-review.trustedfirmware.org}
-              SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa"
-              export GIT_SSH_COMMAND="ssh -p 29418 -i $CI_BOT_KEY ${SSH_PARAMS}"
-              GERRIT_SERVER="ssh://${CI_BOT_USERNAME}@${GERRIT_HOST}:29418"
-              REF="${GERRIT_REFNAME:-}"
-              echo ${REF} | grep -q "^sandbox/" && echo "*** Sandbox run ***"
-              BRANCH="${REF#refs/heads/}"
+            COUNTERPART_PROJ="hafnium/hafnium"
+            GERRIT_HOST=${GERRIT_HOST:-review.trustedfirmware.org}
+            SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa"
+            export GIT_SSH_COMMAND="ssh -p 29418 -i $CI_BOT_KEY ${SSH_PARAMS}"
+            GERRIT_SERVER="ssh://${CI_BOT_USERNAME}@${GERRIT_HOST}:29418"
+            REF="${GERRIT_REFNAME:-}"
+            echo ${REF} | grep -q "^sandbox/" && echo "*** Sandbox run ***"
+            BRANCH="${REF#refs/heads/}"
 
-              # Must be a Gerrit ref-updated new-branch event
-              [ "${GERRIT_EVENT_TYPE:-}" = "ref-updated" -a \
-                "${GERRIT_OLDREV:-}" = "0000000000000000000000000000000000000000" ] || exit 1
+            # Must be a Gerrit ref-updated new-branch event
+            [ "${GERRIT_EVENT_TYPE:-}" = "ref-updated" -a \
+              "${GERRIT_OLDREV:-}" = "0000000000000000000000000000000000000000" ] || exit 1
 
-              # Check if branch exists already in TF-A
-              if git ls-remote --exit-code "${GERRIT_SERVER}/${COUNTERPART_PROJ}" "${BRANCH}" >/dev/null 2>&1; then
-                echo "Branch exists in ${COUNTERPART_PROJ}, do not trigger counterpart"
-                exit 1
-              fi
-              echo "Branch missing, trigger hafnium-lts-automation"
-              exit 0
+            # Check if branch exists already in TF-A
+            if git ls-remote --exit-code "${GERRIT_SERVER}/${COUNTERPART_PROJ}" "${BRANCH}" >/dev/null 2>&1; then
+              echo "Branch exists in ${COUNTERPART_PROJ}, do not trigger counterpart"
+              exit 1
+            fi
+            echo "Branch missing, trigger hafnium-lts-automation"
+            exit 0
           steps:
             - trigger-builds:
-                - project: 'hafnium-lts-automation'
+                - project: "hafnium-lts-automation"
                   block: false
                   predefined-parameters: "UPSTREAM_REFNAME=${GERRIT_REFNAME}"
 

@@ -179,23 +179,23 @@
                             echo "=== Starting expect-post tests ==="
                             ./tf-a-ci-scripts/script/expect-post-runner.sh
       - conditional-publisher:
-        - condition-kind: file-exists
-          on-evaluation-failure: dont-run
-          condition-filename: artefacts/release/tfut_artefacts.txt
-          condition-basedir: workspace
-          action:
-            - postbuildscript:
-                builders:
-                  - role: SLAVE
-                    build-on:
-                      - SUCCESS
-                    build-steps:
-                      - shell: |
-                          #!/bin/bash -e
-                          echo "Found unit test executables, running unit tests now"
-                          export workspace="$(pwd)"
-                          export tfut_root="$(pwd)/tf-a-unit-tests"
-                          bash -x "$workspace/tf-a-ci-scripts/script/run_unit_tests.sh"
+          - condition-kind: file-exists
+            on-evaluation-failure: dont-run
+            condition-filename: artefacts/release/tfut_artefacts.txt
+            condition-basedir: workspace
+            action:
+              - postbuildscript:
+                  builders:
+                    - role: SLAVE
+                      build-on:
+                        - SUCCESS
+                      build-steps:
+                        - shell: |
+                            #!/bin/bash -e
+                            echo "Found unit test executables, running unit tests now"
+                            export workspace="$(pwd)"
+                            export tfut_root="$(pwd)/tf-a-unit-tests"
+                            bash -x "$workspace/tf-a-ci-scripts/script/run_unit_tests.sh"
       - conditional-publisher:
           - condition-kind: file-exists
             on-evaluation-failure: dont-run

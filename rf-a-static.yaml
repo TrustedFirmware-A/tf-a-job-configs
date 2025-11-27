@@ -17,7 +17,7 @@
           name: RFA_REFSPEC
           default: +refs/heads/main:refs/remotes/origin/main
           description: |
-              rfa refspec to use. The main branch is used by default.
+            rfa refspec to use. The main branch is used by default.
       - string:
           name: GERRIT_BRANCH
           default: main
