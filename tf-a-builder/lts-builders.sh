@@ -105,8 +105,8 @@ ln -s ${TOOLS_DIR}/armclang-6.18/bin \
       /arm/warehouse/Distributions/FA/ARMCompiler/6.18/19/standalone-linux-x86_64-rel/bin
 
 # If build actually uses ArmClang, activate and verify UBL license
-if echo ${TEST_CONFIG} | grep -q armclang && [ -n "${ARMCLANG_UBL_CODE}" ]; then
-    ${TOOLS_DIR}/armclang-6.18/bin/armlm activate --code ${ARMCLANG_UBL_CODE}
+if echo ${TEST_CONFIG} | grep -q armclang && [ -n "${ARMCLANG_UBL_FILE}" ]; then
+    ${TOOLS_DIR}/armclang-6.18/bin/armlm import --file ${ARMCLANG_UBL_FILE}
     ${TOOLS_DIR}/armclang-6.18/bin/armlm inspect
     ${TOOLS_DIR}/armclang-6.18/bin/armclang --vsn
 fi

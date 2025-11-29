@@ -100,9 +100,9 @@
               credential-id: TUXSUITE_TOKEN
               variable: TUXSUITE_TOKEN
       - credentials-binding:
-          - text:
-              credential-id: ARMCLANG_UBL_CODE
-              variable: ARMCLANG_UBL_CODE
+          - file:
+              credential-id: ARMCLANG_UBL_FILE
+              variable: ARMCLANG_UBL_FILE
     builders:
       - shell: |
           aarch64-none-elf-gcc -v || true
