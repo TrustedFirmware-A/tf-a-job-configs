@@ -25,6 +25,11 @@
           name: RF_GERRIT_PROJECT
           default: RF-A/rusted-firmware-a
       - string:
+          name: RFA_REFSPEC
+          default: +refs/heads/main:refs/remotes/origin/main
+          description: |
+            rusted-firmware-a refspec to use. The main branch is used by default.
+      - string:
           name: GERRIT_BRANCH
           default: refs/heads/main
       - string:
