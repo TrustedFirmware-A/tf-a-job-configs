@@ -99,7 +99,7 @@
 
           . tf-a-ci-scripts/eclair/eclair_vars.sh
 
-          detachLicense 600
+          detachLicense 600 || mkdir -p $WORKSPACE/tmp/hasplm && sudo cp -r /var/hasplm/*.log $WORKSPACE/tmp/hasplm
           trap "returnLicense || true" EXIT
 
           export ECLAIR_ANALYSIS=ECLAIR
@@ -112,7 +112,7 @@
           tf-ci-scripts/eclair/analyze_index_html.sh
     publishers:
       - archive:
-          artifacts: ECLAIR/**, index.html
+          artifacts: ECLAIR/**, index.html, tmp/hasplm/**
           excludes: ECLAIR/out/.data/**
           latest-only: false
           allow-empty: true
