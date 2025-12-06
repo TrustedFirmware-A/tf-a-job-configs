@@ -1,0 +1,375 @@
+- job:
+    name: tf-a-lts2.14-main
+    node: docker-amd64-tf-a-lts2.14-jammy
+    project-type: multijob
+    concurrent: true
+    disabled: false
+    description: Main CI job for Trusted Firmware LTS v2.14.
+    properties:
+      - throttle:
+          option: project
+          enabled: true
+          max-total: 5
+      - build-discarder:
+          days-to-keep: 14
+          num-to-keep: 60
+    parameters:
+      - string:
+          name: TF_GERRIT_PROJECT
+          default: TF-A/trusted-firmware-a
+      - string:
+          name: TF_GERRIT_BRANCH
+          default: refs/heads/lts-v2.14
+      - string:
+          name: TF_GERRIT_REFSPEC
+          default: +refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14
+      - string:
+          name: TFTF_GERRIT_PROJECT
+          default: TF-A/tf-a-tests
+      - string:
+          name: TFTF_GERRIT_BRANCH
+          default: refs/heads/lts-v2.14
+      - string:
+          name: TFTF_GERRIT_REFSPEC
+          default: +refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14
+      - string:
+          name: SPM_REFSPEC
+          default: lts-v2.14
+          description: |
+            SPM(Hafnium) refspec to use. The lts-v2.14 branch is used by default.
+      - string:
+          name: RMM_REFSPEC
+          default: lts-v2.14
+          description: |
+            tf-rmm refspec to use. The lts-v2.14 branch is used by default.
+      - string:
+          name: CI_REFSPEC
+          default: +refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14
+      - string:
+          name: JOBS_REFSPEC
+          default: refs/heads/master
+          description: |
+            tf-a-job-configs refspec to use. The master branch is used by default.
+      - string:
+          name: MBEDTLS_URL
+          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz
+      - bool:
+          name: FORCE_TO_BUILD
+          default: false
+          description: |
+            If there are no new commits in trusted-firmware-a tf-a-tests, or tf-a-ci-scripts the build will be sikpped.
+            However, you can always force to run the build
+      - string:
+          name: LAVA_RETRIES
+          default: 2
+          description: |
+            Number of tries submitting job to LAVA in case it fails (stopgap measure against nondeterministic failures)
+      - string:
+          name: USE_TUXSUITE_FVP
+          default: 1
+          description: |
+            Whether to submit FVP tests via TuxSuite (instead of LAVA)
+    triggers:
+      - timed: H H(0-7) * * 1,3,5
+    wrappers:
+      - credentials-binding:
+          - ssh-user-private-key:
+              credential-id: TFA_CI_BOT_USER_SSH_KEY
+              key-file-variable: CI_BOT_KEY
+              username-variable: CI_BOT_USERNAME
+              passphrase-variable: ""
+      - timestamps
+    builders:
+      - shell: !include-raw: scripts/clone.sh
+      - shell: |
+          #!/bin/bash
+          set -e
+          cat << EOF > tf-a-env.param
+          GERRIT_PROJECT=${TF_GERRIT_PROJECT}
+          GERRIT_BRANCH=${TF_GERRIT_BRANCH}
+          GERRIT_REFSPEC=${TF_GERRIT_REFSPEC}
+          EOF
+          cat << EOF > tf-a-tests-env.param
+          GERRIT_PROJECT=${TFTF_GERRIT_PROJECT}
+          GERRIT_BRANCH=${TFTF_GERRIT_BRANCH}
+          GERRIT_REFSPEC=${TFTF_GERRIT_REFSPEC}
+          EOF
+      - shell: !include-raw: scripts/lts-check-last-commit.sh
+      - conditional-step:
+          condition-kind: file-exists
+          condition-filename: TO_BUILD
+          condition-basedir: workspace
+          steps:
+            - multijob:
+                name: Run static checks on the code
+                condition: COMPLETED
+                projects:
+                  - name: tf-a-static-checks
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    property-file: tf-a-env.param
+            - multijob:
+                name: Build Trusted Firmware
+                condition: COMPLETED
+                projects:
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l1-build-fvp tf-l2-build-fvp
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: |
+                      TEST_GROUPS=tf-l1-build-fvp tf-l2-build-fvp
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l1-build-juno tf-l2-build-juno
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l1-build-juno tf-l2-build-juno
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l1-build-plat
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l1-build-plat
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l1-build-clang
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l1-build-clang
+                    property-file: tf-a-env.param
+            - multijob:
+                name: Build Trusted Firmware Test Framework
+                condition: COMPLETED
+                projects:
+                  - current-parameters: true
+                    kill-phase-on: NEVER
+                    name: tf-a-lts2.14-ci-gateway
+                    alias: tftf-l1-build
+                    predefined-parameters: TEST_GROUPS=tftf-l1-build
+                    property-file: tf-a-tests-env.param
+            - multijob:
+                name: TFTF Tests for FVP
+                condition: COMPLETED
+                projects:
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tftf-l2-fwu
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tftf-l2-fwu
+                    property-file: tf-a-tests-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tftf-l1-fvp tftf-l2-fvp-auxiliary
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tftf-l1-fvp tftf-l2-fvp-auxiliary
+                    property-file: tf-a-tests-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tftf-l2-fvp tftf-l2-fvp-dynamiq
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tftf-l2-fvp tftf-l2-fvp-dynamiq
+                    property-file: tf-a-tests-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tftf-l2-extensive-tests-fvp
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tftf-l2-extensive-tests-fvp
+                    property-file: tf-a-tests-env.param
+            - multijob:
+                name: Boot up to the Linux shell prompt
+                condition: COMPLETED
+                projects:
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l2-boot-tests-aarch32
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l2-boot-tests-aarch32
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l2-boot-tests-rootfs
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l2-boot-tests-rootfs
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l2-boot-tests-spm-mm
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l2-boot-tests-spm-mm
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: spm-l2-boot-tests
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=spm-l2-boot-tests
+                    property-file: tf-a-env.param
+            - multijob:
+                name: Boot up to the Linux shell prompt - Part 2
+                condition: COMPLETED
+                projects:
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l2-boot-tests-misc
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l2-boot-tests-misc
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l2-boot-tests-latest
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l2-boot-tests-latest
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l2-boot-tests-cortex
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l2-boot-tests-cortex
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l2-boot-tests-gicv2
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l2-boot-tests-gicv2
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l2-boot-tests-bl2_el3
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l2-boot-tests-bl2_el3
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: qemu-boot-tests
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=qemu-boot-tests
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: rmm-l2-boot-tests
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=rmm-l2-boot-tests
+                    property-file: tf-a-env.param
+            - multijob:
+                name: Juno Boot Tests
+                condition: COMPLETED
+                projects:
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l2-boot-tests-juno
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l2-boot-tests-juno
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tftf-l1-juno
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tftf-l1-juno
+                    property-file: tf-a-env.param
+            - multijob:
+                name: Miscellaneous tests
+                condition: COMPLETED
+                projects:
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l3-boot-tests-css
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l3-boot-tests-css
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l3-boot-tests-spm-mm
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l3-boot-tests-spm-mm
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l3-boot-tests-ras
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l3-boot-tests-ras
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l3-boot-tests-misc
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l3-boot-tests-misc
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l3-boot-tests-n1sdp
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l3-boot-tests-n1sdp
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: spm-l3-boot-tests
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=spm-l3-boot-tests
+                    property-file: tf-a-env.param
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l2-boot-tests-partner-boards
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l2-boot-tests-partner-boards
+                    property-file: tf-a-env.param
+                  # Platform-specific self-tests.
+                  # These tests run from the BL31 image then halt the target.
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l2-boot-tests-arm-plats
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l2-boot-tests-arm-plats
+                    property-file: tf-a-env.param
+            - multijob:
+                name: Run doc build check
+                condition: COMPLETED
+                projects:
+                  - name: tf-a-lts2.14-ci-gateway
+                    alias: tf-l1-check-docs
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TEST_GROUPS=tf-l1-check-docs
+                    property-file: tf-a-env.param
+            - multijob:
+                name: Generate visualizations
+                condition: COMPLETED
+                projects:
+                  - name: tf-a-sloc-visualization
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    property-file: tf-a-env.param
+                  - name: tf-a-test-category-visualization
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    property-file: tf-a-env.param
+                  - name: tf-a-test-result-visualization
+                    current-parameters: true
+                    kill-phase-on: NEVER
+                    predefined-parameters: TARGET_BUILD=${JOB_NAME}/${BUILD_NUMBER}
+                    property-file: tf-a-env.param
+            # Run the unstable TF-A Tests at the end but do not let their results
+            # participate in the job's success/failure.
+            - trigger-builds:
+                - project: tf-a-lts2.14-ci-gateway
+                  current-parameters: True
+                  property-file: tf-a-tests-env.param
+                  property-file-fail-on-missing: True
+                  predefined-parameters: TEST_GROUPS=tftf-unstable
+                  block: True
+                  block-thresholds:
+                    build-step-failure-threshold: never
+                    unstable-threshold: never
+                    failure-threshold: never
+    publishers:
+      - conditional-publisher:
+          - condition-kind: shell
+            condition-command: |
+              ! test -f ${WORKSPACE}/TO_BUILD
+            action:
+              - groovy-postbuild:
+                  script: |
+                    def currentBuild = Thread.currentThread().executable
+                    currentBuild.result = hudson.model.Result.SUCCESS
+                    currentBuild.setDescription("There are no new commits in the repositories, skip the build!")
+                  on-failure: nothing
+      - email:
+          recipients: bipin.ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, jidong@google.com, govindraj.raja@arm.com
