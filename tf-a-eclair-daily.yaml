@@ -99,7 +99,18 @@
 
           . tf-a-ci-scripts/eclair/eclair_vars.sh
 
-          detachLicense 600 || mkdir -p $WORKSPACE/tmp/hasplm && sudo cp -r /var/hasplm/*.log $WORKSPACE/tmp/hasplm
+          # retry detachLicense as LM client may not be ready initially
+          for i in {1..10}; do
+            detachLicense 600 && break
+            echo "Attempt $i failed, retrying in 10s..."
+            sleep 10
+            if [ "$i" -eq 10 ]; then
+              echo "detachLicense failed after 10 attempts"
+              mkdir -p $WORKSPACE/tmp/hasplm && sudo cp -r /var/hasplm/*.log $WORKSPACE/tmp/hasplm
+              exit 1
+            fi
+          done
+
           trap "returnLicense || true" EXIT
 
           export ECLAIR_ANALYSIS=ECLAIR
