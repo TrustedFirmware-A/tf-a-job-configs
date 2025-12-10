@@ -22,7 +22,7 @@
       - string:
           name: UPSTREAM_REFNAME
           default: ""
-          description: "Ref name from counterpart job (e.g. lts-vX.Y or sandbox/lts-VX.Y)"
+          description: "Ref name from counterpart job (e.g. lts-vX.Y or sandbox/lts-vX.Y)"
     wrappers:
       - timestamps
       - timeout:
@@ -72,8 +72,10 @@
 
           # Check if the job is triggered by a new LTS branch creation
           if [ -n "${UPSTREAM_REFNAME:-}" ]; then
-            # Triggered from hafnium-lts-automation
+            # Triggered by hafnium-lts-automation
+            echo "Triggered by hafnium-lts-automation"
             echo "New LTS branch created: ${new_branch}"
+            MAIN_PROJ="TF-A/trusted-firmware-a"
           elif [ "${GERRIT_EVENT_TYPE:-}" = "ref-updated" -a \
                  "${GERRIT_OLDREV:-}" = "0000000000000000000000000000000000000000" ]; then
             # Triggered from new LTS branch creation
@@ -84,13 +86,15 @@
           fi
 
           # Create new LTS branch to related repositories
-          repos="TF-A/tf-a-tests ci/tf-a-ci-scripts ci/tf-a-job-configs"
+          repos="${MAIN_PROJ} TF-A/tf-a-tests ci/tf-a-ci-scripts ci/tf-a-job-configs"
           for r in ${repos};
           do
               echo "Create branch \"${new_branch}\" from tag \"${forked_tag}\" in the \"${r}\" project"
-              git -C "${_workdir}" fetch ${gerrit_host}/${r} ${forked_tag} || \
-              (echo "Can not find \"${forked_tag}\" tag on ${r} repository"; exit 1)
-              git -C "${_workdir}" push ${gerrit_host}/${r} FETCH_HEAD^{commit}:refs/heads/${new_branch}
+              if ! git ls-remote --exit-code ${gerrit_host}/${r} ${new_branch}; then
+                git -C "${_workdir}" fetch ${gerrit_host}/${r} ${forked_tag} || \
+                (echo "Can not find \"${forked_tag}\" tag on ${r} repository"; exit 1)
+                git -C "${_workdir}" push ${gerrit_host}/${r} FETCH_HEAD^{commit}:refs/heads/${new_branch}
+              fi
           done
 
           # Create new download space
