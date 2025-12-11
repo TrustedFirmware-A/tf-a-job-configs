@@ -86,7 +86,7 @@
           fi
 
           # Create new LTS branch to related repositories
-          repos="${MAIN_PROJ} TF-A/tf-a-tests ci/tf-a-ci-scripts ci/tf-a-job-configs"
+          repos="${MAIN_PROJ:-} TF-A/tf-a-tests ci/tf-a-ci-scripts ci/tf-a-job-configs"
           for r in ${repos};
           do
               echo "Create branch \"${new_branch}\" from tag \"${forked_tag}\" in the \"${r}\" project"
