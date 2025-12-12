@@ -91,7 +91,7 @@
           for r in ${repos};
           do
               echo "Create branch \"${new_branch}\" from tag \"${forked_tag}\" in the \"${r}\" project"
-              if ! git ls-remote --exit-code ${gerrit_host}/${r} ${new_branch}; then
+              if ! git ls-remote --exit-code "${gerrit_host}/${r}" "refs/heads/${new_branch}"; then
                 git -C "${_workdir}" fetch ${gerrit_host}/${r} ${forked_tag} || \
                 (echo "Can not find \"${forked_tag}\" tag on ${r} repository"; exit 1)
                 git -C "${_workdir}" push ${gerrit_host}/${r} FETCH_HEAD^{commit}:refs/heads/${new_branch}
@@ -140,7 +140,7 @@
               "${GERRIT_OLDREV:-}" = "0000000000000000000000000000000000000000" ] || exit 1
 
             # Check if branch exists already in TF-A
-            if git ls-remote --exit-code "${GERRIT_SERVER}/${COUNTERPART_PROJ}" "${BRANCH}" >/dev/null 2>&1; then
+            if git ls-remote --exit-code "${GERRIT_SERVER}/${COUNTERPART_PROJ}" "refs/heads/${BRANCH}"; then
               echo "Branch exists in ${COUNTERPART_PROJ}, do not trigger counterpart"
               exit 1
             fi
