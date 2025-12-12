@@ -60,6 +60,7 @@
           echo ${REF} | grep -q "^sandbox/" && SANDBOX_RUN="true" && echo "*** Sandbox run ***"
           SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa"
           export GIT_SSH_COMMAND="ssh -p 29418 -i $CI_BOT_KEY ${SSH_PARAMS}"
+          GERRIT_HOST=${GERRIT_HOST:-review.trustedfirmware.org}
           gerrit_host="ssh://${CI_BOT_USERNAME}@${GERRIT_HOST}:29418"
           new_branch=${REF}
           forked_tag=${new_branch##*-}
