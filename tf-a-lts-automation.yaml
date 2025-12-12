@@ -49,7 +49,7 @@
     builders:
       - shell: |
           echo "***************************************"
-          env | grep GERRIT
+          env | grep GERRIT || true
           echo "***************************************"
       - shell: |
           #!/bin/bash
