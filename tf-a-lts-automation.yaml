@@ -128,9 +128,7 @@
 
             COUNTERPART_PROJ="hafnium/hafnium"
             GERRIT_HOST=${GERRIT_HOST:-review.trustedfirmware.org}
-            SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa"
-            export GIT_SSH_COMMAND="ssh -p 29418 -i $CI_BOT_KEY ${SSH_PARAMS}"
-            GERRIT_SERVER="ssh://${CI_BOT_USERNAME}@${GERRIT_HOST}:29418"
+            GERRIT_SERVER="https://${GERRIT_HOST}"
             REF="${GERRIT_REFNAME:-}"
             echo ${REF} | grep -q "^sandbox/" && echo "*** Sandbox run ***"
             BRANCH="${REF#refs/heads/}"
