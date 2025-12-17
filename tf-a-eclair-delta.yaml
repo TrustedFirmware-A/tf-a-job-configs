@@ -4,7 +4,6 @@
     project-type: freestyle
     concurrent: true
     disabled: false
-    defaults: global
     description: |
       ECLAIR (MISRA compliance) testing of TF-A patches
     properties:

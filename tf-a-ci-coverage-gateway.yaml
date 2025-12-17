@@ -4,7 +4,6 @@
     project-type: freestyle
     concurrent: true
     disabled: false
-    defaults: global
     description: |
       Main job entry point for a Trusted Firmware A with coverage focus(TF-A) CI.
     properties:

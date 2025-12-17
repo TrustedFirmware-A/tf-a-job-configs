@@ -4,7 +4,6 @@
     project-type: freestyle
     concurrent: true
     disabled: false
-    defaults: global
     description: |
       Gradually cleanup artifacts in TF-A builds
     properties:

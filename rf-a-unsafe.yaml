@@ -4,7 +4,6 @@
     project-type: freestyle
     concurrent: true
     disabled: false
-    defaults: global
     description: Check for Unsafe changes in Rusted Firmware A
     properties:
       - build-discarder:

@@ -4,7 +4,6 @@
     project-type: freestyle
     concurrent: true
     disabled: false
-    defaults: global
     description: |
       Rusted Firmware A (RF-A) builder
     properties:

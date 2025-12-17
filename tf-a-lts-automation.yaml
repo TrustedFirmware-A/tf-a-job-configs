@@ -3,7 +3,6 @@
     node: build-amd64-private
     project-type: freestyle
     disabled: false
-    defaults: global
     description: |
       Trusted Firmware A LTS automation, this job triggered by a new LTS branch created in the trusted-firmware-a repository.
       It helps to create corrosponding branch in the tf-a-test, hafnium, and tf-a-ci-scripts repositories, as well as set up a new download

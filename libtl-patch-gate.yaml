@@ -5,7 +5,6 @@
     project-type: freestyle
     concurrent: true
     disabled: false
-    defaults: global
     # TODO: check whether we have an orchestrator node for this.
     node: docker-amd64-tf-a-jammy
     properties:
