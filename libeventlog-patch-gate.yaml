@@ -34,7 +34,7 @@
                 approval-value: 1
           projects:
             - project-compare-type: PLAIN
-              project-pattern: shared/libEventLog
+              project-pattern: "{gerrit_project_prefix}shared/libEventLog"
               branches:
                 - branch-compare-type: PLAIN
                   branch-pattern: main

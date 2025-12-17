@@ -56,14 +56,14 @@ case "$TEST_CONFIG" in
       temp_sources=$(cat <<-END
                 {
                 "type": "git",
-                "URL":  "https://review.trustedfirmware.org/TF-A/trusted-firmware-a",
+                "URL":  "https://review.trustedfirmware.org/${GERRIT_PROJECT_PREFIX?}TF-A/trusted-firmware-a",
                 "COMMIT": "",
                 "REFSPEC": "${TF_GERRIT_REFSPEC}",
                 "LOCATION": "trusted-firmware-a"
                 },
                 {
                 "type": "git",
-                "URL":  "https://review.trustedfirmware.org/hafnium/hafnium",
+                "URL":  "https://review.trustedfirmware.org/${GERRIT_PROJECT_PREFIX?}hafnium/hafnium",
                 "COMMIT": "",
                 "REFSPEC": "${SPM_REFSPEC}",
                 "LOCATION": "spm"
@@ -76,7 +76,7 @@ END
       temp_sources=$(cat <<-END
                 {
                 "type": "git",
-                "URL":  "https://review.trustedfirmware.org/TF-A/trusted-firmware-a",
+                "URL":  "https://review.trustedfirmware.org/${GERRIT_PROJECT_PREFIX?}TF-A/trusted-firmware-a",
                 "COMMIT": "",
                 "REFSPEC": "${TF_GERRIT_REFSPEC}",
                 "LOCATION": "trusted-firmware-a"

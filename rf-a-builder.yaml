@@ -22,7 +22,7 @@
             Expanded and normalized test configuration, aka "test description"
       - string:
           name: RF_GERRIT_PROJECT
-          default: RF-A/rusted-firmware-a
+          default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
       - string:
           name: RFA_REFSPEC
           default: +refs/heads/main:refs/remotes/origin/main
@@ -33,7 +33,7 @@
           default: refs/heads/main
       - string:
           name: TF_GERRIT_PROJECT
-          default: TF-A/trusted-firmware-a
+          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
       - string:
           name: TF_GERRIT_BRANCH
           default: refs/heads/master

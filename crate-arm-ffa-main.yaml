@@ -21,7 +21,7 @@
                 - branch-compare-type: PLAIN
                   branch-pattern: main
               project-compare-type: PLAIN
-              project-pattern: arm-firmware-crates/arm-ffa
+              project-pattern: "{gerrit_project_prefix}arm-firmware-crates/arm-ffa"
           trigger-on:
             - patchset-created-event:
                 exclude-drafts: true
@@ -51,7 +51,7 @@
       # patchset - defaults below are for manual triggers
       - string:
           name: GERRIT_PROJECT
-          default: arm-firmware-crates/arm-ffa
+          default: "{gerrit_project_prefix}arm-firmware-crates/arm-ffa"
       - string:
           name: GERRIT_BRANCH
           default: refs/heads/main

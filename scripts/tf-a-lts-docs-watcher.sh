@@ -8,7 +8,7 @@ echo "########################################################################"
 
 set -e
 
-if [ "${GERRIT_PROJECT}" == "TF-A/trusted-firmware-a" ]; then
+if [ "${GERRIT_PROJECT}" == "${GERRIT_PROJECT_PREFIX?}TF-A/trusted-firmware-a" ]; then
     # For real production project, non-sandbox run goes to production RTD project,
     # while for sandbox run to a separate RTD project.
     if [ "${SANDBOX_RUN}" == "false" ]; then
@@ -22,7 +22,7 @@ if [ "${GERRIT_PROJECT}" == "TF-A/trusted-firmware-a" ]; then
         RTD_WEBHOOK_SECRET_KEY=${TFA_SANDBOX_RTD_WEBHOOK_SECRET}
         RTD_API_TOKEN=${PFALCON_RTD_API_TOKEN}
     fi
-elif [ "${GERRIT_PROJECT}" == "sandbox/pfalcon/trusted-firmware-a" ]; then
+elif [ "${GERRIT_PROJECT}" == "${GERRIT_PROJECT_PREFIX?}sandbox/pfalcon/trusted-firmware-a" ]; then
     # For test project, both "production" and "sandbox" go to the same elsewhere project.
     RTD_PROJECT="pfalcon-trustedfirmware-a-sandbox"
     RTD_WEBHOOK_URL="https://readthedocs.org/api/v2/webhook/pfalcon-trustedfirmware-a-sandbox/263459/"
@@ -133,4 +133,3 @@ if [ -n "${new_tag}" ]; then
     wait_for_build ${new_slug}
     echo "Docs for the new release are available at: https://${RTD_PROJECT}.readthedocs.io/en/${new_slug}/"
 fi
-

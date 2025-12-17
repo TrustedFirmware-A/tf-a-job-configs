@@ -14,11 +14,11 @@
     parameters:
       - string:
           name: TFA_REPO
-          default: https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git
+          default: https://git.trustedfirmware.org/{gerrit_project_prefix}TF-A/trusted-firmware-a.git
           description: The trusted-firmware-a repo to clone from
       - string:
           name: TFA_CI_SCRIPT_REPO
-          default: https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
+          default: https://git.trustedfirmware.org/{gerrit_project_prefix}ci/tf-a-ci-scripts.git
           description: The tf-a-ci-script repo to clone from
       - string:
           name: LTS_BRANCHES

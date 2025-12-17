@@ -17,7 +17,7 @@
     parameters:
       - string:
           name: GERRIT_PROJECT
-          default: TF-A/tf-a-tests
+          default: "{gerrit_project_prefix}TF-A/tf-a-tests"
       - string:
           name: GERRIT_BRANCH
           default: refs/heads/master
@@ -133,7 +133,7 @@
                 - branch-compare-type: PLAIN
                   branch-pattern: master
               project-compare-type: PLAIN
-              project-pattern: TF-A/tf-a-tests
+              project-pattern: "{gerrit_project_prefix}TF-A/tf-a-tests"
           trigger-on:
             - comment-added-event:
                 approval-category: Allow-CI

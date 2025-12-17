@@ -17,7 +17,7 @@
     parameters:
       - string:
           name: GERRIT_PROJECT
-          default: TF-A/trusted-firmware-a
+          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
       - string:
           name: GERRIT_BRANCH
           default: refs/heads/lts-v2.10
@@ -36,7 +36,7 @@
           description: Parameter only used by the clone script
       - string:
           name: TFTF_GERRIT_PROJECT
-          default: TF-A/tf-a-tests
+          default: "{gerrit_project_prefix}TF-A/tf-a-tests"
       - string:
           name: TFTF_GERRIT_BRANCH
           default: refs/heads/lts-v2.10
@@ -131,7 +131,7 @@
                 approval-value: 1
           projects:
             - project-compare-type: PLAIN
-              project-pattern: TF-A/trusted-firmware-a
+              project-pattern: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
               branches:
                 - branch-compare-type: PLAIN
                   branch-pattern: lts-v2.10

@@ -4,7 +4,7 @@
     project-type: freestyle
     concurrent: false
     description: Triggers whenever a code change is merged into the master branch of the TF-A repository. Executes a webhook to trigger the ReadTheDocs service to build a fresh copy of the documentation for one or more branches.
-    disabled: false
+    disabled: "{obj:jenkins_site_is_staging}"
     builders:
       - shell: |-
           #!/bin/bash -e
@@ -27,7 +27,7 @@
                 - branch-compare-type: PLAIN
                   branch-pattern: master
               project-compare-type: PLAIN
-              project-pattern: TF-A/trusted-firmware-a
+              project-pattern: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
           trigger-on:
             - ref-updated-event
     wrappers:

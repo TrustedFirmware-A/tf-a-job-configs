@@ -3,7 +3,7 @@
     node: docker-tf-a-eclair-3.13
     project-type: freestyle
     concurrent: true
-    disabled: false
+    disabled: "{obj:jenkins_site_is_staging}"
     description: |
       ECLAIR (MISRA compliance) testing of TF-A
     properties:
@@ -35,7 +35,7 @@
           default: review.trustedfirmware.org
       - string:
           name: GERRIT_PROJECT
-          default: TF-A/trusted-firmware-a
+          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
           description: |
             Git project to build (also set by Gerrit trigger)
       - string:
@@ -77,8 +77,8 @@
           set -ex
           export PATH=~/.local/bin:$PATH
           pwd
-          git clone https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
-          git clone https://git.trustedfirmware.org/ci/tf-ci-scripts.git
+          git clone https://git.trustedfirmware.org/${{GERRIT_PROJECT_PREFIX?}}ci/tf-a-ci-scripts.git
+          git clone https://git.trustedfirmware.org/${{GERRIT_PROJECT_PREFIX?}}ci/tf-ci-scripts.git
 
           git clone --recurse-submodules https://${{GERRIT_HOST}}/${{GERRIT_PROJECT}} -b ${{GERRIT_REFNAME}}
           ls -l

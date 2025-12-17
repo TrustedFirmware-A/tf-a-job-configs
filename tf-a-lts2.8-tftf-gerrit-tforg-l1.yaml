@@ -17,7 +17,7 @@
     parameters:
       - string:
           name: GERRIT_PROJECT
-          default: TF-A/tf-a-tests
+          default: "{gerrit_project_prefix}TF-A/tf-a-tests"
       - string:
           name: GERRIT_BRANCH
           default: refs/heads/lts-v2.8
@@ -127,7 +127,7 @@
                 approval-value: 1
           projects:
             - project-compare-type: PLAIN
-              project-pattern: TF-A/tf-a-tests
+              project-pattern: "{gerrit_project_prefix}TF-A/tf-a-tests"
               branches:
                 - branch-compare-type: PLAIN
                   branch-pattern: lts-v2.8

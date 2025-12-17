@@ -43,7 +43,7 @@
                 approval-value: 1
           projects:
             - project-compare-type: PLAIN
-              project-pattern: shared/transfer-list-library
+              project-pattern: "{gerrit_project_prefix}shared/transfer-list-library"
               branches:
                 - branch-compare-type: PLAIN
                   branch-pattern: main

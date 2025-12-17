@@ -18,7 +18,7 @@
       # patchset - defaults below are for manual triggers
       - string:
           name: GERRIT_PROJECT
-          default: arm-firmware-crates/arm-tzc
+          default: "{gerrit_project_prefix}arm-firmware-crates/arm-tzc"
       - string:
           name: GERRIT_BRANCH
           default: refs/heads/main

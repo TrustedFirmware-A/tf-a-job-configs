@@ -17,7 +17,7 @@
             tf-a-job-configs refspec to use. The master branch is used by default.
       - string:
           name: TF_GERRIT_PROJECT
-          default: TF-A/trusted-firmware-a
+          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
       - string:
           name: TF_GERRIT_BRANCH
           default: refs/heads/master

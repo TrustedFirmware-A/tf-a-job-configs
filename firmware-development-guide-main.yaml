@@ -21,7 +21,7 @@
                 - branch-compare-type: PLAIN
                   branch-pattern: main
               project-compare-type: PLAIN
-              project-pattern: rust-spmc/firmware-development-guide
+              project-pattern: "{gerrit_project_prefix}rust-spmc/firmware-development-guide"
           trigger-on:
             - patchset-created-event:
                 exclude-drafts: true
@@ -51,7 +51,7 @@
       # patchset - defaults below are for manual triggers
       - string:
           name: GERRIT_PROJECT
-          default: rust-spmc/firmware-development-guide
+          default: "{gerrit_project_prefix}rust-spmc/firmware-development-guide"
       - string:
           name: GERRIT_BRANCH
           default: refs/heads/main

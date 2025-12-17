@@ -21,7 +21,7 @@
                 - branch-compare-type: PLAIN
                   branch-pattern: main
               project-compare-type: PLAIN
-              project-pattern: RF-A/rusted-firmware-a
+              project-pattern: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
           trigger-on:
             - patchset-created-event:
                 exclude-drafts: true
@@ -51,7 +51,7 @@
       # patchset - defaults below are for manual triggers
       - string:
           name: GERRIT_PROJECT
-          default: RF-A/rusted-firmware-a
+          default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
       - string:
           name: GERRIT_BRANCH
           default: refs/heads/main
@@ -77,7 +77,7 @@
             'Refs to fetch for the tf-a-ci-scripts repo e.g. refs/changes/13/31138/1'
       - string:
           name: JOBS_PROJECT
-          default: ci/tf-a-job-configs.git
+          default: "{gerrit_project_prefix}ci/tf-a-job-configs.git"
       - string:
           name: JOBS_REFSPEC
           default: refs/heads/master
@@ -106,7 +106,7 @@
           RFA_REFSPEC=${{RFA_REFSPEC}}
           GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
           GERRIT_BRANCH=${{GERRIT_BRANCH}}
-          TF_GERRIT_PROJECT=TF-A/trusted-firmware-a
+          TF_GERRIT_PROJECT=${{GERRIT_PROJECT_PREFIX?}}TF-A/trusted-firmware-a
           TF_GERRIT_REFSPEC=${{TF_GERRIT_REFSPEC}}
           EOF
       - multijob:

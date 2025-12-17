@@ -21,7 +21,7 @@
                 - branch-compare-type: PLAIN
                   branch-pattern: main
               project-compare-type: PLAIN
-              project-pattern: shared/tf-firmware-handoff
+              project-pattern: "{gerrit_project_prefix}shared/tf-firmware-handoff"
           trigger-on:
             - patchset-created-event:
                 exclude-drafts: true
@@ -51,7 +51,7 @@
       # patchset - defaults below are for manual triggers
       - string:
           name: GERRIT_PROJECT
-          default: shared/tf-firmware-handoff
+          default: "{gerrit_project_prefix}shared/tf-firmware-handoff"
       - string:
           name: GERRIT_BRANCH
           default: refs/heads/main

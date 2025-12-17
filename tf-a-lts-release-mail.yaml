@@ -3,7 +3,7 @@
     node: docker-amd64-tf-a-jammy
     project-type: freestyle
     concurrent: true
-    disabled: false
+    disabled: "{obj:jenkins_site_is_staging}"
     description: |
       Render TF-A LTS release email template.
     properties:
@@ -16,7 +16,7 @@
           default: review.trustedfirmware.org
       - string:
           name: GERRIT_PROJECT
-          default: TF-A/trusted-firmware-a
+          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
           description: |
             TF-A Git project
       - string:
@@ -57,7 +57,7 @@
           #!/bin/bash
           set -ex
 
-          git clone https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
+          git clone https://git.trustedfirmware.org/${{GERRIT_PROJECT_PREFIX?}}ci/tf-a-ci-scripts.git
           ./tf-a-ci-scripts/lts/lts-release-mail.py --url https://${{GERRIT_HOST}}/${{GERRIT_PROJECT}} --branch "${{GERRIT_BRANCH}}" ${{RELEASE_TAG}} >email.txt
           awk -F": " '/Subject:/ {{print $2}}' email.txt >subject.txt
           # Remove email headers, put in a seperate file.

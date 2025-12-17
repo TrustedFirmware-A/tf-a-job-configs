@@ -6,7 +6,7 @@ pipeline {
     parameters {
         string(
             name: 'URL',
-            defaultValue: 'ssh://review.trustedfirmware.org:29418/RF-A/rusted-firmware-a',
+            defaultValue: "ssh://review.trustedfirmware.org:29418/${env.GERRIT_PROJECT_PREFIX}RF-A/rusted-firmware-a",
             description: 'Repository URL.')
 
         string(

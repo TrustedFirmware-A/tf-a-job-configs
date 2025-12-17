@@ -16,7 +16,7 @@
                 - branch-compare-type: PLAIN
                   branch-pattern: main
               project-compare-type: PLAIN
-              project-pattern: RF-A/rusted-firmware-a
+              project-pattern: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
           trigger-on:
             - patchset-created-event:
                 exclude-drafts: true
@@ -33,7 +33,7 @@
       # patchset - defaults below are for manual triggers
       - string:
           name: GERRIT_PROJECT
-          default: RF-A/rusted-firmware-a
+          default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
       - string:
           name: GERRIT_BRANCH
           default: refs/heads/main

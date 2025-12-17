@@ -11,7 +11,7 @@
     parameters:
       - string:
           name: RF_GERRIT_PROJECT
-          default: RF-A/rusted-firmware-a
+          default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
       - string:
           name: RFA_REFSPEC
           default: +refs/heads/main:refs/remotes/origin/main
@@ -25,7 +25,7 @@
           default: refs/heads/main
       - string:
           name: TF_GERRIT_PROJECT
-          default: TF-A/trusted-firmware-a
+          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
       - string:
           name: TF_GERRIT_BRANCH
           default: refs/heads/master
@@ -42,7 +42,7 @@
             tf-a-job-configs refspec to use. The master branch is used by default.
       - string:
           name: JOBS_PROJECT
-          default: ci/tf-a-job-configs.git
+          default: "{gerrit_project_prefix}ci/tf-a-job-configs.git"
       - string:
           name: CLONE_REPOS
           default: tf-a-job-configs,tf-a-ci-scripts,rusted-firmware-a

@@ -36,7 +36,7 @@
                 - branch-compare-type: REG_EXP
                   branch-pattern: lts-v.*
               project-compare-type: PLAIN
-              project-pattern: TF-A/trusted-firmware-a
+              project-pattern: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
           trigger-on:
             - comment-added-event:
                 approval-category: Verified

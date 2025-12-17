@@ -21,7 +21,7 @@
                 - branch-compare-type: PLAIN
                   branch-pattern: main
               project-compare-type: PLAIN
-              project-pattern: rust-spmc/arm-xlat
+              project-pattern: "{gerrit_project_prefix}rust-spmc/arm-xlat"
           trigger-on:
             - patchset-created-event:
                 exclude-drafts: true
@@ -51,7 +51,7 @@
       # patchset - defaults below are for manual triggers
       - string:
           name: GERRIT_PROJECT
-          default: rust-spmc/arm-xlat
+          default: "{gerrit_project_prefix}rust-spmc/arm-xlat"
       - string:
           name: GERRIT_BRANCH
           default: refs/heads/main

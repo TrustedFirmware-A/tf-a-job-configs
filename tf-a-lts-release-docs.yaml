@@ -16,7 +16,7 @@
           default: review.trustedfirmware.org
       - string:
           name: GERRIT_PROJECT
-          default: sandbox/pfalcon/trusted-firmware-a
+          default: "{gerrit_project_prefix}sandbox/pfalcon/trusted-firmware-a"
           description: |
             TF-A Git project
       - string:

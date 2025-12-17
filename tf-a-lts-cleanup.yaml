@@ -3,7 +3,7 @@
     node: docker-amd64-tf-a-jammy
     project-type: freestyle
     concurrent: false
-    disabled: false
+    disabled: "{obj:jenkins_site_is_staging}"
     description: Cleanup stale LTS sandbox tags/branches
     properties:
       - build-discarder:
@@ -28,6 +28,6 @@
           ssh-keyscan -p 29418 review.trustedfirmware.org >> ~/.ssh/known_hosts
           export GIT_SSH_COMMAND="ssh -i $CI_BOT_KEY -o 'PubkeyAcceptedKeyTypes +ssh-rsa'"
 
-          git clone https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
+          git clone https://git.trustedfirmware.org/${{GERRIT_PROJECT_PREFIX?}}ci/tf-a-ci-scripts.git
           cd tf-a-ci-scripts/lts
           ./lts-cleanup-sandbox-refs.py --user $CI_BOT_USERNAME --limit 1

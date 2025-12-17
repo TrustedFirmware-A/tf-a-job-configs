@@ -22,7 +22,7 @@
             Expanded and normalized test configuration, aka "test description"
       - string:
           name: TF_GERRIT_PROJECT
-          default: TF-A/trusted-firmware-a
+          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
       - string:
           name: TF_GERRIT_BRANCH
           default: refs/heads/lts-v2.12
@@ -31,7 +31,7 @@
           default: +refs/heads/lts-v2.12:refs/remotes/origin/lts-v2.12
       - string:
           name: TFTF_GERRIT_PROJECT
-          default: TF-A/tf-a-tests
+          default: "{gerrit_project_prefix}TF-A/tf-a-tests"
       - string:
           name: TFTF_GERRIT_BRANCH
           default: refs/heads/lts-v2.12

@@ -15,7 +15,7 @@
           default: review.trustedfirmware.org
       - string:
           name: GERRIT_PROJECT
-          default: TF-A/trusted-firmware-a
+          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
           description: |
             TF-A Git project
       - string:
@@ -46,7 +46,7 @@
           set -ex
           env | grep GERRIT
           echo SANDBOX_RUN=$SANDBOX_RUN
-          git clone https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
+          git clone https://git.trustedfirmware.org/${{GERRIT_PROJECT_PREFIX?}}ci/tf-a-ci-scripts.git
           git clone https://$GERRIT_HOST/$GERRIT_PROJECT
           DIR=$(basename $GERRIT_PROJECT)
           cd $DIR
