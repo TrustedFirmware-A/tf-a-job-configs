@@ -46,7 +46,7 @@
           name: SPM_REFSPEC
           default: v2.10
           description: |
-            SPM (Hafnium) refspec to use.
+            SPM (Hafnium) refspec to use. The 'v2.10' tag is used by default.
       - string:
           name: CI_REFSPEC
           default: +refs/heads/lts-v2.10:refs/remotes/origin/lts-v2.10

@@ -56,9 +56,9 @@
             tf-m-extras refspec to use. The tfa_ci_dep_revision branch is used by default.
       - string:
           name: SPM_REFSPEC
-          default: +refs/heads/lts-v2.12:refs/remotes/origin/lts-v2.12
+          default: v2.12
           description: |
-            SPM(Hafnium) refspec to use. The lts-v2.12 branch is used by default.
+            SPM(Hafnium) refspec to use. The 'v2.12' tag is used by default.
       - string:
           name: CI_REFSPEC
           default: +refs/heads/lts-v2.12:refs/remotes/origin/lts-v2.12
