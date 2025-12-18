@@ -58,7 +58,7 @@
           name: SPM_REFSPEC
           default: +refs/heads/lts-v2.8:refs/remotes/origin/lts-v2.8
           description: |
-            SPM(Hafnium) refspec to use. The master branch is used by default.
+            SPM(Hafnium) refspec to use. The lts-v2.8 branch is used by default.
       - string:
           name: CI_REFSPEC
           default: +refs/heads/lts-v2.8:refs/remotes/origin/lts-v2.8

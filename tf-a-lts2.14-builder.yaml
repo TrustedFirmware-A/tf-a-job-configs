@@ -46,6 +46,11 @@
           name: TFUT_GERRIT_REFSPEC
           default: +refs/heads/main:refs/remotes/origin/main
       - string:
+          name: SPM_REFSPEC
+          default: +refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14
+          description: |
+            SPM(Hafnium) refspec to use. The lts-v2.14 branch is used by default.
+      - string:
           name: CI_REFSPEC
           default: +refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14
       - string:
