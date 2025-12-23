@@ -102,7 +102,7 @@
           git clone https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
           git clone https://git.trustedfirmware.org/ci/tf-ci-scripts.git
 
-          git clone https://${GERRIT_HOST}/${GERRIT_PROJECT} -b ${GERRIT_BRANCH}
+          git clone --recurse-submodules https://${GERRIT_HOST}/${GERRIT_PROJECT} -b ${GERRIT_BRANCH}
           if [ -n "${GERRIT_REFSPEC}" ]; then
           (
               cd $(basename ${GERRIT_PROJECT})
