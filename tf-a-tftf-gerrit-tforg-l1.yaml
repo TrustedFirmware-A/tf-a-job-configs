@@ -40,7 +40,7 @@
           description: Git refspec for Trusted Firmware-A.
       - string:
           name: TFTF_GERRIT_REFSPEC
-          default: ${GERRIT_REFSPEC}
+          default: ${{GERRIT_REFSPEC}}
           description: Parameter only used by the clone script
       - string:
           name: SPM_REFSPEC
@@ -72,17 +72,17 @@
               passphrase-variable: ""
       - timestamps
     builders:
-      - shell: !include-raw: scripts/clone.sh
+      - shell: !include-raw-verbatim: scripts/clone.sh
       - shell: |
           #!/bin/bash
           set -e
           cat << EOF > env.param
-          GERRIT_PATCHSET_NUMBER=${GERRIT_PATCHSET_NUMBER}
-          GERRIT_CHANGE_NUMBER=${GERRIT_CHANGE_NUMBER}
-          GERRIT_HOST=${GERRIT_HOST}
-          TFTF_GERRIT_PROJECT=${GERRIT_PROJECT}
-          TFTF_GERRIT_BRANCH=${GERRIT_BRANCH}
-          TFTF_GERRIT_REFSPEC=${GERRIT_REFSPEC}
+          GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
+          GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}}
+          GERRIT_HOST=${{GERRIT_HOST}}
+          TFTF_GERRIT_PROJECT=${{GERRIT_PROJECT}}
+          TFTF_GERRIT_BRANCH=${{GERRIT_BRANCH}}
+          TFTF_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
           EOF
       - multijob:
           condition: COMPLETED

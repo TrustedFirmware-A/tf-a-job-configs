@@ -69,19 +69,19 @@
     wrappers:
       - timestamps
     builders:
-      - shell: !include-raw: scripts/clone.sh
+      - shell: !include-raw-verbatim: scripts/clone.sh
       - shell: |
           #!/bin/bash
           set -e
           cat << EOF > tf-a-env.param
-          GERRIT_PROJECT=${TF_GERRIT_PROJECT}
-          GERRIT_BRANCH=${TF_GERRIT_BRANCH}
-          GERRIT_REFSPEC=${TF_GERRIT_REFSPEC}
+          GERRIT_PROJECT=${{TF_GERRIT_PROJECT}}
+          GERRIT_BRANCH=${{TF_GERRIT_BRANCH}}
+          GERRIT_REFSPEC=${{TF_GERRIT_REFSPEC}}
           EOF
           cat << EOF > tf-a-tests-env.param
-          GERRIT_PROJECT=${TFTF_GERRIT_PROJECT}
-          GERRIT_BRANCH=${TFTF_GERRIT_BRANCH}
-          GERRIT_REFSPEC=${TFTF_GERRIT_REFSPEC}
+          GERRIT_PROJECT=${{TFTF_GERRIT_PROJECT}}
+          GERRIT_BRANCH=${{TFTF_GERRIT_BRANCH}}
+          GERRIT_REFSPEC=${{TFTF_GERRIT_REFSPEC}}
           EOF
       - multijob:
           name: TFTF Fuzzing

@@ -3,7 +3,7 @@
     description: Lint commit messages
     project-type: pipeline
     sandbox: true
-    dsl: !include-raw: rf-a-static/Jenkinsfile
+    dsl: !include-raw-verbatim: rf-a-static/Jenkinsfile
     properties:
       - build-discarder:
           days-to-keep: 14

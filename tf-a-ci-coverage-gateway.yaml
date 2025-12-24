@@ -84,11 +84,11 @@
           name: QA_TOOLS_BRANCH
           default: master
     builders:
-      - shell: !include-raw: scripts/clone.sh
+      - shell: !include-raw-verbatim: scripts/clone.sh
       - shell: |
           #!/bin/bash
           set -e
-          CI_ROOT=${PWD}/tf-a-ci-scripts
+          CI_ROOT=${{PWD}}/tf-a-ci-scripts
           export workspace=$PWD
           export test_groups=$TEST_GROUPS
           $CI_ROOT/script/gen_test_desc.py
@@ -114,10 +114,10 @@
               build-steps:
                 - shell: |-
                     #!/bin/bash -e
-                    export CI_ROOT=${PWD}/tf-a-ci-scripts
+                    export CI_ROOT=${{PWD}}/tf-a-ci-scripts
                     bash "$CI_ROOT/job/tf-ci-gateway/generate_report.sh"
       - archive:
           artifacts: report.json, report.html, merge/outdir/**
       - groovy-postbuild:
-          script: !include-raw:
+          script: !include-raw-verbatim:
             - tf-a-ci-gateway/postbuild.groovy

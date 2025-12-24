@@ -60,10 +60,10 @@
           excludes: build/**/*.o,build/**/*.d
     scm:
       - git:
-          url: ${TF_SRC_REPO_URL}
-          refspec: ${TF_GERRIT_REFSPEC}
+          url: ${{TF_SRC_REPO_URL}}
+          refspec: ${{TF_GERRIT_REFSPEC}}
           branches:
-            - ${TF_GERRIT_BRANCH}
+            - ${{TF_GERRIT_BRANCH}}
           choosing-strategy: gerrit
           skip-tag: true
           shallow-clone: true

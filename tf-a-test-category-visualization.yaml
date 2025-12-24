@@ -20,12 +20,12 @@
           default:
           description: Optional job/group filter string (e.g. <code>juno</code>).
     builders:
-      - shell: !include-raw: scripts/clone.sh
+      - shell: !include-raw-verbatim: scripts/clone.sh
       - shell: |
           mkdir -p output
 
           cd tf-a-ci-scripts &&
-            bash script/graphs/categorize-tests.bash ${FILTER} \
+            bash script/graphs/categorize-tests.bash ${{FILTER}} \
               > ../output.png 2> ../output.tsv
     publishers:
       - archive:

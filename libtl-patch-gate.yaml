@@ -18,22 +18,22 @@
             block: true
             current-parameters: true
             predefined-parameters: |
-              URL=https://${GERRIT_HOST}/${GERRIT_PROJECT}
-              REFSPEC=${GERRIT_REFSPEC}
-              REFNAME=${GERRIT_PATCHSET_REVISION}
-              BASE_REFSPEC=${GERRIT_REFSPEC}
-              BASE_REFNAME=${GERRIT_PATCHSET_REVISION}^
+              URL=https://${{GERRIT_HOST}}/${{GERRIT_PROJECT}}
+              REFSPEC=${{GERRIT_REFSPEC}}
+              REFNAME=${{GERRIT_PATCHSET_REVISION}}
+              BASE_REFSPEC=${{GERRIT_REFSPEC}}
+              BASE_REFNAME=${{GERRIT_PATCHSET_REVISION}}^
       - trigger-builds:
           - project:
               - tlc-pipeline
             block: true
             current-parameters: true
             predefined-parameters: |
-              URL=https://${GERRIT_HOST}/${GERRIT_PROJECT}
-              REFSPEC=${GERRIT_REFSPEC}
-              REFNAME=${GERRIT_PATCHSET_REVISION}
-              BASE_REFSPEC=${GERRIT_REFSPEC}
-              BASE_REFNAME=${GERRIT_PATCHSET_REVISION}^
+              URL=https://${{GERRIT_HOST}}/${{GERRIT_PROJECT}}
+              REFSPEC=${{GERRIT_REFSPEC}}
+              REFNAME=${{GERRIT_PATCHSET_REVISION}}
+              BASE_REFSPEC=${{GERRIT_REFSPEC}}
+              BASE_REFNAME=${{GERRIT_PATCHSET_REVISION}}^
 
     triggers:
       - gerrit:

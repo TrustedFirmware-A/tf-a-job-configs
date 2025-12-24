@@ -62,7 +62,7 @@
             'e.g. refs/changes/13/31138/1'
       - string:
           name: ARM_CCI_GERRIT_REFSPEC
-          default: ${GERRIT_REFSPEC}
+          default: ${{GERRIT_REFSPEC}}
           description: |
             'do-not-amend: used by scripts/clone.sh to fetch the correct Gerrit patchset - use GERRIT_REFSPEC instead'
       - string:
@@ -92,13 +92,13 @@
               passphrase-variable: ""
       - timestamps
     builders:
-      - shell: !include-raw: scripts/clone.sh
+      - shell: !include-raw-verbatim: scripts/clone.sh
       - shell: |
           #!/bin/bash
           set -e
           cat << EOF > tf-a-env.param
-          ARM_CCI_GERRIT_PROJECT=${GERRIT_PROJECT}
-          ARM_CCI_GERRIT_REFSPEC=${GERRIT_REFSPEC}
+          ARM_CCI_GERRIT_PROJECT=${{GERRIT_PROJECT}}
+          ARM_CCI_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
           EOF
       - multijob:
           name: Platform independent tests
@@ -110,5 +110,5 @@
               predefined-parameters: |
                 TEST_REPO_NAME=arm-cci
                 TEST_REPO_PROJECT=arm-firmware-crates
-                TEST_FEATURES=${TEST_FEATURES}
+                TEST_FEATURES=${{TEST_FEATURES}}
               property-file: tf-a-env.param

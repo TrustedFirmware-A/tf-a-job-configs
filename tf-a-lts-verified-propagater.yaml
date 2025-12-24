@@ -23,44 +23,44 @@
           env |grep '^GERRIT'
           echo "########################################################################"
 
-          SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -p 29418 -i ${CI_BOT_KEY}"
+          SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -p 29418 -i ${{CI_BOT_KEY}}"
           GERRIT_URL="review.trustedfirmware.org"
           GERRIT_QUERY_PARAMS="--dependencies --submit-records --format=JSON change:"
-          QUERY_CMD="${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit query ${GERRIT_QUERY_PARAMS}"
-          QUERY_CHANGE_DEPENDS_CMD="${QUERY_CMD}${GERRIT_CHANGE_NUMBER}"
-          REVIEW_MESSAGE="Propagated verified from ${GERRIT_CHANGE_URL}. By ${BUILD_URL}"
-          SET_VERIFIED_CMD="${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit review --verified"
+          QUERY_CMD="${{SSH_PARAMS}} ${{CI_BOT_USERNAME}}@${{GERRIT_URL}} gerrit query ${{GERRIT_QUERY_PARAMS}}"
+          QUERY_CHANGE_DEPENDS_CMD="${{QUERY_CMD}}${{GERRIT_CHANGE_NUMBER}}"
+          REVIEW_MESSAGE="Propagated verified from ${{GERRIT_CHANGE_URL}}. By ${{BUILD_URL}}"
+          SET_VERIFIED_CMD="${{SSH_PARAMS}} ${{CI_BOT_USERNAME}}@${{GERRIT_URL}} gerrit review --verified"
 
-          change_url_base=${GERRIT_CHANGE_URL%/*}
+          change_url_base=${{GERRIT_CHANGE_URL%/*}}
           # Check this example https://ci.trustedfirmware.org/view/TF-A/job/tf-a-lts-verified-propagater/14/console
           # for what we get from gerrit query command
-          patch_query=$(ssh ${QUERY_CHANGE_DEPENDS_CMD} | jq .)
-          dependsOn=$(echo ${patch_query} | jq -r 'select(.dependsOn)')
+          patch_query=$(ssh ${{QUERY_CHANGE_DEPENDS_CMD}} | jq .)
+          dependsOn=$(echo ${{patch_query}} | jq -r 'select(.dependsOn)')
           # Normally, there would be just one dependent patch
           # (and that patch would in turn has another dependent patch, that's how a dependency chain is structured)
           # But Gerrit data model has a list of dependent patches, so we process all just in case
-          dependsOn_rev=($(echo ${dependsOn} | jq -r '.dependsOn[].revision'))
-          dependsOn_no=($(echo ${dependsOn} | jq -r '.dependsOn[].number'))
-          verified_status=$(echo ${patch_query} | jq -r 'select(.submitRecords) | .submitRecords[0].labels[] | select(.label == "Verified") | .status')
+          dependsOn_rev=($(echo ${{dependsOn}} | jq -r '.dependsOn[].revision'))
+          dependsOn_no=($(echo ${{dependsOn}} | jq -r '.dependsOn[].number'))
+          verified_status=$(echo ${{patch_query}} | jq -r 'select(.submitRecords) | .submitRecords[0].labels[] | select(.label == "Verified") | .status')
           # Verified label status and value mapping
           # REJECT: -1
           # OK: 1
           verified_value=0
-          if [ "${verified_status}" == "REJECT" ]; then
+          if [ "${{verified_status}}" == "REJECT" ]; then
               verified_value=-1
-          elif [ "${verified_status}" == "OK" ]; then
+          elif [ "${{verified_status}}" == "OK" ]; then
               verified_value=1
           fi
           # Vote the same Verified score to the dependent patch by loop
-          for ((i=0; i<${#dependsOn_rev[@]}; i++))
+          for ((i=0; i<${{#dependsOn_rev[@]}}; i++))
           do
               # Need to check the .status before set verified score
-              if [ $(ssh ${QUERY_CMD}${dependsOn_no[$i]} | jq -r 'select(.status)|.status') == "MERGED" ]; then
-              	echo "The dependent patch ${change_url_base}${dependsOn_no[$i]} has been merged. Don't set Verified score to it!"
+              if [ $(ssh ${{QUERY_CMD}}${{dependsOn_no[$i]}} | jq -r 'select(.status)|.status') == "MERGED" ]; then
+              	echo "The dependent patch ${{change_url_base}}${{dependsOn_no[$i]}} has been merged. Don't set Verified score to it!"
                   continue
               else
-              	echo "Set Verified ${verified_value} to: ${change_url_base}/${dependsOn_no[$i]}"
-              	ssh ${SET_VERIFIED_CMD} ${verified_value}  -m \'\"${REVIEW_MESSAGE}\"\' ${dependsOn_rev[$i]}
+              	echo "Set Verified ${{verified_value}} to: ${{change_url_base}}/${{dependsOn_no[$i]}}"
+              	ssh ${{SET_VERIFIED_CMD}} ${{verified_value}}  -m \'\"${{REVIEW_MESSAGE}}\"\' ${{dependsOn_rev[$i]}}
               fi
           done
     properties:

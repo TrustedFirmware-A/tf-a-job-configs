@@ -81,16 +81,16 @@
           git clone https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
           git clone https://git.trustedfirmware.org/ci/tf-ci-scripts.git
 
-          git clone --recurse-submodules https://${GERRIT_HOST}/${GERRIT_PROJECT} -b ${GERRIT_REFNAME}
+          git clone --recurse-submodules https://${{GERRIT_HOST}}/${{GERRIT_PROJECT}} -b ${{GERRIT_REFNAME}}
           ls -l
-          if [ -n "${GERRIT_NEWREV}" ]; then
-              (cd $(basename ${GERRIT_PROJECT}); git checkout ${GERRIT_NEWREV})
+          if [ -n "${{GERRIT_NEWREV}}" ]; then
+              (cd $(basename ${{GERRIT_PROJECT}}); git checkout ${{GERRIT_NEWREV}})
           else
               # Checkout last commit from yesterday, to have a stable commit for
               # multiple builds.
-              (cd $(basename ${GERRIT_PROJECT}); git checkout $(git rev-list -n1 --before="today" HEAD))
+              (cd $(basename ${{GERRIT_PROJECT}}); git checkout $(git rev-list -n1 --before="today" HEAD))
           fi
-          (cd $(basename ${GERRIT_PROJECT}); git log -n1)
+          (cd $(basename ${{GERRIT_PROJECT}}); git log -n1)
 
           export ECLAIR_CONFIG_DIR=$PWD/tf-a-ci-scripts/eclair
           . tf-ci-scripts/eclair/utils.sh
@@ -100,7 +100,7 @@
           . tf-a-ci-scripts/eclair/eclair_vars.sh
 
           # retry detachLicense as LM client may not be ready initially
-          for i in {1..10}; do
+          for i in {{1..10}}; do
             detachLicense 600 && break
             echo "Attempt $i failed, retrying in 10s..."
             sleep 10

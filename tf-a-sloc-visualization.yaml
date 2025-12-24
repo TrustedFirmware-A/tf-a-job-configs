@@ -29,12 +29,12 @@
           default: . ./drivers ./plat ./tools
           description: List of directories to analyze.
     builders:
-      - shell: !include-raw: scripts/clone.sh
+      - shell: !include-raw-verbatim: scripts/clone.sh
       - shell: |
           mkdir -p output
 
           cd trusted-firmware-a &&
-            bash ../tf-a-ci-scripts/script/graphs/sloc-viz.bash ${DIRECTORIES} \
+            bash ../tf-a-ci-scripts/script/graphs/sloc-viz.bash ${{DIRECTORIES}} \
               > ../output.png 2> ../output.tsv
     publishers:
       - archive:

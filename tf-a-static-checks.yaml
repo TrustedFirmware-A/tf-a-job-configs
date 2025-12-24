@@ -61,22 +61,22 @@
           timeout: 240
           fail: true
     builders:
-      - shell: !include-raw: scripts/clone.sh
+      - shell: !include-raw-verbatim: scripts/clone.sh
       - shell: |
           #!/bin/bash
           set -e
-          if [[ "${REPO_UNDER_TEST}" == trusted-firmware-a ]]; then
+          if [[ "${{REPO_UNDER_TEST}}" == trusted-firmware-a ]]; then
           cat <<EOF > env.param
-          GERRIT_PROJECT=${TF_GERRIT_PROJECT}
-          GERRIT_BRANCH=${TF_GERRIT_BRANCH}
-          GERRIT_REFSPEC=${TF_GERRIT_REFSPEC}
+          GERRIT_PROJECT=${{TF_GERRIT_PROJECT}}
+          GERRIT_BRANCH=${{TF_GERRIT_BRANCH}}
+          GERRIT_REFSPEC=${{TF_GERRIT_REFSPEC}}
           TEST_GROUPS=tf-l2-scan-build
           EOF
           fi
-          cd ${WORKSPACE}/${REPO_UNDER_TEST}
+          cd ${{WORKSPACE}}/${{REPO_UNDER_TEST}}
           # Executed project-related static checks: copyright presence, headers in alphabetical order,
           # line endings, coding style and banned API.
-          IS_CONTINUOUS_INTEGRATION=1 ${WORKSPACE}/tf-a-ci-scripts/script/static-checks/static-checks.sh
+          IS_CONTINUOUS_INTEGRATION=1 ${{WORKSPACE}}/tf-a-ci-scripts/script/static-checks/static-checks.sh
       - trigger-builds:
           - project: tf-a-ci-gateway
             block: true
@@ -87,7 +87,7 @@
             property-file-fail-on-missing: True
     publishers:
       - archive:
-          artifacts: ${REPO_UNDER_TEST}/static-checks.log
+          artifacts: ${{REPO_UNDER_TEST}}/static-checks.log
       - groovy-postbuild:
-          script: !include-raw:
+          script: !include-raw-verbatim:
             - tf-a-static-checks/postbuild.groovy

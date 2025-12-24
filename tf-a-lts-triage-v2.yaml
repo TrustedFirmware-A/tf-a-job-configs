@@ -49,25 +49,25 @@
           LTS_TMP_DIR=$(mktemp -d -p ./)
           cd $LTS_TMP_DIR
 
-          git clone ${TFA_CI_SCRIPT_REPO}
+          git clone ${{TFA_CI_SCRIPT_REPO}}
 
           TFA_TMP_DIR=$(mktemp -d -p ./)
-          cd ${TFA_TMP_DIR}
-          git clone ${TFA_REPO} -b integration ./
+          cd ${{TFA_TMP_DIR}}
+          git clone ${{TFA_REPO}} -b integration ./
           LTS_REPO_PATH=$(pwd)
           cd -
-          for b in ${LTS_BRANCHES};
+          for b in ${{LTS_BRANCHES}};
           do
-              CSV_REPORT="${b}_${DATE}.csv"
-              git -C ${LTS_REPO_PATH} checkout -b ${b} origin/${b}
+              CSV_REPORT="${{b}}_${{DATE}}.csv"
+              git -C ${{LTS_REPO_PATH}} checkout -b ${{b}} origin/${{b}}
 
-              python3 tf-a-ci-scripts/lts/lts-triage-v2.py --repo ${LTS_REPO_PATH} --csv_path ${START_PATH}/${CSV_REPORT} \
-              --lts ${b} --gerrit_user ${CI_BOT_USERNAME} --ssh_keyfile ${CI_BOT_KEY} --debug
-              [ -f "${START_PATH}/${CSV_REPORT}" ] && echo "${CSV_REPORT}" >> ${START_PATH}/got_report.txt
+              python3 tf-a-ci-scripts/lts/lts-triage-v2.py --repo ${{LTS_REPO_PATH}} --csv_path ${{START_PATH}}/${{CSV_REPORT}} \
+              --lts ${{b}} --gerrit_user ${{CI_BOT_USERNAME}} --ssh_keyfile ${{CI_BOT_KEY}} --debug
+              [ -f "${{START_PATH}}/${{CSV_REPORT}}" ] && echo "${{CSV_REPORT}}" >> ${{START_PATH}}/got_report.txt
           done
 
-          cd ${START_PATH}
-          rm -rf ${LTS_TMP_DIR}
+          cd ${{START_PATH}}
+          rm -rf ${{LTS_TMP_DIR}}
     publishers:
       - conditional-publisher:
           - condition-kind: file-exists

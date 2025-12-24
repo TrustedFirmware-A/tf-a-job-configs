@@ -40,12 +40,12 @@
           default: tf-a-main/1
           description: Target build to analyze.
     builders:
-      - shell: !include-raw: scripts/clone.sh
+      - shell: !include-raw-verbatim: scripts/clone.sh
       - shell: |
           #!/bin/bash
 
-          bash ${WORKSPACE}/tf-a-ci-scripts/script/graphs/tf-main-results.bash \
-              "${JENKINS_PUBLIC_URL}job/${TARGET_BUILD}"
+          bash ${{WORKSPACE}}/tf-a-ci-scripts/script/graphs/tf-main-results.bash \
+              "${{JENKINS_PUBLIC_URL}}job/${{TARGET_BUILD}}"
     publishers:
       - postbuildscript:
           builders:
@@ -59,10 +59,10 @@
               build-steps:
                 - shell: |-
                     #!/bin/bash -e
-                    export CI_ROOT=${PWD}/tf-a-ci-scripts
+                    export CI_ROOT=${{PWD}}/tf-a-ci-scripts
                     bash "$CI_ROOT/job/tf-ci-gateway/generate_report.sh" -t
       - archive:
           artifacts: report.html, tf-a-main*.png, tf-a-main*.csv
       - groovy-postbuild:
-          script: !include-raw:
+          script: !include-raw-verbatim:
             - tf-a-ci-gateway/postbuild.groovy

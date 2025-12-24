@@ -62,7 +62,7 @@
             'e.g. refs/changes/13/31138/1'
       - string:
           name: RFA_REFSPEC
-          default: ${GERRIT_REFSPEC}
+          default: ${{GERRIT_REFSPEC}}
           description: |
             'do-not-amend: used by scripts/clone.sh to fetch the correct Gerrit patchset - use GERRIT_REFSPEC instead'
       - string:
@@ -97,17 +97,17 @@
               passphrase-variable: ""
       - timestamps
     builders:
-      - shell: !include-raw: scripts/clone.sh
+      - shell: !include-raw-verbatim: scripts/clone.sh
       - shell: |
           #!/bin/bash
           set -e
           cat << EOF > tf-a-env.param
-          RF_GERRIT_PROJECT=${GERRIT_PROJECT}
-          RFA_REFSPEC=${RFA_REFSPEC}
-          GERRIT_REFSPEC=${GERRIT_REFSPEC}
-          GERRIT_BRANCH=${GERRIT_BRANCH}
+          RF_GERRIT_PROJECT=${{GERRIT_PROJECT}}
+          RFA_REFSPEC=${{RFA_REFSPEC}}
+          GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
+          GERRIT_BRANCH=${{GERRIT_BRANCH}}
           TF_GERRIT_PROJECT=TF-A/trusted-firmware-a
-          TF_GERRIT_REFSPEC=${TF_GERRIT_REFSPEC}
+          TF_GERRIT_REFSPEC=${{TF_GERRIT_REFSPEC}}
           EOF
       - multijob:
           name: Lint commit messages
@@ -116,9 +116,9 @@
             - name: rf-a-commitlint
               kill-phase-on: NEVER
               predefined-parameters: |
-                REFSPEC=${GERRIT_REFSPEC}
-                REFNAME=${GERRIT_PATCHSET_REVISION}
-                REFNAME_BASE=origin/${GERRIT_BRANCH}
+                REFSPEC=${{GERRIT_REFSPEC}}
+                REFNAME=${{GERRIT_PATCHSET_REVISION}}
+                REFNAME_BASE=origin/${{GERRIT_BRANCH}}
       - multijob:
           name: Code formatting, static checks and lints
           condition: COMPLETED
@@ -127,9 +127,9 @@
               current-parameters: true
               kill-phase-on: NEVER
               predefined-parameters: |
-                GERRIT_BRANCH=${GERRIT_BRANCH}
-                RFA_REFSPEC=${RFA_REFSPEC}
-                GERRIT_REFSPEC=${GERRIT_REFSPEC}
+                GERRIT_BRANCH=${{GERRIT_BRANCH}}
+                RFA_REFSPEC=${{RFA_REFSPEC}}
+                GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
               property-file: tf-a-env.param
       - multijob:
           name: Platform independent tests
@@ -142,7 +142,7 @@
                 TEST_REPO_NAME=rusted-firmware-a
                 TEST_REPO_PROJECT=RF-A
                 RFA_REFSPEC=$RFA_REFSPEC
-                GERRIT_REFSPEC=${GERRIT_REFSPEC}
+                GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
               property-file: tf-a-env.param
       - multijob:
           name: Build Rusted Firmware A

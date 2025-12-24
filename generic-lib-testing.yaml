@@ -59,23 +59,23 @@
           timeout: 240
           fail: true
     builders:
-      - shell: !include-raw: scripts/clone.sh
+      - shell: !include-raw-verbatim: scripts/clone.sh
       - shell: |
           #!/bin/bash
           set -e
           cat << EOF > env.param
-          GERRIT_PROJECT=${RF_GERRIT_PROJECT}
-          GERRIT_BRANCH=${GERRIT_BRANCH}
-          GERRIT_REFSPEC=${RFA_REFSPEC}
+          GERRIT_PROJECT=${{RF_GERRIT_PROJECT}}
+          GERRIT_BRANCH=${{GERRIT_BRANCH}}
+          GERRIT_REFSPEC=${{RFA_REFSPEC}}
           EOF
 
-          cd ${WORKSPACE}
+          cd ${{WORKSPACE}}
           # Executed project-related next checks: platform independent tests with a generic platform.
-          IS_CONTINUOUS_INTEGRATION=1 ${WORKSPACE}/tf-a-ci-scripts/script/next-checks/next-checks-generic-tests.sh \
-            ${TEST_REPO_PROJECT} ${TEST_REPO_NAME}
+          IS_CONTINUOUS_INTEGRATION=1 ${{WORKSPACE}}/tf-a-ci-scripts/script/next-checks/next-checks-generic-tests.sh \
+            ${{TEST_REPO_PROJECT}} ${{TEST_REPO_NAME}}
     publishers:
       - archive:
           artifacts: next-generic-checks.log
       - groovy-postbuild:
-          script: !include-raw:
+          script: !include-raw-verbatim:
             - generic-lib-testing/postbuild.groovy

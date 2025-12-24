@@ -56,70 +56,70 @@
           set -ex
 
           SANDBOX_RUN="false"
-          REF="${GERRIT_REFNAME:-${UPSTREAM_REFNAME:-}}"
-          echo ${REF} | grep -q "^sandbox/" && SANDBOX_RUN="true" && echo "*** Sandbox run ***"
+          REF="${{GERRIT_REFNAME:-${{UPSTREAM_REFNAME:-}}}}"
+          echo ${{REF}} | grep -q "^sandbox/" && SANDBOX_RUN="true" && echo "*** Sandbox run ***"
           SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa"
-          export GIT_SSH_COMMAND="ssh -p 29418 -i $CI_BOT_KEY ${SSH_PARAMS}"
-          GERRIT_HOST=${GERRIT_HOST:-review.trustedfirmware.org}
-          gerrit_host="ssh://${CI_BOT_USERNAME}@${GERRIT_HOST}:29418"
-          new_branch=${REF}
-          forked_tag=${new_branch##*-}
-          [ "${SANDBOX_RUN}" = "true" ] && forked_tag="sandbox/${forked_tag}"
+          export GIT_SSH_COMMAND="ssh -p 29418 -i $CI_BOT_KEY ${{SSH_PARAMS}}"
+          GERRIT_HOST=${{GERRIT_HOST:-review.trustedfirmware.org}}
+          gerrit_host="ssh://${{CI_BOT_USERNAME}}@${{GERRIT_HOST}}:29418"
+          new_branch=${{REF}}
+          forked_tag=${{new_branch##*-}}
+          [ "${{SANDBOX_RUN}}" = "true" ] && forked_tag="sandbox/${{forked_tag}}"
 
           _workdir=$(mktemp -d)
           rm -f email.txt || true
-          trap '[ -d "${_workdir}" ] && rm -rf "${_workdir}"' EXIT
-          git -C "${_workdir}" init > /dev/null 2>&1
+          trap '[ -d "${{_workdir}}" ] && rm -rf "${{_workdir}}"' EXIT
+          git -C "${{_workdir}}" init > /dev/null 2>&1
 
           # Check if the job is triggered by a new LTS branch creation
-          if [ -n "${UPSTREAM_REFNAME:-}" ]; then
+          if [ -n "${{UPSTREAM_REFNAME:-}}" ]; then
             # Triggered by hafnium-lts-automation
             echo "Triggered by hafnium-lts-automation"
-            echo "New LTS branch created: ${new_branch}"
+            echo "New LTS branch created: ${{new_branch}}"
             MAIN_PROJ="TF-A/trusted-firmware-a"
-          elif [ "${GERRIT_EVENT_TYPE:-}" = "ref-updated" -a \
-                 "${GERRIT_OLDREV:-}" = "0000000000000000000000000000000000000000" ]; then
+          elif [ "${{GERRIT_EVENT_TYPE:-}}" = "ref-updated" -a \
+                 "${{GERRIT_OLDREV:-}}" = "0000000000000000000000000000000000000000" ]; then
             # Triggered from new LTS branch creation
-            echo "New branch created: ${new_branch}"
+            echo "New branch created: ${{new_branch}}"
           else
             echo "Not a new LTS branch event! exit job"
           	exit 0
           fi
 
           # Create new LTS branch to related repositories
-          repos="${MAIN_PROJ:-} TF-A/tf-a-tests ci/tf-a-ci-scripts ci/tf-a-job-configs"
-          for r in ${repos};
+          repos="${{MAIN_PROJ:-}} TF-A/tf-a-tests ci/tf-a-ci-scripts ci/tf-a-job-configs"
+          for r in ${{repos}};
           do
-              echo "Create branch \"${new_branch}\" from tag \"${forked_tag}\" in the \"${r}\" project"
-              if ! git ls-remote --exit-code "${gerrit_host}/${r}" "refs/heads/${new_branch}"; then
-                git -C "${_workdir}" fetch ${gerrit_host}/${r} ${forked_tag} || \
-                (echo "Can not find \"${forked_tag}\" tag on ${r} repository"; exit 1)
-                git -C "${_workdir}" push ${gerrit_host}/${r} FETCH_HEAD^{commit}:refs/heads/${new_branch}
+              echo "Create branch \"${{new_branch}}\" from tag \"${{forked_tag}}\" in the \"${{r}}\" project"
+              if ! git ls-remote --exit-code "${{gerrit_host}}/${{r}}" "refs/heads/${{new_branch}}"; then
+                git -C "${{_workdir}}" fetch ${{gerrit_host}}/${{r}} ${{forked_tag}} || \
+                (echo "Can not find \"${{forked_tag}}\" tag on ${{r}} repository"; exit 1)
+                git -C "${{_workdir}}" push ${{gerrit_host}}/${{r}} FETCH_HEAD^{{commit}}:refs/heads/${{new_branch}}
               fi
           done
 
           # Create new download space
-          echo "Create new download space for \"${new_branch}\""
-          if [ "${SANDBOX_RUN}" = "false" ]; then
-            aws s3 sync s3://trustedfirmware-prod-storage/tf-a s3://openci-trustedfirmware-storage-prod/tf-a-${new_branch}
+          echo "Create new download space for \"${{new_branch}}\""
+          if [ "${{SANDBOX_RUN}}" = "false" ]; then
+            aws s3 sync s3://trustedfirmware-prod-storage/tf-a s3://openci-trustedfirmware-storage-prod/tf-a-${{new_branch}}
           fi
 
-          echo "CI Environment Setup for ${new_branch} branch Completed" > subject.txt
+          echo "CI Environment Setup for ${{new_branch}} branch Completed" > subject.txt
           cat << EOF >email.txt
           Hello,
-          The new LTS branch "${new_branch}" has been created in the following repositoris
-          ${repos}
+          The new LTS branch "${{new_branch}}" has been created in the following repositoris
+          ${{repos}}
 
-          And the new download space is ready on ${DOWNLOAD_SERVER_URL}/tf-a-${new_branch}
+          And the new download space is ready on ${{DOWNLOAD_SERVER_URL}}/tf-a-${{new_branch}}
 
           Please check the job log for the details
-          ${BUILD_URL}console
+          ${{BUILD_URL}}console
 
           EOF
 
           echo "--------- email body ----------"
           cat email.txt
-          [ "${SANDBOX_RUN}" = "true" ] && rm -f email.txt
+          [ "${{SANDBOX_RUN}}" = "true" ] && rm -f email.txt
 
       - conditional-step:
           condition-kind: shell
@@ -127,19 +127,19 @@
             set -eux
 
             COUNTERPART_PROJ="hafnium/hafnium"
-            GERRIT_HOST=${GERRIT_HOST:-review.trustedfirmware.org}
-            GERRIT_SERVER="https://${GERRIT_HOST}"
-            REF="${GERRIT_REFNAME:-}"
-            echo ${REF} | grep -q "^sandbox/" && echo "*** Sandbox run ***"
-            BRANCH="${REF#refs/heads/}"
+            GERRIT_HOST=${{GERRIT_HOST:-review.trustedfirmware.org}}
+            GERRIT_SERVER="https://${{GERRIT_HOST}}"
+            REF="${{GERRIT_REFNAME:-}}"
+            echo ${{REF}} | grep -q "^sandbox/" && echo "*** Sandbox run ***"
+            BRANCH="${{REF#refs/heads/}}"
 
             # Must be a Gerrit ref-updated new-branch event
-            [ "${GERRIT_EVENT_TYPE:-}" = "ref-updated" -a \
-              "${GERRIT_OLDREV:-}" = "0000000000000000000000000000000000000000" ] || exit 1
+            [ "${{GERRIT_EVENT_TYPE:-}}" = "ref-updated" -a \
+              "${{GERRIT_OLDREV:-}}" = "0000000000000000000000000000000000000000" ] || exit 1
 
             # Check if branch exists already in TF-A
-            if git ls-remote --exit-code "${GERRIT_SERVER}/${COUNTERPART_PROJ}" "refs/heads/${BRANCH}"; then
-              echo "Branch exists in ${COUNTERPART_PROJ}, do not trigger counterpart"
+            if git ls-remote --exit-code "${{GERRIT_SERVER}}/${{COUNTERPART_PROJ}}" "refs/heads/${{BRANCH}}"; then
+              echo "Branch exists in ${{COUNTERPART_PROJ}}, do not trigger counterpart"
               exit 1
             fi
             echo "Branch missing, trigger hafnium-lts-automation"
@@ -148,7 +148,7 @@
             - trigger-builds:
                 - project: "hafnium-lts-automation"
                   block: false
-                  predefined-parameters: "UPSTREAM_REFNAME=${GERRIT_REFNAME}"
+                  predefined-parameters: "UPSTREAM_REFNAME=${{GERRIT_REFNAME}}"
 
     publishers:
       - conditional-publisher:
@@ -159,6 +159,6 @@
             action:
               - email-ext:
                   always: true
-                  recipients: ${EMAIL_RECIPIENT}
-                  subject: ${FILE,path="subject.txt"}
-                  body: ${FILE,path="email.txt"}
+                  recipients: ${{EMAIL_RECIPIENT}}
+                  subject: ${{FILE,path="subject.txt"}}
+                  body: ${{FILE,path="email.txt"}}

@@ -49,45 +49,45 @@
               credential-id: TF-COVERITY-SCAN-TOKEN
               variable: TF_COVERITY_SCAN_TOKEN
     builders:
-      - shell: !include-raw: scripts/clone.sh
+      - shell: !include-raw-verbatim: scripts/clone.sh
       - shell: |
           #!/bin/bash
           set -e
           set -x
 
           # Fetch coverity tool and untar it
-          cd ${WORKSPACE}
-          wget ${DOWNLOAD_SERVER_URL}/tf-a/tf-a-coverity/coverity_tool.tgz
+          cd ${{WORKSPACE}}
+          wget ${{DOWNLOAD_SERVER_URL}}/tf-a/tf-a-coverity/coverity_tool.tgz
           tar -xzf coverity_tool.tgz
-          mv cov-analysis-linux64-${COVERITY_VERSION} coverity
-          export PATH=${WORKSPACE}/coverity/bin:${PATH}
+          mv cov-analysis-linux64-${{COVERITY_VERSION}} coverity
+          export PATH=${{WORKSPACE}}/coverity/bin:${{PATH}}
 
           # Run coverity
-          cd ${WORKSPACE}/trusted-firmware-a
-          ${WORKSPACE}/tf-a-ci-scripts/script/tf-coverity/run_coverity_on_tf.py --tf $(pwd)
+          cd ${{WORKSPACE}}/trusted-firmware-a
+          ${{WORKSPACE}}/tf-a-ci-scripts/script/tf-coverity/run_coverity_on_tf.py --tf $(pwd)
       - conditional-step:
           condition-kind: boolean-expression
-          condition-expression: ${UPLOAD_TO_COVERITY_SCAN_ONLINE}
+          condition-expression: ${{UPLOAD_TO_COVERITY_SCAN_ONLINE}}
           on-evaluation-failure: dont-run
           steps:
             - shell: |
                 #!/bin/bash
                 set -e
 
-                cd ${WORKSPACE}/trusted-firmware-a
+                cd ${{WORKSPACE}}/trusted-firmware-a
                 GIT_COMMIT=$(git rev-parse HEAD)
 
                 echo "Uploading tarball to Coverity Scan Online..."
                 curl \
-                  --form token="${TF_COVERITY_SCAN_TOKEN}" \
+                  --form token="${{TF_COVERITY_SCAN_TOKEN}}" \
                   --form email=sandrine.bailleux@arm.com \
                   --form file=@"arm-tf-coverity-results.tgz" \
-                  --form version="Commit ${GIT_COMMIT}" \
-                  --form description="Build ${BUILD_DISPLAY_NAME}" \
+                  --form version="Commit ${{GIT_COMMIT}}" \
+                  --form description="Build ${{BUILD_DISPLAY_NAME}}" \
                   https://scan.coverity.com/builds?project=ARM-software%2Farm-trusted-firmware
     publishers:
       - archive:
           artifacts: trusted-firmware-a/arm-tf-coverity-results.tgz, trusted-firmware-a/tf_coverage.log
       - groovy-postbuild:
-          script: !include-raw:
+          script: !include-raw-verbatim:
             - tf-a-coverity/postbuild.groovy

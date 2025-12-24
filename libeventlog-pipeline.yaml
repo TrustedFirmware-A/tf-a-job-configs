@@ -5,4 +5,4 @@
       style, and building the module.
     project-type: pipeline
     sandbox: true
-    dsl: !include-raw: libeventlog-pipeline/Jenkinsfile
+    dsl: !include-raw-verbatim: libeventlog-pipeline/Jenkinsfile

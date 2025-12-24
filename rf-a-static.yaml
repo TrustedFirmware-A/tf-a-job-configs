@@ -61,22 +61,22 @@
           timeout: 240
           fail: true
     builders:
-      - shell: !include-raw: scripts/clone.sh
+      - shell: !include-raw-verbatim: scripts/clone.sh
       - shell: |
           #!/bin/bash
           set -e
           cat << EOF > env.param
-          RFA_REFSPEC=${RFA_REFSPEC}
-          GERRIT_REFSPEC=${GERRIT_REFSPEC}
-          GERRIT_BRANCH=${GERRIT_BRANCH}
+          RFA_REFSPEC=${{RFA_REFSPEC}}
+          GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
+          GERRIT_BRANCH=${{GERRIT_BRANCH}}
           EOF
-          cd ${WORKSPACE}/rusted-firmware-a
+          cd ${{WORKSPACE}}/rusted-firmware-a
           # Executed project-related static checks: copyright, unix line endings,
           # formatting and lints
-          IS_CONTINUOUS_INTEGRATION=1 ${WORKSPACE}/tf-a-ci-scripts/script/next-checks/next-checks.sh
+          IS_CONTINUOUS_INTEGRATION=1 ${{WORKSPACE}}/tf-a-ci-scripts/script/next-checks/next-checks.sh
     publishers:
       - archive:
           artifacts: rusted-firmware-a/next-checks.log
       - groovy-postbuild:
-          script: !include-raw:
+          script: !include-raw-verbatim:
             - rf-a-static/postbuild.groovy

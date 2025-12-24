@@ -32,7 +32,7 @@
           default: ""
       - string:
           name: TF_GERRIT_REFSPEC
-          default: ${GERRIT_REFSPEC}
+          default: ${{GERRIT_REFSPEC}}
           description: Parameter only used by the clone script
       - string:
           name: TFTF_GERRIT_PROJECT
@@ -68,17 +68,17 @@
               passphrase-variable: ""
       - timestamps
     builders:
-      - shell: !include-raw: scripts/clone.sh
+      - shell: !include-raw-verbatim: scripts/clone.sh
       - shell: |
           #!/bin/bash
           set -e
           cat << EOF > env.param
-          GERRIT_PATCHSET_NUMBER=${GERRIT_PATCHSET_NUMBER}
-          GERRIT_CHANGE_NUMBER=${GERRIT_CHANGE_NUMBER}
-          GERRIT_HOST=${GERRIT_HOST}
-          TF_GERRIT_PROJECT=${GERRIT_PROJECT}
-          TF_GERRIT_BRANCH=${GERRIT_BRANCH}
-          TF_GERRIT_REFSPEC=${GERRIT_REFSPEC}
+          GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
+          GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}}
+          GERRIT_HOST=${{GERRIT_HOST}}
+          TF_GERRIT_PROJECT=${{GERRIT_PROJECT}}
+          TF_GERRIT_BRANCH=${{GERRIT_BRANCH}}
+          TF_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
           EOF
       - multijob:
           name: Lint commit messages
@@ -87,10 +87,10 @@
             - name: tf-a-commitlint
               kill-phase-on: NEVER
               predefined-parameters: |
-                URL=https://review.trustedfirmware.org/${GERRIT_PROJECT}
-                REFSPEC=${GERRIT_REFSPEC}
-                REFNAME=${GERRIT_PATCHSET_REVISION}
-                REFNAME_BASE=origin/${GERRIT_BRANCH}
+                URL=https://review.trustedfirmware.org/${{GERRIT_PROJECT}}
+                REFSPEC=${{GERRIT_REFSPEC}}
+                REFNAME=${{GERRIT_PATCHSET_REVISION}}
+                REFNAME_BASE=origin/${{GERRIT_BRANCH}}
       - multijob:
           condition: COMPLETED
           name: Build and static checks

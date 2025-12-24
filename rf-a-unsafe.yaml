@@ -45,7 +45,7 @@
             'e.g. refs/changes/13/31138/1'
       - string:
           name: RFA_REFSPEC
-          default: ${GERRIT_REFSPEC}
+          default: ${{GERRIT_REFSPEC}}
           description: |
             'do-not-amend: used by scripts/clone.sh to fetch the correct Gerrit patchset - use GERRIT_REFSPEC instead'
       - string:
@@ -75,19 +75,19 @@
           timeout: 240
           fail: true
     builders:
-      - shell: !include-raw: scripts/clone.sh
+      - shell: !include-raw-verbatim: scripts/clone.sh
       - shell: |
           #!/bin/bash
           set -ex
           cat << EOF > tf-a-env.param
-          RF_GERRIT_PROJECT=${GERRIT_PROJECT}
-          RFA_REFSPEC=${GERRIT_REFSPEC}
+          RF_GERRIT_PROJECT=${{GERRIT_PROJECT}}
+          RFA_REFSPEC=${{GERRIT_REFSPEC}}
           EOF
 
-          cd ${WORKSPACE}/rusted-firmware-a
+          cd ${{WORKSPACE}}/rusted-firmware-a
 
           git fetch --unshallow --update-shallow origin
-          git fetch --unshallow --update-shallow origin ${GERRIT_BRANCH} ${GERRIT_REFSPEC}
+          git fetch --unshallow --update-shallow origin ${{GERRIT_BRANCH}} ${{GERRIT_REFSPEC}}
 
           # Vote Unsafe-Review+1 on patches not touching any unsafe code
 
@@ -103,7 +103,7 @@
 
           # 2. Cast the Unsafe-Review +1 vote if the patch does NOT touch unsafe code:
 
-          SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -p 29418 -i ${CI_BOT_KEY}"
+          SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -p 29418 -i ${{CI_BOT_KEY}}"
           GERRIT_URL="review.trustedfirmware.org"
-          SET_SAFE_CMD="${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit review --label Unsafe-Review=1 -m Safe"
-          ssh ${SET_SAFE_CMD} ${GERRIT_CHANGE_NUMBER},${GERRIT_PATCHSET_NUMBER}
+          SET_SAFE_CMD="${{SSH_PARAMS}} ${{CI_BOT_USERNAME}}@${{GERRIT_URL}} gerrit review --label Unsafe-Review=1 -m Safe"
+          ssh ${{SET_SAFE_CMD}} ${{GERRIT_CHANGE_NUMBER}},${{GERRIT_PATCHSET_NUMBER}}

@@ -63,4 +63,4 @@
               credential-id: PFALCON_RTD_WEBHOOK_SECRET
               variable: PFALCON_RTD_WEBHOOK_SECRET
     builders:
-      - shell: !include-raw: scripts/tf-a-lts-docs-watcher.sh
+      - shell: !include-raw-verbatim: scripts/tf-a-lts-docs-watcher.sh

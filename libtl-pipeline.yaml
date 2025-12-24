@@ -5,4 +5,4 @@
       style, building the module, and running unit tests.
     project-type: pipeline
     sandbox: true
-    dsl: !include-raw: libtl-pipeline/Jenkinsfile
+    dsl: !include-raw-verbatim: libtl-pipeline/Jenkinsfile

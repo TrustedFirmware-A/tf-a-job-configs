@@ -76,11 +76,11 @@
           RELEASE=$(grep release docs/conf.py | sed -r -e 's/release = "(.*)"/\1/')
 
           git diff
-          git commit -a -s -m "docs(changelog): changelog for lts-v${RELEASE} release"
+          git commit -a -s -m "docs(changelog): changelog for lts-v${{RELEASE}} release"
           if [ "$SANDBOX_RUN" == "true" ]; then
-              TAG="sandbox/lts-v${RELEASE}-$(date +%Y%m%dT%H%M)"
+              TAG="sandbox/lts-v${{RELEASE}}-$(date +%Y%m%dT%H%M)"
           else
-              TAG="lts-v${RELEASE}"
+              TAG="lts-v${{RELEASE}}"
           fi
           git tag $TAG
 
@@ -99,9 +99,9 @@
               # model Gerrit uses: it resolve tag to a branch it belongs to, then
               # checks ACLs on branch to see if a user has access to it; no branch
               # == problems).
-              git push ssh://${CI_BOT_USERNAME}@${GERRIT_HOST}:29418/${GERRIT_PROJECT} HEAD:refs/heads/${TAG}-br
+              git push ssh://${{CI_BOT_USERNAME}}@${{GERRIT_HOST}}:29418/${{GERRIT_PROJECT}} HEAD:refs/heads/${{TAG}}-br
           fi
           # Push tag
           git push ssh://$CI_BOT_USERNAME@$GERRIT_HOST:29418/$GERRIT_PROJECT $TAG
 
-          echo Release tag is created. Further processing happens in the job ${JENKINS_PUBLIC_URL}job/tf-a-lts-release-tagged
+          echo Release tag is created. Further processing happens in the job ${{JENKINS_PUBLIC_URL}}job/tf-a-lts-release-tagged

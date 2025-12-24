@@ -80,21 +80,21 @@
               passphrase-variable: ""
       - timestamps
     builders:
-      - shell: !include-raw: scripts/clone.sh
+      - shell: !include-raw-verbatim: scripts/clone.sh
       - shell: |
           #!/bin/bash
           set -e
           cat << EOF > tf-a-env.param
-          GERRIT_PROJECT=${TF_GERRIT_PROJECT}
-          GERRIT_BRANCH=${TF_GERRIT_BRANCH}
-          GERRIT_REFSPEC=${TF_GERRIT_REFSPEC}
+          GERRIT_PROJECT=${{TF_GERRIT_PROJECT}}
+          GERRIT_BRANCH=${{TF_GERRIT_BRANCH}}
+          GERRIT_REFSPEC=${{TF_GERRIT_REFSPEC}}
           EOF
           cat << EOF > tf-a-tests-env.param
-          GERRIT_PROJECT=${TFTF_GERRIT_PROJECT}
-          GERRIT_BRANCH=${TFTF_GERRIT_BRANCH}
-          GERRIT_REFSPEC=${TFTF_GERRIT_REFSPEC}
+          GERRIT_PROJECT=${{TFTF_GERRIT_PROJECT}}
+          GERRIT_BRANCH=${{TFTF_GERRIT_BRANCH}}
+          GERRIT_REFSPEC=${{TFTF_GERRIT_REFSPEC}}
           EOF
-      - shell: !include-raw: scripts/lts-check-last-commit.sh
+      - shell: !include-raw-verbatim: scripts/lts-check-last-commit.sh
       - conditional-step:
           condition-kind: file-exists
           condition-filename: TO_BUILD
@@ -344,7 +344,7 @@
                   - name: tf-a-test-result-visualization
                     current-parameters: true
                     kill-phase-on: NEVER
-                    predefined-parameters: TARGET_BUILD=${JOB_NAME}/${BUILD_NUMBER}
+                    predefined-parameters: TARGET_BUILD=${{JOB_NAME}}/${{BUILD_NUMBER}}
                     property-file: tf-a-env.param
             # Run the unstable TF-A Tests at the end but do not let their results
             # participate in the job's success/failure.
@@ -363,7 +363,7 @@
       - conditional-publisher:
           - condition-kind: shell
             condition-command: |
-              ! test -f ${WORKSPACE}/TO_BUILD
+              ! test -f ${{WORKSPACE}}/TO_BUILD
             action:
               - groovy-postbuild:
                   script: |

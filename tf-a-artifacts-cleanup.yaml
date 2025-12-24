@@ -19,4 +19,4 @@
       - shell: |
           #!/bin/bash
 
-          find /var/lib/jenkins/jobs/tf-a-builder/builds -name build.log -mtime +5 | head -n1000 | xargs -i -n1 bash -c "echo {}; gzip -9 {}"
+          find /var/lib/jenkins/jobs/tf-a-builder/builds -name build.log -mtime +5 | head -n1000 | xargs -i -n1 bash -c "echo {{}}; gzip -9 {{}}"

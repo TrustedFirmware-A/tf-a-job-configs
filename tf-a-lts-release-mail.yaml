@@ -59,8 +59,8 @@
           set -ex
 
           git clone https://git.trustedfirmware.org/ci/tf-a-ci-scripts.git
-          ./tf-a-ci-scripts/lts/lts-release-mail.py --url https://${GERRIT_HOST}/${GERRIT_PROJECT} --branch "${GERRIT_BRANCH}" ${RELEASE_TAG} >email.txt
-          awk -F": " '/Subject:/ {print $2}' email.txt >subject.txt
+          ./tf-a-ci-scripts/lts/lts-release-mail.py --url https://${{GERRIT_HOST}}/${{GERRIT_PROJECT}} --branch "${{GERRIT_BRANCH}}" ${{RELEASE_TAG}} >email.txt
+          awk -F": " '/Subject:/ {{print $2}}' email.txt >subject.txt
           # Remove email headers, put in a seperate file.
           sed '0,/^$/d' email.txt >body.txt
 
@@ -89,6 +89,6 @@
             action:
               - email-ext:
                   always: true
-                  subject: ${FILE, path="subject.txt"}
-                  body: ${FILE, path="body.txt"}
-                  recipients: ${FILE, path="recipients.txt"}
+                  subject: ${{FILE, path="subject.txt"}}
+                  body: ${{FILE, path="body.txt"}}
+                  recipients: ${{FILE, path="recipients.txt"}}

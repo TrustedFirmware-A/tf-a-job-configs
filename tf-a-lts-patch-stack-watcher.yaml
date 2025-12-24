@@ -22,7 +22,7 @@
             To trigger Allow-CI+1 or Allow-CI+2 job when a new patch is created
           default: Allow-CI=2
     builders:
-      - shell: !include-raw: scripts/tf-a-lts-patch-stack-watcher.sh
+      - shell: !include-raw-verbatim: scripts/tf-a-lts-patch-stack-watcher.sh
     properties:
       - build-discarder:
           days-to-keep: 60

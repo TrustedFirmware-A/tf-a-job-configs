@@ -5,4 +5,4 @@
       style, running unit tests, and building the package.
     project-type: pipeline
     sandbox: true
-    dsl: !include-raw: tlc-pipeline/Jenkinsfile
+    dsl: !include-raw-verbatim: tlc-pipeline/Jenkinsfile

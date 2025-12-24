@@ -40,8 +40,8 @@
               echo Not a tag event
               exit
           fi
-          echo "RELEASE_TAG=${GERRIT_REFNAME#refs/tags/}" >subjob.param
-          if echo ${GERRIT_REFNAME} | grep -q "sandbox/"; then
+          echo "RELEASE_TAG=${{GERRIT_REFNAME#refs/tags/}}" >subjob.param
+          if echo ${{GERRIT_REFNAME}} | grep -q "sandbox/"; then
               echo "SANDBOX_RUN=true" >>subjob.param
           else
               echo "SANDBOX_RUN=false" >>subjob.param
