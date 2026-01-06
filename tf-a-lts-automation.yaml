@@ -100,7 +100,7 @@
           # Create new download space
           echo "Create new download space for \"${{new_branch}}\""
           if [ "${{SANDBOX_RUN}}" = "false" ]; then
-            aws s3 sync s3://trustedfirmware-prod-storage/tf-a s3://openci-trustedfirmware-storage-prod/tf-a-${{new_branch}}
+            aws s3 sync s3://openci-trustedfirmware-storage-prod/tf-a s3://openci-trustedfirmware-storage-prod/tf-a-${{new_branch}}
           fi
 
           echo "CI Environment Setup for ${{new_branch}} branch Completed" > subject.txt
