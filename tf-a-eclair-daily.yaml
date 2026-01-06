@@ -14,7 +14,7 @@
       - string:
           name: TF_CONFIG_LIST
           default: |
-            fvp-aarch32-default fvp-aarch32-enable-runtime-instr fvp-aarch32-rst-to-sp-min fvp-boot-el3-payload fvp-default fvp-enable-runtime-instr fvp-ext-pstate-ea-el3 fvp-no-cohmem fvp-opteed fvp-rst-bl31 fvp-tspd fvp-tspd-gicv2-symmetric-model fvp-tspd-irq2el3 fvp-tspd-quad-cluster fvp-tspd-tbb-mbedtls fvp-tspd-tsp-async juno-aarch32-rst-to-sp-min juno-aarch32-rst-to-sp-min-enable-runtime-instr juno-default juno-tspd
+            fvp-rst-bl31 fvp-aarch32-rst-to-sp-min fvp-ext-pstate-ea-el3 fvp-opteed fvp-el3-spmc-simd fvp-rme fvp-aarch64-sdei-fconf fvp-tbb-mbedtls fvp-default
           description: |
             List of TF-A configs to build
       - string:
