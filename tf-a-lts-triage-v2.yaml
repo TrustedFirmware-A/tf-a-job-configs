@@ -22,7 +22,7 @@
           description: The tf-a-ci-script repo to clone from
       - string:
           name: LTS_BRANCHES
-          default: lts-v2.8 lts-v2.10 lts-v2.12
+          default: lts-v2.8 lts-v2.10 lts-v2.12 lts-v2.14
           description: |
             LTS branch
     triggers:
