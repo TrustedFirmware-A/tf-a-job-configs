@@ -106,7 +106,7 @@
           RFA_REFSPEC=${{RFA_REFSPEC}}
           GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
           GERRIT_BRANCH=${{GERRIT_BRANCH}}
-          TF_GERRIT_PROJECT=${{GERRIT_PROJECT_PREFIX?}}TF-A/trusted-firmware-a
+          TF_GERRIT_PROJECT=${{GERRIT_PROJECT_PREFIX:-}}TF-A/trusted-firmware-a
           TF_GERRIT_REFSPEC=${{TF_GERRIT_REFSPEC}}
           EOF
       - multijob:

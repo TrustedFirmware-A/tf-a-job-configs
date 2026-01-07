@@ -77,8 +77,8 @@
           set -ex
           export PATH=~/.local/bin:$PATH
           pwd
-          git clone https://git.trustedfirmware.org/${{GERRIT_PROJECT_PREFIX?}}ci/tf-a-ci-scripts.git
-          git clone https://git.trustedfirmware.org/${{GERRIT_PROJECT_PREFIX?}}ci/tf-ci-scripts.git
+          git clone https://git.trustedfirmware.org/${{GERRIT_PROJECT_PREFIX:-}}ci/tf-a-ci-scripts.git
+          git clone https://git.trustedfirmware.org/${{GERRIT_PROJECT_PREFIX:-}}ci/tf-ci-scripts.git
 
           git clone --recurse-submodules https://${{GERRIT_HOST}}/${{GERRIT_PROJECT}} -b ${{GERRIT_REFNAME}}
           ls -l

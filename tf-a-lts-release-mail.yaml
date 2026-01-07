@@ -57,7 +57,7 @@
           #!/bin/bash
           set -ex
 
-          git clone https://git.trustedfirmware.org/${{GERRIT_PROJECT_PREFIX?}}ci/tf-a-ci-scripts.git
+          git clone https://git.trustedfirmware.org/${{GERRIT_PROJECT_PREFIX:-}}ci/tf-a-ci-scripts.git
           ./tf-a-ci-scripts/lts/lts-release-mail.py --url https://${{GERRIT_HOST}}/${{GERRIT_PROJECT}} --branch "${{GERRIT_BRANCH}}" ${{RELEASE_TAG}} >email.txt
           awk -F": " '/Subject:/ {{print $2}}' email.txt >subject.txt
           # Remove email headers, put in a seperate file.

@@ -75,7 +75,7 @@
             # Triggered by hafnium-lts-automation
             echo "Triggered by hafnium-lts-automation"
             echo "New LTS branch created: ${{new_branch}}"
-            MAIN_PROJ="${{GERRIT_PROJECT_PREFIX?}}TF-A/trusted-firmware-a"
+            MAIN_PROJ="${{GERRIT_PROJECT_PREFIX:-}}TF-A/trusted-firmware-a"
           elif [ "${{GERRIT_EVENT_TYPE:-}}" = "ref-updated" -a \
                  "${{GERRIT_OLDREV:-}}" = "0000000000000000000000000000000000000000" ]; then
             # Triggered from new LTS branch creation
@@ -86,7 +86,7 @@
           fi
 
           # Create new LTS branch to related repositories
-          repos="${{MAIN_PROJ:-}} ${{GERRIT_PROJECT_PREFIX?}}TF-A/tf-a-tests ${{GERRIT_PROJECT_PREFIX?}}ci/tf-a-ci-scripts ${{GERRIT_PROJECT_PREFIX?}}ci/tf-a-job-configs"
+          repos="${{MAIN_PROJ:-}} ${{GERRIT_PROJECT_PREFIX:-}}TF-A/tf-a-tests ${{GERRIT_PROJECT_PREFIX:-}}ci/tf-a-ci-scripts ${{GERRIT_PROJECT_PREFIX:-}}ci/tf-a-job-configs"
           for r in ${{repos}};
           do
               echo "Create branch \"${{new_branch}}\" from tag \"${{forked_tag}}\" in the \"${{r}}\" project"
@@ -125,7 +125,7 @@
           condition-command: |
             set -eux
 
-            COUNTERPART_PROJ="${{GERRIT_PROJECT_PREFIX?}}hafnium/hafnium"
+            COUNTERPART_PROJ="${{GERRIT_PROJECT_PREFIX:-}}hafnium/hafnium"
             GERRIT_HOST=${{GERRIT_HOST:-review.trustedfirmware.org}}
             GERRIT_SERVER="https://${{GERRIT_HOST}}"
             REF="${{GERRIT_REFNAME:-}}"
