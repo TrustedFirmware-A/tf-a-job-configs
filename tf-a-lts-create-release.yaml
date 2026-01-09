@@ -86,7 +86,7 @@
 
           mkdir -p ~/.ssh/
           ssh-keyscan -p 29418 $GERRIT_HOST >> ~/.ssh/known_hosts
-          export GIT_SSH_COMMAND="ssh -i $CI_BOT_KEY -o 'PubkeyAcceptedKeyTypes +ssh-rsa'"
+          export GIT_SSH_COMMAND="ssh -i $CI_BOT_KEY -o 'StrictHostKeyChecking=no' -o 'PubkeyAcceptedKeyTypes +ssh-rsa'"
 
           #git push ssh://$CI_BOT_USERNAME@$GERRIT_HOST:29418/$GERRIT_PROJECT HEAD:refs/for/$GERRIT_BRANCH
 
