@@ -345,24 +345,3 @@
               build-step-failure-threshold: never
               unstable-threshold: never
               failure-threshold: never
-      # If all tests passed, catch up the master branch with integration
-      - conditional-step:
-          condition-kind: current-status
-          condition-best: SUCCESS
-          condition-worst: SUCCESS
-          steps:
-            - shell: |-
-                #!/bin/bash
-                #
-                if echo ${{JENKINS_PUBLIC_URL}} | grep -q "ci.trustedfirmware.org"; then
-                    # Only do it on the OpenCI production site
-                    echo "It's running on the OpenCI procution site"
-                    if [ $MULTIJOB_FAILED -eq 0 ]; then
-                        echo "Proceed with integration->master fast-forward merge"
-                        bash "${{WORKSPACE}}/tf-a-ci-scripts/script/scratch_scripts/fast-forward-master.sh"
-                    else
-                        echo "Do not proceed with integration->master merge as sub-jobs failed"
-                    fi
-                else
-                    echo "It's NOT on the OpenCI production site"
-                fi
