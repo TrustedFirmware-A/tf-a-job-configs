@@ -78,6 +78,7 @@
       - string:
           name: TEST_FEATURES
           description: Features the arm-gic crate will be tested against
+          default: fakes
       - string:
           name: CLONE_REPOS
           default: tf-a-ci-scripts,arm-gic
@@ -110,5 +111,5 @@
               predefined-parameters: |
                 TEST_REPO_NAME=arm-gic
                 TEST_REPO_PROJECT=arm-firmware-crates
-                TEST_FEATURES=fakes
+                TEST_FEATURES=${{TEST_FEATURES}}
               property-file: tf-a-env.param

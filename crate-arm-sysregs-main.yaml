@@ -77,6 +77,7 @@
             tf-a-job-configs refspec to use. The master branch is used by default.
       - string:
           name: TEST_FEATURES
+          default: fakes
           description: Features the arm-sysregs crate will be tested against
       - string:
           name: SHARE_FOLDER
