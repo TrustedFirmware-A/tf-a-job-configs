@@ -103,7 +103,7 @@
           $CI_ROOT/script/gen_test_desc.py
       - trigger-builds:
           - project:
-              - tf-a-lts-v2.14-builder
+              - tf-a-lts2.14-builder
             block: true
             current-parameters: true
             parameter-factories:
