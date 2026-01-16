@@ -43,7 +43,7 @@
           default: refs/heads/main
       - string:
           name: TFUT_GERRIT_REFSPEC
-          default: +refs/heads/main:refs/remotes/origin/main
+          default: tfaut-v0.1
       - string:
           name: SPM_REFSPEC
           default: +refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14

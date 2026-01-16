@@ -49,9 +49,9 @@
             SPM (Hafnium) refspec to use.
       - string:
           name: RMM_REFSPEC
-          default: +refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14
+          default: tf-rmm-v0.8.0
           description: |
-            tf-rmm refspec to use. The lts-v2.14 branch is used by default.
+            tf-rmm refspec to use. The tag 'tf-rmm-v0.8.0' is used by default.
       - string:
           name: CI_REFSPEC
           default: +refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14
