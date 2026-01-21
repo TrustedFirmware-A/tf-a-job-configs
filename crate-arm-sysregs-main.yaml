@@ -77,7 +77,7 @@
             tf-a-job-configs refspec to use. The master branch is used by default.
       - string:
           name: TEST_FEATURES
-          default: fakes
+          default: fakes,el3
           description: Features the arm-sysregs crate will be tested against
       - string:
           name: SHARE_FOLDER
@@ -119,4 +119,3 @@
                 TEST_REPO_PROJECT=arm-firmware-crates
                 TEST_FEATURES=${{TEST_FEATURES}}
               property-file: tf-a-env.param
-
