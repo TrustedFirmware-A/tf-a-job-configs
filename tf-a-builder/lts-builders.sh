@@ -73,7 +73,7 @@ linaro_2001_release="/nfs/downloads/linaro/20.01"
 cd ${linaro_2001_release}
 resilient_cmd curl --connect-timeout 5 --retry 5 --retry-delay 1 -fsSLo \
      lt-vexpress64-openembedded_minimal-armv8-gcc-5.2_20170127-761.img.gz \
-     https://releases.linaro.org/openembedded/juno-lsk/latest/lt-vexpress64-openembedded_minimal-armv8-gcc-5.2_20170127-761.img.gz
+     https://downloads.trustedfirmware.org/infra-assets/linaro_artifacts/releases/openembedded/juno-lsk/latest/lt-vexpress64-openembedded_minimal-armv8-gcc-5.2_20170127-761.img.gz
 
 # export trace code coverage variable
 export coverage_trace_plugin="${tf_downloads}/coverage-plugin/qa-tools/coverage-tool/coverage-plugin/coverage_trace.so"

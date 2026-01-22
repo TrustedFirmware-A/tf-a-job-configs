@@ -57,7 +57,7 @@
           description: PRIVATE_CONTAINER_REGISTRY is a system-wide environment variable
       - string:
           name: JUNO_ROOTFS_URL
-          default: http://releases.linaro.org/openembedded/aarch64/17.01/linaro-image-minimal-genericarmv8-20170127-888.rootfs.tar.gz
+          default: https://downloads.trustedfirmware.org/infra-assets/linaro_artifacts/releases/openembedded/aarch64/17.01/linaro-image-minimal-genericarmv8-20170127-888.rootfs.tar.gz
       - string:
           name: MBEDTLS_URL
           default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.4.tar.gz
