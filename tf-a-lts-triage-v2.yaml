@@ -26,7 +26,7 @@
           description: |
             LTS branch
     triggers:
-      - timed: H 5 * * 5 # Run the job at 00:00 every Friday @CTS timezone
+      - timed: H 1 * * 4 # Run the job at 01:xx AM every Thursday @CTS timezone
     wrappers:
       - timestamps
       - timeout:
