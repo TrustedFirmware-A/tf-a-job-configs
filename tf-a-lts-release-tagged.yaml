@@ -19,14 +19,17 @@
             - branches:
                 - branch-compare-type: "REG_EXP"
                   branch-pattern: "refs/tags/lts-v.*"
+
                 - branch-compare-type: "REG_EXP"
                   branch-pattern: "refs/tags/sandbox/lts-v.*"
 
               project-compare-type: "PLAIN"
               project-pattern: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
             - branches:
                 - branch-compare-type: "REG_EXP"
                   branch-pattern: "refs/tags/lts-v.*"
+
                 - branch-compare-type: "REG_EXP"
                   branch-pattern: "refs/tags/sandbox/lts-v.*"
 
@@ -54,6 +57,7 @@
           else
               echo "SANDBOX_RUN=false" >>subjob.param
           fi
+
       - conditional-step:
           condition-kind: "file-exists"
           on-evaluation-failure: "dont-run"
@@ -68,6 +72,7 @@
                   block: true
                   current-parameters: true
                   property-file: "subjob.param"
+
                 - project:
                     - "tf-a-lts-release-mail"
 

@@ -14,39 +14,49 @@
       - string:
           name: "RF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
+
       - string:
           name: "RFA_REFSPEC"
           default: "+refs/heads/main:refs/remotes/origin/main"
 
           description: |
             rfa refspec to use. The main branch is used by default.
+
       - string:
           name: "GERRIT_BRANCH"
           default: "main"
+
       - string:
           name: "GERRIT_REFSPEC"
           default: "refs/heads/main"
+
       - string:
           name: "TF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
       - string:
           name: "TF_GERRIT_BRANCH"
           default: "refs/heads/master"
+
       - string:
           name: "TF_GERRIT_REFSPEC"
           default: "+refs/heads/master:refs/remotes/origin/master"
+
       - string:
           name: "CI_REFSPEC"
           default: "+refs/heads/rf-a:refs/remotes/origin/rf-a"
+
       - string:
           name: "JOBS_REFSPEC"
           default: "refs/heads/master"
 
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
+
       - string:
           name: "JOBS_PROJECT"
           default: "{gerrit_project_prefix}ci/tf-a-job-configs.git"
+
       - string:
           name: "CLONE_REPOS"
           default: "tf-a-job-configs,tf-a-ci-scripts,rusted-firmware-a"
@@ -61,13 +71,16 @@
               key-file-variable: "CI_BOT_KEY"
               username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
+
       - "timestamps"
+
       - timeout:
           timeout: 240
           fail: true
 
     builders:
       - shell: !include-raw-verbatim: "scripts/clone.sh"
+
       - shell: |
           #!/bin/bash
           set -e
@@ -84,6 +97,7 @@
     publishers:
       - archive:
           artifacts: "rusted-firmware-a/next-checks.log"
+
       - groovy-postbuild:
           script: !include-raw-verbatim:
             - "rf-a-static/postbuild.groovy"

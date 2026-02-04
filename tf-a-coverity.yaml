@@ -19,24 +19,30 @@
       - string:
           name: "TF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
       - string:
           name: "TF_GERRIT_BRANCH"
           default: "refs/heads/integration"
+
       - string:
           name: "TF_GERRIT_REFSPEC"
           default: "+refs/heads/integration:refs/remotes/origin/integration"
+
       - string:
           name: "CI_REFSPEC"
           default: "+refs/heads/master:refs/remotes/origin/master"
+
       - string:
           name: "JOBS_REFSPEC"
           default: "refs/heads/master"
 
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
+
       - string:
           name: "COVERITY_VERSION"
           default: "2024.6.1"
+
       - bool:
           name: "UPLOAD_TO_COVERITY_SCAN_ONLINE"
           default: true
@@ -49,6 +55,7 @@
 
     wrappers:
       - "timestamps"
+
       - credentials-binding:
           - text:
               credential-id: "TF-COVERITY-SCAN-TOKEN"
@@ -56,6 +63,7 @@
 
     builders:
       - shell: !include-raw-verbatim: "scripts/clone.sh"
+
       - shell: |
           #!/bin/bash
           set -e
@@ -71,6 +79,7 @@
           # Run coverity
           cd ${{WORKSPACE}}/trusted-firmware-a
           ${{WORKSPACE}}/tf-a-ci-scripts/script/tf-coverity/run_coverity_on_tf.py --tf $(pwd)
+
       - conditional-step:
           condition-kind: "boolean-expression"
           condition-expression: "${{UPLOAD_TO_COVERITY_SCAN_ONLINE}}"
@@ -96,6 +105,7 @@
     publishers:
       - archive:
           artifacts: "trusted-firmware-a/arm-tf-coverity-results.tgz, trusted-firmware-a/tf_coverage.log"
+
       - groovy-postbuild:
           script: !include-raw-verbatim:
             - "tf-a-coverity/postbuild.groovy"

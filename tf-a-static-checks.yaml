@@ -14,30 +14,38 @@
       - string:
           name: "TF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
       - string:
           name: "TF_GERRIT_BRANCH"
           default: "refs/heads/integration"
+
       - string:
           name: "TF_GERRIT_REFSPEC"
           default: "+refs/heads/integration:refs/remotes/origin/integration"
+
       - string:
           name: "TFTF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/tf-a-tests"
+
       - string:
           name: "TFTF_GERRIT_BRANCH"
           default: "refs/heads/master"
+
       - string:
           name: "TFTF_GERRIT_REFSPEC"
           default: "+refs/heads/master:refs/remotes/origin/master"
+
       - string:
           name: "CI_REFSPEC"
           default: "+refs/heads/master:refs/remotes/origin/master"
+
       - string:
           name: "JOBS_REFSPEC"
           default: "refs/heads/master"
 
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
+
       - choice:
           name: "REPO_UNDER_TEST"
 
@@ -47,9 +55,11 @@
 
           default: "trusted-firmware-a"
           description: "Repository to run static checks on."
+
       - string:
           name: "GERRIT_BRANCH"
           default: "master"
+
       - string:
           name: "GERRIT_REFSPEC"
           default: "refs/heads/master"
@@ -61,13 +71,16 @@
               key-file-variable: "CI_BOT_KEY"
               username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
+
       - "timestamps"
+
       - timeout:
           timeout: 240
           fail: true
 
     builders:
       - shell: !include-raw-verbatim: "scripts/clone.sh"
+
       - shell: |
           #!/bin/bash
           set -e
@@ -83,6 +96,7 @@
           # Executed project-related static checks: copyright presence, headers in alphabetical order,
           # line endings, coding style and banned API.
           IS_CONTINUOUS_INTEGRATION=1 ${{WORKSPACE}}/tf-a-ci-scripts/script/static-checks/static-checks.sh
+
       - trigger-builds:
           - project: "tf-a-ci-gateway"
             block: true
@@ -95,6 +109,7 @@
     publishers:
       - archive:
           artifacts: "${{REPO_UNDER_TEST}}/static-checks.log"
+
       - groovy-postbuild:
           script: !include-raw-verbatim:
             - "tf-a-static-checks/postbuild.groovy"

@@ -14,6 +14,7 @@
           option: "project"
           enabled: true
           max-total: 5
+
       - build-discarder:
           days-to-keep: 15
 
@@ -21,52 +22,65 @@
       - string:
           name: "GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
       - string:
           name: "GERRIT_BRANCH"
           default: "refs/heads/integration"
+
       - string:
           name: "GERRIT_REFSPEC"
           default: "+refs/heads/integration:refs/remotes/origin/integration"
+
       - string:
           name: "GERRIT_PATCHSET_NUMBER"
           default: ""
+
       - string:
           name: "GERRIT_CHANGE_NUMBER"
           default: ""
+
       - string:
           name: "TF_GERRIT_REFSPEC"
           default: "${{GERRIT_REFSPEC}}"
           description: "Parameter only used by the clone script"
+
       - string:
           name: "TFTF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/tf-a-tests"
+
       - string:
           name: "TFTF_GERRIT_BRANCH"
           default: "refs/heads/master"
+
       - string:
           name: "TFTF_GERRIT_REFSPEC"
           default: "+refs/heads/master:refs/remotes/origin/master"
+
       - string:
           name: "SPM_REFSPEC"
           default: "+refs/heads/master:refs/remotes/origin/master"
 
           description: |
             SPM(Hafnium) refspec to use. The master branch is used by default.
+
       - string:
           name: "RMM_REFSPEC"
           default: "+refs/heads/main:refs/remotes/origin/main"
 
           description: |
             tf-rmm refspec to use. The main branch is used by default.
+
       - string:
           name: "CI_REFSPEC"
           default: "+refs/heads/master:refs/remotes/origin/master"
+
       - string:
           name: "JOBS_REFSPEC"
           default: "refs/heads/master"
 
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
+
       - string:
           name: "MBEDTLS_URL"
           default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz"
@@ -78,10 +92,12 @@
               key-file-variable: "CI_BOT_KEY"
               username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
+
       - "timestamps"
 
     builders:
       - shell: !include-raw-verbatim: "scripts/clone.sh"
+
       - shell: |
           #!/bin/bash
           set -e
@@ -93,6 +109,7 @@
           TF_GERRIT_BRANCH=${{GERRIT_BRANCH}}
           TF_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
           EOF
+
       - multijob:
           name: "Lint commit messages"
           condition: "COMPLETED"
@@ -106,6 +123,7 @@
                 REFSPEC=${{GERRIT_REFSPEC}}
                 REFNAME=${{GERRIT_PATCHSET_REVISION}}
                 REFNAME_BASE=origin/${{GERRIT_BRANCH}}
+
       - multijob:
           condition: "COMPLETED"
           name: "Build and static checks"
@@ -120,6 +138,7 @@
                 ENABLE_STATIC_CHECK=true
 
               property-file: "env.param"
+
       - multijob:
           condition: "COMPLETED"
           name: "Run doc build check"
@@ -133,6 +152,7 @@
                 TEST_GROUPS=tf-l1-check-docs
 
               property-file: "env.param"
+
       - multijob:
           condition: "COMPLETED"
           name: "Run build tests"

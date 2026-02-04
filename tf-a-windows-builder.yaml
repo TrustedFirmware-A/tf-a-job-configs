@@ -14,6 +14,7 @@
           max-per-node: 10
           max-total: 10
           option: "project"
+
       - build-discarder:
           days-to-keep: 15
 
@@ -25,6 +26,7 @@
           values:
             - "0"
             - "1"
+
       - axis:
           name: "label"
           type: "slave"
@@ -41,24 +43,30 @@
       - string:
           name: "TF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
       - string:
           name: "TF_GERRIT_BRANCH"
           default: "refs/heads/master"
+
       - string:
           name: "TF_SRC_REPO_URL"
           default: "https://review.trustedfirmware.org/{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
       - string:
           name: "TF_GERRIT_REFSPEC"
           default: "+refs/heads/master:refs/remotes/origin/master"
+
       - string:
           name: "MBEDTLS_URL"
           default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz"
+
       - string:
           name: "PARAMS"
           description: "Debug parameters for make"
 
     wrappers:
       - "timestamps"
+
       - timeout:
           timeout: 120
           fail: true

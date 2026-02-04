@@ -28,6 +28,7 @@
               REFNAME=${{GERRIT_PATCHSET_REVISION}}
               BASE_REFSPEC=${{GERRIT_REFSPEC}}
               BASE_REFNAME=${{GERRIT_PATCHSET_REVISION}}^
+
       - trigger-builds:
           - project:
               - "tlc-pipeline"

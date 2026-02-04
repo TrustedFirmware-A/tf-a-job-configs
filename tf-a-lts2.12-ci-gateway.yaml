@@ -11,6 +11,7 @@
     properties:
       - build-discarder:
           days-to-keep: 15
+
       - throttle:
           option: "project"
           enabled: true
@@ -24,9 +25,11 @@
               key-file-variable: "CI_BOT_KEY"
               username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
+
       - timeout:
           timeout: 240
           fail: true
+
       - "timestamps"
 
     parameters:
@@ -38,57 +41,68 @@
             White space separated list of test configs: can be mix of specific
             test configs (e.g., <code>l1/fvp-default:fvp-linux-default</code>) and
             group names (e.g., <code>l1 l2</code>).
+
       - string:
           name: "TF_GERRIT_REFSPEC"
           default: "+refs/heads/lts-v2.12:refs/remotes/origin/lts-v2.12"
 
           description: |
             trusted-firmware-a refspec to use. The lts-v2.12 branch is used by default.
+
       - string:
           name: "TFTF_GERRIT_REFSPEC"
           default: "+refs/heads/lts-v2.12:refs/remotes/origin/lts-v2.12"
 
           description: |
             tf-a-tests refspec to use. The lts-v2.12 branch is used by default.
+
       - string:
           name: "TF_M_TESTS_GERRIT_REFSPEC"
           default: "53ddc58dcd57e1f5cf658b316d7d735335d58570"
 
           description: |
             tf-m-tests refspec to use. The tfa_ci_dep_revision branch is used by default.
+
       - string:
           name: "TF_M_EXTRAS_GERRIT_REFSPEC"
           default: "3ff04e40ff7f66c8cee087b6e5cbd8fb8c1bec01"
 
           description: |
             tf-m-extras refspec to use. The tfa_ci_dep_revision branch is used by default.
+
       - string:
           name: "SPM_REFSPEC"
           default: "v2.12"
 
           description: |
             SPM(Hafnium) refspec to use. The 'v2.12' tag is used by default.
+
       - string:
           name: "CI_REFSPEC"
           default: "+refs/heads/lts-v2.12:refs/remotes/origin/lts-v2.12"
 
           description: |
             tf-a-ci-scripts refspec to use. The lts-v2.12 branch is used by default.
+
       - string:
           name: "JOBS_REFSPEC"
           default: "refs/heads/master"
 
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
+
       - bool:
           name: "ENABLE_STATIC_CHECK"
           default: false
+
       - string:
           name: "QA_TOOLS_REPO"
           default: "https://git.gitlab.arm.com/tooling/qa-tools.git"
+
       - string:
           name: "QA_TOOLS_BRANCH"
           default: "master"
+
       - string:
           name: "USE_TUXSUITE_FVP"
           default: 1
@@ -98,6 +112,7 @@
 
     builders:
       - shell: !include-raw-verbatim: "scripts/clone.sh"
+
       - shell: |
           #!/bin/bash
           set -e
@@ -105,6 +120,7 @@
           export workspace=$PWD
           export test_groups=$TEST_GROUPS
           $CI_ROOT/script/gen_test_desc.py
+
       - trigger-builds:
           - project:
               - "tf-a-lts2.12-builder"
@@ -134,8 +150,10 @@
                     #!/bin/bash -e
                     export CI_ROOT=${{PWD}}/tf-a-ci-scripts
                     bash "$CI_ROOT/job/tf-ci-gateway/generate_report.sh"
+
       - archive:
           artifacts: "report.json, report.html, merge/outdir/**"
+
       - groovy-postbuild:
           script: !include-raw-verbatim:
             - "tf-a-ci-gateway/postbuild.groovy"

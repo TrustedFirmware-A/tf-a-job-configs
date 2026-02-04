@@ -15,18 +15,21 @@
       - string:
           name: "GERRIT_HOST"
           default: "review.trustedfirmware.org"
+
       - string:
           name: "GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
 
           description: |
             TF-A Git project
+
       - string:
           name: "GERRIT_BRANCH"
           default: "lts-v2.10"
 
           description: |
             Git branch to release from (lts-v2.8, lts-v2.10, etc.)
+
       - bool:
           name: "SANDBOX_RUN"
           default: true
@@ -45,6 +48,7 @@
               key-file-variable: "CI_BOT_KEY"
               username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
+
       - "timestamps"
 
     builders:

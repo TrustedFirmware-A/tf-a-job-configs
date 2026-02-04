@@ -39,6 +39,7 @@
 
     wrappers:
       - "timestamps"
+
       - credentials-binding:
           - text:
               credential-id: "TF-A-RTD-API-TOKEN"

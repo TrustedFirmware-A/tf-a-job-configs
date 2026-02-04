@@ -11,6 +11,7 @@
           option: "project"
           enabled: true
           max-total: 5
+
       - build-discarder:
           days-to-keep: 60
           num-to-keep: 30
@@ -19,51 +20,63 @@
       - string:
           name: "TF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
       - string:
           name: "TF_GERRIT_BRANCH"
           default: "refs/heads/lts-v2.8"
+
       - string:
           name: "TF_GERRIT_REFSPEC"
           default: "+refs/heads/lts-v2.8:refs/remotes/origin/lts-v2.8"
+
       - string:
           name: "TFTF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/tf-a-tests"
+
       - string:
           name: "TFTF_GERRIT_BRANCH"
           default: "refs/heads/lts-v2.8"
+
       - string:
           name: "TFTF_GERRIT_REFSPEC"
           default: "+refs/heads/lts-v2.8:refs/remotes/origin/lts-v2.8"
+
       - string:
           name: "SPM_REFSPEC"
           default: "v2.8"
 
           description: |
             SPM(Hafnium) refspec to use. The 'v2.8' tag is used by default.
+
       - string:
           name: "CI_REFSPEC"
           default: "+refs/heads/lts-v2.8:refs/remotes/origin/lts-v2.8"
+
       - string:
           name: "JOBS_REFSPEC"
           default: "refs/heads/master"
 
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
+
       - string:
           name: "MBEDTLS_URL"
           default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.3.tar.gz"
+
       - string:
           name: "LAVA_RETRIES"
           default: 2
 
           description: |
             Number of tries submitting job to LAVA in case it fails (stopgap measure against nondeterministic failures)
+
       - string:
           name: "USE_TUXSUITE_FVP"
           default: 1
 
           description: |
             Whether to submit FVP tests via TuxSuite (instead of LAVA)
+
       - bool:
           name: "FORCE_TO_BUILD"
           default: false
@@ -82,10 +95,12 @@
               key-file-variable: "CI_BOT_KEY"
               username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
+
       - "timestamps"
 
     builders:
       - shell: !include-raw-verbatim: "scripts/clone.sh"
+
       - shell: |
           #!/bin/bash
           set -e
@@ -99,7 +114,9 @@
           GERRIT_BRANCH=${{TFTF_GERRIT_BRANCH}}
           GERRIT_REFSPEC=${{TFTF_GERRIT_REFSPEC}}
           EOF
+
       - shell: !include-raw-verbatim: "scripts/lts-check-last-commit.sh"
+
       - conditional-step:
           condition-kind: "file-exists"
           condition-filename: "TO_BUILD"
@@ -115,6 +132,7 @@
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     property-file: "tf-a-env.param"
+
             - multijob:
                 name: "Build Trusted Firmware"
                 condition: "COMPLETED"
@@ -129,24 +147,28 @@
                       TEST_GROUPS=tf-l1-build-fvp tf-l2-build-fvp
 
                     property-file: "tf-a-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "tf-l1-build-juno tf-l2-build-juno"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tf-l1-build-juno tf-l2-build-juno"
                     property-file: "tf-a-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "tf-l1-build-plat"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tf-l1-build-plat"
                     property-file: "tf-a-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "tf-l1-build-clang"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tf-l1-build-clang"
                     property-file: "tf-a-env.param"
+
             - multijob:
                 name: "TFTF Tests for FVP"
                 condition: "COMPLETED"
@@ -158,24 +180,28 @@
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tftf-l2-fwu"
                     property-file: "tf-a-tests-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "tftf-l1-fvp tftf-l2-fvp-auxiliary"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tftf-l1-fvp tftf-l2-fvp-auxiliary"
                     property-file: "tf-a-tests-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "tftf-l2-fvp tftf-l2-fvp-dynamiq"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tftf-l2-fvp tftf-l2-fvp-dynamiq"
                     property-file: "tf-a-tests-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "tftf-l2-extensive-tests-fvp"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tftf-l2-extensive-tests-fvp"
                     property-file: "tf-a-tests-env.param"
+
             - multijob:
                 name: "Boot up to the Linux shell prompt"
                 condition: "COMPLETED"
@@ -187,24 +213,28 @@
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-aarch32"
                     property-file: "tf-a-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "tf-l2-boot-tests-rootfs"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-rootfs"
                     property-file: "tf-a-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "tf-l2-boot-tests-spm-mm"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-spm-mm"
                     property-file: "tf-a-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "spm-l2-boot-tests"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=spm-l2-boot-tests"
                     property-file: "tf-a-env.param"
+
             - multijob:
                 name: "Boot up to the Linux shell prompt - Part 2"
                 condition: "COMPLETED"
@@ -216,36 +246,42 @@
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-misc"
                     property-file: "tf-a-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "tf-l2-boot-tests-latest"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-latest"
                     property-file: "tf-a-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "tf-l2-boot-tests-cortex"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-cortex"
                     property-file: "tf-a-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "tf-l2-boot-tests-gicv2"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-gicv2"
                     property-file: "tf-a-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "tf-l2-boot-tests-bl2_el3"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-bl2_el3"
                     property-file: "tf-a-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "qemu-boot-tests"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=qemu-boot-tests"
                     property-file: "tf-a-env.param"
+
             - multijob:
                 name: "Juno Boot Tests"
                 condition: "COMPLETED"
@@ -257,12 +293,14 @@
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-juno"
                     property-file: "tf-a-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "tftf-l1-juno"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tftf-l1-juno"
                     property-file: "tf-a-env.param"
+
             - multijob:
                 name: "Miscellaneous tests"
                 condition: "COMPLETED"
@@ -274,36 +312,42 @@
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-css"
                     property-file: "tf-a-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "tf-l3-boot-tests-spm-mm"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-spm-mm"
                     property-file: "tf-a-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "tf-l3-boot-tests-ras"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-ras"
                     property-file: "tf-a-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "tf-l3-boot-tests-misc"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-misc"
                     property-file: "tf-a-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "spm-l3-boot-tests"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=spm-l3-boot-tests"
                     property-file: "tf-a-env.param"
+
                   - name: "tf-a-lts2.8-ci-gateway"
                     alias: "tf-l1-boot-tests-plat"
                     current-parameters: true
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tf-l1-boot-tests-plat"
                     property-file: "tf-a-env.param"
+
             - multijob:
                 name: "Run doc build check"
                 condition: "COMPLETED"
@@ -314,6 +358,7 @@
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TEST_GROUPS=tf-l1-check-docs"
                     property-file: "tf-a-env.param"
+
             - multijob:
                 name: "Generate visualizations"
                 condition: "COMPLETED"
@@ -332,6 +377,7 @@
                     kill-phase-on: "NEVER"
                     predefined-parameters: "TARGET_BUILD=${{JOB_NAME}}/${{BUILD_NUMBER}}"
                     property-file: "tf-a-env.param"
+
             # Run the unstable TF-A Tests at the end but do not let their results
             # participate in the job's success/failure.
             - trigger-builds:
@@ -362,5 +408,6 @@
                     currentBuild.setDescription("There are no new commits in the repositories, skip the build!")
 
                   on-failure: "nothing"
+
       - email:
           recipients: "bipin.ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, jidong@google.com, govindraj.raja@arm.com"

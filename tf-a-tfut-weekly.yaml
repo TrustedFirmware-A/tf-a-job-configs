@@ -11,6 +11,7 @@
           option: "project"
           enabled: true
           max-total: 5
+
       - build-discarder:
           days-to-keep: 14
           num-to-keep: 60
@@ -19,60 +20,74 @@
       - string:
           name: "TF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
       - string:
           name: "TF_GERRIT_BRANCH"
           default: "refs/heads/integration"
+
       - string:
           name: "TF_GERRIT_REFSPEC"
           default: "+refs/heads/integration:refs/remotes/origin/integration"
+
       - string:
           name: "TFTF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/tf-a-tests"
+
       - string:
           name: "TFTF_GERRIT_BRANCH"
           default: "refs/heads/master"
+
       - string:
           name: "TFTF_GERRIT_REFSPEC"
           default: "+refs/heads/master:refs/remotes/origin/master"
+
       - string:
           name: "SPM_REFSPEC"
           default: "+refs/heads/master:refs/remotes/origin/master"
 
           description: |
             SPM(Hafnium) refspec to use. The master branch is used by default.
+
       - string:
           name: "RMM_REFSPEC"
           default: "+refs/heads/main:refs/remotes/origin/main"
 
           description: |
             tf-rmm refspec to use. The main branch is used by default.
+
       - string:
           name: "TFUT_GERRIT_REFSPEC"
           default: "+refs/heads/main:refs/remotes/origin/main"
 
           description: |
             tf-a-unit-tests refspec to use. The main branch is used by default.
+
       - string:
           name: "CI_REFSPEC"
           default: "+refs/heads/master:refs/remotes/origin/master"
+
       - string:
           name: "JOBS_REFSPEC"
           default: "refs/heads/master"
 
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
+
       - string:
           name: "LAVA_PRIORITY"
           default: "low"
+
       - string:
           name: "MBEDTLS_URL"
           default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz"
+
       - string:
           name: "LAVA_RETRIES"
           default: 2
 
           description: |
             Number of tries submitting job to LAVA in case it fails (stopgap measure against nondeterministic failures)
+
       - string:
           name: "USE_TUXSUITE_FVP"
           default: 1
@@ -85,6 +100,7 @@
 
     builders:
       - shell: !include-raw-verbatim: "scripts/clone.sh"
+
       - shell: |
           #!/bin/bash
           set -e
@@ -98,6 +114,7 @@
           GERRIT_BRANCH=${{TFTF_GERRIT_BRANCH}}
           GERRIT_REFSPEC=${{TFTF_GERRIT_REFSPEC}}
           EOF
+
       - multijob:
           name: "TFA UNIT TESTS"
           condition: "COMPLETED"

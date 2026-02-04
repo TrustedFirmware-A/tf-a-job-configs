@@ -17,24 +17,28 @@
       - string:
           name: "GERRIT_HOST"
           default: "review.trustedfirmware.org"
+
       - string:
           name: "GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
 
           description: |
             TF-A Git project
+
       - string:
           name: "GERRIT_BRANCH"
           default: ""
 
           description: |
             Git branch (e.g. lts-v2.8) to search for the latest tag in case of --latest is used for RELEASE_TAG
+
       - string:
           name: "RELEASE_TAG"
           default: "--latest"
 
           description: |
             Release git tag, e.g. 'lts-v2.8.10', or '--latest' to get latest tag in GERRIT_BRANCH
+
       - bool:
           name: "SANDBOX_RUN"
           default: true
@@ -42,6 +46,7 @@
           description: |
             Run sandbox simulation of a release. Uncheck this only after
             running simulation and checking that everything is correct!
+
           #    triggers:
           #    - gerrit:
           #        silent: true
@@ -57,6 +62,7 @@
 
     wrappers:
       - "timestamps"
+
       - timeout:
           timeout: 5
           fail: true
@@ -90,6 +96,7 @@
           artifacts: "email.txt"
           latest-only: false
           allow-empty: true
+
       - conditional-publisher:
           - condition-kind: "file-exists"
             on-evaluation-failure: "dont-run"

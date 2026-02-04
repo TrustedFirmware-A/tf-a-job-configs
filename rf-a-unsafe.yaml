@@ -29,6 +29,7 @@
                 exclude-no-code-change: true
                 exclude-private: true
                 exclude-wip: true
+
             - comment-added-contains-event:
                 comment-contains-value: "^RUN_UNSAFE_CI$"
 
@@ -41,33 +42,39 @@
       - string:
           name: "GERRIT_PROJECT"
           default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
+
       - string:
           name: "GERRIT_BRANCH"
           default: "refs/heads/main"
+
       - string:
           name: "GERRIT_REFSPEC"
           default: "+refs/heads/main:refs/remotes/origin/main"
 
           description: |
             'e.g. refs/changes/13/31138/1'
+
       - string:
           name: "RFA_REFSPEC"
           default: "${{GERRIT_REFSPEC}}"
 
           description: |
             'do-not-amend: used by scripts/clone.sh to fetch the correct Gerrit patchset - use GERRIT_REFSPEC instead'
+
       - string:
           name: "CI_REFSPEC"
           default: "+refs/heads/rf-a:refs/remotes/origin/rf-a"
 
           description: |
             'Refs to fetch for the tf-a-ci-scripts repo e.g. refs/changes/13/31138/1'
+
       - string:
           name: "JOBS_REFSPEC"
           default: "refs/heads/master"
 
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
+
       - string:
           name: "CLONE_REPOS"
           default: "tf-a-ci-scripts,rusted-firmware-a"
@@ -82,13 +89,16 @@
               key-file-variable: "CI_BOT_KEY"
               username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
+
       - "timestamps"
+
       - timeout:
           timeout: 240
           fail: true
 
     builders:
       - shell: !include-raw-verbatim: "scripts/clone.sh"
+
       - shell: |
           #!/bin/bash
           set -ex

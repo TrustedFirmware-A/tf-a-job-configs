@@ -14,6 +14,7 @@
           option: "project"
           enabled: true
           max-total: 5
+
       - build-discarder:
           days-to-keep: 15
 
@@ -21,55 +22,69 @@
       - string:
           name: "GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
       - string:
           name: "GERRIT_BRANCH"
           default: "refs/heads/lts-v2.14"
+
       - string:
           name: "GERRIT_REFSPEC"
           default: "+refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14"
+
       - string:
           name: "GERRIT_PATCHSET_NUMBER"
           default: ""
+
       - string:
           name: "GERRIT_CHANGE_NUMBER"
           default: ""
+
       - string:
           name: "TF_GERRIT_REFSPEC"
           default: "${{GERRIT_REFSPEC}}"
           description: "Parameter only used by the clone script"
+
       - string:
           name: "TFTF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/tf-a-tests"
+
       - string:
           name: "TFTF_GERRIT_BRANCH"
           default: "refs/heads/lts-v2.14"
+
       - string:
           name: "TFTF_GERRIT_REFSPEC"
           default: "+refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14"
+
       - string:
           name: "SPM_REFSPEC"
           default: "+refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14"
 
           description: |
             SPM(Hafnium) refspec to use. The lts-v2.14 branch is used by default.
+
       - string:
           name: "RMM_REFSPEC"
           default: "tf-rmm-v0.8.0"
 
           description: |
             tf-rmm refspec to use. The tag 'tf-rmm-v0.8.0' is used by default.
+
       - string:
           name: "CI_REFSPEC"
           default: "+refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14"
+
       - string:
           name: "JOBS_REFSPEC"
           default: "refs/heads/master"
 
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
+
       - string:
           name: "MBEDTLS_URL"
           default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz"
+
       - string:
           name: "LAVA_RETRIES"
           default: 2
@@ -84,10 +99,12 @@
               key-file-variable: "CI_BOT_KEY"
               username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
+
       - "timestamps"
 
     builders:
       - shell: !include-raw-verbatim: "scripts/clone.sh"
+
       - shell: |
           #!/bin/bash
           set -e
@@ -99,6 +116,7 @@
           TF_GERRIT_BRANCH=${{GERRIT_BRANCH}}
           TF_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
           EOF
+
       - multijob:
           condition: "COMPLETED"
           name: "Carry out level 1 tests"
@@ -108,6 +126,7 @@
               name: "tf-a-lts2.14-gerrit-tforg-l1"
               current-parameters: true
               property-file: "env.param"
+
       - multijob:
           condition: "COMPLETED"
           name: "Build Trusted Firmware"
@@ -122,6 +141,7 @@
                 TF_REFSPEC=$GERRIT_REFSPEC
 
               property-file: "env.param"
+
       - multijob:
           condition: "COMPLETED"
           name: "Run platform boot tests"
@@ -135,6 +155,7 @@
                 TF_REFSPEC=$GERRIT_REFSPEC
 
               property-file: "env.param"
+
       - multijob:
           condition: "COMPLETED"
           name: "TFTF tests"
@@ -149,6 +170,7 @@
                 TF_REFSPEC=$GERRIT_REFSPEC
 
               property-file: "env.param"
+
       - multijob:
           condition: "COMPLETED"
           name: "Boot up to the Linux shell prompt"
@@ -163,6 +185,7 @@
                 TF_REFSPEC=$GERRIT_REFSPEC
 
               property-file: "env.param"
+
       - conditional-step:
           condition-command: '[ "$NOMINATION_FILE" ]'
           condition-kind: "shell"

@@ -14,6 +14,7 @@
           option: "project"
           enabled: true
           max-total: 5
+
       - build-discarder:
           days-to-keep: 14
 
@@ -21,51 +22,63 @@
       - string:
           name: "GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/tf-a-tests"
+
       - string:
           name: "GERRIT_BRANCH"
           default: "refs/heads/lts-v2.14"
+
       - string:
           name: "GERRIT_REFSPEC"
           default: "+refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14"
+
       - string:
           name: "GERRIT_PATCHSET_NUMBER"
           default: ""
+
       - string:
           name: "GERRIT_CHANGE_NUMBER"
           default: ""
+
       - string:
           name: "TF_GERRIT_BRANCH"
           default: "refs/heads/lts-v2.14"
           description: "Git project branch for Trusted Firmware-A."
+
       - string:
           name: "TF_GERRIT_REFSPEC"
           default: "+refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14"
           description: "Git refspec for Trusted Firmware-A."
+
       - string:
           name: "TFTF_GERRIT_REFSPEC"
           default: "${{GERRIT_REFSPEC}}"
           description: "Parameter only used by the clone script"
+
       - string:
           name: "SPM_REFSPEC"
           default: "+refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14"
 
           description: |
             SPM (Hafnium) refspec to use.
+
       - string:
           name: "RMM_REFSPEC"
           default: "tf-rmm-v0.8.0"
 
           description: |
             tf-rmm refspec to use. The tag 'tf-rmm-v0.8.0' is used by default.
+
       - string:
           name: "CI_REFSPEC"
           default: "+refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14"
+
       - string:
           name: "JOBS_REFSPEC"
           default: "refs/heads/master"
 
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
+
       - string:
           name: "MBEDTLS_URL"
           default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz"
@@ -77,10 +90,12 @@
               key-file-variable: "CI_BOT_KEY"
               username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
+
       - "timestamps"
 
     builders:
       - shell: !include-raw-verbatim: "scripts/clone.sh"
+
       - shell: |
           #!/bin/bash
           set -e
@@ -92,6 +107,7 @@
           TFTF_GERRIT_BRANCH=${{GERRIT_BRANCH}}
           TFTF_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
           EOF
+
       - multijob:
           condition: "COMPLETED"
           name: "Build and static checks"
@@ -102,6 +118,7 @@
               current-parameters: true
               predefined-parameters: "REPO_UNDER_TEST=tf-a-tests"
               property-file: "env.param"
+
       - multijob:
           condition: "COMPLETED"
           name: "Run doc build check"
@@ -115,6 +132,7 @@
                 TEST_GROUPS=tftf-l1-check-docs
 
               property-file: "env.param"
+
       - multijob:
           condition: "COMPLETED"
           name: "Build TF-A-Tests"
@@ -128,6 +146,7 @@
                 TEST_GROUPS=tftf-l1-build
 
               property-file: "env.param"
+
       - multijob:
           condition: "COMPLETED"
           name: "Basic TF-A-Tests test cases"

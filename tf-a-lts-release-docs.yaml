@@ -17,30 +17,35 @@
       - string:
           name: "GERRIT_HOST"
           default: "review.trustedfirmware.org"
+
       - string:
           name: "GERRIT_PROJECT"
           default: "{gerrit_project_prefix}sandbox/pfalcon/trusted-firmware-a"
 
           description: |
             TF-A Git project
+
       - string:
           name: "GERRIT_BRANCH"
           default: ""
 
           description: |
             Git branch (e.g. lts-v2.8)
+
       - string:
           name: "GERRIT_REFNAME"
           default: ""
 
           description: |
             Git refname
+
       - string:
           name: "RELEASE_TAG"
           default: "--latest"
 
           description: |
             Release git tag, e.g. 'lts-v2.8.10'
+
       - bool:
           name: "SANDBOX_RUN"
           default: true
@@ -51,22 +56,28 @@
 
     wrappers:
       - "timestamps"
+
       - timeout:
           timeout: 60
           fail: true
+
       - credentials-binding:
           - text:
               credential-id: "TF-A-RTD-API-TOKEN"
               variable: "RTD_API_TOKEN"
+
           - text:
               credential-id: "Trusted_Firmware_ReadTheDocs_Token"
               variable: "RTD_WEBHOOK_SECRET"
+
           - text:
               credential-id: "TFA_SANDBOX_RTD_WEBHOOK_SECRET"
               variable: "TFA_SANDBOX_RTD_WEBHOOK_SECRET"
+
           - text:
               credential-id: "PFALCON_RTD_API_TOKEN"
               variable: "PFALCON_RTD_API_TOKEN"
+
           - text:
               credential-id: "PFALCON_RTD_WEBHOOK_SECRET"
               variable: "PFALCON_RTD_WEBHOOK_SECRET"

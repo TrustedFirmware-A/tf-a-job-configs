@@ -11,6 +11,7 @@
           option: "project"
           enabled: true
           max-total: 5
+
       - build-discarder:
           days-to-keep: 14
           num-to-keep: 60
@@ -34,6 +35,7 @@
                 exclude-no-code-change: true
                 exclude-private: true
                 exclude-wip: true
+
             - comment-added-contains-event:
                 comment-contains-value: "^RUN_CI$"
 
@@ -59,41 +61,49 @@
       - string:
           name: "GERRIT_PROJECT"
           default: "{gerrit_project_prefix}arm-firmware-crates/arm-sysregs"
+
       - string:
           name: "GERRIT_BRANCH"
           default: "refs/heads/main"
+
       - string:
           name: "GERRIT_REFSPEC"
           default: "+refs/heads/main:refs/remotes/origin/main"
 
           description: |
             'e.g. refs/changes/13/31138/1'
+
       - string:
           name: "ARM_SYSREGS_GERRIT_REFSPEC"
           default: "${{GERRIT_REFSPEC}}"
 
           description: |
             'do-not-amend: used by scripts/clone.sh to fetch the correct Gerrit patchset - use GERRIT_REFSPEC instead'
+
       - string:
           name: "CI_REFSPEC"
           default: "+refs/heads/rf-a:refs/remotes/origin/rf-a"
 
           description: |
             'Refs to fetch for the tf-a-ci-scripts repo e.g. refs/changes/13/31138/1'
+
       - string:
           name: "JOBS_REFSPEC"
           default: "refs/heads/master"
 
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
+
       - string:
           name: "TEST_FEATURES"
           default: "fakes,el3"
           description: "Features the arm-sysregs crate will be tested against"
+
       - string:
           name: "SHARE_FOLDER"
           default: "/srv/shared/${{JOB_NAME}}/${{BUILD_NUMBER}}"
           description: "Folder containing shared repositories for downstream pipeline jobs"
+
       - string:
           name: "CLONE_REPOS"
           default: "tf-a-ci-scripts,arm-sysregs"
@@ -108,11 +118,13 @@
               key-file-variable: "CI_BOT_KEY"
               username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
+
       - "workspace-cleanup"
       - "timestamps"
 
     builders:
       - shell: !include-raw-verbatim: "scripts/clone.sh"
+
       - shell: |
           #!/bin/bash
           set -e
@@ -121,6 +133,7 @@
           ARM_SCMI_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
           SHARE_FOLDER=${{SHARE_FOLDER}}
           EOF
+
       - multijob:
           name: "Platform independent tests"
           condition: "COMPLETED"

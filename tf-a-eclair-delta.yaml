@@ -20,48 +20,58 @@
 
           default: |
             fvp-tbb-mbedtls-rme-romlib fvp-spm-spmd-lsp fvp-pauth-bti-sdei fvp-aarch32-roxlattables
+
       - string:
           name: "MAKE_TARGET"
           default: ""
 
           description: |
             TF-A make target
+
       - string:
           name: "MAKE_JOBS"
           default: "16"
 
           description: |
             --jobs to pass to make, etc.
+
       - string:
           name: "DEBUG"
           default: "1"
 
           description: |
             TF-A make DEBUG setting
+
       - string:
           name: "GERRIT_HOST"
           default: "review.trustedfirmware.org"
+
       - string:
           name: "GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
 
           description: |
             Git project to build (also set by Gerrit trigger)
+
       - string:
           name: "GERRIT_BRANCH"
           default: "integration"
 
           description: |
             Git branch to build (also set by Gerrit trigger)
+
       - string:
           name: "GERRIT_REFSPEC"
           default: ""
+
       - string:
           name: "GERRIT_CHANGE_NUMBER"
           default: ""
+
       - string:
           name: "GERRIT_PATCHSET_NUMBER"
           default: ""
+
       - string:
           name: "MBEDTLS_URL"
           default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz"
@@ -81,6 +91,7 @@
 
               project-compare-type: "PLAIN"
               project-pattern: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
             - branches:
                 - branch-compare-type: "PLAIN"
                   branch-pattern: "integration"
@@ -92,15 +103,18 @@
             - comment-added-event:
                 approval-category: "Allow-CI"
                 approval-value: 1
+
             - comment-added-event:
                 approval-category: "Allow-CI"
                 approval-value: 2
 
     wrappers:
       - "timestamps"
+
       - timeout:
           timeout: 330
           fail: true
+
       - credentials-binding:
           - ssh-user-private-key:
               credential-id: "TFA_CI_BOT_USER_SSH_KEY"
