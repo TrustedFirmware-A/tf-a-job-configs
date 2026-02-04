@@ -1,9 +1,10 @@
 - job:
-    name: tf-a-commitlint
-    description: Lint commit messages.
-    project-type: pipeline
+    name: "tf-a-commitlint"
+    description: "Lint commit messages."
+    project-type: "pipeline"
     sandbox: true
-    dsl: !include-raw-verbatim: tf-a-commitlint/Jenkinsfile
+    dsl: !include-raw-verbatim: "tf-a-commitlint/Jenkinsfile"
+
     properties:
       - build-discarder:
           days-to-keep: 14

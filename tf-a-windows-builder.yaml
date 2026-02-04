@@ -1,70 +1,82 @@
 - job:
-    name: tf-a-windows-builder
-    node: tf-a-windows
-    project-type: matrix
+    name: "tf-a-windows-builder"
+    node: "tf-a-windows"
+    project-type: "matrix"
     concurrent: true
     disabled: false
+
     description: |
       Trusted Firmware A (TF-A) Windows hosted builder
+
     properties:
       - throttle:
           enabled: true
           max-per-node: 10
           max-total: 10
-          option: project
+          option: "project"
       - build-discarder:
           days-to-keep: 15
+
     axes:
       - axis:
-          name: DEBUG
-          type: user-defined
+          name: "DEBUG"
+          type: "user-defined"
+
           values:
             - "0"
             - "1"
       - axis:
-          name: label
-          type: slave
+          name: "label"
+          type: "slave"
+
           values:
-            - tf-a-windows
+            - "tf-a-windows"
+
     builders:
       - shell: |
           #!C:\msys64\usr\bin\env.exe OSTYPE="msys" bash -x
           make -j $(nproc) CROSS_COMPILE=aarch64-none-elf- PLAT=fvp DEBUG=$DEBUG V=1 all
+
     parameters:
       - string:
-          name: TF_GERRIT_PROJECT
+          name: "TF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
       - string:
-          name: TF_GERRIT_BRANCH
-          default: refs/heads/master
+          name: "TF_GERRIT_BRANCH"
+          default: "refs/heads/master"
       - string:
-          name: TF_SRC_REPO_URL
-          default: https://review.trustedfirmware.org/{gerrit_project_prefix}TF-A/trusted-firmware-a
+          name: "TF_SRC_REPO_URL"
+          default: "https://review.trustedfirmware.org/{gerrit_project_prefix}TF-A/trusted-firmware-a"
       - string:
-          name: TF_GERRIT_REFSPEC
-          default: +refs/heads/master:refs/remotes/origin/master
+          name: "TF_GERRIT_REFSPEC"
+          default: "+refs/heads/master:refs/remotes/origin/master"
       - string:
-          name: MBEDTLS_URL
-          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz
+          name: "MBEDTLS_URL"
+          default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz"
       - string:
-          name: PARAMS
-          description: Debug parameters for make
+          name: "PARAMS"
+          description: "Debug parameters for make"
+
     wrappers:
-      - timestamps
+      - "timestamps"
       - timeout:
           timeout: 120
           fail: true
+
     publishers:
       - archive:
-          artifacts: build/**/*
-          excludes: build/**/*.o,build/**/*.d
+          artifacts: "build/**/*"
+          excludes: "build/**/*.o,build/**/*.d"
+
     scm:
       - git:
-          url: ${{TF_SRC_REPO_URL}}
-          refspec: ${{TF_GERRIT_REFSPEC}}
+          url: "${{TF_SRC_REPO_URL}}"
+          refspec: "${{TF_GERRIT_REFSPEC}}"
+
           branches:
-            - ${{TF_GERRIT_BRANCH}}
-          choosing-strategy: gerrit
+            - "${{TF_GERRIT_BRANCH}}"
+
+          choosing-strategy: "gerrit"
           skip-tag: true
           shallow-clone: true
           wipe-workspace: false

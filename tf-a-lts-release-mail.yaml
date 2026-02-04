@@ -1,37 +1,44 @@
 - job:
-    name: tf-a-lts-release-mail
-    node: docker-amd64-tf-a-jammy
-    project-type: freestyle
+    name: "tf-a-lts-release-mail"
+    node: "docker-amd64-tf-a-jammy"
+    project-type: "freestyle"
     concurrent: true
     disabled: "{obj:jenkins_site_is_staging}"
+
     description: |
       Render TF-A LTS release email template.
+
     properties:
       - build-discarder:
           days-to-keep: 365
           num-to-keep: 50
+
     parameters:
       - string:
-          name: GERRIT_HOST
-          default: review.trustedfirmware.org
+          name: "GERRIT_HOST"
+          default: "review.trustedfirmware.org"
       - string:
-          name: GERRIT_PROJECT
+          name: "GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
           description: |
             TF-A Git project
       - string:
-          name: GERRIT_BRANCH
+          name: "GERRIT_BRANCH"
           default: ""
+
           description: |
             Git branch (e.g. lts-v2.8) to search for the latest tag in case of --latest is used for RELEASE_TAG
       - string:
-          name: RELEASE_TAG
-          default: --latest
+          name: "RELEASE_TAG"
+          default: "--latest"
+
           description: |
             Release git tag, e.g. 'lts-v2.8.10', or '--latest' to get latest tag in GERRIT_BRANCH
       - bool:
-          name: SANDBOX_RUN
+          name: "SANDBOX_RUN"
           default: true
+
           description: |
             Run sandbox simulation of a release. Uncheck this only after
             running simulation and checking that everything is correct!
@@ -47,11 +54,13 @@
           #          project-pattern: 'TF-A/trusted-firmware-a'
           #        trigger-on:
           #        - patchset-created-event
+
     wrappers:
-      - timestamps
+      - "timestamps"
       - timeout:
           timeout: 5
           fail: true
+
     builders:
       - shell: |
           #!/bin/bash
@@ -75,19 +84,21 @@
           echo "======================================================================="
           cat email.txt
           echo "======================================================================="
+
     publishers:
       - archive:
-          artifacts: email.txt
+          artifacts: "email.txt"
           latest-only: false
           allow-empty: true
       - conditional-publisher:
-          - condition-kind: file-exists
-            on-evaluation-failure: dont-run
-            condition-filename: email.txt
-            condition-basedir: workspace
+          - condition-kind: "file-exists"
+            on-evaluation-failure: "dont-run"
+            condition-filename: "email.txt"
+            condition-basedir: "workspace"
+
             action:
               - email-ext:
                   always: true
-                  subject: ${{FILE, path="subject.txt"}}
-                  body: ${{FILE, path="body.txt"}}
-                  recipients: ${{FILE, path="recipients.txt"}}
+                  subject: '${{FILE, path="subject.txt"}}'
+                  body: '${{FILE, path="body.txt"}}'
+                  recipients: '${{FILE, path="recipients.txt"}}'

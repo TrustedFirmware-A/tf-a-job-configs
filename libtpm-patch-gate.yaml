@@ -1,21 +1,27 @@
 - job:
-    name: libtpm-patch-gate
+    name: "libtpm-patch-gate"
+
     description: |
       Main entry point for the TPM library CI pipeline.
-    project-type: freestyle
+
+    project-type: "freestyle"
     concurrent: true
     disabled: false
     # TODO: check whether we have an orchestrator node for this.
-    node: docker-amd64-tf-a-jammy
+    node: "docker-amd64-tf-a-jammy"
+
     properties:
       - build-discarder:
           days-to-keep: 10
+
     builders:
       - trigger-builds:
           - project:
-              - tf-a-libtpm-pipeline
+              - "tf-a-libtpm-pipeline"
+
             block: true
             current-parameters: true
+
             predefined-parameters: |
               URL=https://${{GERRIT_HOST}}/${{GERRIT_PROJECT}}
               REFSPEC=${{GERRIT_REFSPEC}}
@@ -25,17 +31,21 @@
 
     triggers:
       - gerrit:
-          server-name: review.trustedfirmware.org
+          server-name: "review.trustedfirmware.org"
+
           trigger-on:
             - comment-added-event:
                 approval-category: "Allow-CI"
                 approval-value: 1
+
           projects:
-            - project-compare-type: PLAIN
+            - project-compare-type: "PLAIN"
               project-pattern: "{gerrit_project_prefix}shared/libTPM"
+
               branches:
-                - branch-compare-type: PLAIN
-                  branch-pattern: main
+                - branch-compare-type: "PLAIN"
+                  branch-pattern: "main"
+
           override-votes: true
           gerrit-build-started-verified-value: 0
           gerrit-build-successful-codereview-value: 0

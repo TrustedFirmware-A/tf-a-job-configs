@@ -1,92 +1,105 @@
 - job:
-    name: tf-a-daily
-    node: docker-amd64-tf-a-jammy
-    project-type: freestyle
+    name: "tf-a-daily"
+    node: "docker-amd64-tf-a-jammy"
+    project-type: "freestyle"
     concurrent: false
     disabled: false
-    description: Triggers tf-a-windows-builder, tf-main and tf-coverity for the TF-A project.
+    description: "Triggers tf-a-windows-builder, tf-main and tf-coverity for the TF-A project."
+
     properties:
       - build-discarder:
           days-to-keep: 14
           num-to-keep: 60
+
     parameters:
       - string:
-          name: TF_GERRIT_PROJECT
+          name: "TF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
       - string:
-          name: TF_GERRIT_BRANCH
-          default: refs/heads/integration
+          name: "TF_GERRIT_BRANCH"
+          default: "refs/heads/integration"
       - string:
-          name: TF_GERRIT_REFSPEC
-          default: +refs/heads/integration:refs/remotes/origin/integration
+          name: "TF_GERRIT_REFSPEC"
+          default: "+refs/heads/integration:refs/remotes/origin/integration"
       - string:
-          name: TFTF_GERRIT_PROJECT
+          name: "TFTF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/tf-a-tests"
       - string:
-          name: TFTF_GERRIT_BRANCH
-          default: refs/heads/master
+          name: "TFTF_GERRIT_BRANCH"
+          default: "refs/heads/master"
       - string:
-          name: TFTF_GERRIT_REFSPEC
-          default: +refs/heads/master:refs/remotes/origin/master
+          name: "TFTF_GERRIT_REFSPEC"
+          default: "+refs/heads/master:refs/remotes/origin/master"
       - string:
-          name: SPM_REFSPEC
-          default: +refs/heads/master:refs/remotes/origin/master
+          name: "SPM_REFSPEC"
+          default: "+refs/heads/master:refs/remotes/origin/master"
+
           description: |
             SPM(Hafnium) refspec to use. The master branch is used by default.
       - string:
-          name: RMM_REFSPEC
-          default: +refs/heads/main:refs/remotes/origin/main
+          name: "RMM_REFSPEC"
+          default: "+refs/heads/main:refs/remotes/origin/main"
+
           description: |
             tf-rmm refspec to use. The main branch is used by default.
       - string:
-          name: CI_REFSPEC
-          default: +refs/heads/master:refs/remotes/origin/master
+          name: "CI_REFSPEC"
+          default: "+refs/heads/master:refs/remotes/origin/master"
       - string:
-          name: JOBS_REFSPEC
-          default: refs/heads/master
+          name: "JOBS_REFSPEC"
+          default: "refs/heads/master"
+
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
       - string:
-          name: MBEDTLS_URL
-          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz
+          name: "MBEDTLS_URL"
+          default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz"
       - string:
-          name: LAVA_PRIORITY
-          default: low
+          name: "LAVA_PRIORITY"
+          default: "low"
+
     wrappers:
       - credentials-binding:
           - ssh-user-private-key:
-              credential-id: TFA_CI_BOT_USER_SSH_KEY
-              key-file-variable: CI_BOT_KEY
-              username-variable: CI_BOT_USERNAME
+              credential-id: "TFA_CI_BOT_USER_SSH_KEY"
+              key-file-variable: "CI_BOT_KEY"
+              username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
-      - timestamps
+
+      - "timestamps"
+
     builders:
-      - shell: !include-raw-verbatim: scripts/clone.sh
+      - shell: !include-raw-verbatim: "scripts/clone.sh"
       - shell: |
           #!/bin/bash
           set -e
       - trigger-builds:
           - project:
-              - tf-a-main
+              - "tf-a-main"
+
             block: true
             current-parameters: true
           - project:
-              - tf-a-coverity
+              - "tf-a-coverity"
+
             block: true
             current-parameters: true
           - project:
-              - tf-a-windows-builder
+              - "tf-a-windows-builder"
+
             block: true
             current-parameters: true
       # If all tests passed, catch up the master branch with integration
       - conditional-step:
-          condition-kind: current-status
-          condition-best: SUCCESS
-          condition-worst: SUCCESS
+          condition-kind: "current-status"
+          condition-best: "SUCCESS"
+          condition-worst: "SUCCESS"
+
           steps:
             - shell: |-
                 #!/bin/bash
                 echo "Proceed with integration->master fast-forward merge"
                 bash "${{WORKSPACE}}/tf-a-ci-scripts/script/scratch_scripts/fast-forward-master.sh"
+
     triggers:
-      - timed: H 22 * * *
+      - timed: "H 22 * * *"

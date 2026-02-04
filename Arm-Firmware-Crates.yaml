@@ -1,14 +1,15 @@
 - view:
-    name: Arm-Firmware-Crates
-    view-type: list
-    regex: crate-arm-.*
+    name: "Arm-Firmware-Crates"
+    view-type: "list"
+    regex: "crate-arm-.*"
     filter-queue: true
     filter-executors: true
+
     columns:
-      - status
-      - weather
-      - job
-      - last-success
-      - last-failure
-      - last-duration
-      - build-button
+      - "status"
+      - "weather"
+      - "job"
+      - "last-success"
+      - "last-failure"
+      - "last-duration"
+      - "build-button"

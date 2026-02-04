@@ -1,24 +1,28 @@
 - job:
-    name: tf-a-lts-cleanup
-    node: docker-amd64-tf-a-jammy
-    project-type: freestyle
+    name: "tf-a-lts-cleanup"
+    node: "docker-amd64-tf-a-jammy"
+    project-type: "freestyle"
     concurrent: false
     disabled: "{obj:jenkins_site_is_staging}"
-    description: Cleanup stale LTS sandbox tags/branches
+    description: "Cleanup stale LTS sandbox tags/branches"
+
     properties:
       - build-discarder:
           days-to-keep: 180
           num-to-keep: 30
+
     triggers:
-      - timed: H 3 * * 0,3
+      - timed: "H 3 * * 0,3"
+
     wrappers:
       - credentials-binding:
           - ssh-user-private-key:
-              credential-id: TFA_CI_BOT_USER_SSH_KEY
-              key-file-variable: CI_BOT_KEY
-              username-variable: CI_BOT_USERNAME
+              credential-id: "TFA_CI_BOT_USER_SSH_KEY"
+              key-file-variable: "CI_BOT_KEY"
+              username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
-      - timestamps
+      - "timestamps"
+
     builders:
       - shell: |
           #!/bin/bash

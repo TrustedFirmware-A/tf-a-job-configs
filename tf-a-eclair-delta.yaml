@@ -1,96 +1,113 @@
 - job:
-    name: tf-a-eclair-delta
-    node: docker-tf-a-eclair-3.13
-    project-type: freestyle
+    name: "tf-a-eclair-delta"
+    node: "docker-tf-a-eclair-3.13"
+    project-type: "freestyle"
     concurrent: true
     disabled: "{obj:jenkins_site_is_staging}"
+
     description: |
       ECLAIR (MISRA compliance) testing of TF-A patches
+
     properties:
       - build-discarder:
           days-to-keep: 45
           num-to-keep: 200
           artifact-num-to-keep: 80
+
     parameters:
       - string:
-          name: TF_CONFIG_LIST
+          name: "TF_CONFIG_LIST"
+
           default: |
             fvp-tbb-mbedtls-rme-romlib fvp-spm-spmd-lsp fvp-pauth-bti-sdei fvp-aarch32-roxlattables
       - string:
-          name: MAKE_TARGET
+          name: "MAKE_TARGET"
           default: ""
+
           description: |
             TF-A make target
       - string:
-          name: MAKE_JOBS
+          name: "MAKE_JOBS"
           default: "16"
+
           description: |
             --jobs to pass to make, etc.
       - string:
-          name: DEBUG
+          name: "DEBUG"
           default: "1"
+
           description: |
             TF-A make DEBUG setting
       - string:
-          name: GERRIT_HOST
-          default: review.trustedfirmware.org
+          name: "GERRIT_HOST"
+          default: "review.trustedfirmware.org"
       - string:
-          name: GERRIT_PROJECT
+          name: "GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
           description: |
             Git project to build (also set by Gerrit trigger)
       - string:
-          name: GERRIT_BRANCH
-          default: integration
+          name: "GERRIT_BRANCH"
+          default: "integration"
+
           description: |
             Git branch to build (also set by Gerrit trigger)
       - string:
-          name: GERRIT_REFSPEC
+          name: "GERRIT_REFSPEC"
           default: ""
       - string:
-          name: GERRIT_CHANGE_NUMBER
+          name: "GERRIT_CHANGE_NUMBER"
           default: ""
       - string:
-          name: GERRIT_PATCHSET_NUMBER
+          name: "GERRIT_PATCHSET_NUMBER"
           default: ""
       - string:
-          name: MBEDTLS_URL
-          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz
+          name: "MBEDTLS_URL"
+          default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz"
+
           description: |
             URL of mbedTLS library to use in build (only for some configurations)
+
     triggers:
       - gerrit:
           silent: true
-          server-name: review.trustedfirmware.org
+          server-name: "review.trustedfirmware.org"
+
           projects:
             - branches:
-                - branch-compare-type: PLAIN
-                  branch-pattern: integration
-              project-compare-type: PLAIN
+                - branch-compare-type: "PLAIN"
+                  branch-pattern: "integration"
+
+              project-compare-type: "PLAIN"
               project-pattern: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
             - branches:
-                - branch-compare-type: PLAIN
-                  branch-pattern: integration
-              project-compare-type: PLAIN
+                - branch-compare-type: "PLAIN"
+                  branch-pattern: "integration"
+
+              project-compare-type: "PLAIN"
               project-pattern: "{gerrit_project_prefix}sandbox/pfalcon/trusted-firmware-a"
+
           trigger-on:
             - comment-added-event:
-                approval-category: Allow-CI
+                approval-category: "Allow-CI"
                 approval-value: 1
             - comment-added-event:
-                approval-category: Allow-CI
+                approval-category: "Allow-CI"
                 approval-value: 2
+
     wrappers:
-      - timestamps
+      - "timestamps"
       - timeout:
           timeout: 330
           fail: true
       - credentials-binding:
           - ssh-user-private-key:
-              credential-id: TFA_CI_BOT_USER_SSH_KEY
-              key-file-variable: CI_BOT_KEY
-              username-variable: CI_BOT_USERNAME
+              credential-id: "TFA_CI_BOT_USER_SSH_KEY"
+              key-file-variable: "CI_BOT_KEY"
+              username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
+
     builders:
       - shell: |
           #!/bin/bash
@@ -146,9 +163,10 @@
           returnLicense
           tf-ci-scripts/eclair/analyze_delta_index_html.sh
           tf-ci-scripts/eclair/post_gerrit_comment.sh
+
     publishers:
       - archive:
-          artifacts: ECLAIR*/**, diff_output/**, misra_delta.txt, *issues_html/**, index.html
-          excludes: ECLAIR/out/.data/**
+          artifacts: "ECLAIR*/**, diff_output/**, misra_delta.txt, *issues_html/**, index.html"
+          excludes: "ECLAIR/out/.data/**"
           latest-only: false
           allow-empty: true

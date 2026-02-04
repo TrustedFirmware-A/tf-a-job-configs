@@ -1,50 +1,61 @@
 - job:
-    name: tf-a-lts-automation
-    node: build-amd64-private
-    project-type: freestyle
+    name: "tf-a-lts-automation"
+    node: "build-amd64-private"
+    project-type: "freestyle"
     disabled: "{obj:jenkins_site_is_staging}"
+
     description: |
       Trusted Firmware A LTS automation, this job triggered by a new LTS branch created in the trusted-firmware-a repository.
       It helps to create corrosponding branch in the tf-a-test, hafnium, and tf-a-ci-scripts repositories, as well as set up a new download
       space for the new LTS branch.
       It will also trigger hafnium-lts-automation job, if the new LTS branch is not exist in the hafnium repository
+
     properties:
       - build-discarder:
           days-to-keep: 15
+
     parameters:
       - string:
-          name: EMAIL_RECIPIENT
+          name: "EMAIL_RECIPIENT"
+
           default: |
             bipin.ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, jidong@google.com, govindraj.raja@arm.com, arthur.she@linaro.org
+
           description: |
             The notification recipients
       - string:
-          name: UPSTREAM_REFNAME
+          name: "UPSTREAM_REFNAME"
           default: ""
           description: "Ref name from counterpart job (e.g. lts-vX.Y or sandbox/lts-vX.Y)"
+
     wrappers:
-      - timestamps
+      - "timestamps"
       - timeout:
           timeout: 120
           fail: true
       - credentials-binding:
           - ssh-user-private-key:
-              credential-id: TFA_CI_BOT_USER_SSH_KEY
-              key-file-variable: CI_BOT_KEY
-              username-variable: CI_BOT_USERNAME
+              credential-id: "TFA_CI_BOT_USER_SSH_KEY"
+              key-file-variable: "CI_BOT_KEY"
+              username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
+
     triggers:
       - gerrit:
           silent: true
-          server-name: review.trustedfirmware.org
+          server-name: "review.trustedfirmware.org"
+
           projects:
             - branches:
-                - branch-compare-type: REG_EXP
+                - branch-compare-type: "REG_EXP"
                   branch-pattern: "^(sandbox/)?lts-v.*$"
-              project-compare-type: PLAIN
+
+              project-compare-type: "PLAIN"
               project-pattern: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
           trigger-on:
-            - ref-updated-event
+            - "ref-updated-event"
+
     builders:
       - shell: |
           echo "***************************************"
@@ -121,7 +132,8 @@
           [ "${{SANDBOX_RUN}}" = "true" ] && rm -f email.txt
 
       - conditional-step:
-          condition-kind: shell
+          condition-kind: "shell"
+
           condition-command: |
             set -eux
 
@@ -143,6 +155,7 @@
             fi
             echo "Branch missing, trigger hafnium-lts-automation"
             exit 0
+
           steps:
             - trigger-builds:
                 - project: "hafnium-lts-automation"
@@ -151,13 +164,14 @@
 
     publishers:
       - conditional-publisher:
-          - condition-kind: file-exists
-            on-evaluation-failure: dont-run
-            condition-filename: email.txt
-            condition-basedir: workspace
+          - condition-kind: "file-exists"
+            on-evaluation-failure: "dont-run"
+            condition-filename: "email.txt"
+            condition-basedir: "workspace"
+
             action:
               - email-ext:
                   always: true
-                  recipients: ${{EMAIL_RECIPIENT}}
-                  subject: ${{FILE,path="subject.txt"}}
-                  body: ${{FILE,path="email.txt"}}
+                  recipients: "${{EMAIL_RECIPIENT}}"
+                  subject: '${{FILE,path="subject.txt"}}'
+                  body: '${{FILE,path="email.txt"}}'

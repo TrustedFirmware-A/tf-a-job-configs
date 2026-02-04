@@ -1,8 +1,10 @@
 - job:
-    name: tlc-pipeline
+    name: "tlc-pipeline"
+
     description: |
       Job triggered for every Transfer List Compiler (TLC) patch, verifying code
       style, running unit tests, and building the package.
-    project-type: pipeline
+
+    project-type: "pipeline"
     sandbox: true
-    dsl: !include-raw-verbatim: tlc-pipeline/Jenkinsfile
+    dsl: !include-raw-verbatim: "tlc-pipeline/Jenkinsfile"

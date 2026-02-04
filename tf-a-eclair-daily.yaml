@@ -1,60 +1,73 @@
 - job:
-    name: tf-a-eclair-daily
-    node: docker-tf-a-eclair-3.13
-    project-type: freestyle
+    name: "tf-a-eclair-daily"
+    node: "docker-tf-a-eclair-3.13"
+    project-type: "freestyle"
     concurrent: true
     disabled: "{obj:jenkins_site_is_staging}"
+
     description: |
       ECLAIR (MISRA compliance) testing of TF-A
+
     properties:
       - build-discarder:
           days-to-keep: 40
+
     parameters:
       - string:
-          name: TF_CONFIG_LIST
+          name: "TF_CONFIG_LIST"
+
           default: |
             fvp-rst-bl31 fvp-aarch32-rst-to-sp-min fvp-ext-pstate-ea-el3 fvp-opteed fvp-el3-spmc-simd fvp-rme fvp-aarch64-sdei-fconf fvp-tbb-mbedtls fvp-default
+
           description: |
             List of TF-A configs to build
       - string:
-          name: MAKE_TARGET
+          name: "MAKE_TARGET"
           default: ""
+
           description: |
             TF-A make target
       - string:
-          name: MAKE_JOBS
+          name: "MAKE_JOBS"
+
           description: |
             --jobs to pass to make, etc.
       - string:
-          name: DEBUG
+          name: "DEBUG"
           default: "1"
+
           description: |
             TF-A make DEBUG setting
       - string:
-          name: GERRIT_HOST
-          default: review.trustedfirmware.org
+          name: "GERRIT_HOST"
+          default: "review.trustedfirmware.org"
       - string:
-          name: GERRIT_PROJECT
+          name: "GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
           description: |
             Git project to build (also set by Gerrit trigger)
       - string:
-          name: GERRIT_REFNAME
-          default: integration
+          name: "GERRIT_REFNAME"
+          default: "integration"
+
           description: |
             Git branch to build (also set by Gerrit trigger)
       - string:
-          name: GERRIT_NEWREV
+          name: "GERRIT_NEWREV"
           default: ""
+
           description: |
             Git revision to build (also set by Gerrit ref-updated trigger)
       - string:
-          name: MBEDTLS_URL
-          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz
+          name: "MBEDTLS_URL"
+          default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz"
+
           description: |
             URL of mbedTLS library to use in build (only for some configurations)
+
     triggers:
-      - timed: H 2 * * *
+      - timed: "H 2 * * *"
         #    - gerrit:
         #        silent: true
         #        server-name: 'review.trustedfirmware.org'
@@ -66,11 +79,13 @@
         #          project-pattern: 'TF-A/trusted-firmware-a'
         #        trigger-on:
         #        - ref-updated-event
+
     wrappers:
-      - timestamps
+      - "timestamps"
       - timeout:
           timeout: 420
           fail: true
+
     builders:
       - shell: |
           #!/bin/bash
@@ -120,9 +135,10 @@
           eclair_compress_db
 
           tf-ci-scripts/eclair/analyze_index_html.sh
+
     publishers:
       - archive:
-          artifacts: ECLAIR/**, index.html, tmp/hasplm/**
-          excludes: ECLAIR/out/.data/**
+          artifacts: "ECLAIR/**, index.html, tmp/hasplm/**"
+          excludes: "ECLAIR/out/.data/**"
           latest-only: false
           allow-empty: true

@@ -1,19 +1,24 @@
 - job:
-    name: tf-a-artifacts-cleanup
-    node: master
-    project-type: freestyle
+    name: "tf-a-artifacts-cleanup"
+    node: "master"
+    project-type: "freestyle"
     concurrent: true
     disabled: false
+
     description: |
       Gradually cleanup artifacts in TF-A builds
+
     properties:
       - build-discarder:
           days-to-keep: 50
           num-to-keep: 50
+
     triggers:
-      - timed: H H/8 * * *
+      - timed: "H H/8 * * *"
+
     wrappers:
-      - timestamps
+      - "timestamps"
+
     builders:
       - shell: |
           #!/bin/bash

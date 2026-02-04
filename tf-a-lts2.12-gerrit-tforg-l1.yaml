@@ -1,74 +1,81 @@
 - job:
-    name: tf-a-lts2.12-gerrit-tforg-l1
-    node: docker-amd64-tf-a-lts2.12-jammy
-    project-type: multijob
+    name: "tf-a-lts2.12-gerrit-tforg-l1"
+    node: "docker-amd64-tf-a-lts2.12-jammy"
+    project-type: "multijob"
     concurrent: true
     disabled: false
+
     description: |
       Job that triggers for every TF-A patch approved with the Allow-CI+1
       label on review.trustedfirmware.org.
+
     properties:
       - throttle:
-          option: project
+          option: "project"
           enabled: true
           max-total: 5
       - build-discarder:
           days-to-keep: 14
+
     parameters:
       - string:
-          name: GERRIT_PROJECT
+          name: "GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
       - string:
-          name: GERRIT_BRANCH
-          default: refs/heads/lts-v2.12
+          name: "GERRIT_BRANCH"
+          default: "refs/heads/lts-v2.12"
       - string:
-          name: GERRIT_REFSPEC
-          default: +refs/heads/lts-v2.12:refs/remotes/origin/lts-v2.12
+          name: "GERRIT_REFSPEC"
+          default: "+refs/heads/lts-v2.12:refs/remotes/origin/lts-v2.12"
       - string:
-          name: GERRIT_PATCHSET_NUMBER
+          name: "GERRIT_PATCHSET_NUMBER"
           default: ""
       - string:
-          name: GERRIT_CHANGE_NUMBER
+          name: "GERRIT_CHANGE_NUMBER"
           default: ""
       - string:
-          name: TF_GERRIT_REFSPEC
-          default: ${{GERRIT_REFSPEC}}
-          description: Parameter only used by the clone script
+          name: "TF_GERRIT_REFSPEC"
+          default: "${{GERRIT_REFSPEC}}"
+          description: "Parameter only used by the clone script"
       - string:
-          name: TFTF_GERRIT_PROJECT
+          name: "TFTF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/tf-a-tests"
       - string:
-          name: TFTF_GERRIT_BRANCH
-          default: refs/heads/lts-v2.12
+          name: "TFTF_GERRIT_BRANCH"
+          default: "refs/heads/lts-v2.12"
       - string:
-          name: TFTF_GERRIT_REFSPEC
-          default: +refs/heads/lts-v2.12:refs/remotes/origin/lts-v2.12
+          name: "TFTF_GERRIT_REFSPEC"
+          default: "+refs/heads/lts-v2.12:refs/remotes/origin/lts-v2.12"
       - string:
-          name: SPM_REFSPEC
-          default: v2.12
+          name: "SPM_REFSPEC"
+          default: "v2.12"
+
           description: |
             SPM(Hafnium) refspec to use. The 'v2.12' tag is used by default.
       - string:
-          name: CI_REFSPEC
-          default: +refs/heads/lts-v2.12:refs/remotes/origin/lts-v2.12
+          name: "CI_REFSPEC"
+          default: "+refs/heads/lts-v2.12:refs/remotes/origin/lts-v2.12"
       - string:
-          name: JOBS_REFSPEC
-          default: refs/heads/master
+          name: "JOBS_REFSPEC"
+          default: "refs/heads/master"
+
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
       - string:
-          name: MBEDTLS_URL
-          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.3.tar.gz
+          name: "MBEDTLS_URL"
+          default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.3.tar.gz"
+
     wrappers:
       - credentials-binding:
           - ssh-user-private-key:
-              credential-id: TFA_CI_BOT_USER_SSH_KEY
-              key-file-variable: CI_BOT_KEY
-              username-variable: CI_BOT_USERNAME
+              credential-id: "TFA_CI_BOT_USER_SSH_KEY"
+              key-file-variable: "CI_BOT_KEY"
+              username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
-      - timestamps
+      - "timestamps"
+
     builders:
-      - shell: !include-raw-verbatim: scripts/clone.sh
+      - shell: !include-raw-verbatim: "scripts/clone.sh"
       - shell: |
           #!/bin/bash
           set -e
@@ -81,60 +88,76 @@
           TF_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
           EOF
       - multijob:
-          name: Lint commit messages
-          condition: COMPLETED
+          name: "Lint commit messages"
+          condition: "COMPLETED"
+
           projects:
-            - name: tf-a-commitlint
-              kill-phase-on: NEVER
+            - name: "tf-a-commitlint"
+              kill-phase-on: "NEVER"
+
               predefined-parameters: |
                 URL=https://review.trustedfirmware.org/${{GERRIT_PROJECT}}
                 REFSPEC=${{GERRIT_REFSPEC}}
                 REFNAME=${{GERRIT_PATCHSET_REVISION}}
                 REFNAME_BASE=origin/${{GERRIT_BRANCH}}
       - multijob:
-          condition: COMPLETED
-          name: Build and static checks
+          condition: "COMPLETED"
+          name: "Build and static checks"
+
           projects:
-            - kill-phase-on: NEVER
-              name: tf-a-static-checks
+            - kill-phase-on: "NEVER"
+              name: "tf-a-static-checks"
               current-parameters: true
+
               predefined-parameters: |-
                 TEST_GROUPS=tf-l2-scan-build
                 ENABLE_STATIC_CHECK=true
-              property-file: env.param
+
+              property-file: "env.param"
       - multijob:
-          condition: COMPLETED
-          name: Run doc build check
+          condition: "COMPLETED"
+          name: "Run doc build check"
+
           projects:
-            - kill-phase-on: NEVER
-              name: tf-a-lts2.12-ci-gateway
+            - kill-phase-on: "NEVER"
+              name: "tf-a-lts2.12-ci-gateway"
               current-parameters: true
+
               predefined-parameters: |
                 TEST_GROUPS=tf-l1-check-docs
-              property-file: env.param
+
+              property-file: "env.param"
       - multijob:
-          condition: COMPLETED
-          name: Run build tests
+          condition: "COMPLETED"
+          name: "Run build tests"
+
           projects:
-            - kill-phase-on: NEVER
-              name: tf-a-lts2.12-ci-gateway
+            - kill-phase-on: "NEVER"
+              name: "tf-a-lts2.12-ci-gateway"
               current-parameters: true
+
               predefined-parameters: |
                 TEST_GROUPS=tf-l1-build-fvp tf-l1-build-juno tf-l1-build-clang tf-l1-build-plat spm-l1-build-tests
-              property-file: env.param
+
+              property-file: "env.param"
+
     triggers:
       - gerrit:
-          server-name: review.trustedfirmware.org
+          server-name: "review.trustedfirmware.org"
+
           trigger-on:
             - comment-added-event:
-                approval-category: Allow-CI
+                approval-category: "Allow-CI"
                 approval-value: 1
+
           projects:
-            - project-compare-type: PLAIN
+            - project-compare-type: "PLAIN"
               project-pattern: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
               branches:
-                - branch-compare-type: PLAIN
-                  branch-pattern: lts-v2.12
+                - branch-compare-type: "PLAIN"
+                  branch-pattern: "lts-v2.12"
+
           override-votes: true
           gerrit-build-started-verified-value: 0
           gerrit-build-successful-verified-value: 1

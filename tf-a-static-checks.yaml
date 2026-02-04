@@ -1,66 +1,73 @@
 - job:
-    name: tf-a-static-checks
-    node: docker-amd64-tf-a-jammy
-    project-type: freestyle
+    name: "tf-a-static-checks"
+    node: "docker-amd64-tf-a-jammy"
+    project-type: "freestyle"
     concurrent: true
     disabled: false
-    description: Run static checks on Git repository
+    description: "Run static checks on Git repository"
+
     properties:
       - build-discarder:
           days-to-keep: 14
+
     parameters:
       - string:
-          name: TF_GERRIT_PROJECT
+          name: "TF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
       - string:
-          name: TF_GERRIT_BRANCH
-          default: refs/heads/integration
+          name: "TF_GERRIT_BRANCH"
+          default: "refs/heads/integration"
       - string:
-          name: TF_GERRIT_REFSPEC
-          default: +refs/heads/integration:refs/remotes/origin/integration
+          name: "TF_GERRIT_REFSPEC"
+          default: "+refs/heads/integration:refs/remotes/origin/integration"
       - string:
-          name: TFTF_GERRIT_PROJECT
+          name: "TFTF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/tf-a-tests"
       - string:
-          name: TFTF_GERRIT_BRANCH
-          default: refs/heads/master
+          name: "TFTF_GERRIT_BRANCH"
+          default: "refs/heads/master"
       - string:
-          name: TFTF_GERRIT_REFSPEC
-          default: +refs/heads/master:refs/remotes/origin/master
+          name: "TFTF_GERRIT_REFSPEC"
+          default: "+refs/heads/master:refs/remotes/origin/master"
       - string:
-          name: CI_REFSPEC
-          default: +refs/heads/master:refs/remotes/origin/master
+          name: "CI_REFSPEC"
+          default: "+refs/heads/master:refs/remotes/origin/master"
       - string:
-          name: JOBS_REFSPEC
-          default: refs/heads/master
+          name: "JOBS_REFSPEC"
+          default: "refs/heads/master"
+
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
       - choice:
-          name: REPO_UNDER_TEST
+          name: "REPO_UNDER_TEST"
+
           choices:
-            - trusted-firmware-a
-            - tf-a-tests
-          default: trusted-firmware-a
-          description: Repository to run static checks on.
+            - "trusted-firmware-a"
+            - "tf-a-tests"
+
+          default: "trusted-firmware-a"
+          description: "Repository to run static checks on."
       - string:
-          name: GERRIT_BRANCH
-          default: master
+          name: "GERRIT_BRANCH"
+          default: "master"
       - string:
-          name: GERRIT_REFSPEC
-          default: refs/heads/master
+          name: "GERRIT_REFSPEC"
+          default: "refs/heads/master"
+
     wrappers:
       - credentials-binding:
           - ssh-user-private-key:
-              credential-id: TFA_CI_BOT_USER_SSH_KEY
-              key-file-variable: CI_BOT_KEY
-              username-variable: CI_BOT_USERNAME
+              credential-id: "TFA_CI_BOT_USER_SSH_KEY"
+              key-file-variable: "CI_BOT_KEY"
+              username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
-      - timestamps
+      - "timestamps"
       - timeout:
           timeout: 240
           fail: true
+
     builders:
-      - shell: !include-raw-verbatim: scripts/clone.sh
+      - shell: !include-raw-verbatim: "scripts/clone.sh"
       - shell: |
           #!/bin/bash
           set -e
@@ -77,16 +84,17 @@
           # line endings, coding style and banned API.
           IS_CONTINUOUS_INTEGRATION=1 ${{WORKSPACE}}/tf-a-ci-scripts/script/static-checks/static-checks.sh
       - trigger-builds:
-          - project: tf-a-ci-gateway
+          - project: "tf-a-ci-gateway"
             block: true
-            property-file: env.param
+            property-file: "env.param"
             current-parameters: true
             # Do not trigger tf-a-ci-gateway if env.param file does not exist,
             # which is the case here for TF-A Tests repository
             property-file-fail-on-missing: True
+
     publishers:
       - archive:
-          artifacts: ${{REPO_UNDER_TEST}}/static-checks.log
+          artifacts: "${{REPO_UNDER_TEST}}/static-checks.log"
       - groovy-postbuild:
           script: !include-raw-verbatim:
-            - tf-a-static-checks/postbuild.groovy
+            - "tf-a-static-checks/postbuild.groovy"

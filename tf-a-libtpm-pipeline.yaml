@@ -1,8 +1,10 @@
 - job:
-    name: tf-a-libtpm-pipeline
+    name: "tf-a-libtpm-pipeline"
+
     description: |
       Job triggered for every TPM Library (LibTPM) patch, verifying code
       style, and building the module.
-    project-type: pipeline
+
+    project-type: "pipeline"
     sandbox: true
-    dsl: !include-raw-verbatim: libtpm-pipeline/Jenkinsfile
+    dsl: !include-raw-verbatim: "libtpm-pipeline/Jenkinsfile"

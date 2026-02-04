@@ -1,45 +1,52 @@
 - job:
-    name: tf-a-lts-create-release
-    node: docker-amd64-tf-a-jammy
-    project-type: freestyle
+    name: "tf-a-lts-create-release"
+    node: "docker-amd64-tf-a-jammy"
+    project-type: "freestyle"
     concurrent: false
     disabled: false
-    description: Create a new TF-A LTS release from a tip of an LTS branch.
+    description: "Create a new TF-A LTS release from a tip of an LTS branch."
+
     properties:
       - build-discarder:
           days-to-keep: 365
           num-to-keep: 30
+
     parameters:
       - string:
-          name: GERRIT_HOST
-          default: review.trustedfirmware.org
+          name: "GERRIT_HOST"
+          default: "review.trustedfirmware.org"
       - string:
-          name: GERRIT_PROJECT
+          name: "GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
           description: |
             TF-A Git project
       - string:
-          name: GERRIT_BRANCH
-          default: lts-v2.10
+          name: "GERRIT_BRANCH"
+          default: "lts-v2.10"
+
           description: |
             Git branch to release from (lts-v2.8, lts-v2.10, etc.)
       - bool:
-          name: SANDBOX_RUN
+          name: "SANDBOX_RUN"
           default: true
+
           description: |
             Run sandbox simulation of a release. A tag will be created in
             separate "sandbox" namespace, and further actions like docs
             publishing or release email sending will be also sandboxed.
             Uncheck this only after running a simulation and verifying that
             everything is correct!
+
     wrappers:
       - credentials-binding:
           - ssh-user-private-key:
-              credential-id: TFA_CI_BOT_USER_SSH_KEY
-              key-file-variable: CI_BOT_KEY
-              username-variable: CI_BOT_USERNAME
+              credential-id: "TFA_CI_BOT_USER_SSH_KEY"
+              key-file-variable: "CI_BOT_KEY"
+              username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
-      - timestamps
+      - "timestamps"
+
     builders:
       - shell: |
           #!/bin/bash

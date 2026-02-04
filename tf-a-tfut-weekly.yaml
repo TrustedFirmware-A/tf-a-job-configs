@@ -1,80 +1,90 @@
 - job:
-    name: tf-a-tfut-weekly
-    node: docker-amd64-tf-a-jammy
-    project-type: multijob
+    name: "tf-a-tfut-weekly"
+    node: "docker-amd64-tf-a-jammy"
+    project-type: "multijob"
     concurrent: true
     disabled: false
-    description: CI job for weekly runs of TF-A Unit Testing
+    description: "CI job for weekly runs of TF-A Unit Testing"
+
     properties:
       - throttle:
-          option: project
+          option: "project"
           enabled: true
           max-total: 5
       - build-discarder:
           days-to-keep: 14
           num-to-keep: 60
+
     parameters:
       - string:
-          name: TF_GERRIT_PROJECT
+          name: "TF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
       - string:
-          name: TF_GERRIT_BRANCH
-          default: refs/heads/integration
+          name: "TF_GERRIT_BRANCH"
+          default: "refs/heads/integration"
       - string:
-          name: TF_GERRIT_REFSPEC
-          default: +refs/heads/integration:refs/remotes/origin/integration
+          name: "TF_GERRIT_REFSPEC"
+          default: "+refs/heads/integration:refs/remotes/origin/integration"
       - string:
-          name: TFTF_GERRIT_PROJECT
+          name: "TFTF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/tf-a-tests"
       - string:
-          name: TFTF_GERRIT_BRANCH
-          default: refs/heads/master
+          name: "TFTF_GERRIT_BRANCH"
+          default: "refs/heads/master"
       - string:
-          name: TFTF_GERRIT_REFSPEC
-          default: +refs/heads/master:refs/remotes/origin/master
+          name: "TFTF_GERRIT_REFSPEC"
+          default: "+refs/heads/master:refs/remotes/origin/master"
       - string:
-          name: SPM_REFSPEC
-          default: +refs/heads/master:refs/remotes/origin/master
+          name: "SPM_REFSPEC"
+          default: "+refs/heads/master:refs/remotes/origin/master"
+
           description: |
             SPM(Hafnium) refspec to use. The master branch is used by default.
       - string:
-          name: RMM_REFSPEC
-          default: +refs/heads/main:refs/remotes/origin/main
+          name: "RMM_REFSPEC"
+          default: "+refs/heads/main:refs/remotes/origin/main"
+
           description: |
             tf-rmm refspec to use. The main branch is used by default.
       - string:
-          name: TFUT_GERRIT_REFSPEC
-          default: +refs/heads/main:refs/remotes/origin/main
+          name: "TFUT_GERRIT_REFSPEC"
+          default: "+refs/heads/main:refs/remotes/origin/main"
+
           description: |
             tf-a-unit-tests refspec to use. The main branch is used by default.
       - string:
-          name: CI_REFSPEC
-          default: +refs/heads/master:refs/remotes/origin/master
+          name: "CI_REFSPEC"
+          default: "+refs/heads/master:refs/remotes/origin/master"
       - string:
-          name: JOBS_REFSPEC
-          default: refs/heads/master
+          name: "JOBS_REFSPEC"
+          default: "refs/heads/master"
+
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
       - string:
-          name: LAVA_PRIORITY
-          default: low
+          name: "LAVA_PRIORITY"
+          default: "low"
       - string:
-          name: MBEDTLS_URL
-          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz
+          name: "MBEDTLS_URL"
+          default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz"
       - string:
-          name: LAVA_RETRIES
+          name: "LAVA_RETRIES"
           default: 2
+
           description: |
             Number of tries submitting job to LAVA in case it fails (stopgap measure against nondeterministic failures)
       - string:
-          name: USE_TUXSUITE_FVP
+          name: "USE_TUXSUITE_FVP"
           default: 1
+
           description: |
             Whether to submit FVP tests via TuxSuite (instead of LAVA)
+
     wrappers:
-      - timestamps
+      - "timestamps"
+
     builders:
-      - shell: !include-raw-verbatim: scripts/clone.sh
+      - shell: !include-raw-verbatim: "scripts/clone.sh"
       - shell: |
           #!/bin/bash
           set -e
@@ -89,14 +99,16 @@
           GERRIT_REFSPEC=${{TFTF_GERRIT_REFSPEC}}
           EOF
       - multijob:
-          name: TFA UNIT TESTS
-          condition: COMPLETED
+          name: "TFA UNIT TESTS"
+          condition: "COMPLETED"
+
           projects:
-            - name: tf-a-ci-gateway
-              alias: tfut
+            - name: "tf-a-ci-gateway"
+              alias: "tfut"
               current-parameters: true
-              kill-phase-on: NEVER
-              predefined-parameters: TEST_GROUPS=tfut
-              property-file: tf-a-tests-env.param
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tfut"
+              property-file: "tf-a-tests-env.param"
+
     triggers:
-      - timed: 59 23 * * 7
+      - timed: "59 23 * * 7"

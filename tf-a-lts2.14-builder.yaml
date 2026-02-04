@@ -1,133 +1,145 @@
 - job:
-    name: tf-a-lts2.14-builder
-    node: docker-amd64-tf-a-lts2.14-jammy
-    project-type: freestyle
+    name: "tf-a-lts2.14-builder"
+    node: "docker-amd64-tf-a-lts2.14-jammy"
+    project-type: "freestyle"
     concurrent: true
     disabled: false
+
     description: |
       Trusted Firmware A (TF-A) LTS 2.14 builder
+
     properties:
       - build-discarder:
           days-to-keep: 15
+
     parameters:
       - string:
-          name: import_cc
+          name: "import_cc"
       - string:
-          name: TEST_CONFIG
+          name: "TEST_CONFIG"
+
           description: |
             Original test configuration.
       - string:
-          name: TEST_DESC
+          name: "TEST_DESC"
+
           description: |
             Expanded and normalized test configuration, aka "test description"
       - string:
-          name: TF_GERRIT_PROJECT
+          name: "TF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
       - string:
-          name: TF_GERRIT_BRANCH
-          default: refs/heads/lts-v2.14
+          name: "TF_GERRIT_BRANCH"
+          default: "refs/heads/lts-v2.14"
       - string:
-          name: TF_GERRIT_REFSPEC
-          default: +refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14
+          name: "TF_GERRIT_REFSPEC"
+          default: "+refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14"
       - string:
-          name: TFTF_GERRIT_PROJECT
+          name: "TFTF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/tf-a-tests"
       - string:
-          name: TFTF_GERRIT_BRANCH
-          default: refs/heads/lts-v2.14
+          name: "TFTF_GERRIT_BRANCH"
+          default: "refs/heads/lts-v2.14"
       - string:
-          name: TFTF_GERRIT_REFSPEC
-          default: +refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14
+          name: "TFTF_GERRIT_REFSPEC"
+          default: "+refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14"
       - string:
-          name: TFUT_GERRIT_BRANCH
-          default: refs/heads/main
+          name: "TFUT_GERRIT_BRANCH"
+          default: "refs/heads/main"
       - string:
-          name: TFUT_GERRIT_REFSPEC
-          default: tfaut-v0.1
+          name: "TFUT_GERRIT_REFSPEC"
+          default: "tfaut-v0.1"
       - string:
-          name: SPM_REFSPEC
-          default: +refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14
+          name: "SPM_REFSPEC"
+          default: "+refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14"
+
           description: |
             SPM(Hafnium) refspec to use. The lts-v2.14 branch is used by default.
       - string:
-          name: CI_REFSPEC
-          default: +refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14
+          name: "CI_REFSPEC"
+          default: "+refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14"
       - string:
-          name: JOBS_REFSPEC
-          default: refs/heads/master
+          name: "JOBS_REFSPEC"
+          default: "refs/heads/master"
+
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
       - string:
-          name: DOCKER_REGISTRY
-          default: ${{PRIVATE_CONTAINER_REGISTRY}}
-          description: PRIVATE_CONTAINER_REGISTRY is a system-wide environment variable
+          name: "DOCKER_REGISTRY"
+          default: "${{PRIVATE_CONTAINER_REGISTRY}}"
+          description: "PRIVATE_CONTAINER_REGISTRY is a system-wide environment variable"
       - string:
-          name: JUNO_ROOTFS_URL
-          default: https://downloads.trustedfirmware.org/infra-assets/linaro_artifacts/releases/openembedded/aarch64/17.01/linaro-image-minimal-genericarmv8-20170127-888.rootfs.tar.gz
+          name: "JUNO_ROOTFS_URL"
+          default: "https://downloads.trustedfirmware.org/infra-assets/linaro_artifacts/releases/openembedded/aarch64/17.01/linaro-image-minimal-genericarmv8-20170127-888.rootfs.tar.gz"
       - string:
-          name: MBEDTLS_URL
-          default: https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz
+          name: "MBEDTLS_URL"
+          default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz"
       - string:
-          name: GERRIT_PATCHSET_NUMBER
+          name: "GERRIT_PATCHSET_NUMBER"
           default: ""
       - string:
-          name: GERRIT_CHANGE_NUMBER
+          name: "GERRIT_CHANGE_NUMBER"
           default: ""
       - string:
-          name: GERRIT_HOST
-          default: review.trustedfirmware.org
+          name: "GERRIT_HOST"
+          default: "review.trustedfirmware.org"
       - string:
-          name: QA_TOOLS_REPO
-          default: https://git.gitlab.arm.com/tooling/qa-tools.git
+          name: "QA_TOOLS_REPO"
+          default: "https://git.gitlab.arm.com/tooling/qa-tools.git"
       - string:
-          name: QA_TOOLS_BRANCH
-          default: master
+          name: "QA_TOOLS_BRANCH"
+          default: "master"
       - string:
-          name: LAVA_RETRIES
+          name: "LAVA_RETRIES"
           default: 2
+
           description: |
             Number of tries submitting job to LAVA in case it fails (stopgap measure against nondeterministic failures)
       - string:
-          name: USE_TUXSUITE_FVP
+          name: "USE_TUXSUITE_FVP"
           default: 1
+
           description: |
             Whether to submit FVP tests via TuxSuite (instead of LAVA)
+
     wrappers:
-      - timestamps
+      - "timestamps"
       - timeout:
           timeout: 120
           fail: true
       - credentials-binding:
           - text:
-              credential-id: LAVA_USER_TF
-              variable: LAVA_USER
+              credential-id: "LAVA_USER_TF"
+              variable: "LAVA_USER"
       - credentials-binding:
           - text:
-              credential-id: LAVA_TOKEN_TF
-              variable: LAVA_TOKEN
+              credential-id: "LAVA_TOKEN_TF"
+              variable: "LAVA_TOKEN"
       - credentials-binding:
           - text:
-              credential-id: TUXSUITE_TOKEN
-              variable: TUXSUITE_TOKEN
+              credential-id: "TUXSUITE_TOKEN"
+              variable: "TUXSUITE_TOKEN"
       - credentials-binding:
           - file:
-              credential-id: ARMCLANG_UBL_FILE
-              variable: ARMCLANG_UBL_FILE
+              credential-id: "ARMCLANG_UBL_FILE"
+              variable: "ARMCLANG_UBL_FILE"
+
     builders:
       - shell: |
           aarch64-none-elf-gcc -v || true
-      - shell: !include-raw-verbatim: scripts/clone.sh
-      - shell: !include-raw-verbatim: tf-a-builder/builders.sh
+      - shell: !include-raw-verbatim: "scripts/clone.sh"
+      - shell: !include-raw-verbatim: "tf-a-builder/builders.sh"
       - inject:
-          properties-file: artefacts/env
+          properties-file: "artefacts/env"
       - shell: |
           ln -s "artefacts/${{BIN_MODE:-release}}" "artefacts-lava"
           echo ${{BIN_MODE:-release}} >lava-binmode.txt
       - conditional-step:
-          condition-kind: file-exists
-          on-evaluation-failure: dont-run
-          condition-filename: artefacts-lava/job.yaml
-          condition-basedir: workspace
+          condition-kind: "file-exists"
+          on-evaluation-failure: "dont-run"
+          condition-filename: "artefacts-lava/job.yaml"
+          condition-basedir: "workspace"
+
           steps:
             - shell: |
                 #!/bin/bash
@@ -139,27 +151,32 @@
                 DEVICE_TYPE=${{DEVICE_TYPE}}
                 LAVA_SERVER=tf.validation.linaro.org
                 EOF
+
     publishers:
       - archive:
-          artifacts: artefacts/**, lava-binmode.txt
+          artifacts: "artefacts/**, lava-binmode.txt"
           latest-only: false
           allow-empty: true
           follow-symlinks: true
       - conditional-publisher:
-          - condition-kind: file-exists
-            on-evaluation-failure: dont-run
-            condition-filename: artefacts-lava/job.yaml
-            condition-basedir: workspace
+          - condition-kind: "file-exists"
+            on-evaluation-failure: "dont-run"
+            condition-filename: "artefacts-lava/job.yaml"
+            condition-basedir: "workspace"
+
             action:
               - postbuildscript:
                   mark-unstable-if-failed: true
+
                   builders:
-                    - role: SLAVE
+                    - role: "SLAVE"
+
                       build-on:
-                        - SUCCESS
+                        - "SUCCESS"
+
                       build-steps:
                         - inject:
-                            properties-file: ${{WORKSPACE}}/lava.param
+                            properties-file: "${{WORKSPACE}}/lava.param"
                         - shell: |
                             #!/bin/bash -x
 
@@ -174,25 +191,30 @@
                             fi
               - postbuildscript:
                   builders:
-                    - role: SLAVE
+                    - role: "SLAVE"
+
                       build-on:
-                        - SUCCESS
+                        - "SUCCESS"
+
                       build-steps:
                         - shell: |
                             #!/bin/bash -e
                             echo "=== Starting expect-post tests ==="
                             ./tf-a-ci-scripts/script/expect-post-runner.sh
       - conditional-publisher:
-          - condition-kind: file-exists
-            on-evaluation-failure: dont-run
-            condition-filename: artefacts/release/tfut_artefacts.txt
-            condition-basedir: workspace
+          - condition-kind: "file-exists"
+            on-evaluation-failure: "dont-run"
+            condition-filename: "artefacts/release/tfut_artefacts.txt"
+            condition-basedir: "workspace"
+
             action:
               - postbuildscript:
                   builders:
-                    - role: SLAVE
+                    - role: "SLAVE"
+
                       build-on:
-                        - SUCCESS
+                        - "SUCCESS"
+
                       build-steps:
                         - shell: |
                             #!/bin/bash -e
@@ -201,29 +223,31 @@
                             export tfut_root="$(pwd)/tf-a-unit-tests"
                             bash -x "$workspace/tf-a-ci-scripts/script/run_unit_tests.sh"
       - conditional-publisher:
-          - condition-kind: file-exists
-            on-evaluation-failure: dont-run
-            condition-filename: lava-raw-debug.log
-            condition-basedir: workspace
+          - condition-kind: "file-exists"
+            on-evaluation-failure: "dont-run"
+            condition-filename: "lava-raw-debug.log"
+            condition-basedir: "workspace"
+
             action:
               - archive:
-                  artifacts: lava-raw-debug.log
+                  artifacts: "lava-raw-debug.log"
                   latest-only: false
                   allow-empty: true
       - conditional-publisher:
-          - condition-kind: file-exists
-            on-evaluation-failure: dont-run
-            condition-filename: unit_tests/run/run.sh
-            condition-basedir: workspace
+          - condition-kind: "file-exists"
+            on-evaluation-failure: "dont-run"
+            condition-filename: "unit_tests/run/run.sh"
+            condition-basedir: "workspace"
+
             action:
               - archive:
-                  artifacts: unit_tests/**
+                  artifacts: "unit_tests/**"
                   latest-only: false
                   allow-empty: true
       - archive:
-          artifacts: lava.log, lava-*.log, tux.id, feedback.log, config_file.json, covtrace-*.log, trace_report/**
+          artifacts: "lava.log, lava-*.log, tux.id, feedback.log, config_file.json, covtrace-*.log, trace_report/**"
           latest-only: false
           allow-empty: true
       - groovy-postbuild:
           script: !include-raw-verbatim:
-            - tf-a-builder/postbuild.groovy
+            - "tf-a-builder/postbuild.groovy"

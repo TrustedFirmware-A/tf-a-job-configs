@@ -1,41 +1,46 @@
 - job:
-    name: tf-a-sloc-visualization
-    description: Generates a visualization of programming languages used by the code-base.
-    node: docker-amd64-tf-a-jammy
+    name: "tf-a-sloc-visualization"
+    description: "Generates a visualization of programming languages used by the code-base."
+    node: "docker-amd64-tf-a-jammy"
     concurrent: true
+
     properties:
       - build-discarder:
           days-to-keep: 30
+
     parameters:
       - string:
-          name: CI_REFSPEC
-          default: +refs/heads/master:refs/remotes/origin/master
+          name: "CI_REFSPEC"
+          default: "+refs/heads/master:refs/remotes/origin/master"
       - string:
-          name: JOBS_REFSPEC
-          default: refs/heads/master
+          name: "JOBS_REFSPEC"
+          default: "refs/heads/master"
+
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
       - string:
-          name: TF_GERRIT_PROJECT
+          name: "TF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
       - string:
-          name: TF_GERRIT_BRANCH
-          default: refs/heads/master
+          name: "TF_GERRIT_BRANCH"
+          default: "refs/heads/master"
       - string:
-          name: TF_GERRIT_REFSPEC
-          default: +refs/heads/master:refs/remotes/origin/master
+          name: "TF_GERRIT_REFSPEC"
+          default: "+refs/heads/master:refs/remotes/origin/master"
       - string:
-          name: DIRECTORIES
-          default: . ./drivers ./plat ./tools
-          description: List of directories to analyze.
+          name: "DIRECTORIES"
+          default: ". ./drivers ./plat ./tools"
+          description: "List of directories to analyze."
+
     builders:
-      - shell: !include-raw-verbatim: scripts/clone.sh
+      - shell: !include-raw-verbatim: "scripts/clone.sh"
       - shell: |
           mkdir -p output
 
           cd trusted-firmware-a &&
             bash ../tf-a-ci-scripts/script/graphs/sloc-viz.bash ${{DIRECTORIES}} \
               > ../output.png 2> ../output.tsv
+
     publishers:
       - archive:
-          artifacts: output.*
+          artifacts: "output.*"

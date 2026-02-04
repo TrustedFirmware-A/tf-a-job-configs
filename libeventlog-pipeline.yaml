@@ -1,8 +1,10 @@
 - job:
-    name: libeventlog-pipeline
+    name: "libeventlog-pipeline"
+
     description: |
       Job triggered for every Event Log Library (LibEventLog) patch, verifying code
       style, and building the module.
-    project-type: pipeline
+
+    project-type: "pipeline"
     sandbox: true
-    dsl: !include-raw-verbatim: libeventlog-pipeline/Jenkinsfile
+    dsl: !include-raw-verbatim: "libeventlog-pipeline/Jenkinsfile"

@@ -1,43 +1,50 @@
 - job:
-    name: tf-a-lts-triage-v2
-    node: docker-amd64-tf-a-jammy
-    project-type: freestyle
+    name: "tf-a-lts-triage-v2"
+    node: "docker-amd64-tf-a-jammy"
+    project-type: "freestyle"
     concurrent: true
     disabled: false
+
     description: |
       Generate LTS triage report every Friday
+
     properties:
       - build-discarder:
           days-to-keep: 45
           num-to-keep: 200
           artifact-num-to-keep: 100
+
     parameters:
       - string:
-          name: TFA_REPO
-          default: https://git.trustedfirmware.org/{gerrit_project_prefix}TF-A/trusted-firmware-a.git
-          description: The trusted-firmware-a repo to clone from
+          name: "TFA_REPO"
+          default: "https://git.trustedfirmware.org/{gerrit_project_prefix}TF-A/trusted-firmware-a.git"
+          description: "The trusted-firmware-a repo to clone from"
       - string:
-          name: TFA_CI_SCRIPT_REPO
-          default: https://git.trustedfirmware.org/{gerrit_project_prefix}ci/tf-a-ci-scripts.git
-          description: The tf-a-ci-script repo to clone from
+          name: "TFA_CI_SCRIPT_REPO"
+          default: "https://git.trustedfirmware.org/{gerrit_project_prefix}ci/tf-a-ci-scripts.git"
+          description: "The tf-a-ci-script repo to clone from"
       - string:
-          name: LTS_BRANCHES
-          default: lts-v2.8 lts-v2.10 lts-v2.12 lts-v2.14
+          name: "LTS_BRANCHES"
+          default: "lts-v2.8 lts-v2.10 lts-v2.12 lts-v2.14"
+
           description: |
             LTS branch
+
     triggers:
-      - timed: H 1 * * 4 # Run the job at 01:xx AM every Thursday @CTS timezone
+      - timed: "H 1 * * 4" # Run the job at 01:xx AM every Thursday @CTS timezone
+
     wrappers:
-      - timestamps
+      - "timestamps"
       - timeout:
           timeout: 30
           fail: true
       - credentials-binding:
           - ssh-user-private-key:
-              credential-id: TFA_CI_BOT_USER_SSH_KEY
-              key-file-variable: CI_BOT_KEY
-              username-variable: CI_BOT_USERNAME
+              credential-id: "TFA_CI_BOT_USER_SSH_KEY"
+              key-file-variable: "CI_BOT_KEY"
+              username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
+
     builders:
       - shell: |
           #!/bin/bash
@@ -67,18 +74,20 @@
 
           cd ${{START_PATH}}
           rm -rf ${{LTS_TMP_DIR}}
+
     publishers:
       - conditional-publisher:
-          - condition-kind: file-exists
-            on-evaluation-failure: dont-run
-            condition-filename: got_report.txt
-            condition-basedir: workspace
+          - condition-kind: "file-exists"
+            on-evaluation-failure: "dont-run"
+            condition-filename: "got_report.txt"
+            condition-basedir: "workspace"
+
             action:
               - archive:
                   artifacts: "*.csv"
               - email-ext:
                   always: true
-                  recipients: arthur.she@linaro.org, bipin.ravi@arm.com, vwadekar@nvidia.com, joanna.farley@arm.com, lauren.wehrmeister@arm.com, yann.gautier@st.com, jidong@google.com, olivier.deprez@arm.com, Govindraj.Raja@arm.com
-                  subject: TF-A LTS Triage report
-                  body: Attached is the CSV report from the TF-A LTS Triage job this week.
+                  recipients: "arthur.she@linaro.org, bipin.ravi@arm.com, vwadekar@nvidia.com, joanna.farley@arm.com, lauren.wehrmeister@arm.com, yann.gautier@st.com, jidong@google.com, olivier.deprez@arm.com, Govindraj.Raja@arm.com"
+                  subject: "TF-A LTS Triage report"
+                  body: "Attached is the CSV report from the TF-A LTS Triage job this week."
                   attachments: "*.csv"

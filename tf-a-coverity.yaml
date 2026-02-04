@@ -1,54 +1,61 @@
 - job:
-    name: tf-a-coverity
-    node: docker-amd64-tf-a-jammy-high-spec
-    project-type: freestyle
+    name: "tf-a-coverity"
+    node: "docker-amd64-tf-a-jammy-high-spec"
+    project-type: "freestyle"
     concurrent: true
     disabled: "{obj:jenkins_site_is_staging}"
+
     description: |
       Run the Coverity tool on Trusted Firmware and submit the resulting
       tarball to <a href="https://scan.coverity.com/projects/arm-software-arm-trusted-firmware">Coverity Scan Online</a>.
       <br/>
       This job runs <b>every weekday</b> and by default uses the <b>integration</b> branch on trustedfirmware.org.
+
     properties:
       - build-discarder:
           days-to-keep: 14
+
     parameters:
       - string:
-          name: TF_GERRIT_PROJECT
+          name: "TF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
       - string:
-          name: TF_GERRIT_BRANCH
-          default: refs/heads/integration
+          name: "TF_GERRIT_BRANCH"
+          default: "refs/heads/integration"
       - string:
-          name: TF_GERRIT_REFSPEC
-          default: +refs/heads/integration:refs/remotes/origin/integration
+          name: "TF_GERRIT_REFSPEC"
+          default: "+refs/heads/integration:refs/remotes/origin/integration"
       - string:
-          name: CI_REFSPEC
-          default: +refs/heads/master:refs/remotes/origin/master
+          name: "CI_REFSPEC"
+          default: "+refs/heads/master:refs/remotes/origin/master"
       - string:
-          name: JOBS_REFSPEC
-          default: refs/heads/master
+          name: "JOBS_REFSPEC"
+          default: "refs/heads/master"
+
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
       - string:
-          name: COVERITY_VERSION
-          default: 2024.6.1
+          name: "COVERITY_VERSION"
+          default: "2024.6.1"
       - bool:
-          name: UPLOAD_TO_COVERITY_SCAN_ONLINE
+          name: "UPLOAD_TO_COVERITY_SCAN_ONLINE"
           default: true
+
           description: |-
             Whether the resulting tarball should be automatically uploaded to Coverity Scan Online.
             <p>
             <b style="color:red;">The number of uploads allowed on Coverity Scan Online is LIMITED.
             Therefore, if you don't need the results to be analysed, please UNTICK this box!<b>
+
     wrappers:
-      - timestamps
+      - "timestamps"
       - credentials-binding:
           - text:
-              credential-id: TF-COVERITY-SCAN-TOKEN
-              variable: TF_COVERITY_SCAN_TOKEN
+              credential-id: "TF-COVERITY-SCAN-TOKEN"
+              variable: "TF_COVERITY_SCAN_TOKEN"
+
     builders:
-      - shell: !include-raw-verbatim: scripts/clone.sh
+      - shell: !include-raw-verbatim: "scripts/clone.sh"
       - shell: |
           #!/bin/bash
           set -e
@@ -65,9 +72,10 @@
           cd ${{WORKSPACE}}/trusted-firmware-a
           ${{WORKSPACE}}/tf-a-ci-scripts/script/tf-coverity/run_coverity_on_tf.py --tf $(pwd)
       - conditional-step:
-          condition-kind: boolean-expression
-          condition-expression: ${{UPLOAD_TO_COVERITY_SCAN_ONLINE}}
-          on-evaluation-failure: dont-run
+          condition-kind: "boolean-expression"
+          condition-expression: "${{UPLOAD_TO_COVERITY_SCAN_ONLINE}}"
+          on-evaluation-failure: "dont-run"
+
           steps:
             - shell: |
                 #!/bin/bash
@@ -84,9 +92,10 @@
                   --form version="Commit ${{GIT_COMMIT}}" \
                   --form description="Build ${{BUILD_DISPLAY_NAME}}" \
                   https://scan.coverity.com/builds?project=ARM-software%2Farm-trusted-firmware
+
     publishers:
       - archive:
-          artifacts: trusted-firmware-a/arm-tf-coverity-results.tgz, trusted-firmware-a/tf_coverage.log
+          artifacts: "trusted-firmware-a/arm-tf-coverity-results.tgz, trusted-firmware-a/tf_coverage.log"
       - groovy-postbuild:
           script: !include-raw-verbatim:
-            - tf-a-coverity/postbuild.groovy
+            - "tf-a-coverity/postbuild.groovy"

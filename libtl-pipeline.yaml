@@ -1,8 +1,10 @@
 - job:
-    name: libtl-pipeline
+    name: "libtl-pipeline"
+
     description: |
       Job triggered for every Transfer List Library (LibTL) patch, verifying code
       style, building the module, and running unit tests.
-    project-type: pipeline
+
+    project-type: "pipeline"
     sandbox: true
-    dsl: !include-raw-verbatim: libtl-pipeline/Jenkinsfile
+    dsl: !include-raw-verbatim: "libtl-pipeline/Jenkinsfile"

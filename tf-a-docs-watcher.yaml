@@ -1,10 +1,11 @@
 - job:
-    name: tf-a-docs-watcher
-    node: docker-amd64-tf-a-jammy
-    project-type: freestyle
+    name: "tf-a-docs-watcher"
+    node: "docker-amd64-tf-a-jammy"
+    project-type: "freestyle"
     concurrent: false
-    description: Triggers whenever a code change is merged into the master branch of the TF-A repository. Executes a webhook to trigger the ReadTheDocs service to build a fresh copy of the documentation for one or more branches.
+    description: "Triggers whenever a code change is merged into the master branch of the TF-A repository. Executes a webhook to trigger the ReadTheDocs service to build a fresh copy of the documentation for one or more branches."
     disabled: "{obj:jenkins_site_is_staging}"
+
     builders:
       - shell: |-
           #!/bin/bash -e
@@ -14,31 +15,39 @@
           curl -s -X POST -H "Authorization: Token ${{RTD_TOKEN}}" ${{RTD_API}}/versions/$RTD_BRANCHES/builds/ | jq .
           echo "Trigger build latest version"
           curl -s -X POST -H "Authorization: Token ${{RTD_TOKEN}}" ${{RTD_API}}/versions/latest/builds/ | jq .
+
     properties:
       - build-discarder:
           days-to-keep: 60
           num-to-keep: 10
+
     triggers:
       - gerrit:
           silent: true
-          server-name: review.trustedfirmware.org
+          server-name: "review.trustedfirmware.org"
+
           projects:
             - branches:
-                - branch-compare-type: PLAIN
-                  branch-pattern: master
-              project-compare-type: PLAIN
+                - branch-compare-type: "PLAIN"
+                  branch-pattern: "master"
+
+              project-compare-type: "PLAIN"
               project-pattern: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
           trigger-on:
-            - ref-updated-event
+            - "ref-updated-event"
+
     wrappers:
-      - timestamps
+      - "timestamps"
       - credentials-binding:
           - text:
-              credential-id: TF-A-RTD-API-TOKEN
-              variable: RTD_TOKEN
+              credential-id: "TF-A-RTD-API-TOKEN"
+              variable: "RTD_TOKEN"
+
     parameters:
       - string:
-          name: RTD_BRANCHES
-          default: master
+          name: "RTD_BRANCHES"
+          default: "master"
+
           description: |
             The branch, or branches, to rebuild the documentation for.

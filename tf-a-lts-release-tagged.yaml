@@ -1,36 +1,44 @@
 - job:
-    name: tf-a-lts-release-tagged
-    node: docker-amd64-tf-a-jammy
-    project-type: freestyle
+    name: "tf-a-lts-release-tagged"
+    node: "docker-amd64-tf-a-jammy"
+    project-type: "freestyle"
     concurrent: false
     disabled: "{obj:jenkins_site_is_staging}"
-    description: Triggers when a new LTS release is tagged
+    description: "Triggers when a new LTS release is tagged"
+
     properties:
       - build-discarder:
           days-to-keep: 90
           num-to-keep: 60
+
     triggers:
       - gerrit:
-          server-name: review.trustedfirmware.org
+          server-name: "review.trustedfirmware.org"
+
           projects:
             - branches:
-                - branch-compare-type: REG_EXP
-                  branch-pattern: refs/tags/lts-v.*
-                - branch-compare-type: REG_EXP
-                  branch-pattern: refs/tags/sandbox/lts-v.*
-              project-compare-type: PLAIN
+                - branch-compare-type: "REG_EXP"
+                  branch-pattern: "refs/tags/lts-v.*"
+                - branch-compare-type: "REG_EXP"
+                  branch-pattern: "refs/tags/sandbox/lts-v.*"
+
+              project-compare-type: "PLAIN"
               project-pattern: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
             - branches:
-                - branch-compare-type: REG_EXP
-                  branch-pattern: refs/tags/lts-v.*
-                - branch-compare-type: REG_EXP
-                  branch-pattern: refs/tags/sandbox/lts-v.*
-              project-compare-type: PLAIN
+                - branch-compare-type: "REG_EXP"
+                  branch-pattern: "refs/tags/lts-v.*"
+                - branch-compare-type: "REG_EXP"
+                  branch-pattern: "refs/tags/sandbox/lts-v.*"
+
+              project-compare-type: "PLAIN"
               project-pattern: "{gerrit_project_prefix}sandbox/pfalcon/trusted-firmware-a"
+
           trigger-on:
-            - ref-updated-event
+            - "ref-updated-event"
+
     wrappers:
-      - timestamps
+      - "timestamps"
+
     builders:
       - shell: |
           #!/bin/bash
@@ -47,19 +55,22 @@
               echo "SANDBOX_RUN=false" >>subjob.param
           fi
       - conditional-step:
-          condition-kind: file-exists
-          on-evaluation-failure: dont-run
-          condition-filename: subjob.param
-          condition-basedir: workspace
+          condition-kind: "file-exists"
+          on-evaluation-failure: "dont-run"
+          condition-filename: "subjob.param"
+          condition-basedir: "workspace"
+
           steps:
             - trigger-builds:
                 - project:
-                    - tf-a-lts-release-docs
+                    - "tf-a-lts-release-docs"
+
                   block: true
                   current-parameters: true
-                  property-file: subjob.param
+                  property-file: "subjob.param"
                 - project:
-                    - tf-a-lts-release-mail
+                    - "tf-a-lts-release-mail"
+
                   block: true
                   current-parameters: true
-                  property-file: subjob.param
+                  property-file: "subjob.param"

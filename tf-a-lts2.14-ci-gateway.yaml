@@ -1,99 +1,115 @@
 - job:
-    name: tf-a-lts2.14-ci-gateway
-    node: docker-amd64-tf-a-lts2.14-jammy
-    project-type: freestyle
+    name: "tf-a-lts2.14-ci-gateway"
+    node: "docker-amd64-tf-a-lts2.14-jammy"
+    project-type: "freestyle"
     concurrent: true
     disabled: false
+
     description: |
       Main job entry point for a Trusted Firmware A (TF-A) LTS 2.14 CI.
+
     properties:
       - build-discarder:
           days-to-keep: 15
       - throttle:
-          option: project
+          option: "project"
           enabled: true
           max-per-node: 3
           max-total: 10
+
     wrappers:
       - credentials-binding:
           - ssh-user-private-key:
-              credential-id: TFA_CI_BOT_USER_SSH_KEY
-              key-file-variable: CI_BOT_KEY
-              username-variable: CI_BOT_USERNAME
+              credential-id: "TFA_CI_BOT_USER_SSH_KEY"
+              key-file-variable: "CI_BOT_KEY"
+              username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
       - timeout:
           timeout: 240
           fail: true
-      - timestamps
+      - "timestamps"
+
     parameters:
       - string:
-          name: TEST_GROUPS
-          default: tf-l2-boot-tests-cortex/fvp-default:fvp-linux-dtb-fip.uboot-cortexa35x4-debug
+          name: "TEST_GROUPS"
+          default: "tf-l2-boot-tests-cortex/fvp-default:fvp-linux-dtb-fip.uboot-cortexa35x4-debug"
+
           description: |
             White space separated list of test configs: can be mix of specific
             test configs (e.g., <code>l1/fvp-default:fvp-linux-default</code>) and
             group names (e.g., <code>l1 l2</code>).
       - string:
-          name: TF_GERRIT_REFSPEC
-          default: +refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14
+          name: "TF_GERRIT_REFSPEC"
+          default: "+refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14"
+
           description: |
             trusted-firmware-a refspec to use. The lts-v2.14 branch is used by default.
       - string:
-          name: TFTF_GERRIT_REFSPEC
-          default: +refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14
+          name: "TFTF_GERRIT_REFSPEC"
+          default: "+refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14"
+
           description: |
             tf-a-tests refspec to use. The lts-v2.14 branch is used by default.
       - string:
-          name: TF_M_TESTS_GERRIT_REFSPEC
-          default: 3041b858639c85d9541c37fcbd1b42d3d0f03c79
+          name: "TF_M_TESTS_GERRIT_REFSPEC"
+          default: "3041b858639c85d9541c37fcbd1b42d3d0f03c79"
+
           description: |
             tf-m-tests refspec to use. The tfa_ci_dep_revision branch is used by default.
       - string:
-          name: TF_M_EXTRAS_GERRIT_REFSPEC
-          default: 6edb83b21cae8ebbc3c3c219ea34d41ca0cc2bf1
+          name: "TF_M_EXTRAS_GERRIT_REFSPEC"
+          default: "6edb83b21cae8ebbc3c3c219ea34d41ca0cc2bf1"
+
           description: |
             tf-m-extras refspec to use. The tfa_ci_dep_revision branch is used by default.
       - string:
-          name: SPM_REFSPEC
-          default: +refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14
+          name: "SPM_REFSPEC"
+          default: "+refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14"
+
           description: |
             SPM(Hafnium) refspec to use. The lts-v2.14 branch is used by default.
       - string:
-          name: CI_REFSPEC
-          default: +refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14
+          name: "CI_REFSPEC"
+          default: "+refs/heads/lts-v2.14:refs/remotes/origin/lts-v2.14"
+
           description: |
             tf-a-ci-scripts refspec to use. The lts-v2.14 branch is used by default.
       - string:
-          name: RMM_REFSPEC
-          default: tf-rmm-v0.8.0
+          name: "RMM_REFSPEC"
+          default: "tf-rmm-v0.8.0"
+
           description: |
             tf-rmm refspec to use. The tag 'tf-rmm-v0.8.0' is used by default.
       - string:
-          name: TFUT_GERRIT_REFSPEC
-          default: tfaut-v0.1
+          name: "TFUT_GERRIT_REFSPEC"
+          default: "tfaut-v0.1"
+
           description: |
             tf-a-unit-tests refspec to use. The tag 'tfaut-v0.1' is used by default.
       - string:
-          name: JOBS_REFSPEC
-          default: refs/heads/master
+          name: "JOBS_REFSPEC"
+          default: "refs/heads/master"
+
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
       - bool:
-          name: ENABLE_STATIC_CHECK
+          name: "ENABLE_STATIC_CHECK"
           default: false
       - string:
-          name: QA_TOOLS_REPO
-          default: https://git.gitlab.arm.com/tooling/qa-tools.git
+          name: "QA_TOOLS_REPO"
+          default: "https://git.gitlab.arm.com/tooling/qa-tools.git"
       - string:
-          name: QA_TOOLS_BRANCH
-          default: master
+          name: "QA_TOOLS_BRANCH"
+          default: "master"
       - string:
-          name: USE_TUXSUITE_FVP
+          name: "USE_TUXSUITE_FVP"
           default: 1
+
           description: |
             Whether to submit FVP tests via TuxSuite (instead of LAVA)
+
     builders:
-      - shell: !include-raw-verbatim: scripts/clone.sh
+      - shell: !include-raw-verbatim: "scripts/clone.sh"
       - shell: |
           #!/bin/bash
           set -e
@@ -103,30 +119,35 @@
           $CI_ROOT/script/gen_test_desc.py
       - trigger-builds:
           - project:
-              - tf-a-lts2.14-builder
+              - "tf-a-lts2.14-builder"
+
             block: true
             current-parameters: true
+
             parameter-factories:
-              - factory: filebuild
+              - factory: "filebuild"
                 file-pattern: "*.testprop"
-                no-files-found-action: FAIL
+                no-files-found-action: "FAIL"
+
     publishers:
       - postbuildscript:
           builders:
-            - role: SLAVE
+            - role: "SLAVE"
+
               build-on:
-                - SUCCESS
-                - FAILURE
-                - UNSTABLE
-                - ABORTED
-                - NOT_BUILT
+                - "SUCCESS"
+                - "FAILURE"
+                - "UNSTABLE"
+                - "ABORTED"
+                - "NOT_BUILT"
+
               build-steps:
                 - shell: |-
                     #!/bin/bash -e
                     export CI_ROOT=${{PWD}}/tf-a-ci-scripts
                     bash "$CI_ROOT/job/tf-ci-gateway/generate_report.sh"
       - archive:
-          artifacts: report.json, report.html, merge/outdir/**
+          artifacts: "report.json, report.html, merge/outdir/**"
       - groovy-postbuild:
           script: !include-raw-verbatim:
-            - tf-a-ci-gateway/postbuild.groovy
+            - "tf-a-ci-gateway/postbuild.groovy"
