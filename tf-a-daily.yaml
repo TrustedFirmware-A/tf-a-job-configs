@@ -53,6 +53,12 @@
           name: LAVA_PRIORITY
           default: low
     wrappers:
+      - credentials-binding:
+          - ssh-user-private-key:
+              credential-id: TFA_CI_BOT_USER_SSH_KEY
+              key-file-variable: CI_BOT_KEY
+              username-variable: CI_BOT_USERNAME
+              passphrase-variable: ""
       - timestamps
     builders:
       - shell: !include-raw-verbatim: scripts/clone.sh
