@@ -74,6 +74,13 @@
 
           git clone https://git.trustedfirmware.org/${{GERRIT_PROJECT_PREFIX:-}}ci/tf-a-ci-scripts.git
           ./tf-a-ci-scripts/lts/lts-release-mail.py --url https://${{GERRIT_HOST}}/${{GERRIT_PROJECT}} --branch "${{GERRIT_BRANCH}}" ${{RELEASE_TAG}} >email.txt
+
+          if [ ! -s email.txt ]; then
+              echo "No changes found. Removing email.txt to prevent sending email."
+              rm email.txt
+              exit 0
+          fi
+
           awk -F": " '/Subject:/ {{print $2}}' email.txt >subject.txt
           # Remove email headers, put in a seperate file.
           sed '0,/^$/d' email.txt >body.txt
