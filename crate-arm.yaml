@@ -1,3 +1,6 @@
+- project:
+    name: "crate-arm"
+
 - view:
     name: "Arm-Firmware-Crates"
     view-type: "list"

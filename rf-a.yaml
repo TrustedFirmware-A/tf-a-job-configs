@@ -1,3 +1,6 @@
+- project:
+    name: "rf-a"
+
 - view:
     name: "RF-A"
     view-type: "list"

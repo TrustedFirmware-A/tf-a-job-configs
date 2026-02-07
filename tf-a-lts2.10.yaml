@@ -1,3 +1,6 @@
+- project:
+    name: "tf-a-lts2.10"
+
 - view:
     name: "TF-A-LTS2.10"
     view-type: "list"
