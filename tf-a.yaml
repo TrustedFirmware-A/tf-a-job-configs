@@ -5,7 +5,7 @@
 - view-template:
     name: "TF-A"
     view-type: "list"
-    regex: "^tf-a(-|$)"
+    regex: "^tf-a(-.*)?$"
     filter-queue: true
     filter-executors: true
 

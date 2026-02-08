@@ -5,7 +5,7 @@
 - view-template:
     name: "Arm-Firmware-Crates"
     view-type: "list"
-    regex: "^crate-arm(-|$)"
+    regex: "^crate-arm(-.*)?$"
     filter-queue: true
     filter-executors: true
 
