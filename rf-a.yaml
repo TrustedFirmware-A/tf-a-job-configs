@@ -1,7 +1,8 @@
 - project:
     name: "rf-a"
+    views: ["RF-A"]
 
-- view:
+- view-template:
     name: "RF-A"
     view-type: "list"
     regex: "^rf-a(-|$)"

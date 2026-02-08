@@ -1,7 +1,8 @@
 - project:
     name: "crate-arm"
+    views: ["Arm-Firmware-Crates"]
 
-- view:
+- view-template:
     name: "Arm-Firmware-Crates"
     view-type: "list"
     regex: "^crate-arm(-|$)"

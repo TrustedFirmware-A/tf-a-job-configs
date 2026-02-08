@@ -1,7 +1,8 @@
 - project:
     name: "tf-a-lts2.14"
+    views: ["TF-A-LTS2.14"]
 
-- view:
+- view-template:
     name: "TF-A-LTS2.14"
     view-type: "list"
     regex: "^tf-a-lts2[.]14(-|$)"
