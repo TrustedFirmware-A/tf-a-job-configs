@@ -4,7 +4,7 @@
 - view:
     name: "RF-A"
     view-type: "list"
-    regex: "rf-a-.*"
+    regex: "^rf-a(-|$)"
     filter-queue: true
     filter-executors: true
 

@@ -4,7 +4,7 @@
 - view:
     name: "TF-A-LTS2.14"
     view-type: "list"
-    regex: "tf-a-lts2.14.*"
+    regex: "^tf-a-lts2[.]14(-|$)"
     filter-queue: true
     filter-executors: true
 

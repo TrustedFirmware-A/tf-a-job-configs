@@ -4,7 +4,7 @@
 - view:
     name: "TF-A-LTS"
     view-type: "list"
-    regex: "tf-a-lts.*"
+    regex: "^tf-a-lts"
     filter-queue: true
     filter-executors: true
 
