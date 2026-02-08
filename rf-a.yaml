@@ -1,8 +1,10 @@
 - project:
     name: "rf-a"
-    views: ["RF-A"]
+    views: ["rf-a"]
 
 - view-template:
+    id: "rf-a"
+
     name: "RF-A"
     view-type: "list"
     regex: "^rf-a(-.*)?$"

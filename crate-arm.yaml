@@ -1,8 +1,10 @@
 - project:
     name: "crate-arm"
-    views: ["Arm-Firmware-Crates"]
+    views: ["crate-arm"]
 
 - view-template:
+    id: "crate-arm"
+
     name: "Arm-Firmware-Crates"
     view-type: "list"
     regex: "^crate-arm(-.*)?$"

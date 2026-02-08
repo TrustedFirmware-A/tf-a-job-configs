@@ -1,8 +1,10 @@
 - project:
     name: "tf-a-lts"
-    views: ["TF-A-LTS"]
+    views: ["tf-a-lts"]
 
 - view-template:
+    id: "tf-a-lts"
+
     name: "TF-A-LTS"
     view-type: "list"
     regex: "^tf-a-lts.*$"
