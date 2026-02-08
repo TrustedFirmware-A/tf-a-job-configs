@@ -1,21 +1,7 @@
 - project:
     name: "rf-a"
-    views: ["rf-a"]
 
-- view-template:
-    id: "rf-a"
-
-    name: "RF-A"
-    view-type: "list"
-    regex: "^rf-a(-.*)?$"
-    filter-queue: true
-    filter-executors: true
-
-    columns:
-      - "status"
-      - "weather"
-      - "job"
-      - "last-success"
-      - "last-failure"
-      - "last-duration"
-      - "build-button"
+    views:
+      - "tf-a":
+          name: "RF-A"
+          regex: "^rf-a(-.*)?$"

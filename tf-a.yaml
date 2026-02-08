@@ -1,13 +1,17 @@
 - project:
     name: "tf-a"
-    views: ["tf-a"]
+
+    views:
+      - "tf-a":
+          name: "TF-A"
+          regex: "^tf-a(-.*)?$"
 
 - view-template:
     id: "tf-a"
 
-    name: "TF-A"
+    name: "{name}"
     view-type: "list"
-    regex: "^tf-a(-.*)?$"
+    regex: "{regex}"
     filter-queue: true
     filter-executors: true
 

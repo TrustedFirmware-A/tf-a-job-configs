@@ -1,21 +1,7 @@
 - project:
     name: "crate-arm"
-    views: ["crate-arm"]
 
-- view-template:
-    id: "crate-arm"
-
-    name: "Arm-Firmware-Crates"
-    view-type: "list"
-    regex: "^crate-arm(-.*)?$"
-    filter-queue: true
-    filter-executors: true
-
-    columns:
-      - "status"
-      - "weather"
-      - "job"
-      - "last-success"
-      - "last-failure"
-      - "last-duration"
-      - "build-button"
+    views:
+      - "tf-a":
+          name: "Arm-Firmware-Crates"
+          regex: "^crate-arm(-.*)?$"

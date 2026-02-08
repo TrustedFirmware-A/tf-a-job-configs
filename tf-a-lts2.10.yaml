@@ -1,21 +1,7 @@
 - project:
     name: "tf-a-lts2.10"
-    views: ["tf-a-lts2.10"]
 
-- view-template:
-    id: "tf-a-lts2.10"
-
-    name: "TF-A-LTS2.10"
-    view-type: "list"
-    regex: "^tf-a-lts2[.]10(-.*)?$"
-    filter-queue: true
-    filter-executors: true
-
-    columns:
-      - "status"
-      - "weather"
-      - "job"
-      - "last-success"
-      - "last-failure"
-      - "last-duration"
-      - "build-button"
+    views:
+      - "tf-a-lts-version":
+          version: "2.10"
+          version_regex: "2[.]10"

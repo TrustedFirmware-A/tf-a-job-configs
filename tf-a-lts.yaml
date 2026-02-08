@@ -1,21 +1,15 @@
 - project:
     name: "tf-a-lts"
-    views: ["tf-a-lts"]
 
-- view-template:
-    id: "tf-a-lts"
+    views:
+      - "tf-a":
+          name: "TF-A-LTS"
+          regex: "^tf-a-lts.*$"
 
-    name: "TF-A-LTS"
-    view-type: "list"
-    regex: "^tf-a-lts.*$"
-    filter-queue: true
-    filter-executors: true
+- view-group:
+    name: "tf-a-lts-version"
 
-    columns:
-      - "status"
-      - "weather"
-      - "job"
-      - "last-success"
-      - "last-failure"
-      - "last-duration"
-      - "build-button"
+    views:
+      - "tf-a":
+          name: "TF-A-LTS{version}"
+          regex: "^tf-a-lts{version_regex}(-.*)?$"
