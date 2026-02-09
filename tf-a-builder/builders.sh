@@ -2,6 +2,9 @@
 
 set -ex
 
+BUILDERS_SH_ARMCLANG_VERSION=${BUILDERS_SH_ARMCLANG_VERSION:?}
+BUILDERS_SH_ARMCLANG_WAREHOUSE_VERSION=${BUILDERS_SH_ARMCLANG_WAREHOUSE_VERSION:?}
+
 # Run the given command passed through parameters, if fails, try
 # at most more N-times with a pause of M-seconds until success.
 resilient_cmd() {
@@ -99,16 +102,16 @@ mkdir -p /arm/pdsw/tools/gcc-linaro-6.2.1-2016.11-x86_64_aarch64-linux-gnu
 ln -s ${TOOLS_DIR}/gcc-linaro-6.2.1-2016.11-x86_64_aarch64-linux-gnu/bin \
    /arm/pdsw/tools/gcc-linaro-6.2.1-2016.11-x86_64_aarch64-linux-gnu/bin
 
-# CC=/arm/warehouse/Distributions/FA/ARMCompiler/6.23/37/standalone-linux-x86_64-rel/bin/armclang
-mkdir -p /arm/warehouse/Distributions/FA/ARMCompiler/6.23/37/standalone-linux-x86_64-rel
-ln -s ${TOOLS_DIR}/armclang-6.23/bin \
-      /arm/warehouse/Distributions/FA/ARMCompiler/6.23/37/standalone-linux-x86_64-rel/bin
+# CC=/arm/warehouse/Distributions/FA/ARMCompiler/${BUILDERS_SH_ARMCLANG_WAREHOUSE_VERSION}/standalone-linux-x86_64-rel/bin/armclang
+mkdir -p "/arm/warehouse/Distributions/FA/ARMCompiler/${BUILDERS_SH_ARMCLANG_WAREHOUSE_VERSION}/standalone-linux-x86_64-rel"
+ln -s "${TOOLS_DIR}/armclang-${BUILDERS_SH_ARMCLANG_VERSION}/bin" \
+      "/arm/warehouse/Distributions/FA/ARMCompiler/${BUILDERS_SH_ARMCLANG_WAREHOUSE_VERSION}/standalone-linux-x86_64-rel/bin"
 
 # If build actually uses ArmClang, activate and verify UBL license
 if echo ${TEST_CONFIG} | grep -q armclang && [ -n "${ARMCLANG_UBL_FILE}" ]; then
-    ${TOOLS_DIR}/armclang-6.23/bin/armlm import --file ${ARMCLANG_UBL_FILE}
-    ${TOOLS_DIR}/armclang-6.23/bin/armlm inspect
-    ${TOOLS_DIR}/armclang-6.23/bin/armclang --vsn
+    "${TOOLS_DIR}/armclang-${BUILDERS_SH_ARMCLANG_VERSION}/bin/armlm" import --file "${ARMCLANG_UBL_FILE}"
+    "${TOOLS_DIR}/armclang-${BUILDERS_SH_ARMCLANG_VERSION}/bin/armlm" inspect
+    "${TOOLS_DIR}/armclang-${BUILDERS_SH_ARMCLANG_VERSION}/bin/armclang" --vsn
 fi
 
 # Mandatory workspace

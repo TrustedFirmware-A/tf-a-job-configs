@@ -145,6 +145,11 @@
               credential-id: "ARMCLANG_UBL_FILE"
               variable: "ARMCLANG_UBL_FILE"
 
+      - inject:
+          properties-content: |
+            BUILDERS_SH_ARMCLANG_VERSION=6.23
+            BUILDERS_SH_ARMCLANG_WAREHOUSE_VERSION=6.23/37
+
     builders:
       - shell: |
           aarch64-none-elf-gcc -v || true

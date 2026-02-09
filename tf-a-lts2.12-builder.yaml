@@ -144,12 +144,17 @@
               credential-id: "ARMCLANG_UBL_FILE"
               variable: "ARMCLANG_UBL_FILE"
 
+      - inject:
+          properties-content: |
+            BUILDERS_SH_ARMCLANG_VERSION=6.18
+            BUILDERS_SH_ARMCLANG_WAREHOUSE_VERSION=6.18/19
+
     builders:
       - shell: |
           aarch64-none-elf-gcc -v || true
 
       - shell: !include-raw-verbatim: "scripts/clone.sh"
-      - shell: !include-raw-verbatim: "tf-a-builder/lts-builders.sh"
+      - shell: !include-raw-verbatim: "tf-a-builder/builders.sh"
 
       - inject:
           properties-file: "artefacts/env"
