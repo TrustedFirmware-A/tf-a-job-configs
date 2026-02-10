@@ -25,11 +25,11 @@
 
       - string:
           name: "GERRIT_BRANCH"
-          default: "refs/heads/lts-v2.10"
+          default: "lts-v2.10"
 
       - string:
           name: "GERRIT_REFSPEC"
-          default: "+refs/heads/lts-v2.10:refs/remotes/origin/lts-v2.10"
+          default: "lts-v2.10"
 
       - string:
           name: "GERRIT_PATCHSET_NUMBER"
@@ -41,12 +41,12 @@
 
       - string:
           name: "TF_GERRIT_BRANCH"
-          default: "refs/heads/lts-v2.10"
+          default: "lts-v2.10"
           description: "Git project branch for Trusted Firmware-A."
 
       - string:
           name: "TF_GERRIT_REFSPEC"
-          default: "+refs/heads/lts-v2.10:refs/remotes/origin/lts-v2.10"
+          default: "lts-v2.10"
           description: "Git refspec for Trusted Firmware-A."
 
       - string:
@@ -63,11 +63,11 @@
 
       - string:
           name: "CI_REFSPEC"
-          default: "+refs/heads/lts-v2.10:refs/remotes/origin/lts-v2.10"
+          default: "lts-v2.10"
 
       - string:
           name: "JOBS_REFSPEC"
-          default: "refs/heads/main"
+          default: "main"
 
           description: |
             tf-a-job-configs refspec to use. The main branch is used by default.

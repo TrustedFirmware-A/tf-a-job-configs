@@ -46,7 +46,7 @@
 
       - string:
           name: "TF_GERRIT_BRANCH"
-          default: "refs/heads/master"
+          default: "master"
 
       - string:
           name: "TF_SRC_REPO_URL"
@@ -54,7 +54,7 @@
 
       - string:
           name: "TF_GERRIT_REFSPEC"
-          default: "+refs/heads/master:refs/remotes/origin/master"
+          default: "master"
 
       - string:
           name: "MBEDTLS_URL"

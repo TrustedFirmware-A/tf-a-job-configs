@@ -11,11 +11,11 @@
     parameters:
       - string:
           name: "CI_REFSPEC"
-          default: "+refs/heads/master:refs/remotes/origin/master"
+          default: "master"
 
       - string:
           name: "JOBS_REFSPEC"
-          default: "refs/heads/master"
+          default: "master"
 
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
@@ -26,11 +26,11 @@
 
       - string:
           name: "TF_GERRIT_BRANCH"
-          default: "refs/heads/master"
+          default: "master"
 
       - string:
           name: "TF_GERRIT_REFSPEC"
-          default: "+refs/heads/master:refs/remotes/origin/master"
+          default: "master"
 
       - string:
           name: "DIRECTORIES"

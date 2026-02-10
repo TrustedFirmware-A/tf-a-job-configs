@@ -17,7 +17,7 @@
 
       - string:
           name: "RFA_REFSPEC"
-          default: "+refs/heads/main:refs/remotes/origin/main"
+          default: "main"
 
           description: |
             rfa refspec to use. The main branch is used by default.
@@ -28,7 +28,7 @@
 
       - string:
           name: "GERRIT_REFSPEC"
-          default: "refs/heads/main"
+          default: "main"
 
       - string:
           name: "TF_GERRIT_PROJECT"
@@ -36,19 +36,19 @@
 
       - string:
           name: "TF_GERRIT_BRANCH"
-          default: "refs/heads/master"
+          default: "master"
 
       - string:
           name: "TF_GERRIT_REFSPEC"
-          default: "+refs/heads/master:refs/remotes/origin/master"
+          default: "master"
 
       - string:
           name: "CI_REFSPEC"
-          default: "+refs/heads/rf-a:refs/remotes/origin/rf-a"
+          default: "rf-a"
 
       - string:
           name: "JOBS_REFSPEC"
-          default: "refs/heads/master"
+          default: "master"
 
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.

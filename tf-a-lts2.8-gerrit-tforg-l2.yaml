@@ -26,11 +26,11 @@
 
       - string:
           name: "GERRIT_BRANCH"
-          default: "refs/heads/lts-v2.8"
+          default: "lts-v2.8"
 
       - string:
           name: "GERRIT_REFSPEC"
-          default: "+refs/heads/lts-v2.8:refs/remotes/origin/lts-v2.8"
+          default: "lts-v2.8"
 
       - string:
           name: "GERRIT_PATCHSET_NUMBER"
@@ -51,11 +51,11 @@
 
       - string:
           name: "TFTF_GERRIT_BRANCH"
-          default: "refs/heads/lts-v2.8"
+          default: "lts-v2.8"
 
       - string:
           name: "TFTF_GERRIT_REFSPEC"
-          default: "+refs/heads/lts-v2.8:refs/remotes/origin/lts-v2.8"
+          default: "lts-v2.8"
 
       - string:
           name: "SPM_REFSPEC"
@@ -66,11 +66,11 @@
 
       - string:
           name: "CI_REFSPEC"
-          default: "+refs/heads/lts-v2.8:refs/remotes/origin/lts-v2.8"
+          default: "lts-v2.8"
 
       - string:
           name: "JOBS_REFSPEC"
-          default: "refs/heads/master"
+          default: "master"
 
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
