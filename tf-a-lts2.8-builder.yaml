@@ -53,6 +53,14 @@
           default: "master"
 
       - string:
+          name: "TF_M_TESTS_GERRIT_REFSPEC"
+          default: "master"
+
+      - string:
+          name: "TF_M_EXTRAS_GERRIT_REFSPEC"
+          default: "master"
+
+      - string:
           name: "SPM_REFSPEC"
           default: "v2.8"
 

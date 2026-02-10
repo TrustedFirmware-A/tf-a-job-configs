@@ -43,11 +43,19 @@
             group names (e.g., <code>l1 l2</code>).
 
       - string:
+          name: "TF_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
+      - string:
           name: "TF_GERRIT_REFSPEC"
           default: "master"
 
           description: |
             trusted-firmware-a refspec to use. The master branch is used by default.
+
+      - string:
+          name: "TFTF_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}TF-A/tf-a-tests"
 
       - string:
           name: "TFTF_GERRIT_REFSPEC"

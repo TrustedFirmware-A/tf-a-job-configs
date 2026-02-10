@@ -57,6 +57,30 @@
           default: "master"
 
       - string:
+          name: "TFTF_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}TF-A/tf-a-tests"
+
+      - string:
+          name: "TFTF_GERRIT_REFSPEC"
+          default: "master"
+
+      - string:
+          name: "SPM_REFSPEC"
+          default: "master"
+
+      - string:
+          name: "RMM_REFSPEC"
+          default: "main"
+
+      - string:
+          name: "CI_REFSPEC"
+          default: "master"
+
+      - string:
+          name: "JOBS_REFSPEC"
+          default: "master"
+
+      - string:
           name: "MBEDTLS_URL"
           default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz"
 

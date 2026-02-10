@@ -56,6 +56,14 @@
           default: "master"
 
       - string:
+          name: "SPM_REFSPEC"
+          default: "master"
+
+      - string:
+          name: "RMM_REFSPEC"
+          default: "main"
+
+      - string:
           name: "CI_REFSPEC"
           default: "rf-a"
 

@@ -53,6 +53,14 @@
           default: "lts-v2.12"
 
       - string:
+          name: "TF_M_TESTS_GERRIT_REFSPEC"
+          default: "53ddc58dcd57e1f5cf658b316d7d735335d58570"
+
+      - string:
+          name: "TF_M_EXTRAS_GERRIT_REFSPEC"
+          default: "3ff04e40ff7f66c8cee087b6e5cbd8fb8c1bec01"
+
+      - string:
           name: "SPM_REFSPEC"
           default: "v2.12"
 
