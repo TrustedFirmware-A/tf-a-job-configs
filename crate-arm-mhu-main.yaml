@@ -99,11 +99,6 @@
           description: "Features the arm-mhu crate will be tested against"
 
       - string:
-          name: "SHARE_FOLDER"
-          default: "/srv/shared/${{JOB_NAME}}/${{BUILD_NUMBER}}"
-          description: "Folder containing shared repositories for downstream pipeline jobs"
-
-      - string:
           name: "CLONE_REPOS"
           default: "tf-a-ci-scripts,arm-mhu"
 
@@ -130,7 +125,6 @@
           cat << EOF > tf-a-env.param
           ARM_MHU_GERRIT_PROJECT=${{GERRIT_PROJECT}}
           ARM_MHU_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
-          SHARE_FOLDER=${{SHARE_FOLDER}}
           EOF
 
       - multijob:
