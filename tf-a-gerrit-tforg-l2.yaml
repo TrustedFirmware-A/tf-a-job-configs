@@ -25,11 +25,11 @@
 
       - string:
           name: "GERRIT_BRANCH"
-          default: "integration"
+          default: "master"
 
       - string:
           name: "GERRIT_REFSPEC"
-          default: "integration"
+          default: "master"
 
       - string:
           name: "GERRIT_PATCHSET_NUMBER"

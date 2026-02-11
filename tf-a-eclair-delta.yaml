@@ -55,14 +55,14 @@
 
       - string:
           name: "GERRIT_BRANCH"
-          default: "integration"
+          default: "master"
 
           description: |
             Git branch to build (also set by Gerrit trigger)
 
       - string:
           name: "GERRIT_REFSPEC"
-          default: ""
+          default: "master"
 
       - string:
           name: "GERRIT_CHANGE_NUMBER"

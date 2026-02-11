@@ -63,7 +63,7 @@
 
           TFA_TMP_DIR=$(mktemp -d -p ./)
           cd ${{TFA_TMP_DIR}}
-          git clone ${{TFA_REPO}} -b integration ./
+          git clone ${{TFA_REPO}} -b master ./
           LTS_REPO_PATH=$(pwd)
           cd -
           for b in ${{LTS_BRANCHES}};

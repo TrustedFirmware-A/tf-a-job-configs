@@ -23,11 +23,11 @@
 
       - string:
           name: "TF_GERRIT_BRANCH"
-          default: "integration"
+          default: "master"
 
       - string:
           name: "TF_GERRIT_REFSPEC"
-          default: "integration"
+          default: "master"
 
       - string:
           name: "TFTF_GERRIT_PROJECT"

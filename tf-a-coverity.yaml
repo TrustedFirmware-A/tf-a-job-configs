@@ -9,7 +9,7 @@
       Run the Coverity tool on Trusted Firmware and submit the resulting
       tarball to <a href="https://scan.coverity.com/projects/arm-software-arm-trusted-firmware">Coverity Scan Online</a>.
       <br/>
-      This job runs <b>every weekday</b> and by default uses the <b>integration</b> branch on trustedfirmware.org.
+      This job runs <b>every weekday</b> and by default uses the <b>master</b> branch on trustedfirmware.org.
 
     properties:
       - build-discarder:
@@ -22,11 +22,11 @@
 
       - string:
           name: "TF_GERRIT_BRANCH"
-          default: "integration"
+          default: "master"
 
       - string:
           name: "TF_GERRIT_REFSPEC"
-          default: "integration"
+          default: "master"
 
       - string:
           name: "TFTF_GERRIT_PROJECT"

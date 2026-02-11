@@ -55,7 +55,7 @@
 
       - string:
           name: "GERRIT_REFNAME"
-          default: "integration"
+          default: "master"
 
           description: |
             Git branch to build (also set by Gerrit trigger)
