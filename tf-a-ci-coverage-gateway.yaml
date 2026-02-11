@@ -66,17 +66,17 @@
 
       - string:
           name: "TF_M_TESTS_GERRIT_REFSPEC"
-          default: "master"
+          default: "tfa_ci_dep_revision"
 
           description: |
-            tf-m-tests refspec to use. The master branch is used by default.
+            tf-m-tests refspec to use. The tfa_ci_dep_revision branch is used by default.
 
       - string:
           name: "TF_M_EXTRAS_GERRIT_REFSPEC"
-          default: "master"
+          default: "tfa_ci_dep_revision"
 
           description: |
-            tf-m-extras refspec to use. The master branch is used by default.
+            tf-m-extras refspec to use. The tfa_ci_dep_revision branch is used by default.
 
       - string:
           name: "SPM_REFSPEC"

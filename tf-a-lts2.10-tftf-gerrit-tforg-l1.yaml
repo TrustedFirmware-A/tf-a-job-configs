@@ -67,10 +67,10 @@
 
       - string:
           name: "JOBS_REFSPEC"
-          default: "main"
+          default: "master"
 
           description: |
-            tf-a-job-configs refspec to use. The main branch is used by default.
+            tf-a-job-configs refspec to use. The master branch is used by default.
 
       - string:
           name: "MBEDTLS_URL"

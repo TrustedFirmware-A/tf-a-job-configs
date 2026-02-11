@@ -25,7 +25,7 @@
 
       - string:
           name: "GERRIT_BRANCH"
-          default: "lts-v2.10"
+          default: "lts-v2.8"
 
           description: |
             Git branch to release from (lts-v2.8, lts-v2.10, etc.)

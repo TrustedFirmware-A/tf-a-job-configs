@@ -27,7 +27,7 @@
 
       - string:
           name: "GERRIT_BRANCH"
-          default: ""
+          default: "lts-v2.8"
 
           description: |
             Git branch (e.g. lts-v2.8) to search for the latest tag in case of --latest is used for RELEASE_TAG

@@ -34,11 +34,11 @@
 
       - string:
           name: "TF_GERRIT_BRANCH"
-          default: "master"
+          default: "lts-v2.10"
 
       - string:
           name: "TF_GERRIT_REFSPEC"
-          default: "master"
+          default: "lts-v2.10"
 
       - string:
           name: "TFTF_GERRIT_PROJECT"
@@ -46,11 +46,11 @@
 
       - string:
           name: "TFTF_GERRIT_BRANCH"
-          default: "master"
+          default: "lts-v2.10"
 
       - string:
           name: "TFTF_GERRIT_REFSPEC"
-          default: "master"
+          default: "lts-v2.10"
 
       - string:
           name: "TF_M_TESTS_GERRIT_REFSPEC"
@@ -69,7 +69,7 @@
 
       - string:
           name: "CI_REFSPEC"
-          default: "master"
+          default: "lts-v2.10"
 
       - string:
           name: "JOBS_REFSPEC"

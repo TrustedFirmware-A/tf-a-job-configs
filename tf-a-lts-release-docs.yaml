@@ -20,14 +20,14 @@
 
       - string:
           name: "GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}sandbox/pfalcon/trusted-firmware-a"
+          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
 
           description: |
             TF-A Git project
 
       - string:
           name: "GERRIT_BRANCH"
-          default: ""
+          default: "lts-v2.8"
 
           description: |
             Git branch (e.g. lts-v2.8)
