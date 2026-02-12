@@ -8,10 +8,8 @@
 
 set -ex
 
-git config --global url."https://review.trustedfirmware.org/mirror/mbed-tls".insteadOf "https://github.com/Mbed-TLS/mbedtls.git"
-git config --global url."https://review.trustedfirmware.org/mirror/mbed-tls".insteadOf "http://github.com/Mbed-TLS/mbedtls.git"
-git config --global url."https://review.trustedfirmware.org/mirror/mbed-tls".insteadOf "https://github.com/ARMmbed/mbedtls.git"
-git config --global url."https://review.trustedfirmware.org/mirror/mbed-tls".insteadOf "http://github.com/ARMmbed/mbedtls.git"
+git config --global --add url."https://review.trustedfirmware.org/mirror/mbed-tls.git".insteadOf "https://github.com/Mbed-TLS/mbedtls.git"
+git config --global --add url."https://review.trustedfirmware.org/mirror/mbed-tls.git".insteadOf "https://github.com/ARMmbed/mbedtls.git"
 
 # Global defaults
 CLONE_REPOS=${CLONE_REPOS:-trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm}
