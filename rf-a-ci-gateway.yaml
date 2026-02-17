@@ -72,7 +72,7 @@
 
       - string:
           name: "CI_REFSPEC"
-          default: "rf-a"
+          default: "master"
 
           description: |
             tf-a-ci-scripts refspec to use. The rf-a branch is used by default.

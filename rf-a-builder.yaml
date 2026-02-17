@@ -65,7 +65,7 @@
 
       - string:
           name: "CI_REFSPEC"
-          default: "rf-a"
+          default: "master"
 
       - string:
           name: "JOBS_REFSPEC"

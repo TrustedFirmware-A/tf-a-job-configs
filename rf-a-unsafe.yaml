@@ -63,7 +63,7 @@
 
       - string:
           name: "CI_REFSPEC"
-          default: "rf-a"
+          default: "master"
 
           description: |
             'Refs to fetch for the tf-a-ci-scripts repo e.g. refs/changes/13/31138/1'
