@@ -76,7 +76,7 @@
           fail: true
 
     builders:
-      - shell: !include-raw-verbatim: "scripts/clone.sh"
+      - "tf-a-clone"
 
       - shell: |
           #!/bin/bash

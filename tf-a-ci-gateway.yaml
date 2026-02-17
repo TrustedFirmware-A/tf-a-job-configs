@@ -133,7 +133,7 @@
             Whether to submit FVP tests via TuxSuite (instead of LAVA)
 
     builders:
-      - shell: !include-raw-verbatim: "scripts/clone.sh"
+      - "tf-a-clone"
 
       - shell: |
           #!/bin/bash

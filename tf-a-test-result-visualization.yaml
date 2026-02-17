@@ -52,7 +52,7 @@
           description: "Target build to analyze."
 
     builders:
-      - shell: !include-raw-verbatim: "scripts/clone.sh"
+      - "tf-a-clone"
 
       - shell: |
           #!/bin/bash

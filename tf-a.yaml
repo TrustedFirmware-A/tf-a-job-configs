@@ -23,3 +23,9 @@
       - "last-failure"
       - "last-duration"
       - "build-button"
+
+- builder:
+    name: "tf-a-clone"
+
+    builders:
+      - shell: !include-raw-verbatim: "scripts/clone.sh"

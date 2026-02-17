@@ -170,7 +170,7 @@
       - shell: |
           aarch64-none-elf-gcc -v || true
 
-      - shell: !include-raw-verbatim: "scripts/clone.sh"
+      - "tf-a-clone"
       - shell: !include-raw-verbatim: "tf-a-builder/builders.sh"
 
       - inject:

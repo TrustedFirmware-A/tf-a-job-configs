@@ -25,7 +25,7 @@
           description: "Optional job/group filter string (e.g. <code>juno</code>)."
 
     builders:
-      - shell: !include-raw-verbatim: "scripts/clone.sh"
+      - "tf-a-clone"
 
       - shell: |
           mkdir -p output
