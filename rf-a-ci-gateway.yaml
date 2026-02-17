@@ -35,7 +35,7 @@
     parameters:
       - string:
           name: "TEST_GROUPS"
-          default: "rfa-fvp/fvp:fvp-rfa"
+          default: "rfa-fvp/fvp,nil,fvp-rfa:fvp-rfa-fip.rfa"
 
           description: |
             White space separated list of test configs: can be mix of specific
