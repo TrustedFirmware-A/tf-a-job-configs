@@ -152,14 +152,6 @@ for repo in ${!repos_map[@]}; do
     REPO_NAME="$repo"
     REPO_URL="${REPO_HOST}/${REPO_PROJECT}"
     REPO_REFSPEC="${REPO_DEFAULT_REFSPEC}"
-    REPO_SSH_URL="ssh://${CI_BOT_USERNAME}@${REPO_HOST#https://}:29418/${REPO_PROJECT}"
-
-    if [[ -n "${FETCH_SSH}" ]]; then
-        REPO_GIT_URL="${REPO_SSH_URL}"
-    else
-        REPO_GIT_URL="${REPO_URL}"
-    fi
-
     # if a list of repos is provided via the CLONE_REPOS build param, only clone
     # those in the list - otherwise all are cloned by default
     if [[ -n "${CLONE_REPOS}" ]] && ! grep -qw "${REPO_NAME}" <<< "${CLONE_REPOS}"; then
@@ -179,7 +171,7 @@ for repo in ${!repos_map[@]}; do
     fi
 
     git init --quiet -- "${REPO_NAME}"
-    git -C "${REPO_NAME}" remote add origin "${REPO_GIT_URL}"
+    git -C "${REPO_NAME}" remote add origin "${REPO_URL}"
     git -C "${REPO_NAME}" fetch --quiet --depth 1 --no-tags \
         --no-recurse-submodules -- origin "${REPO_REFSPEC}"
     git -C "${REPO_NAME}" checkout --quiet --detach FETCH_HEAD
