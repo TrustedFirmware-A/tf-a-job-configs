@@ -33,6 +33,9 @@
       - "timestamps"
 
     parameters:
+      - tf-a-clone:
+          projects: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
+
       - string:
           name: "TEST_GROUPS"
           default: "tf-l3-code-coverage"

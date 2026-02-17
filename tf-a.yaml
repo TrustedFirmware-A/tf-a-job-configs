@@ -29,3 +29,11 @@
 
     builders:
       - shell: !include-raw-verbatim: "scripts/clone.sh"
+
+- parameter:
+    name: "tf-a-clone"
+
+    parameters:
+      - string:
+          name: "CLONE_REPOS"
+          default: "{projects}"
