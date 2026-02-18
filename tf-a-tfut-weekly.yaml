@@ -7,6 +7,10 @@
     description: "CI job for weekly runs of TF-A Unit Testing"
 
     properties:
+      - tf-a-ci-scripts:
+          download_server_url: "https://downloads.trustedfirmware.org"
+          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a"
+
       - throttle:
           option: "project"
           enabled: true
@@ -99,10 +103,6 @@
             Whether to submit FVP tests via TuxSuite (instead of LAVA)
 
     wrappers:
-      - tf-a-ci-scripts:
-          download_server_url: "https://downloads.trustedfirmware.org"
-          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a"
-
       - "timestamps"
 
     builders:

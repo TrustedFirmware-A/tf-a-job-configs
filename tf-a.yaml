@@ -38,10 +38,10 @@
           name: "CLONE_REPOS"
           default: "{projects}"
 
-- wrapper:
+- property:
     name: "tf-a-ci-scripts"
 
-    wrappers:
+    properties:
       - inject:
           properties-content: |
             DOWNLOAD_SERVER_URL={download_server_url}

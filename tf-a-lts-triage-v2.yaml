@@ -9,6 +9,10 @@
       Generate LTS triage report every Friday
 
     properties:
+      - tf-a-ci-scripts:
+          download_server_url: "https://downloads.trustedfirmware.org"
+          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a"
+
       - build-discarder:
           days-to-keep: 45
           num-to-keep: 200
@@ -36,10 +40,6 @@
       - timed: "H 1 * * 4" # Run the job at 01:xx AM every Thursday @CTS timezone
 
     wrappers:
-      - tf-a-ci-scripts:
-          download_server_url: "https://downloads.trustedfirmware.org"
-          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a"
-
       - "timestamps"
 
       - timeout:

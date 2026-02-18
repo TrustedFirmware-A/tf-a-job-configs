@@ -9,6 +9,10 @@
       Render TF-A LTS release email template.
 
     properties:
+      - tf-a-ci-scripts:
+          download_server_url: "https://downloads.trustedfirmware.org"
+          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a"
+
       - build-discarder:
           days-to-keep: 365
           num-to-keep: 50
@@ -61,10 +65,6 @@
           #        - patchset-created-event
 
     wrappers:
-      - tf-a-ci-scripts:
-          download_server_url: "https://downloads.trustedfirmware.org"
-          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a"
-
       - "timestamps"
 
       - timeout:

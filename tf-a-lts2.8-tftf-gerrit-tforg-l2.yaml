@@ -10,6 +10,10 @@
       label on review.trustedfirmware.org.
 
     properties:
+      - tf-a-ci-scripts:
+          download_server_url: "https://downloads.trustedfirmware.org"
+          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a-lts-v2.8"
+
       - throttle:
           option: "project"
           enabled: true
@@ -80,10 +84,6 @@
           default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.3.tar.gz"
 
     wrappers:
-      - tf-a-ci-scripts:
-          download_server_url: "https://downloads.trustedfirmware.org"
-          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a-lts-v2.8"
-
       - credentials-binding:
           - ssh-user-private-key:
               credential-id: "TFA_CI_BOT_USER_SSH_KEY"

@@ -7,6 +7,10 @@
     description: "Main CI job for Trusted Firmware."
 
     properties:
+      - tf-a-ci-scripts:
+          download_server_url: "https://downloads.trustedfirmware.org"
+          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a-lts-v2.8"
+
       - throttle:
           option: "project"
           enabled: true
@@ -92,10 +96,6 @@
       - timed: "H H(0-7) * * 3,6"
 
     wrappers:
-      - tf-a-ci-scripts:
-          download_server_url: "https://downloads.trustedfirmware.org"
-          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a-lts-v2.8"
-
       - credentials-binding:
           - ssh-user-private-key:
               credential-id: "TFA_CI_BOT_USER_SSH_KEY"

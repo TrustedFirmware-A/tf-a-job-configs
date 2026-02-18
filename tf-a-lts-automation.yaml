@@ -11,6 +11,10 @@
       It will also trigger hafnium-lts-automation job, if the new LTS branch is not exist in the hafnium repository
 
     properties:
+      - tf-a-ci-scripts:
+          download_server_url: "https://downloads.trustedfirmware.org"
+          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a"
+
       - build-discarder:
           days-to-keep: 15
 
@@ -30,10 +34,6 @@
           description: "Ref name from counterpart job (e.g. lts-vX.Y or sandbox/lts-vX.Y)"
 
     wrappers:
-      - tf-a-ci-scripts:
-          download_server_url: "https://downloads.trustedfirmware.org"
-          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a"
-
       - "timestamps"
 
       - timeout:

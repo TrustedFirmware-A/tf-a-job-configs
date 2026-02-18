@@ -9,6 +9,10 @@
       Trusted Firmware A (TF-A) LTS2.12 builder
 
     properties:
+      - tf-a-ci-scripts:
+          download_server_url: "https://downloads.trustedfirmware.org"
+          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a-lts-v2.12"
+
       - build-discarder:
           days-to-keep: 15
 
@@ -129,10 +133,6 @@
             Whether to submit FVP tests via TuxSuite (instead of LAVA)
 
     wrappers:
-      - tf-a-ci-scripts:
-          download_server_url: "https://downloads.trustedfirmware.org"
-          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a-lts-v2.12"
-
       - "timestamps"
 
       - timeout:

@@ -10,6 +10,10 @@
       label on review.trustedfirmware.org.
 
     properties:
+      - tf-a-ci-scripts:
+          download_server_url: "https://downloads.trustedfirmware.org"
+          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a-lts-v2.14"
+
       - throttle:
           option: "project"
           enabled: true
@@ -96,10 +100,6 @@
             Number of tries submitting job to LAVA in case it fails (stopgap measure against nondeterministic failures)
 
     wrappers:
-      - tf-a-ci-scripts:
-          download_server_url: "https://downloads.trustedfirmware.org"
-          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a-lts-v2.14"
-
       - credentials-binding:
           - ssh-user-private-key:
               credential-id: "TFA_CI_BOT_USER_SSH_KEY"
