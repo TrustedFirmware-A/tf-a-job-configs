@@ -141,6 +141,10 @@
             Whether to submit FVP tests via TuxSuite (instead of LAVA)
 
     wrappers:
+      - tf-a-ci-scripts:
+          download_server_url: "https://downloads.trustedfirmware.org"
+          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a-lts-v2.14"
+
       - "timestamps"
 
       - timeout:

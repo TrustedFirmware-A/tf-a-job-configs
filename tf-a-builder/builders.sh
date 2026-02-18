@@ -63,8 +63,6 @@ export mbedtls_archive=${WORKSPACE}/nfs/downloads/mbedtls/$(ls -1 mbedtls-*.tar.
 # Path to root of CI repository
 ci_root="${WORKSPACE}/tf-a-ci-scripts"
 
-export tfa_downloads="${DOWNLOAD_SERVER_URL}/tf-a"
-
 # Fetch required firmware/binaries and place it at proper location
 export nfs_volume="${WORKSPACE}/nfs"
 project_filer="${nfs_volume}/projectscratch/ssg/trusted-fw"

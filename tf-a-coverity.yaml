@@ -73,6 +73,10 @@
             Therefore, if you don't need the results to be analysed, please UNTICK this box!<b>
 
     wrappers:
+      - tf-a-ci-scripts:
+          download_server_url: "https://downloads.trustedfirmware.org"
+          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a"
+
       - "timestamps"
 
       - credentials-binding:

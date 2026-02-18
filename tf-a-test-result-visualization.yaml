@@ -87,3 +87,8 @@
       - groovy-postbuild:
           script: !include-raw-verbatim:
             - "tf-a-ci-gateway/postbuild.groovy"
+
+    wrappers:
+      - tf-a-ci-scripts:
+          download_server_url: "https://downloads.trustedfirmware.org"
+          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a"
