@@ -63,8 +63,7 @@ export mbedtls_archive=${WORKSPACE}/nfs/downloads/mbedtls/$(ls -1 mbedtls-*.tar.
 # Path to root of CI repository
 ci_root="${WORKSPACE}/tf-a-ci-scripts"
 
-export tf_downloads="${DOWNLOAD_SERVER_URL}"
-export tfa_downloads="${tf_downloads}/tf-a"
+export tfa_downloads="${DOWNLOAD_SERVER_URL}/tf-a"
 
 # Fetch required firmware/binaries and place it at proper location
 export nfs_volume="${WORKSPACE}/nfs"
@@ -79,7 +78,7 @@ resilient_cmd curl --connect-timeout 5 --retry 5 --retry-delay 1 -fsSLo \
      https://downloads.trustedfirmware.org/infra-assets/linaro_artifacts/releases/openembedded/juno-lsk/latest/lt-vexpress64-openembedded_minimal-armv8-gcc-5.2_20170127-761.img.gz
 
 # export trace code coverage variable
-export coverage_trace_plugin="${tf_downloads}/coverage-plugin/qa-tools/coverage-tool/coverage-plugin/coverage_trace.so"
+export coverage_trace_plugin="${DOWNLOAD_SERVER_URL}/coverage-plugin/qa-tools/coverage-tool/coverage-plugin/coverage_trace.so"
 
 # FIXME: create temporal /arm softlinks.
 # Reason behind is described at
