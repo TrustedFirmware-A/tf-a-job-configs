@@ -1,10 +1,10 @@
 - job:
-    name: "crate-arm-pl011-uart-main"
+    name: "rf-a-crate-sp805-main"
     node: "docker-amd64-tf-a-jammy"
     project-type: "multijob"
     concurrent: true
     disabled: false
-    description: "Main CI job for the arm-pl011-uart crate"
+    description: "Main CI job for the arm-sp805 crate"
 
     properties:
       - tf-a-ci-scripts:
@@ -30,7 +30,7 @@
                   branch-pattern: "main"
 
               project-compare-type: "PLAIN"
-              project-pattern: "{gerrit_project_prefix}arm-firmware-crates/arm-pl011-uart"
+              project-pattern: "{gerrit_project_prefix}arm-firmware-crates/arm-sp805"
 
           trigger-on:
             - patchset-created-event:
@@ -61,13 +61,13 @@
 
     parameters:
       - tf-a-clone:
-          projects: "tf-a-ci-scripts,arm-pl011-uart"
+          projects: "tf-a-ci-scripts,arm-sp805"
 
       # GERRIT_{PROJECT,BRANCH,REFSPEC} are set when triggered by a Gerrit
       # patchset - defaults below are for manual triggers
       - string:
           name: "GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}arm-firmware-crates/arm-pl011-uart"
+          default: "{gerrit_project_prefix}arm-firmware-crates/arm-sp805"
 
       - string:
           name: "GERRIT_BRANCH"
@@ -81,7 +81,7 @@
             'e.g. refs/changes/13/31138/1'
 
       - string:
-          name: "ARM_PL011_UART_GERRIT_REFSPEC"
+          name: "ARM_SP805_GERRIT_REFSPEC"
           default: "${{GERRIT_REFSPEC}}"
 
           description: |
@@ -103,7 +103,7 @@
 
       - string:
           name: "TEST_FEATURES"
-          description: "Features the arm-pl011-uart crate will be tested against"
+          description: "Features the arm-sp805 crate will be tested against"
 
     wrappers:
       - credentials-binding:
@@ -122,8 +122,8 @@
           #!/bin/bash
           set -e
           cat << EOF > tf-a-env.param
-          ARM_PL011_UART_GERRIT_PROJECT=${{GERRIT_PROJECT}}
-          ARM_PL011_UART_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
+          ARM_SP805_GERRIT_PROJECT=${{GERRIT_PROJECT}}
+          ARM_SP805_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
           EOF
 
       - multijob:
@@ -131,12 +131,12 @@
           condition: "COMPLETED"
 
           projects:
-            - name: "generic-lib-testing"
+            - name: "rf-a-crate-generic-lib-testing"
               current-parameters: true
               kill-phase-on: "NEVER"
 
               predefined-parameters: |
-                TEST_REPO_NAME=arm-pl011-uart
+                TEST_REPO_NAME=arm-sp805
                 TEST_REPO_PROJECT=arm-firmware-crates
                 TEST_FEATURES=${{TEST_FEATURES}}
 

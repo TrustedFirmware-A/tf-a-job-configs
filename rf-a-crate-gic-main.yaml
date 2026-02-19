@@ -1,5 +1,5 @@
 - job:
-    name: "crate-arm-gic-main"
+    name: "rf-a-crate-gic-main"
     node: "docker-amd64-tf-a-jammy"
     project-type: "multijob"
     concurrent: true
@@ -132,7 +132,7 @@
           condition: "COMPLETED"
 
           projects:
-            - name: "generic-lib-testing"
+            - name: "rf-a-crate-generic-lib-testing"
               current-parameters: true
               kill-phase-on: "NEVER"
 

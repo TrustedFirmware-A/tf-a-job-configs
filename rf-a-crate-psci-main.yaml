@@ -1,10 +1,10 @@
 - job:
-    name: "tf-firmware-handoff-main"
+    name: "rf-a-crate-psci-main"
     node: "docker-amd64-tf-a-jammy"
     project-type: "multijob"
     concurrent: true
     disabled: false
-    description: "Main CI job for the tf-firmware-handoff crate"
+    description: "Main CI job for the arm-psci crate"
 
     properties:
       - tf-a-ci-scripts:
@@ -30,7 +30,7 @@
                   branch-pattern: "main"
 
               project-compare-type: "PLAIN"
-              project-pattern: "{gerrit_project_prefix}shared/tf-firmware-handoff"
+              project-pattern: "{gerrit_project_prefix}arm-firmware-crates/arm-psci"
 
           trigger-on:
             - patchset-created-event:
@@ -61,13 +61,13 @@
 
     parameters:
       - tf-a-clone:
-          projects: "tf-a-ci-scripts,tf-firmware-handoff"
+          projects: "tf-a-ci-scripts,arm-psci"
 
       # GERRIT_{PROJECT,BRANCH,REFSPEC} are set when triggered by a Gerrit
       # patchset - defaults below are for manual triggers
       - string:
           name: "GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}shared/tf-firmware-handoff"
+          default: "{gerrit_project_prefix}arm-firmware-crates/arm-psci"
 
       - string:
           name: "GERRIT_BRANCH"
@@ -81,7 +81,7 @@
             'e.g. refs/changes/13/31138/1'
 
       - string:
-          name: "TF_FIRMWARE_HANDOFF_GERRIT_REFSPEC"
+          name: "ARM_PSCI_GERRIT_REFSPEC"
           default: "${{GERRIT_REFSPEC}}"
 
           description: |
@@ -103,7 +103,7 @@
 
       - string:
           name: "TEST_FEATURES"
-          description: "Features the tf-firmware-handoff crate will be tested against"
+          description: "Features the arm-psci crate will be tested against"
 
     wrappers:
       - credentials-binding:
@@ -122,8 +122,8 @@
           #!/bin/bash
           set -e
           cat << EOF > tf-a-env.param
-          TF_FIRMWARE_HANDOFF_GERRIT_PROJECT=${{GERRIT_PROJECT}}
-          TF_FIRMWARE_HANDOFF_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
+          ARM_PSCI_GERRIT_PROJECT=${{GERRIT_PROJECT}}
+          ARM_PSCI_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
           EOF
 
       - multijob:
@@ -131,13 +131,13 @@
           condition: "COMPLETED"
 
           projects:
-            - name: "generic-lib-testing"
+            - name: "rf-a-crate-generic-lib-testing"
               current-parameters: true
               kill-phase-on: "NEVER"
 
               predefined-parameters: |
-                TEST_REPO_NAME=tf-firmware-handoff
-                TEST_REPO_PROJECT=shared
+                TEST_REPO_NAME=arm-psci
+                TEST_REPO_PROJECT=arm-firmware-crates
                 TEST_FEATURES=${{TEST_FEATURES}}
 
               property-file: "tf-a-env.param"

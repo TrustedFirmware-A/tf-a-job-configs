@@ -1,10 +1,10 @@
 - job:
-    name: "crate-arm-sysregs-main"
+    name: "rf-a-crate-mhu-main"
     node: "docker-amd64-tf-a-jammy"
     project-type: "multijob"
     concurrent: true
     disabled: false
-    description: "Main CI job for the arm-sysregs crate"
+    description: "Main CI job for the arm-mhu crate"
 
     properties:
       - tf-a-ci-scripts:
@@ -30,7 +30,7 @@
                   branch-pattern: "main"
 
               project-compare-type: "PLAIN"
-              project-pattern: "{gerrit_project_prefix}arm-firmware-crates/arm-sysregs"
+              project-pattern: "{gerrit_project_prefix}arm-firmware-crates/arm-mhu"
 
           trigger-on:
             - patchset-created-event:
@@ -61,13 +61,13 @@
 
     parameters:
       - tf-a-clone:
-          projects: "tf-a-ci-scripts,arm-sysregs"
+          projects: "tf-a-ci-scripts,arm-mhu"
 
       # GERRIT_{PROJECT,BRANCH,REFSPEC} are set when triggered by a Gerrit
       # patchset - defaults below are for manual triggers
       - string:
           name: "GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}arm-firmware-crates/arm-sysregs"
+          default: "{gerrit_project_prefix}arm-firmware-crates/arm-mhu"
 
       - string:
           name: "GERRIT_BRANCH"
@@ -81,7 +81,7 @@
             'e.g. refs/changes/13/31138/1'
 
       - string:
-          name: "ARM_SYSREGS_GERRIT_REFSPEC"
+          name: "ARM_MHU_GERRIT_REFSPEC"
           default: "${{GERRIT_REFSPEC}}"
 
           description: |
@@ -103,8 +103,7 @@
 
       - string:
           name: "TEST_FEATURES"
-          default: "fakes,el3"
-          description: "Features the arm-sysregs crate will be tested against"
+          description: "Features the arm-mhu crate will be tested against"
 
     wrappers:
       - credentials-binding:
@@ -124,8 +123,8 @@
           #!/bin/bash
           set -e
           cat << EOF > tf-a-env.param
-          ARM_SCMI_GERRIT_PROJECT=${{GERRIT_PROJECT}}
-          ARM_SCMI_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
+          ARM_MHU_GERRIT_PROJECT=${{GERRIT_PROJECT}}
+          ARM_MHU_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
           EOF
 
       - multijob:
@@ -133,12 +132,12 @@
           condition: "COMPLETED"
 
           projects:
-            - name: "generic-lib-testing"
+            - name: "rf-a-crate-generic-lib-testing"
               current-parameters: true
               kill-phase-on: "NEVER"
 
               predefined-parameters: |
-                TEST_REPO_NAME=arm-sysregs
+                TEST_REPO_NAME=arm-mhu
                 TEST_REPO_PROJECT=arm-firmware-crates
                 TEST_FEATURES=${{TEST_FEATURES}}
 

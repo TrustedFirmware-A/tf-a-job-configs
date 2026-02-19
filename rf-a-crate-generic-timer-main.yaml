@@ -1,10 +1,10 @@
 - job:
-    name: "crate-arm-tzc-main"
+    name: "rf-a-crate-generic-timer-main"
     node: "docker-amd64-tf-a-jammy"
     project-type: "multijob"
     concurrent: true
     disabled: false
-    description: "Main CI job for the arm-tzc crate"
+    description: "Main CI job for the arm-generic-timer crate"
 
     properties:
       - tf-a-ci-scripts:
@@ -20,15 +20,54 @@
           days-to-keep: 14
           num-to-keep: 60
 
+    triggers:
+      - gerrit:
+          server-name: "review.trustedfirmware.org"
+
+          projects:
+            - branches:
+                - branch-compare-type: "PLAIN"
+                  branch-pattern: "main"
+
+              project-compare-type: "PLAIN"
+              project-pattern: "{gerrit_project_prefix}arm-firmware-crates/arm-generic-timer"
+
+          trigger-on:
+            - patchset-created-event:
+                exclude-drafts: true
+                exclude-trivial-rebase: true
+                exclude-no-code-change: true
+                exclude-private: true
+                exclude-wip: true
+
+            - comment-added-contains-event:
+                comment-contains-value: "^RUN_CI$"
+
+          override-votes: true
+          gerrit-build-started-verified-value: 0
+          gerrit-build-successful-verified-value: 1
+          gerrit-build-failed-verified-value: -1
+          gerrit-build-unstable-verified-value: -1
+          gerrit-build-notbuilt-verified-value: 0
+          # without explicitly setting these values to 0, the plugin will by
+          # default leave Code Review votes
+          gerrit-build-started-codereview-value: 0
+          gerrit-build-successful-codereview-value: 0
+          gerrit-build-failed-codereview-value: 0
+          gerrit-build-unstable-codereview-value: 0
+          gerrit-build-notbuilt-codereview-value: 0
+          silent: false
+          silent-start: false
+
     parameters:
       - tf-a-clone:
-          projects: "tf-a-ci-scripts,arm-tzc"
+          projects: "tf-a-ci-scripts,arm-generic-timer"
 
       # GERRIT_{PROJECT,BRANCH,REFSPEC} are set when triggered by a Gerrit
       # patchset - defaults below are for manual triggers
       - string:
           name: "GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}arm-firmware-crates/arm-tzc"
+          default: "{gerrit_project_prefix}arm-firmware-crates/arm-generic-timer"
 
       - string:
           name: "GERRIT_BRANCH"
@@ -42,7 +81,7 @@
             'e.g. refs/changes/13/31138/1'
 
       - string:
-          name: "ARM_TZC_GERRIT_REFSPEC"
+          name: "ARM_GENERIC_TIMER_GERRIT_REFSPEC"
           default: "${{GERRIT_REFSPEC}}"
 
           description: |
@@ -64,7 +103,7 @@
 
       - string:
           name: "TEST_FEATURES"
-          description: "Features the arm-tzc crate will be tested against"
+          description: "Features the arm-generic-timer crate will be tested against"
 
     wrappers:
       - credentials-binding:
@@ -83,8 +122,8 @@
           #!/bin/bash
           set -e
           cat << EOF > tf-a-env.param
-          ARM_TZC_GERRIT_PROJECT=${{GERRIT_PROJECT}}
-          ARM_TZC_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
+          ARM_GENERIC_TIMER_GERRIT_PROJECT=${{GERRIT_PROJECT}}
+          ARM_GENERIC_TIMER_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
           EOF
 
       - multijob:
@@ -92,12 +131,12 @@
           condition: "COMPLETED"
 
           projects:
-            - name: "generic-lib-testing"
+            - name: "rf-a-crate-generic-lib-testing"
               current-parameters: true
               kill-phase-on: "NEVER"
 
               predefined-parameters: |
-                TEST_REPO_NAME=arm-tzc
+                TEST_REPO_NAME=arm-generic-timer
                 TEST_REPO_PROJECT=arm-firmware-crates
                 TEST_FEATURES=${{TEST_FEATURES}}
 

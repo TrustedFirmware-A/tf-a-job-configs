@@ -1,7 +1,7 @@
 - project:
-    name: "crate-arm"
+    name: "rf-a-crate"
 
     views:
       - "tf-a":
           name: "Arm-Firmware-Crates"
-          regex: "^crate-arm(-.*)?$"
+          regex: "^rf-a-crate(-.*)?$"
