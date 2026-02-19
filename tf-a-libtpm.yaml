@@ -8,3 +8,14 @@
           description: >
             Job triggered for every TPM Library (LibTPM) patch, verifying code
             style, and building the module.
+
+      - tf-a-patch-gate:
+          name: "libtpm"
+
+          description: >
+            Main entry point for the TPM library CI pipeline.
+
+          project: "shared/libTPM"
+          branch: "main"
+
+          jobs: "tf-a-libtpm-pipeline"

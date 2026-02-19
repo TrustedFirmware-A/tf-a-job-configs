@@ -8,3 +8,14 @@
           description: >
             Job triggered for every Event Log Library (LibEventLog) patch,
             verifying code style, and building the module.
+
+      - tf-a-patch-gate:
+          name: "libeventlog"
+
+          description: >
+            Main entry point for the Event Log library CI pipeline.
+
+          project: "shared/libEventLog"
+          branch: "main"
+
+          jobs: "tf-a-libeventlog-pipeline"

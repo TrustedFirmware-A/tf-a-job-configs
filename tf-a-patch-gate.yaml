@@ -1,0 +1,57 @@
+- job-template:
+    id: "tf-a-patch-gate"
+    node: "docker-amd64-tf-a-jammy"
+
+    name: "tf-a-{name}-patch-gate"
+    description: "{description}"
+
+    project-type: "freestyle"
+    concurrent: true
+
+    triggers:
+      - gerrit:
+          server-name: "review.trustedfirmware.org"
+
+          trigger-on:
+            - comment-added-event:
+                approval-category: "Allow-CI"
+                approval-value: 1
+
+          projects:
+            - project-compare-type: "PLAIN"
+              project-pattern: "{gerrit_project_prefix}{project}"
+
+              branches:
+                - branch-compare-type: "PLAIN"
+                  branch-pattern: "{branch}"
+
+          override-votes: true
+
+          gerrit-build-aborted-codereview-value: 0
+          gerrit-build-aborted-verified-value: 0
+          gerrit-build-failed-codereview-value: 0
+          gerrit-build-failed-verified-value: -1
+          gerrit-build-started-codereview-value: 0
+          gerrit-build-started-verified-value: 0
+          gerrit-build-successful-codereview-value: 0
+          gerrit-build-successful-verified-value: 1
+          gerrit-build-unstable-codereview-value: 0
+          gerrit-build-unstable-verified-value: -1
+
+    properties:
+      - build-discarder:
+          days-to-keep: 30
+
+    builders:
+      - trigger-builds:
+          - project: "{jobs}"
+            block: true
+
+            predefined-parameters: |
+              URL=https://${{GERRIT_HOST}}/${{GERRIT_PROJECT}}
+
+              REFSPEC=${{GERRIT_REFSPEC}}
+              REFNAME=${{GERRIT_PATCHSET_REVISION}}
+
+              BASE_REFSPEC=${{GERRIT_REFSPEC}}
+              BASE_REFNAME=${{GERRIT_PATCHSET_REVISION}}^
