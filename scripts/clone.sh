@@ -171,8 +171,11 @@ for repo in ${!repos_map[@]}; do
         echo "Checkout refspec \"${REPO_REFSPEC}\" from repository \"${REPO_NAME}\""
     fi
 
-    git init --quiet -- "${REPO_NAME}"
-    git -C "${REPO_NAME}" remote add origin "${REPO_URL}"
+    if [[ ! -d "${REPO_NAME}" ]]; then
+        git init --quiet -- "${REPO_NAME}"
+        git -C "${REPO_NAME}" remote add origin "${REPO_URL}"
+    fi
+
     git -C "${REPO_NAME}" fetch --quiet --depth 1 --no-tags \
         --no-recurse-submodules -- origin "${REPO_REFSPEC}"
     git -C "${REPO_NAME}" checkout --quiet --detach FETCH_HEAD
