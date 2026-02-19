@@ -1,2 +1,10 @@
 - project:
     name: "tf-a-libtpm"
+
+    jobs:
+      - tf-a-pipeline:
+          name: "libtpm"
+
+          description: >
+            Job triggered for every TPM Library (LibTPM) patch, verifying code
+            style, and building the module.

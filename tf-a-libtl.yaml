@@ -1,2 +1,10 @@
 - project:
     name: "tf-a-libtl"
+
+    jobs:
+      - tf-a-pipeline:
+          name: "libtl"
+
+          description: >
+            Job triggered for every Transfer List Library (LibTL) patch,
+            verifying code style, building the module, and running unit tests.

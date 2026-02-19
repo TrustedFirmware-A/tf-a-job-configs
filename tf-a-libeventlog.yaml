@@ -1,2 +1,10 @@
 - project:
     name: "tf-a-libeventlog"
+
+    jobs:
+      - tf-a-pipeline:
+          name: "libeventlog"
+
+          description: >
+            Job triggered for every Event Log Library (LibEventLog) patch,
+            verifying code style, and building the module.

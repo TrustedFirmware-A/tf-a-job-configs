@@ -1,0 +1,10 @@
+- job-template:
+    id: "tf-a-pipeline"
+
+    name: "tf-a-{name}-pipeline"
+    description: "{description}"
+
+    project-type: "pipeline"
+    sandbox: true
+
+    dsl: !include-raw-verbatim: "tf-a-{name}-pipeline/Jenkinsfile"
