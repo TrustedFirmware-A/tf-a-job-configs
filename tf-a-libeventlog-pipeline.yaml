@@ -1,5 +1,5 @@
 - job:
-    name: "libeventlog-pipeline"
+    name: "tf-a-libeventlog-pipeline"
 
     description: |
       Job triggered for every Event Log Library (LibEventLog) patch, verifying code
@@ -7,4 +7,4 @@
 
     project-type: "pipeline"
     sandbox: true
-    dsl: !include-raw-verbatim: "libeventlog-pipeline/Jenkinsfile"
+    dsl: !include-raw-verbatim: "tf-a-libeventlog-pipeline/Jenkinsfile"

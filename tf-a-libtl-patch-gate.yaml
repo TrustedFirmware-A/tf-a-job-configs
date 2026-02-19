@@ -1,5 +1,5 @@
 - job:
-    name: "libtl-patch-gate"
+    name: "tf-a-libtl-patch-gate"
 
     description: |
       Main entry point for the Transfer List CI pipeline.
@@ -17,7 +17,7 @@
     builders:
       - trigger-builds:
           - project:
-              - "libtl-pipeline"
+              - "tf-a-libtl-pipeline"
 
             block: true
             current-parameters: true
@@ -31,7 +31,7 @@
 
       - trigger-builds:
           - project:
-              - "tlc-pipeline"
+              - "tf-a-tlc-pipeline"
 
             block: true
             current-parameters: true

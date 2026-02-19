@@ -7,4 +7,4 @@
 
     project-type: "pipeline"
     sandbox: true
-    dsl: !include-raw-verbatim: "libtpm-pipeline/Jenkinsfile"
+    dsl: !include-raw-verbatim: "tf-a-libtpm-pipeline/Jenkinsfile"

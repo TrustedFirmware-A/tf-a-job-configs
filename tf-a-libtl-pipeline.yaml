@@ -1,5 +1,5 @@
 - job:
-    name: "libtl-pipeline"
+    name: "tf-a-libtl-pipeline"
 
     description: |
       Job triggered for every Transfer List Library (LibTL) patch, verifying code
@@ -7,4 +7,4 @@
 
     project-type: "pipeline"
     sandbox: true
-    dsl: !include-raw-verbatim: "libtl-pipeline/Jenkinsfile"
+    dsl: !include-raw-verbatim: "tf-a-libtl-pipeline/Jenkinsfile"

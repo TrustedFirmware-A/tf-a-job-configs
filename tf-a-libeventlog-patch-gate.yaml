@@ -1,8 +1,8 @@
 - job:
-    name: "libtpm-patch-gate"
+    name: "tf-a-libeventlog-patch-gate"
 
     description: |
-      Main entry point for the TPM library CI pipeline.
+      Main entry point for the Event Log library CI pipeline.
 
     project-type: "freestyle"
     concurrent: true
@@ -17,7 +17,7 @@
     builders:
       - trigger-builds:
           - project:
-              - "tf-a-libtpm-pipeline"
+              - "tf-a-libeventlog-pipeline"
 
             block: true
             current-parameters: true
@@ -40,7 +40,7 @@
 
           projects:
             - project-compare-type: "PLAIN"
-              project-pattern: "{gerrit_project_prefix}shared/libTPM"
+              project-pattern: "{gerrit_project_prefix}shared/libEventLog"
 
               branches:
                 - branch-compare-type: "PLAIN"
@@ -48,8 +48,6 @@
 
           override-votes: true
           gerrit-build-started-verified-value: 0
-          gerrit-build-successful-codereview-value: 0
           gerrit-build-successful-verified-value: 1
-          gerrit-build-failed-codereview-value: 0
           gerrit-build-failed-verified-value: -1
           gerrit-build-unstable-verified-value: -1
