@@ -21,9 +21,6 @@
           projects: "tf-a-ci-scripts,trusted-firmware-a,rusted-firmware-a"
 
       - string:
-          name: "import_cc"
-
-      - string:
           name: "TEST_CONFIG"
 
           description: |

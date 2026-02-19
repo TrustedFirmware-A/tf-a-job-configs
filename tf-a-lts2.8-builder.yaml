@@ -21,9 +21,6 @@
           projects: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
 
       - string:
-          name: "import_cc"
-
-      - string:
           name: "TEST_CONFIG"
 
           description: |
