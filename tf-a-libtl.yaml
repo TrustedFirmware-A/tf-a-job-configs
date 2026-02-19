@@ -8,3 +8,10 @@
           description: >
             Job triggered for every Transfer List Library (LibTL) patch,
             verifying code style, building the module, and running unit tests.
+
+      - tf-a-pipeline:
+          name: "libtl-tlc"
+
+          description: >
+            Job triggered for every Transfer List Compiler (TLC) patch,
+            verifying code style, running unit tests, and building the package.
