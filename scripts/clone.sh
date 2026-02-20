@@ -171,18 +171,22 @@ for repo in ${!repos_map[@]}; do
         echo "Checkout refspec \"${REPO_REFSPEC}\" from repository \"${REPO_NAME}\""
     fi
 
-    if [[ ! -d "${REPO_NAME}" ]]; then
-        git init --quiet -- "${REPO_NAME}"
-        git -C "${REPO_NAME}" remote add origin "${REPO_URL}"
+    if [[ ! -d "${REPO_PROJECT}" ]]; then
+        mkdir -p "${REPO_PROJECT}"
+
+        git init --quiet -- "${REPO_PROJECT}"
+        git -C "${REPO_PROJECT}" remote add origin "${REPO_URL}"
     fi
 
-    git -C "${REPO_NAME}" fetch --quiet --depth 1 --no-tags \
+    git -C "${REPO_PROJECT}" fetch --quiet --depth 1 --no-tags \
         --no-recurse-submodules -- origin "${REPO_REFSPEC}"
-    git -C "${REPO_NAME}" checkout --quiet --detach FETCH_HEAD
-    git -C "${REPO_NAME}" submodule update --quiet --depth 1 --init \
+    git -C "${REPO_PROJECT}" checkout --quiet --detach FETCH_HEAD
+    git -C "${REPO_PROJECT}" submodule update --quiet --depth 1 --init \
         --recursive
+
+    ln -s "${REPO_PROJECT}" "${REPO_NAME}"
 
     echo "Freshly cloned ${REPO_URL} (refspec ${REPO_REFSPEC}):"
 
-    git -C ${REPO_NAME} log -1
+    git -C ${REPO_PROJECT} log -1
 done
