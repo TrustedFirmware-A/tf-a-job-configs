@@ -7,6 +7,8 @@
     description: "Create a new TF-A LTS release from a tip of an LTS branch."
 
     properties:
+      - "tf-a-clone-properties"
+
       - tf-a-ci-scripts:
           download_server_url: "https://downloads.trustedfirmware.org"
           download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a"

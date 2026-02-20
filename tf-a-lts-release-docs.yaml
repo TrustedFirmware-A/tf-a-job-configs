@@ -9,6 +9,8 @@
       Publish TF-A LTS docs for a release on ReadTheDocs site
 
     properties:
+      - "tf-a-clone-properties"
+
       - build-discarder:
           days-to-keep: 365
           num-to-keep: 50

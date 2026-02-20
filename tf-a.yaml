@@ -39,6 +39,14 @@
           default: "{projects}"
 
 - property:
+    name: "tf-a-clone-properties"
+
+    properties:
+      - inject:
+          script-content: !include-raw-verbatim: "scripts/clone-properties.sh"
+          override-build-parameters: true
+
+- property:
     name: "tf-a-ci-scripts"
 
     properties:
