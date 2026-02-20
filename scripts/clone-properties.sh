@@ -69,5 +69,9 @@ for project in "${!projects[@]}"; do
     refspecs["next/${project}"]="${refspecs["${project}"]}"
 done
 
+if [[ -v GERRIT_REFNAME ]]; then
+    GERRIT_REFSPEC="${GERRIT_REFNAME}"
+fi
+
 printf '%s=%s\n' "${projects["${GERRIT_PROJECT:?}"]}" "${GERRIT_PROJECT:?}"
 printf '%s=%s\n' "${refspecs["${GERRIT_PROJECT:?}"]}" "${GERRIT_REFSPEC:?}"
