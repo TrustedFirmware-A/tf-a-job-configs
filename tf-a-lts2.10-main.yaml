@@ -21,7 +21,7 @@
           num-to-keep: 30
 
     parameters:
-      - tf-a-clone:
+      - tf-a-clone-parameters:
           projects: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
 
       - string:

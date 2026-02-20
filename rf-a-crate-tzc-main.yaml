@@ -21,7 +21,7 @@
           num-to-keep: 60
 
     parameters:
-      - tf-a-clone:
+      - tf-a-clone-parameters:
           projects: "tf-a-ci-scripts,arm-tzc"
 
       # GERRIT_{PROJECT,BRANCH,REFSPEC} are set when triggered by a Gerrit

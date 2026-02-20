@@ -31,7 +31,7 @@
       - shell: !include-raw-verbatim: "scripts/clone.sh"
 
 - parameter:
-    name: "tf-a-clone"
+    name: "tf-a-clone-parameters"
 
     parameters:
       - string:

@@ -15,7 +15,7 @@
           days-to-keep: 14
 
     parameters:
-      - tf-a-clone:
+      - tf-a-clone-parameters:
           projects: "tf-a-ci-scripts,rusted-firmware-a"
 
       - string:

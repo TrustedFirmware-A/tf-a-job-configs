@@ -37,7 +37,7 @@
       - "timestamps"
 
     parameters:
-      - tf-a-clone:
+      - tf-a-clone-parameters:
           projects: "tf-a-ci-scripts,trusted-firmware-a,rusted-firmware-a"
 
       - string:

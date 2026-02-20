@@ -60,7 +60,7 @@
           silent-start: false
 
     parameters:
-      - tf-a-clone:
+      - tf-a-clone-parameters:
           projects: "tf-a-ci-scripts,arm-fvp-base-pac"
 
       # GERRIT_{PROJECT,BRANCH,REFSPEC} are set when triggered by a Gerrit
