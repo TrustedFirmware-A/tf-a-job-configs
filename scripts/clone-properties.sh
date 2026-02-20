@@ -70,8 +70,14 @@ for project in "${!projects[@]}"; do
 done
 
 if [[ -v GERRIT_REFNAME ]]; then
-    GERRIT_REFSPEC="${GERRIT_REFNAME}"
+    project="GERRIT_PROJECT"
+    refname="GERRIT_REFNAME"
+else
+    project="GERRIT_PROJECT"
+    refname="GERRIT_REFSPEC"
 fi
 
-printf '%s=%s\n' "${projects["${GERRIT_PROJECT:?}"]}" "${GERRIT_PROJECT:?}"
-printf '%s=%s\n' "${refspecs["${GERRIT_PROJECT:?}"]}" "${GERRIT_REFSPEC:?}"
+{
+    printf '%s=%s\n' "${projects["${!project:?}"]}" "\${${project}}"
+    printf '%s=%s\n' "${refspecs["${!project:?}"]}" "\${${refname}}"
+} | tee "tf-a-clone.properties"
