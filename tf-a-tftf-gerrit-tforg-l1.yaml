@@ -125,7 +125,6 @@
             - kill-phase-on: "NEVER"
               name: "tf-a-static-checks"
               current-parameters: true
-              predefined-parameters: "REPO_UNDER_TEST=tf-a-tests"
               property-file: "env.param"
 
       - multijob:

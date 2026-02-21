@@ -53,15 +53,9 @@
           description: |
             tf-a-job-configs refspec to use. The master branch is used by default.
 
-      - choice:
-          name: "REPO_UNDER_TEST"
-
-          choices:
-            - "trusted-firmware-a"
-            - "tf-a-tests"
-
-          default: "trusted-firmware-a"
-          description: "Repository to run static checks on."
+      - string:
+          name: "GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
 
       - string:
           name: "GERRIT_BRANCH"
@@ -91,7 +85,7 @@
       - shell: |
           #!/bin/bash
           set -e
-          if [[ "${{REPO_UNDER_TEST}}" == trusted-firmware-a ]]; then
+          if [[ "${{GERRIT_PROJECT}}" =~ (next/)?TF-A/trusted-firmware-a ]]; then
           cat <<EOF > env.param
           GERRIT_PROJECT=${{TF_GERRIT_PROJECT}}
           GERRIT_BRANCH=${{TF_GERRIT_BRANCH}}
@@ -99,7 +93,7 @@
           TEST_GROUPS=tf-l2-scan-build
           EOF
           fi
-          cd ${{WORKSPACE}}/${{REPO_UNDER_TEST}}
+          cd ${{WORKSPACE}}/${{GERRIT_PROJECT}}
           # Executed project-related static checks: copyright presence, headers in alphabetical order,
           # line endings, coding style and banned API.
           IS_CONTINUOUS_INTEGRATION=1 ${{WORKSPACE}}/tf-a-ci-scripts/script/static-checks/static-checks.sh
@@ -115,7 +109,7 @@
 
     publishers:
       - archive:
-          artifacts: "${{REPO_UNDER_TEST}}/static-checks.log"
+          artifacts: "${{GERRIT_PROJECT}}/static-checks.log"
 
       - groovy-postbuild:
           script: !include-raw-verbatim:

@@ -19,7 +19,7 @@ def findRealUrl(url) {
   return url
 }
 
-def repo_under_test = manager.build.buildVariables.get('REPO_UNDER_TEST')
+def repo_under_test = manager.build.buildVariables.get('GERRIT_PROJECT')
 def artifact = "${repo_under_test}/static-checks.log"
 def jobUrl = manager.hudson.getRootUrl() + "${manager.build.url}artifact/${artifact}"
 def url = new URL(jobUrl)
