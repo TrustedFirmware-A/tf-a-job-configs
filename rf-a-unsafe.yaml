@@ -64,6 +64,10 @@
             'e.g. refs/changes/13/31138/1'
 
       - string:
+          name: "RF_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
+
+      - string:
           name: "RFA_REFSPEC"
           default: "${{GERRIT_REFSPEC}}"
 
@@ -71,11 +75,19 @@
             'do-not-amend: used by scripts/clone.sh to fetch the correct Gerrit patchset - use GERRIT_REFSPEC instead'
 
       - string:
+          name: "CI_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}ci/tf-a-ci-scripts"
+
+      - string:
           name: "CI_REFSPEC"
           default: "master"
 
           description: |
             'Refs to fetch for the tf-a-ci-scripts repo e.g. refs/changes/13/31138/1'
+
+      - string:
+          name: "JOBS_PROJECT"
+          default: "{gerrit_project_prefix}ci/tf-a-job-configs.git"
 
       - string:
           name: "JOBS_REFSPEC"

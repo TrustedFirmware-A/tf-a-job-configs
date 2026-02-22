@@ -27,8 +27,16 @@
           default: "main"
 
       - string:
+          name: "CI_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}ci/tf-a-ci-scripts"
+
+      - string:
           name: "CI_REFSPEC"
           default: "master"
+
+      - string:
+          name: "JOBS_PROJECT"
+          default: "{gerrit_project_prefix}ci/tf-a-job-configs.git"
 
       - string:
           name: "JOBS_REFSPEC"

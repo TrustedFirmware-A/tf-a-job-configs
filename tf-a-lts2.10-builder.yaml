@@ -57,12 +57,24 @@
           default: "lts-v2.10"
 
       - string:
+          name: "TF_M_TESTS_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}TF-M/tf-m-tests"
+
+      - string:
           name: "TF_M_TESTS_GERRIT_REFSPEC"
           default: "95d3407a65e26fb3a4319ab38c257e50c9ee804f"
 
       - string:
+          name: "TF_M_EXTRAS_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}TF-M/tf-m-extras"
+
+      - string:
           name: "TF_M_EXTRAS_GERRIT_REFSPEC"
           default: "master"
+
+      - string:
+          name: "SPM_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}hafnium/hafnium"
 
       - string:
           name: "SPM_REFSPEC"
@@ -72,8 +84,16 @@
             SPM(Hafnium) refspec to use. The 'v2.10' tag is used by default.
 
       - string:
+          name: "CI_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}ci/tf-a-ci-scripts"
+
+      - string:
           name: "CI_REFSPEC"
           default: "lts-v2.10"
+
+      - string:
+          name: "JOBS_PROJECT"
+          default: "{gerrit_project_prefix}ci/tf-a-job-configs.git"
 
       - string:
           name: "JOBS_REFSPEC"

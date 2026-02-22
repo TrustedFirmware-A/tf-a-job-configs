@@ -50,6 +50,10 @@
           default: "master"
 
       - string:
+          name: "CI_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}ci/tf-a-ci-scripts"
+
+      - string:
           name: "CI_REFSPEC"
           default: "master"
 

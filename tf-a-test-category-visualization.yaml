@@ -17,8 +17,16 @@
           projects: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
 
       - string:
+          name: "CI_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}ci/tf-a-ci-scripts"
+
+      - string:
           name: "CI_REFSPEC"
           default: "master"
+
+      - string:
+          name: "JOBS_PROJECT"
+          default: "{gerrit_project_prefix}ci/tf-a-job-configs.git"
 
       - string:
           name: "JOBS_REFSPEC"

@@ -49,6 +49,10 @@
           default: ""
 
       - string:
+          name: "TF_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
+      - string:
           name: "TF_GERRIT_REFSPEC"
           default: "${{GERRIT_REFSPEC}}"
           description: "Parameter only used by the clone script"
@@ -66,11 +70,19 @@
           default: "master"
 
       - string:
+          name: "SPM_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}hafnium/hafnium"
+
+      - string:
           name: "SPM_REFSPEC"
           default: "master"
 
           description: |
             SPM(Hafnium) refspec to use. The master branch is used by default.
+
+      - string:
+          name: "RMM_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}TF-RMM/tf-rmm"
 
       - string:
           name: "RMM_REFSPEC"
@@ -80,8 +92,16 @@
             tf-rmm refspec to use. The main branch is used by default.
 
       - string:
+          name: "CI_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}ci/tf-a-ci-scripts"
+
+      - string:
           name: "CI_REFSPEC"
           default: "master"
+
+      - string:
+          name: "JOBS_PROJECT"
+          default: "{gerrit_project_prefix}ci/tf-a-job-configs.git"
 
       - string:
           name: "JOBS_REFSPEC"

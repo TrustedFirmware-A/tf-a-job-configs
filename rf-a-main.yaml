@@ -83,6 +83,10 @@
             'e.g. refs/changes/13/31138/1'
 
       - string:
+          name: "RF_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
+
+      - string:
           name: "RFA_REFSPEC"
           default: "${{GERRIT_REFSPEC}}"
 
@@ -90,11 +94,19 @@
             'do-not-amend: used by scripts/clone.sh to fetch the correct Gerrit patchset - use GERRIT_REFSPEC instead'
 
       - string:
+          name: "TF_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
+      - string:
           name: "TF_GERRIT_REFSPEC"
           default: "master"
 
           description: |
             'Used by scripts/clone.sh to fetch the correct Gerrit patchset'
+
+      - string:
+          name: "CI_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}ci/tf-a-ci-scripts"
 
       - string:
           name: "CI_REFSPEC"
