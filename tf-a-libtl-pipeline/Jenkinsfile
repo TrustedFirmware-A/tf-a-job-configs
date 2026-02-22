@@ -56,7 +56,7 @@ pipeline {
         stage('Code style') {
             steps {
                 script {
-                    sh "git-clang-format ${params.BASE_REF} HEAD --diff -q | tee formatted.patch"
+                    sh "git-clang-format ${params.BASE_REFNAME} HEAD --diff -q | tee formatted.patch"
                     sh "[ -s formatted.patch ] || rm formatted.patch"
 
                     if (fileExists('formatted.patch')) {
