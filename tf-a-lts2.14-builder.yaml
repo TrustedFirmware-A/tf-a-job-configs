@@ -21,6 +21,14 @@
           projects: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
 
       - string:
+          name: "GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
+      - string:
+          name: "GERRIT_REFSPEC"
+          default: "lts-v2.14"
+
+      - string:
           name: "TEST_CONFIG"
 
           description: |

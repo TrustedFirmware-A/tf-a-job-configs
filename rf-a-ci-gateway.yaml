@@ -41,6 +41,14 @@
           projects: "tf-a-ci-scripts,trusted-firmware-a,rusted-firmware-a"
 
       - string:
+          name: "GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
+
+      - string:
+          name: "GERRIT_REFSPEC"
+          default: "main"
+
+      - string:
           name: "TEST_GROUPS"
           default: "rfa-fvp/fvp,nil,fvp-rfa:fvp-rfa-fip.rfa"
 

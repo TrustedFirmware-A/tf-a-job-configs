@@ -19,6 +19,14 @@
           projects: "tf-a-ci-scripts,rusted-firmware-a"
 
       - string:
+          name: "GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
+
+      - string:
+          name: "GERRIT_REFSPEC"
+          default: "main"
+
+      - string:
           name: "RF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
 
