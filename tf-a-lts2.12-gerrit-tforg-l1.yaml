@@ -150,7 +150,7 @@
               current-parameters: true
 
               predefined-parameters: |-
-                TEST_GROUPS=tf-l2-scan-build
+                TEST_GROUPS=tf-l2-scan-build-lts-v2.12
                 ENABLE_STATIC_CHECK=true
 
               property-file: "env.param"
@@ -165,7 +165,7 @@
               current-parameters: true
 
               predefined-parameters: |
-                TEST_GROUPS=tf-l1-check-docs
+                TEST_GROUPS=tf-l1-check-docs-lts-v2.12
 
               property-file: "env.param"
 
@@ -179,7 +179,7 @@
               current-parameters: true
 
               predefined-parameters: |
-                TEST_GROUPS=tf-l1-build-fvp tf-l1-build-juno tf-l1-build-clang tf-l1-build-plat spm-l1-build-tests
+                TEST_GROUPS=tf-l1-build-fvp-lts-v2.12 tf-l1-build-juno-lts-v2.12 tf-l1-build-clang-lts-v2.12 tf-l1-build-plat-lts-v2.12 spm-l1-build-tests-lts-v2.12
 
               property-file: "env.param"
 
