@@ -30,6 +30,11 @@
           description: "The tf-a-ci-script repo to clone from"
 
       - string:
+          name: "BASE_BRANCH"
+          default: "master"
+          description: "Base branch to compare LTS branches against"
+
+      - string:
           name: "LTS_BRANCHES"
           default: "lts-v2.8 lts-v2.10 lts-v2.12 lts-v2.14"
 
@@ -76,7 +81,7 @@
               git -C ${{LTS_REPO_PATH}} checkout -b ${{b}} origin/${{b}}
 
               python3 tf-a-ci-scripts/lts/lts-triage-v2.py --repo ${{LTS_REPO_PATH}} --csv_path ${{START_PATH}}/${{CSV_REPORT}} \
-              --lts ${{b}} --gerrit_user ${{CI_BOT_USERNAME}} --ssh_keyfile ${{CI_BOT_KEY}} --debug
+              --lts ${{b}} --base_branch ${{BASE_BRANCH}} --gerrit_user ${{CI_BOT_USERNAME}} --ssh_keyfile ${{CI_BOT_KEY}} --debug
               [ -f "${{START_PATH}}/${{CSV_REPORT}}" ] && echo "${{CSV_REPORT}}" >> ${{START_PATH}}/got_report.txt
           done
 
