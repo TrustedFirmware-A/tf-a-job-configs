@@ -28,6 +28,10 @@
     name: "tf-a-clone"
 
     builders:
+      - inject:
+          properties-content: |
+            CLONE_REPOS={projects}
+
       - shell: !include-raw-verbatim: "scripts/clone.sh"
 
 - parameter:

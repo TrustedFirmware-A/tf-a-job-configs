@@ -61,7 +61,8 @@
           description: "List of directories to analyze."
 
     builders:
-      - "tf-a-clone"
+      - tf-a-clone:
+          projects: "${{CLONE_REPOS}}"
 
       - shell: |
           mkdir -p output

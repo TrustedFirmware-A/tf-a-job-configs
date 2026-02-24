@@ -154,7 +154,8 @@
             Whether to submit FVP tests via TuxSuite (instead of LAVA)
 
     builders:
-      - "tf-a-clone"
+      - tf-a-clone:
+          projects: "${{CLONE_REPOS}}"
 
       - shell: |
           #!/bin/bash

@@ -193,7 +193,9 @@
       - shell: |
           aarch64-none-elf-gcc -v || true
 
-      - "tf-a-clone"
+      - tf-a-clone:
+          projects: "${{CLONE_REPOS}}"
+
       - shell: !include-raw-verbatim: "tf-a-builder/builders.sh"
 
       - inject:
