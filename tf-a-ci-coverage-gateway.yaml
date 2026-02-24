@@ -157,10 +157,20 @@
           name: "QA_TOOLS_BRANCH"
           default: "master"
 
-    builders:
-      - tf-a-clone:
-          projects: "${{CLONE_REPOS}}"
+    scm:
+      - git:
+          url: "ssh://review.trustedfirmware.org:29418/ci/tf-a-ci-scripts"
+          credentials-id: "TFA_CI_BOT_USER_SSH_KEY"
+          basedir: "tf-a-ci-scripts"
 
+          refspec: "${{CI_REFSPEC}}"
+          branches: ["master"]
+
+          extensions:
+            - choosing-strategy: "gerrit"
+            - honor-refspec: true
+
+    builders:
       - shell: |
           #!/bin/bash
           set -e
@@ -175,6 +185,9 @@
 
             block: true
             current-parameters: true
+
+            predefined-parameters: |
+                CLONE_REPOS=${{CLONE_REPOS}}
 
             parameter-factories:
               - factory: "filebuild"
