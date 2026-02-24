@@ -226,6 +226,7 @@
           artifacts: "artefacts/**, lava-binmode.txt"
           latest-only: false
           allow-empty: true
+          follow-symlinks: true
 
       - conditional-publisher:
           - condition-kind: "file-exists"
