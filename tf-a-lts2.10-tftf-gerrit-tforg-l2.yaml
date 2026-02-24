@@ -148,7 +148,7 @@
               current-parameters: true
 
               predefined-parameters: |-
-                TEST_GROUPS=tftf-l2-fwu
+                TEST_GROUPS=tftf-l2-fwu-lts-v2.10
 
               property-file: "env.param"
 
@@ -162,7 +162,7 @@
               current-parameters: true
 
               predefined-parameters: |-
-                TEST_GROUPS=tftf-l2-fvp-auxiliary tftf-l2-juno tf-l2-boot-tests-spm-mm tftf-l2-fvp-dynamiq spm-l2-boot-tests
+                TEST_GROUPS=tftf-l2-fvp-auxiliary-lts-v2.10 tftf-l2-juno-lts-v2.10 tf-l2-boot-tests-spm-mm-lts-v2.10 tftf-l2-fvp-dynamiq-lts-v2.10 spm-l2-boot-tests-lts-v2.10
 
               property-file: "env.param"
 
@@ -176,7 +176,7 @@
               current-parameters: true
 
               predefined-parameters: |-
-                TEST_GROUPS=tftf-l2-extensive-tests-fvp
+                TEST_GROUPS=tftf-l2-extensive-tests-fvp-lts-v2.10
 
               property-file: "env.param"
 

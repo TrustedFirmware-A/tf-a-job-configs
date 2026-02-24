@@ -176,7 +176,7 @@
               current-parameters: true
 
               predefined-parameters: |
-                TEST_GROUPS=tftf-l1-fvp
+                TEST_GROUPS=tftf-l1-fvp-lts-v2.10
 
               property-file: "env.param"
 
