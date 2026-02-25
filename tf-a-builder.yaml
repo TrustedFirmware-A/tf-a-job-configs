@@ -45,20 +45,12 @@
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
 
       - string:
-          name: "TF_GERRIT_BRANCH"
-          default: "master"
-
-      - string:
           name: "TF_GERRIT_REFSPEC"
           default: "master"
 
       - string:
           name: "TFTF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/tf-a-tests"
-
-      - string:
-          name: "TFTF_GERRIT_BRANCH"
-          default: "master"
 
       - string:
           name: "TFTF_GERRIT_REFSPEC"
@@ -97,10 +89,6 @@
           default: "main"
 
       - string:
-          name: "TFUT_GERRIT_BRANCH"
-          default: "main"
-
-      - string:
           name: "TFUT_GERRIT_REFSPEC"
           default: "main"
 
@@ -135,18 +123,6 @@
       - string:
           name: "MBEDTLS_URL"
           default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz"
-
-      - string:
-          name: "GERRIT_PATCHSET_NUMBER"
-          default: ""
-
-      - string:
-          name: "GERRIT_CHANGE_NUMBER"
-          default: ""
-
-      - string:
-          name: "GERRIT_HOST"
-          default: "review.trustedfirmware.org"
 
       - string:
           name: "QA_TOOLS_REPO"
