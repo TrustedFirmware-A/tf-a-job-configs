@@ -21,14 +21,6 @@
           projects: "tf-a-ci-scripts,trusted-firmware-a,rusted-firmware-a"
 
       - string:
-          name: "GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
-
-      - string:
-          name: "GERRIT_REFSPEC"
-          default: "main"
-
-      - string:
           name: "TEST_CONFIG"
 
           description: |
@@ -41,18 +33,15 @@
             Expanded and normalized test configuration, aka "test description"
 
       - string:
-          name: "RF_GERRIT_PROJECT"
+          name: "GERRIT_PROJECT"
           default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
 
       - string:
-          name: "RFA_REFSPEC"
+          name: "GERRIT_BRANCH"
           default: "main"
 
-          description: |
-            rusted-firmware-a refspec to use. The main branch is used by default.
-
       - string:
-          name: "GERRIT_BRANCH"
+          name: "GERRIT_REFSPEC"
           default: "main"
 
       - string:
@@ -62,6 +51,17 @@
       - string:
           name: "TF_GERRIT_REFSPEC"
           default: "master"
+
+      - string:
+          name: "RF_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
+
+      - string:
+          name: "RFA_REFSPEC"
+          default: "main"
+
+          description: |
+            rusted-firmware-a refspec to use. The main branch is used by default.
 
       - string:
           name: "SPM_GERRIT_PROJECT"

@@ -21,14 +21,6 @@
           projects: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
 
       - string:
-          name: "GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
-
-      - string:
-          name: "GERRIT_REFSPEC"
-          default: "lts-v2.10"
-
-      - string:
           name: "TEST_CONFIG"
 
           description: |
@@ -39,6 +31,14 @@
 
           description: |
             Expanded and normalized test configuration, aka "test description"
+
+      - string:
+          name: "GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
+      - string:
+          name: "GERRIT_REFSPEC"
+          default: "lts-v2.10"
 
       - string:
           name: "TF_GERRIT_PROJECT"
@@ -103,17 +103,17 @@
             tf-a-job-configs refspec to use. The master branch is used by default.
 
       - string:
-          name: "DOCKER_REGISTRY"
-          default: "${{PRIVATE_CONTAINER_REGISTRY}}"
-          description: "PRIVATE_CONTAINER_REGISTRY is a system-wide environment variable"
-
-      - string:
           name: "JUNO_ROOTFS_URL"
           default: "https://downloads.trustedfirmware.org/infra-assets/linaro_artifacts/releases/openembedded/aarch64/17.01/linaro-image-minimal-genericarmv8-20170127-888.rootfs.tar.gz"
 
       - string:
           name: "MBEDTLS_URL"
           default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.4.tar.gz"
+
+      - string:
+          name: "DOCKER_REGISTRY"
+          default: "${{PRIVATE_CONTAINER_REGISTRY}}"
+          description: "PRIVATE_CONTAINER_REGISTRY is a system-wide environment variable"
 
       - string:
           name: "QA_TOOLS_REPO"
