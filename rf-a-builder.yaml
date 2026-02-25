@@ -64,6 +64,30 @@
             rusted-firmware-a refspec to use. The main branch is used by default.
 
       - string:
+          name: "TFTF_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}TF-A/tf-a-tests"
+
+      - string:
+          name: "TFTF_GERRIT_REFSPEC"
+          default: "master"
+
+      - string:
+          name: "TF_M_TESTS_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}TF-M/tf-m-tests"
+
+      - string:
+          name: "TF_M_TESTS_GERRIT_REFSPEC"
+          default: "tfa_ci_dep_revision"
+
+      - string:
+          name: "TF_M_EXTRAS_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}TF-M/tf-m-extras"
+
+      - string:
+          name: "TF_M_EXTRAS_GERRIT_REFSPEC"
+          default: "tfa_ci_dep_revision"
+
+      - string:
           name: "SPM_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}hafnium/hafnium"
 
@@ -77,6 +101,10 @@
 
       - string:
           name: "RMM_REFSPEC"
+          default: "main"
+
+      - string:
+          name: "TFUT_GERRIT_REFSPEC"
           default: "main"
 
       - string:

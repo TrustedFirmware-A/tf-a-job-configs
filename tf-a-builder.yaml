@@ -37,8 +37,16 @@
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
 
       - string:
+          name: "GERRIT_BRANCH"
+          default: "master"
+
+      - string:
           name: "GERRIT_REFSPEC"
           default: "master"
+
+      - string:
+          name: "GERRIT_HOST"
+          default: "review.trustedfirmware.org"
 
       - string:
           name: "TF_GERRIT_PROJECT"
@@ -47,6 +55,17 @@
       - string:
           name: "TF_GERRIT_REFSPEC"
           default: "master"
+
+      - string:
+          name: "RF_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
+
+      - string:
+          name: "RFA_REFSPEC"
+          default: "main"
+
+          description: |
+            rusted-firmware-a refspec to use. The main branch is used by default.
 
       - string:
           name: "TFTF_GERRIT_PROJECT"

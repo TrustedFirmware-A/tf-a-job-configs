@@ -37,6 +37,10 @@
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
 
       - string:
+          name: "GERRIT_BRANCH"
+          default: "lts-v2.10"
+
+      - string:
           name: "GERRIT_REFSPEC"
           default: "lts-v2.10"
 
@@ -47,6 +51,17 @@
       - string:
           name: "TF_GERRIT_REFSPEC"
           default: "lts-v2.10"
+
+      - string:
+          name: "RF_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
+
+      - string:
+          name: "RFA_REFSPEC"
+          default: "main"
+
+          description: |
+            rusted-firmware-a refspec to use. The main branch is used by default.
 
       - string:
           name: "TFTF_GERRIT_PROJECT"
@@ -82,6 +97,18 @@
 
           description: |
             SPM(Hafnium) refspec to use. The 'v2.10' tag is used by default.
+
+      - string:
+          name: "RMM_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}TF-RMM/tf-rmm"
+
+      - string:
+          name: "RMM_REFSPEC"
+          default: "main"
+
+      - string:
+          name: "TFUT_GERRIT_REFSPEC"
+          default: "main"
 
       - string:
           name: "CI_GERRIT_PROJECT"
