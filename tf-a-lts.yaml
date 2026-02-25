@@ -13,3 +13,37 @@
       - "tf-a":
           name: "TF-A-LTS{version}"
           regex: "^tf-a-lts{version_regex}(-.*)?$"
+
+- job-group:
+    name: "tf-a-lts-builder"
+
+    jobs:
+      - tf-a-builder:
+          name: "tf-a-lts{version}-builder"
+          node: "docker-amd64-tf-a-lts{version}-jammy"
+
+          label: "TF-A LTS v{version}"
+
+          downloads_space: "tf-a-lts-v{version}"
+          clones: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
+
+          config: "tf-l1-build-fvp/fvp-default:nil"
+          config_desc: "0000%tf-l1-build-fvp%fvp-default,nil,nil,nil:nil.test"
+
+          project: "TF-A/trusted-firmware-a"
+          branch: "lts-v{version}"
+
+          tf_a_project: "${{GERRIT_PROJECT}}"
+          tf_a_branch: "${{GERRIT_REFSPEC}}"
+
+          tftf_project: "TF-A/tf-a-tests"
+          tftf_branch: "lts-v{version}"
+
+          rf_a_project: "RF-A/rusted-firmware-a"
+          rf_a_branch: "main"
+
+          tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
+          tf_a_ci_scripts_branch: "lts-v{version}"
+
+          tf_a_ci_jobs_project: "ci/tf-a-job-configs"
+          tf_a_ci_jobs_branch: "master"

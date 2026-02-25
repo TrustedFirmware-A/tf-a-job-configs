@@ -1,159 +1,365 @@
-- job:
-    name: "tf-a-builder"
-    node: "docker-amd64-tf-a-jammy"
+- job-template:
+    id: "tf-a-builder"
     project-type: "freestyle"
+
+    name: "{name}"
+    node: "{node}"
+
+    description: >
+      Run a single <strong>{label}</strong> test configuration.
+
     concurrent: true
     disabled: false
-
-    description: |
-      Trusted Firmware A (TF-A) builder
 
     properties:
       - tf-a-ci-scripts:
           download_server_url: "https://downloads.trustedfirmware.org"
-          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a"
-
-      - inject:
-          properties-content: |
-            BUILDERS_SH_ARMCLANG_VERSION=6.23
-            BUILDERS_SH_ARMCLANG_WAREHOUSE_VERSION=6.23/37
+          download_server_tf_a_url: "https://downloads.trustedfirmware.org/{downloads_space}"
 
       - build-discarder:
           days-to-keep: 30
 
     parameters:
       - tf-a-clone-parameters:
-          projects: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
+          projects: "{clones}"
 
       - string:
           name: "TEST_CONFIG"
+          default: "{config}"
 
-          description: |
-            Original test configuration.
+          description: >
+            Original test configuration passed by the gateway job, e.g.:
+
+            <ul>
+              <li><code>fvp-no-cohmem,fvp-default:fvp-tftf-fip.tftf-aemva</code></li>
+              <li><code>fvp,nil,fvp-rfa:fvp-rfa-fip.rfa</code></li>
+              <li><code>juno-default:juno-linux.uboot</code></li>
+            </ul>
 
       - string:
           name: "TEST_DESC"
+          default: "{config_desc}"
 
-          description: |
-            Expanded and normalized test configuration, aka "test description"
+          description: >
+            Expanded and normalized test configuration descriptor produced by
+            the <code>gen_test_desc.py</code> script.
 
       - string:
           name: "GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+          default: "{project}"
+
+          description: >
+            Gerrit project that triggered the job, e.g.:
+
+            <ul>
+              <li><code>TF-A/trusted-firmware-a</code></li>
+              <li><code>TF-A/tf-a-tests</code></li>
+              <li><code>RF-A/rusted-firmware-a</code></li>
+            </ul>
 
       - string:
           name: "GERRIT_BRANCH"
-          default: "master"
+          default: "{branch}"
+
+          description: >
+            Git branch targeted by the change under test, e.g.:
+
+            <ul>
+              <li><code>master</code></li>
+              <li><code>integration</code></li>
+              <li><code>main</code></li>
+            </ul>
 
       - string:
           name: "GERRIT_REFSPEC"
-          default: "master"
+          default: "{branch}"
+
+          description: >
+            Git revision under test, e.g.:
+
+            <ul>
+              <li><code>refs/heads/master</code> (or <code>master</code>)</li>
+              <li><code>refs/tags/v2.14.0</code> (or <code>v2.14.0</code>)</li>
+              <li><code>refs/changes/09/45309/12</code></li>
+              <li><code>1c26b186</code></li>
+            </ul>
 
       - string:
           name: "TF_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+          default: "{tf_a_project}"
+
+          description: >
+            Gerrit project of the Trusted Firmware-A revision to build, e.g.:
+
+            <ul>
+              <li><code>TF-A/trusted-firmware-a</code></li>
+              <li><code>next/TF-A/trusted-firmware-a</code></li>
+            </ul>
 
       - string:
           name: "TF_GERRIT_REFSPEC"
-          default: "master"
+          default: "{tf_a_branch}"
+
+          description: >
+            Git revision of Trusted Firmware-A to build, e.g.:
+
+            <ul>
+              <li><code>refs/heads/master</code> (or <code>master</code>)</li>
+              <li><code>refs/tags/v2.14.0</code> (or <code>v2.14.0</code>)</li>
+              <li><code>refs/changes/09/45309/12</code></li>
+              <li><code>1c26b186</code></li>
+            </ul>
 
       - string:
           name: "RF_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
+          default: "{rf_a_project}"
+
+          description: >
+            Gerrit project of the TF-A revision to build, e.g.:
+
+            <ul>
+              <li><code>RF-A/rusted-firmware-a</code></li>
+              <li><code>next/RF-A/rusted-firmware-a</code></li>
+            </ul>
 
       - string:
           name: "RFA_REFSPEC"
-          default: "main"
+          default: "{rf_a_branch}"
 
-          description: |
-            rusted-firmware-a refspec to use. The main branch is used by default.
+          description: >
+            Git revision of RF-A to build, e.g.:
+
+            <ul>
+              <li><code>refs/heads/main</code> (or <code>main</code>)</li>
+              <li><code>refs/tags/v0.2.0</code> (or <code>v0.2.0</code>)</li>
+              <li><code>refs/changes/85/47985/1</code></li>
+              <li><code>c7a17331</code></li>
+            </ul>
 
       - string:
           name: "TFTF_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}TF-A/tf-a-tests"
+          default: "{tftf_project}"
+
+          description: >
+            Gerrit project of the TFTF revision to build, e.g.:
+
+            <ul>
+              <li><code>TF-A/tf-a-tests</code></li>
+              <li><code>next/TF-A/tf-a-tests</code></li>
+            </ul>
 
       - string:
           name: "TFTF_GERRIT_REFSPEC"
-          default: "master"
+          default: "{tftf_branch}"
+
+          description: >
+            Git revision of TFTF to build, e.g.:
+
+            <ul>
+              <li><code>refs/heads/master</code> (or <code>master</code>)</li>
+              <li><code>refs/tags/v2.14.0</code> (or <code>v2.14.0</code>)</li>
+              <li><code>refs/changes/19/45319/10</code></li>
+              <li><code>0c62f73c</code></li>
+            </ul>
 
       - string:
           name: "TF_M_TESTS_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}TF-M/tf-m-tests"
+          default: "{tf_m_tests_project}"
+
+          description: >
+            Gerrit project of the TF-M Tests revision to build, e.g.:
+
+            <ul>
+              <li><code>TF-M/tf-m-tests</code></li>
+              <li><code>next/TF-M/tf-m-tests</code></li>
+            </ul>
 
       - string:
           name: "TF_M_TESTS_GERRIT_REFSPEC"
-          default: "tfa_ci_dep_revision"
+          default: "{tf_m_tests_branch}"
+
+          description: >
+            Git revision of the TF-M Tests to build, e.g.:
+
+            <ul>
+              <li><code>refs/heads/main</code> (or <code>main</code>)</li>
+              <li><code>refs/tags/TF-Mv2.2.2</code> (or <code>TF-Mv2.2.2</code>)</li>
+              <li><code>refs/changes/90/36690/3</code></li>
+              <li><code>e0a433c6</code></li>
+            </ul>
 
       - string:
           name: "TF_M_EXTRAS_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}TF-M/tf-m-extras"
+          default: "{tf_m_extras_project}"
+
+          description: >
+            Gerrit project of the TF-M Extras revision to build, e.g.:
+
+            <ul>
+              <li><code>TF-M/tf-m-extras</code></li>
+              <li><code>next/TF-M/tf-m-extras</code></li>
+            </ul>
 
       - string:
           name: "TF_M_EXTRAS_GERRIT_REFSPEC"
-          default: "tfa_ci_dep_revision"
+          default: "{tf_m_extra_branch}"
+
+          description: >
+            Git revision of the TF-M Extras to build, e.g.:
+
+            <ul>
+              <li><code>refs/heads/main</code> (or <code>main</code>)</li>
+              <li><code>refs/tags/TF-Mv2.2.2</code> (or <code>TF-Mv2.2.2</code>)</li>
+              <li><code>refs/changes/11/35711/2</code></li>
+              <li><code>88a4bd39</code></li>
+            </ul>
 
       - string:
           name: "SPM_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}hafnium/hafnium"
+          default: "{hafnium_project}"
+
+          description: >
+            Gerrit project of the Hafnium revision to build, e.g.:
+
+            <ul>
+              <li><code>hafnium/hafnium</code></li>
+              <li><code>next/hafnium/hafnium</code></li>
+            </ul>
 
       - string:
           name: "SPM_REFSPEC"
-          default: "master"
+          default: "{hafnium_branch}"
+
+          description: >
+            Git revision of Hafnium to build, e.g.:
+
+            <ul>
+              <li><code>refs/heads/master</code> (or <code>master</code>)</li>
+              <li><code>refs/tags/v2.14.0</code> (or <code>v2.14.0</code>)</li>
+              <li><code>refs/changes/13/44713/9</code></li>
+              <li><code>ce12c6e5</code></li>
+            </ul>
 
       - string:
           name: "RMM_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}TF-RMM/tf-rmm"
+          default: "{tf_rmm_project}"
+
+          description: >
+            Gerrit project of the TF-RMM revision to build, e.g.:
+
+            <ul>
+              <li><code>TF-RMM/tf-rmm</code></li>
+              <li><code>next/TF-RMM/tf-rmm</code></li>
+            </ul>
 
       - string:
           name: "RMM_REFSPEC"
-          default: "main"
+          default: "{tf_rmm_branch}"
+
+          description: >
+            Git revision of TF-RMM to build, e.g.:
+
+            <ul>
+              <li><code>refs/heads/main</code> (or <code>main</code>)</li>
+              <li><code>refs/tags/tf-rmm-v0.8.0</code> (or <code>tf-rmm-v0.8.0</code>)</li>
+              <li><code>refs/changes/52/45552/1</code></li>
+              <li><code>bbb2c4fc</code></li>
+            </ul>
 
       - string:
           name: "CI_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}ci/tf-a-ci-scripts"
+          default: "{tf_a_ci_scripts_project}"
+
+          description: >
+            Gerrit project of the TF-A CI scripts revision to build, e.g.:
+
+            <ul>
+              <li><code>ci/tf-a-ci-scripts</code></li>
+              <li><code>next/ci/tf-a-ci-scripts</code></li>
+            </ul>
 
       - string:
           name: "CI_REFSPEC"
-          default: "master"
+          default: "{tf_a_ci_scripts_branch}"
+
+          description: >
+            Git revision of the TF-A CI scripts to build, e.g.:
+
+            <ul>
+              <li><code>refs/heads/master</code> (or <code>master</code>)</li>
+              <li><code>refs/tags/v2.14.0</code> (or <code>v2.14.0</code>)</li>
+              <li><code>refs/changes/79/45379/7</code></li>
+              <li><code>8c7748b6</code></li>
+            </ul>
 
       - string:
           name: "JOBS_PROJECT"
-          default: "{gerrit_project_prefix}ci/tf-a-job-configs.git"
+          default: "{tf_a_ci_jobs_project}"
+
+          description: >
+            Gerrit project of the TF-A CI jobs revision to build, e.g.:
+
+            <ul>
+              <li><code>ci/tf-a-ci-scripts</code></li>
+              <li><code>next/ci/tf-a-ci-scripts</code></li>
+            </ul>
 
       - string:
           name: "JOBS_REFSPEC"
-          default: "master"
+          default: "{tf_a_ci_jobs_branch}"
 
-          description: |
-            tf-a-job-configs refspec to use. The master branch is used by default.
+          description: >
+            Git revision of the TF-A CI jobs to build, e.g.:
+
+            <ul>
+              <li><code>refs/heads/master</code> (or <code>master</code>)</li>
+              <li><code>refs/tags/v2.14.0</code> (or <code>v2.14.0</code>)</li>
+              <li><code>refs/changes/97/45197/1</code></li>
+              <li><code>77b067a4</code></li>
+            </ul>
 
       - string:
           name: "JUNO_ROOTFS_URL"
           default: "https://downloads.trustedfirmware.org/infra-assets/linaro_artifacts/releases/openembedded/aarch64/17.01/linaro-image-minimal-genericarmv8-20170127-888.rootfs.tar.gz"
 
+          description: >
+            URL of the RootFS to use for Juno FVP/LAVA runs.
+
       - string:
           name: "MBEDTLS_URL"
-          default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz"
+          default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-{tf_a_mbedtls_version}.tar.gz"
+
+          description: >
+            URL of the Mbed TLS tarball to use when building TF-A.
 
       - string:
           name: "DOCKER_REGISTRY"
           default: "${{PRIVATE_CONTAINER_REGISTRY}}"
-          description: "PRIVATE_CONTAINER_REGISTRY is a system-wide environment variable"
+
+          description: >
+            Docker registry LAVA should use to fetch FVP images.
 
       - string:
           name: "QA_TOOLS_REPO"
           default: "https://git.gitlab.arm.com/tooling/qa-tools.git"
 
+          description: >
+            QA tools repository used for coverage and report generation.
+
       - string:
           name: "QA_TOOLS_BRANCH"
           default: "master"
+
+          description: >
+            Branch/refspec of QA tools to use.
 
       - string:
           name: "LAVA_RETRIES"
           default: 2
 
-          description: |
-            Number of tries submitting job to LAVA in case it fails (stopgap measure against nondeterministic failures)
+          description: >
+            Number of times jobs should be submitted to LAVA upon failure, as a
+            temporary mitigation against non-deterministic LAVA failures.
 
     wrappers:
       - "timestamps"
@@ -183,11 +389,16 @@
               variable: "ARMCLANG_UBL_FILE"
 
     builders:
+      - tf-a-clone:
+          projects: "${{CLONE_REPOS}}"
+
       - shell: |
           aarch64-none-elf-gcc -v || true
 
-      - tf-a-clone:
-          projects: "${{CLONE_REPOS}}"
+      - inject:
+          properties-content: |
+            BUILDERS_SH_ARMCLANG_VERSION={armclang_version}
+            BUILDERS_SH_ARMCLANG_WAREHOUSE_VERSION={armclang_warehouse_version}
 
       - shell: !include-raw-verbatim: "tf-a-builder/builders.sh"
 

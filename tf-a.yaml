@@ -6,6 +6,53 @@
           name: "TF-A"
           regex: "^tf-a(-.*)?$"
 
+    jobs:
+      - tf-a-builder:
+          name: "tf-a-builder"
+          node: "docker-amd64-tf-a-jammy"
+
+          label: "TF-A"
+
+          downloads_space: "tf-a"
+          clones: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
+
+          armclang_version: "6.23"
+          armclang_warehouse_version: "6.23/37"
+
+          config: "tf-l1-build-fvp/fvp-default:nil"
+          config_desc: "0000%tf-l1-build-fvp%fvp-default,nil,nil,nil:nil.test"
+
+          project: "TF-A/trusted-firmware-a"
+          branch: "master"
+
+          tf_a_project: "${{GERRIT_PROJECT}}"
+          tf_a_branch: "${{GERRIT_BRANCH}}"
+          tf_a_mbedtls_version: "3.6.5"
+
+          rf_a_project: "RF-A/rusted-firmware-a"
+          rf_a_branch: "main"
+
+          tftf_project: "TF-A/tf-a-tests"
+          tftf_branch: "master"
+
+          tf_m_tests_project: "TF-M/tf-m-tests"
+          tf_m_tests_branch: "tfa_ci_dep_revision"
+
+          tf_m_extras_project: "TF-M/tf-m-extras"
+          tf_m_extra_branch: "tfa_ci_dep_revision"
+
+          hafnium_project: "hafnium/hafnium"
+          hafnium_branch: "master"
+
+          tf_rmm_project: "TF-RMM/tf-rmm"
+          tf_rmm_branch: "main"
+
+          tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
+          tf_a_ci_scripts_branch: "master"
+
+          tf_a_ci_jobs_project: "ci/tf-a-job-configs"
+          tf_a_ci_jobs_branch: "master"
+
 - view-template:
     id: "tf-a"
 

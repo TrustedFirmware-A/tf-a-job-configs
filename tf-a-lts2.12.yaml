@@ -1,7 +1,27 @@
 - project:
     name: "tf-a-lts2.12"
 
+    version: "2.12"
+    version_regex: "2[.]12"
+
     views:
-      - "tf-a-lts-version":
-          version: "2.12"
-          version_regex: "2[.]12"
+      - "tf-a-lts-version"
+
+    jobs:
+      - tf-a-lts-builder:
+          armclang_version: "6.18"
+          armclang_warehouse_version: "6.18/19"
+
+          tf_a_mbedtls_version: "3.6.3"
+
+          tf_m_tests_project: "TF-M/tf-m-tests"
+          tf_m_tests_branch: "53ddc58dcd57e1f5cf658b316d7d735335d58570"
+
+          tf_m_extras_project: "TF-M/tf-m-extras"
+          tf_m_extra_branch: "3ff04e40ff7f66c8cee087b6e5cbd8fb8c1bec01"
+
+          hafnium_project: "hafnium/hafnium"
+          hafnium_branch: "v{version}"
+
+          tf_rmm_project: "TF-RMM/tf-rmm"
+          tf_rmm_branch: "main"
