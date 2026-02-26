@@ -13,6 +13,11 @@
           download_server_url: "https://downloads.trustedfirmware.org"
           download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a-lts-v2.10"
 
+      - inject:
+          properties-content: |
+            BUILDERS_SH_ARMCLANG_VERSION=6.18
+            BUILDERS_SH_ARMCLANG_WAREHOUSE_VERSION=6.18/19
+
       - build-discarder:
           days-to-keep: 30
 
