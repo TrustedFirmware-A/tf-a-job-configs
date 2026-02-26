@@ -283,11 +283,13 @@
                   artifacts: "lava-raw-debug.log"
                   latest-only: false
                   allow-empty: true
+                  follow-symlinks: true
 
       - archive:
           artifacts: "lava.log, lava-*.log, tux.id, feedback.log, config_file.json, covtrace-*.log, trace_report/**"
           latest-only: false
           allow-empty: true
+          follow-symlinks: true
 
       - groovy-postbuild:
           script: !include-raw-verbatim:
