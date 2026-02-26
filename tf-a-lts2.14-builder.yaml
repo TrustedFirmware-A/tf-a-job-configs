@@ -107,10 +107,6 @@
           default: "tf-rmm-v0.8.0"
 
       - string:
-          name: "TFUT_GERRIT_REFSPEC"
-          default: "tfaut-v0.1"
-
-      - string:
           name: "CI_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}ci/tf-a-ci-scripts"
 

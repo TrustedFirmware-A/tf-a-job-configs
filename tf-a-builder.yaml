@@ -45,10 +45,6 @@
           default: "master"
 
       - string:
-          name: "GERRIT_HOST"
-          default: "review.trustedfirmware.org"
-
-      - string:
           name: "TF_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
 
@@ -105,10 +101,6 @@
 
       - string:
           name: "RMM_REFSPEC"
-          default: "main"
-
-      - string:
-          name: "TFUT_GERRIT_REFSPEC"
           default: "main"
 
       - string:

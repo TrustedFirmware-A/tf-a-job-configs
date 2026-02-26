@@ -104,10 +104,6 @@
           default: "main"
 
       - string:
-          name: "TFUT_GERRIT_REFSPEC"
-          default: "main"
-
-      - string:
           name: "CI_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}ci/tf-a-ci-scripts"
 
