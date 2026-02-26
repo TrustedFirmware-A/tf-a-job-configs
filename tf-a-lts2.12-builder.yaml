@@ -37,6 +37,10 @@
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
 
       - string:
+          name: "GERRIT_BRANCH"
+          default: "lts-v2.12"
+
+      - string:
           name: "GERRIT_REFSPEC"
           default: "lts-v2.12"
 
