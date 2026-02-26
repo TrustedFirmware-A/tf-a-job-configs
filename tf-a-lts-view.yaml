@@ -1,0 +1,8 @@
+- view-group:
+    name: "tf-a-lts-view"
+
+    views:
+      - tf-a-view:
+          name: "TF-A-LTS{version}"
+          description: "Trusted Firmware-A LTS v{version}"
+          regex: "^tf-a-lts{version_regex}(-.*)?$"

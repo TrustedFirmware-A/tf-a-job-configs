@@ -5,7 +5,7 @@
     version_regex: "2[.]10"
 
     views:
-      - "tf-a-lts-version"
+      - tf-a-lts-view:
 
     jobs:
       - tf-a-lts-builder:
