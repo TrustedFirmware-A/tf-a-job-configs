@@ -47,6 +47,9 @@
           tf_rmm_project: "TF-RMM/tf-rmm"
           tf_rmm_branch: "main"
 
+          tfut_project: "TF-A/tf-a-unit-tests"
+          tfut_branch: "main"
+
           tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
           tf_a_ci_scripts_branch: "master"
 

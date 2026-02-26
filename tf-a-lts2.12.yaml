@@ -25,3 +25,6 @@
 
           tf_rmm_project: "TF-RMM/tf-rmm"
           tf_rmm_branch: "main"
+
+          tfut_project: "TF-A/tf-a-unit-tests"
+          tfut_branch: "main"

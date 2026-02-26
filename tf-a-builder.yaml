@@ -267,6 +267,32 @@
             </ul>
 
       - string:
+          name: "TFUT_GERRIT_PROJECT"
+          default: "{tfut_project}"
+
+          description: >
+            Gerrit project of the TFUT revision to build, e.g.:
+
+            <ul>
+              <li><code>TF-A/tf-a-unit-tests</code></li>
+              <li><code>next/TF-A/tf-a-unit-tests</code></li>
+            </ul>
+
+      - string:
+          name: "TFUT_GERRIT_REFSPEC"
+          default: "{tfut_branch}"
+
+          description: >
+            Git revision of TFUT to build, e.g.:
+
+            <ul>
+              <li><code>refs/heads/main</code> (or <code>main</code>)</li>
+              <li><code>refs/tags/tfaut-v0.1</code> (or <code>tfaut-v0.1</code>)</li>
+              <li><code>refs/changes/39/41539/5</code></li>
+              <li><code>d864d80b</code></li>
+            </ul>
+
+      - string:
           name: "CI_GERRIT_PROJECT"
           default: "{tf_a_ci_scripts_project}"
 
