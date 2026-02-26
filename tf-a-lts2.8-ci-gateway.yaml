@@ -159,7 +159,6 @@
             branch: "lts-v2.8"
 
           extensions:
-            - choosing-strategy: "gerrit"
             - honor-refspec: true
 
     builders:
