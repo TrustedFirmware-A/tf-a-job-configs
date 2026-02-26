@@ -2,8 +2,9 @@
     name: "tf-a"
 
     views:
-      - "tf-a":
+      - tf-a-view:
           name: "TF-A"
+          description: "Trusted Firmware-A"
           regex: "^tf-a(-.*)?$"
 
     jobs:
@@ -56,23 +57,6 @@
           tf_a_ci_jobs_project: "ci/tf-a-job-configs"
           tf_a_ci_jobs_branch: "master"
 
-- view-template:
-    id: "tf-a"
-
-    name: "{name}"
-    view-type: "list"
-    regex: "{regex}"
-    filter-queue: true
-    filter-executors: true
-
-    columns:
-      - "status"
-      - "weather"
-      - "job"
-      - "last-success"
-      - "last-failure"
-      - "last-duration"
-      - "build-button"
 
 - builder:
     name: "tf-a-clone"

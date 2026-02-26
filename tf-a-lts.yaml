@@ -2,16 +2,18 @@
     name: "tf-a-lts"
 
     views:
-      - "tf-a":
+      - tf-a-view:
           name: "TF-A-LTS"
+          description: "Trusted Firmware-A LTS"
           regex: "^tf-a-lts.*$"
 
 - view-group:
     name: "tf-a-lts-version"
 
     views:
-      - "tf-a":
+      - tf-a-view:
           name: "TF-A-LTS{version}"
+          description: "Trusted Firmware-A LTS v{version}"
           regex: "^tf-a-lts{version_regex}(-.*)?$"
 
 - job-group:

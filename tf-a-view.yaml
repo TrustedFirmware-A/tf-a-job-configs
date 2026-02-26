@@ -1,0 +1,20 @@
+- view-template:
+    id: "tf-a-view"
+    view-type: "list"
+
+    name: "{name}"
+    description: "All <strong>{description}</strong> jobs."
+
+    regex: "{regex}"
+
+    filter-queue: true
+    filter-executors: true
+
+    columns:
+      - "status"
+      - "weather"
+      - "job"
+      - "last-success"
+      - "last-failure"
+      - "last-duration"
+      - "build-button"

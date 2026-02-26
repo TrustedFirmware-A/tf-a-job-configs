@@ -2,6 +2,7 @@
     name: "rf-a-crate"
 
     views:
-      - "tf-a":
+      - tf-a-view:
           name: "Arm-Firmware-Crates"
+          description: "Arm Firmware crates"
           regex: "^rf-a-crate(-.*)?$"

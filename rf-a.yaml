@@ -2,8 +2,9 @@
     name: "rf-a"
 
     views:
-      - "tf-a":
+      - tf-a-view:
           name: "RF-A"
+          description: "Rusted Firmware-A"
           regex: "^rf-a(-.*)?$"
 
     jobs:
