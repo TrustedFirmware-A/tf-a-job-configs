@@ -150,13 +150,6 @@
           description: |
             Number of tries submitting job to LAVA in case it fails (stopgap measure against nondeterministic failures)
 
-      - string:
-          name: "USE_TUXSUITE_FVP"
-          default: 1
-
-          description: |
-            Whether to submit FVP tests via TuxSuite (instead of LAVA)
-
     wrappers:
       - "timestamps"
 

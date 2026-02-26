@@ -2,8 +2,6 @@
 
 set -xe
 
-USE_TUXSUITE_FVP=${USE_TUXSUITE_FVP:-0}
-
 # Get LAVA device type from a job file
 get_lava_device_type() {
     local job_file=$1
@@ -85,7 +83,7 @@ ls -l ${WORKSPACE}
 
 DEVICE=$(get_lava_device_type artefacts-lava/job.yaml)
 
-if [ "${DEVICE}" == "fvp" -a "${USE_TUXSUITE_FVP}" -ne 0 ]; then
+if [ "${DEVICE}" == "fvp" ]; then
     setup_tuxsuite
     set -o pipefail
     for i in $(seq 1 ${LAVA_RETRIES:-3}); do
