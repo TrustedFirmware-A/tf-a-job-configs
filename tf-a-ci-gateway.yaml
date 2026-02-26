@@ -170,11 +170,13 @@
           credentials-id: "TFA_CI_BOT_USER_SSH_KEY"
           basedir: "tf-a-ci-scripts"
 
-          refspec: "${{CI_REFSPEC}}"
-          branches: ["master"]
+          refspec: "${{CI_REFSPEC}}:${{CI_REFSPEC}}"
+          branches: ["${{CI_REFSPEC}}"]
+
+          changelog-against:
+            branch: "master"
 
           extensions:
-            - choosing-strategy: "gerrit"
             - honor-refspec: true
 
     builders:
