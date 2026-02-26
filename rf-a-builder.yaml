@@ -299,4 +299,4 @@
 
       - groovy-postbuild:
           script: !include-raw-verbatim:
-            - "rf-a-builder/postbuild.groovy"
+            - "tf-a-builder/postbuild.groovy"
