@@ -196,7 +196,7 @@
             current-parameters: true
 
             predefined-parameters: |
-                CLONE_REPOS=${{CLONE_REPOS}}
+              CLONE_REPOS=${{CLONE_REPOS}}
 
             parameter-factories:
               - factory: "filebuild"

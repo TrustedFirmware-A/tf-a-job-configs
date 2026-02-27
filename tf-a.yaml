@@ -57,7 +57,6 @@
           tf_a_ci_jobs_project: "ci/tf-a-job-configs"
           tf_a_ci_jobs_branch: "master"
 
-
 - builder:
     name: "tf-a-clone"
 
