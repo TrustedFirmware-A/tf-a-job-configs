@@ -11,6 +11,7 @@
           armclang_version: "6.23"
           armclang_warehouse_version: "6.23/37"
 
+          default_groups: "tf-l1-build-fvp/fvp-default:nil"
           default_config: "fvp-default:nil"
           default_config_desc: "0000%tf-l1-build-fvp%fvp-default,nil,nil,nil,nil,nil:nil.test"
 
@@ -46,6 +47,7 @@
           armclang_version: "6.18"
           armclang_warehouse_version: "6.18/19"
 
+          default_groups: "tf-l1-build-fvp-lts-v2.8/fvp-default-lts-v2.8:nil"
           default_config: "fvp-default-lts-v2.8:nil"
           default_config_desc: "0000%tf-l1-build-fvp-lts-v2.8%fvp-default-lts-v2.8,nil,nil,nil,nil,nil:nil.test"
 
@@ -81,6 +83,7 @@
           armclang_version: "6.18"
           armclang_warehouse_version: "6.18/19"
 
+          default_groups: "tf-l1-build-fvp-lts-v2.10/fvp-default-lts-v2.10:nil"
           default_config: "fvp-default-lts-v2.10:nil"
           default_config_desc: "0000%tf-l1-build-fvp-lts-v2.10%fvp-default-lts-v2.10,nil,nil,nil,nil,nil:nil.test"
 
@@ -116,6 +119,7 @@
           armclang_version: "6.18"
           armclang_warehouse_version: "6.18/19"
 
+          default_groups: "tf-l1-build-fvp-lts-v2.12/fvp-default-lts-v2.12:nil"
           default_config: "fvp-default-lts-v2.12:nil"
           default_config_desc: "0000%tf-l1-build-fvp-lts-v2.12%fvp-default-lts-v2.12,nil,nil,nil,nil,nil:nil.test"
 
@@ -151,6 +155,7 @@
           armclang_version: "6.23"
           armclang_warehouse_version: "6.23/37"
 
+          default_groups: "tf-l1-build-fvp-lts-v2.14/fvp-default-lts-v2.14:nil"
           default_config: "fvp-default-lts-v2.14:nil"
           default_config_desc: "0000%tf-l1-build-fvp-lts-v2.14%fvp-default-lts-v2.14,nil,nil,nil,nil,nil:nil.test"
 
