@@ -106,6 +106,7 @@
     publishers:
       - archive:
           artifacts: "rusted-firmware-a/next-checks.log"
+          follow-symlinks: true
 
       - groovy-postbuild:
           script: !include-raw-verbatim:
