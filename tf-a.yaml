@@ -209,7 +209,7 @@
           regex: "^tf-a-lts2[.]14(-.*)?$"
 
     jobs:
-      - tf-a-builder:
+      - tf-a-gateway-chain:
           default_config: "tf-l1-build-fvp/fvp-default:nil"
           default_config_desc: "0000%tf-l1-build-fvp%fvp-default,nil,nil,nil:nil.test"
           default_clones: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"

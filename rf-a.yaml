@@ -9,7 +9,7 @@
           regex: "^rf-a(-.*)?$"
 
     jobs:
-      - tf-a-builder:
+      - tf-a-gateway-chain:
           node: "docker-amd64-tf-a-jammy"
 
           label: "RF-A"
