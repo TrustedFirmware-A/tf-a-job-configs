@@ -44,6 +44,226 @@
             Expanded and normalized test configuration descriptor produced by
             the <code>gen_test_desc.py</code> script.
 
+      - tf-a-builder-parameters:
+          default_config: "{default_config}"
+          default_config_desc: "{default_config_desc}"
+          default_clones: "{default_clones}"
+
+          default_gerrit_project: "{default_gerrit_project}"
+          default_gerrit_branch: "{default_gerrit_branch}"
+
+          default_tf_a_project: "{default_tf_a_project}"
+          default_tf_a_branch: "{default_tf_a_branch}"
+          default_tf_a_mbedtls_version: "{default_tf_a_mbedtls_version}"
+
+          default_rf_a_project: "{default_rf_a_project}"
+          default_rf_a_branch: "{default_rf_a_branch}"
+
+          default_tftf_project: "{default_tftf_project}"
+          default_tftf_branch: "{default_tftf_branch}"
+
+          default_tf_m_tests_project: "{default_tf_m_tests_project}"
+          default_tf_m_tests_branch: "{default_tf_m_tests_branch}"
+
+          default_tf_m_extras_project: "{default_tf_m_extras_project}"
+          default_tf_m_extras_branch: "{default_tf_m_extras_branch}"
+
+          default_hafnium_project: "{default_hafnium_project}"
+          default_hafnium_branch: "{default_hafnium_branch}"
+
+          default_tf_rmm_project: "{default_tf_rmm_project}"
+          default_tf_rmm_branch: "{default_tf_rmm_branch}"
+
+          default_tfut_project: "{default_tfut_project}"
+          default_tfut_branch: "{default_tfut_branch}"
+
+          default_tf_a_ci_scripts_project: "{default_tf_a_ci_scripts_project}"
+          default_tf_a_ci_scripts_branch: "{default_tf_a_ci_scripts_branch}"
+
+          default_tf_a_ci_jobs_project: "ci/tf-a-job-configs"
+          default_tf_a_ci_jobs_branch: "master"
+
+    wrappers:
+      - "timestamps"
+
+      - timeout:
+          timeout: 120
+          fail: true
+
+      - credentials-binding:
+          - text:
+              credential-id: "LAVA_USER_TF"
+              variable: "LAVA_USER"
+
+      - credentials-binding:
+          - text:
+              credential-id: "LAVA_TOKEN_TF"
+              variable: "LAVA_TOKEN"
+
+      - credentials-binding:
+          - text:
+              credential-id: "TUXSUITE_TOKEN"
+              variable: "TUXSUITE_TOKEN"
+
+      - credentials-binding:
+          - file:
+              credential-id: "ARMCLANG_UBL_FILE"
+              variable: "ARMCLANG_UBL_FILE"
+
+    builders:
+      - tf-a-clone:
+          projects: "${{CLONE_REPOS}}"
+
+      - shell: |
+          aarch64-none-elf-gcc -v || true
+
+      - inject:
+          properties-content: |
+            BUILDERS_SH_ARMCLANG_VERSION={armclang_version}
+            BUILDERS_SH_ARMCLANG_WAREHOUSE_VERSION={armclang_warehouse_version}
+
+      - shell: !include-raw-verbatim: "tf-a-builder/builders.sh"
+
+      - inject:
+          properties-file: "artefacts/env"
+
+      - shell: |
+          ln -s "artefacts/${{BIN_MODE:-release}}" "artefacts-lava"
+          echo ${{BIN_MODE:-release}} >lava-binmode.txt
+
+      - conditional-step:
+          condition-kind: "file-exists"
+          on-evaluation-failure: "dont-run"
+          condition-filename: "artefacts-lava/job.yaml"
+          condition-basedir: "workspace"
+
+          steps:
+            - shell: |
+                #!/bin/bash
+                set -e
+                DEVICE_TYPE=fvp
+                CUSTOM_YAML_URL=${{BUILD_URL}}/artifact/artefacts-lava/job.yaml
+                DEVICE_TYPE=$(awk -F': ' '/device_type/ {{print $2}}' ${{WORKSPACE}}/artefacts-lava/job.yaml)
+                cat << EOF > ${{WORKSPACE}}/lava.param
+                DEVICE_TYPE=${{DEVICE_TYPE}}
+                LAVA_SERVER=tf.validation.linaro.org
+                EOF
+
+    publishers:
+      - archive:
+          artifacts: "artefacts/**, lava-binmode.txt"
+          latest-only: false
+          allow-empty: true
+          follow-symlinks: true
+
+      - conditional-publisher:
+          - condition-kind: "file-exists"
+            on-evaluation-failure: "dont-run"
+            condition-filename: "artefacts-lava/job.yaml"
+            condition-basedir: "workspace"
+
+            action:
+              - postbuildscript:
+                  mark-unstable-if-failed: true
+
+                  builders:
+                    - role: "SLAVE"
+
+                      build-on:
+                        - "SUCCESS"
+
+                      build-steps:
+                        - inject:
+                            properties-file: "${{WORKSPACE}}/lava.param"
+
+                        - shell: |
+                            #!/bin/bash -x
+
+                            tf-a-job-configs/tf-a-builder/submit-test-job.sh
+                            status=$?
+                            tf-a-job-configs/tf-a-builder/lava-log-process.sh
+                            if [ $status -ne 0 ]; then
+                                echo "LAVA JOB RESULT: 1"
+                                exit 1
+                            else
+                                echo "LAVA JOB RESULT: 0"
+                            fi
+
+              - postbuildscript:
+                  builders:
+                    - role: "SLAVE"
+
+                      build-on:
+                        - "SUCCESS"
+
+                      build-steps:
+                        - shell: |
+                            #!/bin/bash -e
+                            echo "=== Starting expect-post tests ==="
+                            ./tf-a-ci-scripts/script/expect-post-runner.sh
+
+      - conditional-publisher:
+          - condition-kind: "file-exists"
+            on-evaluation-failure: "dont-run"
+            condition-filename: "artefacts/release/tfut_artefacts.txt"
+            condition-basedir: "workspace"
+
+            action:
+              - postbuildscript:
+                  builders:
+                    - role: "SLAVE"
+
+                      build-on:
+                        - "SUCCESS"
+
+                      build-steps:
+                        - shell: |
+                            #!/bin/bash -e
+                            echo "Found unit test executables, running unit tests now"
+                            export workspace="$(pwd)"
+                            export tfut_root="$(pwd)/tf-a-unit-tests"
+                            bash -x "$workspace/tf-a-ci-scripts/script/run_unit_tests.sh"
+
+      - conditional-publisher:
+          - condition-kind: "file-exists"
+            on-evaluation-failure: "dont-run"
+            condition-filename: "lava-raw-debug.log"
+            condition-basedir: "workspace"
+
+            action:
+              - archive:
+                  artifacts: "lava-raw-debug.log"
+                  latest-only: false
+                  allow-empty: true
+                  follow-symlinks: true
+
+      - conditional-publisher:
+          - condition-kind: "file-exists"
+            on-evaluation-failure: "dont-run"
+            condition-filename: "unit_tests/run/run.sh"
+            condition-basedir: "workspace"
+
+            action:
+              - archive:
+                  artifacts: "unit_tests/**"
+                  latest-only: false
+                  allow-empty: true
+                  follow-symlinks: true
+
+      - archive:
+          artifacts: "lava.log, lava-*.log, tux.id, feedback.log, config_file.json, covtrace-*.log, trace_report/**"
+          latest-only: false
+          allow-empty: true
+          follow-symlinks: true
+
+      - groovy-postbuild:
+          script: !include-raw-verbatim:
+            - "tf-a-builder/postbuild.groovy"
+
+- parameter:
+    name: "tf-a-builder-parameters"
+
+    parameters:
       - string:
           name: "GERRIT_PROJECT"
           default: "{default_gerrit_project}"
@@ -386,180 +606,3 @@
           description: >
             Number of times jobs should be submitted to LAVA upon failure, as a
             temporary mitigation against non-deterministic LAVA failures.
-
-    wrappers:
-      - "timestamps"
-
-      - timeout:
-          timeout: 120
-          fail: true
-
-      - credentials-binding:
-          - text:
-              credential-id: "LAVA_USER_TF"
-              variable: "LAVA_USER"
-
-      - credentials-binding:
-          - text:
-              credential-id: "LAVA_TOKEN_TF"
-              variable: "LAVA_TOKEN"
-
-      - credentials-binding:
-          - text:
-              credential-id: "TUXSUITE_TOKEN"
-              variable: "TUXSUITE_TOKEN"
-
-      - credentials-binding:
-          - file:
-              credential-id: "ARMCLANG_UBL_FILE"
-              variable: "ARMCLANG_UBL_FILE"
-
-    builders:
-      - tf-a-clone:
-          projects: "${{CLONE_REPOS}}"
-
-      - shell: |
-          aarch64-none-elf-gcc -v || true
-
-      - inject:
-          properties-content: |
-            BUILDERS_SH_ARMCLANG_VERSION={armclang_version}
-            BUILDERS_SH_ARMCLANG_WAREHOUSE_VERSION={armclang_warehouse_version}
-
-      - shell: !include-raw-verbatim: "tf-a-builder/builders.sh"
-
-      - inject:
-          properties-file: "artefacts/env"
-
-      - shell: |
-          ln -s "artefacts/${{BIN_MODE:-release}}" "artefacts-lava"
-          echo ${{BIN_MODE:-release}} >lava-binmode.txt
-
-      - conditional-step:
-          condition-kind: "file-exists"
-          on-evaluation-failure: "dont-run"
-          condition-filename: "artefacts-lava/job.yaml"
-          condition-basedir: "workspace"
-
-          steps:
-            - shell: |
-                #!/bin/bash
-                set -e
-                DEVICE_TYPE=fvp
-                CUSTOM_YAML_URL=${{BUILD_URL}}/artifact/artefacts-lava/job.yaml
-                DEVICE_TYPE=$(awk -F': ' '/device_type/ {{print $2}}' ${{WORKSPACE}}/artefacts-lava/job.yaml)
-                cat << EOF > ${{WORKSPACE}}/lava.param
-                DEVICE_TYPE=${{DEVICE_TYPE}}
-                LAVA_SERVER=tf.validation.linaro.org
-                EOF
-
-    publishers:
-      - archive:
-          artifacts: "artefacts/**, lava-binmode.txt"
-          latest-only: false
-          allow-empty: true
-          follow-symlinks: true
-
-      - conditional-publisher:
-          - condition-kind: "file-exists"
-            on-evaluation-failure: "dont-run"
-            condition-filename: "artefacts-lava/job.yaml"
-            condition-basedir: "workspace"
-
-            action:
-              - postbuildscript:
-                  mark-unstable-if-failed: true
-
-                  builders:
-                    - role: "SLAVE"
-
-                      build-on:
-                        - "SUCCESS"
-
-                      build-steps:
-                        - inject:
-                            properties-file: "${{WORKSPACE}}/lava.param"
-
-                        - shell: |
-                            #!/bin/bash -x
-
-                            tf-a-job-configs/tf-a-builder/submit-test-job.sh
-                            status=$?
-                            tf-a-job-configs/tf-a-builder/lava-log-process.sh
-                            if [ $status -ne 0 ]; then
-                                echo "LAVA JOB RESULT: 1"
-                                exit 1
-                            else
-                                echo "LAVA JOB RESULT: 0"
-                            fi
-
-              - postbuildscript:
-                  builders:
-                    - role: "SLAVE"
-
-                      build-on:
-                        - "SUCCESS"
-
-                      build-steps:
-                        - shell: |
-                            #!/bin/bash -e
-                            echo "=== Starting expect-post tests ==="
-                            ./tf-a-ci-scripts/script/expect-post-runner.sh
-
-      - conditional-publisher:
-          - condition-kind: "file-exists"
-            on-evaluation-failure: "dont-run"
-            condition-filename: "artefacts/release/tfut_artefacts.txt"
-            condition-basedir: "workspace"
-
-            action:
-              - postbuildscript:
-                  builders:
-                    - role: "SLAVE"
-
-                      build-on:
-                        - "SUCCESS"
-
-                      build-steps:
-                        - shell: |
-                            #!/bin/bash -e
-                            echo "Found unit test executables, running unit tests now"
-                            export workspace="$(pwd)"
-                            export tfut_root="$(pwd)/tf-a-unit-tests"
-                            bash -x "$workspace/tf-a-ci-scripts/script/run_unit_tests.sh"
-
-      - conditional-publisher:
-          - condition-kind: "file-exists"
-            on-evaluation-failure: "dont-run"
-            condition-filename: "lava-raw-debug.log"
-            condition-basedir: "workspace"
-
-            action:
-              - archive:
-                  artifacts: "lava-raw-debug.log"
-                  latest-only: false
-                  allow-empty: true
-                  follow-symlinks: true
-
-      - conditional-publisher:
-          - condition-kind: "file-exists"
-            on-evaluation-failure: "dont-run"
-            condition-filename: "unit_tests/run/run.sh"
-            condition-basedir: "workspace"
-
-            action:
-              - archive:
-                  artifacts: "unit_tests/**"
-                  latest-only: false
-                  allow-empty: true
-                  follow-symlinks: true
-
-      - archive:
-          artifacts: "lava.log, lava-*.log, tux.id, feedback.log, config_file.json, covtrace-*.log, trace_report/**"
-          latest-only: false
-          allow-empty: true
-          follow-symlinks: true
-
-      - groovy-postbuild:
-          script: !include-raw-verbatim:
-            - "tf-a-builder/postbuild.groovy"
