@@ -40,7 +40,7 @@
           tf_m_tests_branch: "tfa_ci_dep_revision"
 
           tf_m_extras_project: "TF-M/tf-m-extras"
-          tf_m_extra_branch: "tfa_ci_dep_revision"
+          tf_m_extras_branch: "tfa_ci_dep_revision"
 
           hafnium_project: "hafnium/hafnium"
           hafnium_branch: "master"

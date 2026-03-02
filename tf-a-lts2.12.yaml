@@ -18,7 +18,7 @@
           tf_m_tests_branch: "53ddc58dcd57e1f5cf658b316d7d735335d58570"
 
           tf_m_extras_project: "TF-M/tf-m-extras"
-          tf_m_extra_branch: "3ff04e40ff7f66c8cee087b6e5cbd8fb8c1bec01"
+          tf_m_extras_branch: "3ff04e40ff7f66c8cee087b6e5cbd8fb8c1bec01"
 
           hafnium_project: "hafnium/hafnium"
           hafnium_branch: "v{version}"
