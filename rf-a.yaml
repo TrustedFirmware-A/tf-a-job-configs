@@ -15,44 +15,44 @@
           label: "RF-A"
 
           downloads_space: "tf-a"
-          clones: "tf-a-ci-scripts,trusted-firmware-a,rusted-firmware-a"
+          default_clones: "tf-a-ci-scripts,trusted-firmware-a,rusted-firmware-a"
 
           armclang_version: "6.23"
           armclang_warehouse_version: "6.23/37"
 
-          config: "fvp,nil,fvp-rfa:fvp-rfa-fip.rfa"
-          config_desc: "0000%rfa-fvp%fvp-rfa,nil,nil,nil,fvp,nil:fvp-rfa-fip.rfa.test"
+          default_config: "fvp,nil,fvp-rfa:fvp-rfa-fip.rfa"
+          default_config_desc: "0000%rfa-fvp%fvp-rfa,nil,nil,nil,fvp,nil:fvp-rfa-fip.rfa.test"
 
-          project: "RF-A/rusted-firmware-a"
-          branch: "main"
+          default_gerrit_project: "RF-A/rusted-firmware-a"
+          default_gerrit_branch: "main"
 
-          tf_a_project: "TF-A/trusted-firmware-a"
-          tf_a_branch: "master"
-          tf_a_mbedtls_version: "3.6.5"
+          default_tf_a_project: "TF-A/trusted-firmware-a"
+          default_tf_a_branch: "master"
+          default_tf_a_mbedtls_version: "3.6.5"
 
-          rf_a_project: "${{GERRIT_PROJECT}}"
-          rf_a_branch: "${{GERRIT_REFSPEC}}"
+          default_rf_a_project: "${{GERRIT_PROJECT}}"
+          default_rf_a_branch: "${{GERRIT_REFSPEC}}"
 
-          tftf_project: "TF-A/tf-a-tests"
-          tftf_branch: "master"
+          default_tftf_project: "TF-A/tf-a-tests"
+          default_tftf_branch: "master"
 
-          tf_m_tests_project: "TF-M/tf-m-tests"
-          tf_m_tests_branch: "tfa_ci_dep_revision"
+          default_tf_m_tests_project: "TF-M/tf-m-tests"
+          default_tf_m_tests_branch: "tfa_ci_dep_revision"
 
-          tf_m_extras_project: "TF-M/tf-m-extras"
-          tf_m_extras_branch: "tfa_ci_dep_revision"
+          default_tf_m_extras_project: "TF-M/tf-m-extras"
+          default_tf_m_extras_branch: "tfa_ci_dep_revision"
 
-          hafnium_project: "hafnium/hafnium"
-          hafnium_branch: "master"
+          default_hafnium_project: "hafnium/hafnium"
+          default_hafnium_branch: "master"
 
-          tf_rmm_project: "TF-RMM/tf-rmm"
-          tf_rmm_branch: "main"
+          default_tf_rmm_project: "TF-RMM/tf-rmm"
+          default_tf_rmm_branch: "main"
 
-          tfut_project: "TF-A/tf-a-unit-tests"
-          tfut_branch: "main"
+          default_tfut_project: "TF-A/tf-a-unit-tests"
+          default_tfut_branch: "main"
 
-          tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
-          tf_a_ci_scripts_branch: "master"
+          default_tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
+          default_tf_a_ci_scripts_branch: "master"
 
-          tf_a_ci_jobs_project: "ci/tf-a-job-configs"
-          tf_a_ci_jobs_branch: "master"
+          default_tf_a_ci_jobs_project: "ci/tf-a-job-configs"
+          default_tf_a_ci_jobs_branch: "master"

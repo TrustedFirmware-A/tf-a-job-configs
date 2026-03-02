@@ -21,11 +21,11 @@
 
     parameters:
       - tf-a-clone-parameters:
-          projects: "{clones}"
+          projects: "{default_clones}"
 
       - string:
           name: "TEST_CONFIG"
-          default: "{config}"
+          default: "{default_config}"
 
           description: >
             Original test configuration passed by the gateway job, e.g.:
@@ -38,7 +38,7 @@
 
       - string:
           name: "TEST_DESC"
-          default: "{config_desc}"
+          default: "{default_config_desc}"
 
           description: >
             Expanded and normalized test configuration descriptor produced by
@@ -46,7 +46,7 @@
 
       - string:
           name: "GERRIT_PROJECT"
-          default: "{project}"
+          default: "{default_gerrit_project}"
 
           description: >
             Gerrit project that triggered the job, e.g.:
@@ -59,7 +59,7 @@
 
       - string:
           name: "GERRIT_BRANCH"
-          default: "{branch}"
+          default: "{default_gerrit_branch}"
 
           description: >
             Git branch targeted by the change under test, e.g.:
@@ -72,7 +72,7 @@
 
       - string:
           name: "GERRIT_REFSPEC"
-          default: "{branch}"
+          default: "{default_gerrit_branch}"
 
           description: >
             Git revision under test, e.g.:
@@ -86,7 +86,7 @@
 
       - string:
           name: "TF_GERRIT_PROJECT"
-          default: "{tf_a_project}"
+          default: "{default_tf_a_project}"
 
           description: >
             Gerrit project of the Trusted Firmware-A revision to build, e.g.:
@@ -98,7 +98,7 @@
 
       - string:
           name: "TF_GERRIT_REFSPEC"
-          default: "{tf_a_branch}"
+          default: "{default_tf_a_branch}"
 
           description: >
             Git revision of Trusted Firmware-A to build, e.g.:
@@ -112,7 +112,7 @@
 
       - string:
           name: "RF_GERRIT_PROJECT"
-          default: "{rf_a_project}"
+          default: "{default_rf_a_project}"
 
           description: >
             Gerrit project of the TF-A revision to build, e.g.:
@@ -124,7 +124,7 @@
 
       - string:
           name: "RFA_REFSPEC"
-          default: "{rf_a_branch}"
+          default: "{default_rf_a_branch}"
 
           description: >
             Git revision of RF-A to build, e.g.:
@@ -138,7 +138,7 @@
 
       - string:
           name: "TFTF_GERRIT_PROJECT"
-          default: "{tftf_project}"
+          default: "{default_tftf_project}"
 
           description: >
             Gerrit project of the TFTF revision to build, e.g.:
@@ -150,7 +150,7 @@
 
       - string:
           name: "TFTF_GERRIT_REFSPEC"
-          default: "{tftf_branch}"
+          default: "{default_tftf_branch}"
 
           description: >
             Git revision of TFTF to build, e.g.:
@@ -164,7 +164,7 @@
 
       - string:
           name: "TF_M_TESTS_GERRIT_PROJECT"
-          default: "{tf_m_tests_project}"
+          default: "{default_tf_m_tests_project}"
 
           description: >
             Gerrit project of the TF-M Tests revision to build, e.g.:
@@ -176,7 +176,7 @@
 
       - string:
           name: "TF_M_TESTS_GERRIT_REFSPEC"
-          default: "{tf_m_tests_branch}"
+          default: "{default_tf_m_tests_branch}"
 
           description: >
             Git revision of the TF-M Tests to build, e.g.:
@@ -190,7 +190,7 @@
 
       - string:
           name: "TF_M_EXTRAS_GERRIT_PROJECT"
-          default: "{tf_m_extras_project}"
+          default: "{default_tf_m_extras_project}"
 
           description: >
             Gerrit project of the TF-M Extras revision to build, e.g.:
@@ -202,7 +202,7 @@
 
       - string:
           name: "TF_M_EXTRAS_GERRIT_REFSPEC"
-          default: "{tf_m_extras_branch}"
+          default: "{default_tf_m_extras_branch}"
 
           description: >
             Git revision of the TF-M Extras to build, e.g.:
@@ -216,7 +216,7 @@
 
       - string:
           name: "SPM_GERRIT_PROJECT"
-          default: "{hafnium_project}"
+          default: "{default_hafnium_project}"
 
           description: >
             Gerrit project of the Hafnium revision to build, e.g.:
@@ -228,7 +228,7 @@
 
       - string:
           name: "SPM_REFSPEC"
-          default: "{hafnium_branch}"
+          default: "{default_hafnium_branch}"
 
           description: >
             Git revision of Hafnium to build, e.g.:
@@ -242,7 +242,7 @@
 
       - string:
           name: "RMM_GERRIT_PROJECT"
-          default: "{tf_rmm_project}"
+          default: "{default_tf_rmm_project}"
 
           description: >
             Gerrit project of the TF-RMM revision to build, e.g.:
@@ -254,7 +254,7 @@
 
       - string:
           name: "RMM_REFSPEC"
-          default: "{tf_rmm_branch}"
+          default: "{default_tf_rmm_branch}"
 
           description: >
             Git revision of TF-RMM to build, e.g.:
@@ -268,7 +268,7 @@
 
       - string:
           name: "TFUT_GERRIT_PROJECT"
-          default: "{tfut_project}"
+          default: "{default_tfut_project}"
 
           description: >
             Gerrit project of the TFUT revision to build, e.g.:
@@ -280,7 +280,7 @@
 
       - string:
           name: "TFUT_GERRIT_REFSPEC"
-          default: "{tfut_branch}"
+          default: "{default_tfut_branch}"
 
           description: >
             Git revision of TFUT to build, e.g.:
@@ -294,7 +294,7 @@
 
       - string:
           name: "CI_GERRIT_PROJECT"
-          default: "{tf_a_ci_scripts_project}"
+          default: "{default_tf_a_ci_scripts_project}"
 
           description: >
             Gerrit project of the TF-A CI scripts revision to build, e.g.:
@@ -306,7 +306,7 @@
 
       - string:
           name: "CI_REFSPEC"
-          default: "{tf_a_ci_scripts_branch}"
+          default: "{default_tf_a_ci_scripts_branch}"
 
           description: >
             Git revision of the TF-A CI scripts to build, e.g.:
@@ -320,7 +320,7 @@
 
       - string:
           name: "JOBS_PROJECT"
-          default: "{tf_a_ci_jobs_project}"
+          default: "{default_tf_a_ci_jobs_project}"
 
           description: >
             Gerrit project of the TF-A CI jobs revision to build, e.g.:
@@ -332,7 +332,7 @@
 
       - string:
           name: "JOBS_REFSPEC"
-          default: "{tf_a_ci_jobs_branch}"
+          default: "{default_tf_a_ci_jobs_branch}"
 
           description: >
             Git revision of the TF-A CI jobs to build, e.g.:
@@ -353,7 +353,7 @@
 
       - string:
           name: "MBEDTLS_URL"
-          default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-{tf_a_mbedtls_version}.tar.gz"
+          default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-{default_tf_a_mbedtls_version}.tar.gz"
 
           description: >
             URL of the Mbed TLS tarball to use when building TF-A.
