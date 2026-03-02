@@ -37,9 +37,6 @@
           default_tfut_project: "TF-A/tf-a-unit-tests"
           default_tfut_branch: "main"
 
-          default_tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
-          default_tf_a_ci_scripts_branch: "master"
-
       - "tf-a-lts2.8":
           label: "TF-A LTS v2.8"
 
@@ -74,9 +71,6 @@
 
           default_tfut_project: "TF-A/tf-a-unit-tests"
           default_tfut_branch: "main"
-
-          default_tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
-          default_tf_a_ci_scripts_branch: "lts-v2.8"
 
       - "tf-a-lts2.10":
           label: "TF-A LTS v2.10"
@@ -113,9 +107,6 @@
           default_tfut_project: "TF-A/tf-a-unit-tests"
           default_tfut_branch: "main"
 
-          default_tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
-          default_tf_a_ci_scripts_branch: "lts-v2.10"
-
       - "tf-a-lts2.12":
           label: "TF-A LTS v2.12"
 
@@ -151,9 +142,6 @@
           default_tfut_project: "TF-A/tf-a-unit-tests"
           default_tfut_branch: "main"
 
-          default_tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
-          default_tf_a_ci_scripts_branch: "lts-v2.12"
-
       - "tf-a-lts2.14":
           label: "TF-A LTS v2.14"
 
@@ -188,9 +176,6 @@
 
           default_tfut_project: "TF-A/tf-a-unit-tests"
           default_tfut_branch: "tfaut-v0.1"
-
-          default_tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
-          default_tf_a_ci_scripts_branch: "lts-v2.14"
 
     views:
       - tf-a-view:
@@ -232,6 +217,9 @@
 
           default_rf_a_project: "RF-A/rusted-firmware-a"
           default_rf_a_branch: "main"
+
+          default_tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
+          default_tf_a_ci_scripts_branch: "master"
 
           default_tf_a_ci_jobs_project: "ci/tf-a-job-configs"
           default_tf_a_ci_jobs_branch: "master"

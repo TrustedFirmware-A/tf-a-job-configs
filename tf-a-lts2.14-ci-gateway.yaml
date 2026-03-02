@@ -118,7 +118,7 @@
 
       - string:
           name: "CI_REFSPEC"
-          default: "lts-v2.14"
+          default: "master"
 
           description: |
             tf-a-ci-scripts refspec to use. The lts-v2.14 branch is used by default.
@@ -170,7 +170,7 @@
           branches: ["refs/remotes/origin/${{CI_REFSPEC}}"]
 
           changelog-against:
-            branch: "lts-v2.14"
+            branch: "master"
 
           extensions:
             - honor-refspec: true

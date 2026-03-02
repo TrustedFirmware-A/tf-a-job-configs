@@ -95,7 +95,7 @@
 
       - string:
           name: "CI_REFSPEC"
-          default: "lts-v2.10"
+          default: "master"
 
       - string:
           name: "JOBS_PROJECT"
