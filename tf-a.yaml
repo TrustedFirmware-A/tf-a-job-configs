@@ -1,5 +1,6 @@
 - project:
     name: "tf-a"
+    base: "tf-a"
 
     views:
       - tf-a-view:
@@ -9,7 +10,6 @@
 
     jobs:
       - tf-a-builder:
-          name: "tf-a-builder"
           node: "docker-amd64-tf-a-jammy"
 
           label: "TF-A"

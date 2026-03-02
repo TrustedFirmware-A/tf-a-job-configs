@@ -2,7 +2,7 @@
     id: "tf-a-builder"
     project-type: "freestyle"
 
-    name: "{name}"
+    name: "{base}-builder"
     node: "{node}"
 
     description: >
