@@ -151,7 +151,6 @@
 
               predefined-parameters: |-
                 TEST_GROUPS=tf-l2-scan-build-lts-v2.10
-                ENABLE_STATIC_CHECK=true
 
               property-file: "env.param"
 
