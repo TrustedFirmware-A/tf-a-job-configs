@@ -100,6 +100,26 @@
           description: "Trusted Firmware-A LTS"
           regex: "^tf-a-lts.*$"
 
+      - tf-a-view:
+          name: "TF-A-LTS2.8"
+          description: "Trusted Firmware-A LTS v2.8"
+          regex: "^tf-a-lts2[.]8(-.*)?$"
+
+      - tf-a-view:
+          name: "TF-A-LTS2.10"
+          description: "Trusted Firmware-A LTS v2.10"
+          regex: "^tf-a-lts2[.]10(-.*)?$"
+
+      - tf-a-view:
+          name: "TF-A-LTS2.12"
+          description: "Trusted Firmware-A LTS v2.12"
+          regex: "^tf-a-lts2[.]12(-.*)?$"
+
+      - tf-a-view:
+          name: "TF-A-LTS2.14"
+          description: "Trusted Firmware-A LTS v2.14"
+          regex: "^tf-a-lts2[.]14(-.*)?$"
+
     jobs:
       - tf-a-builder:
           node: "docker-amd64-tf-a-lts{version}-jammy"

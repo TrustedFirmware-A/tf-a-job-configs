@@ -1,8 +1,0 @@
-- project:
-    name: "tf-a-lts2.14"
-
-    version: "2.14"
-    version_regex: "2[.]14"
-
-    views:
-      - tf-a-lts-view:
