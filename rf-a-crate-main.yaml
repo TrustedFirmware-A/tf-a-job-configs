@@ -1,10 +1,11 @@
-- job:
-    name: "rf-a-crate-firmware-development-guide-main"
+- job-template:
+    id: "rf-a-crate-main"
+    name: "rf-a-crate-{crate}-main"
     node: "docker-amd64-tf-a-jammy"
     project-type: "multijob"
     concurrent: true
     disabled: false
-    description: "Main CI job for the firmware-development-guide crate"
+    description: "Main CI job for the {crate_name} crate"
 
     properties:
       - "tf-a-clone-properties"
@@ -32,7 +33,7 @@
                   branch-pattern: "main"
 
               project-compare-type: "PLAIN"
-              project-pattern: "{gerrit_project_prefix}rust-spmc/firmware-development-guide"
+              project-pattern: "{gerrit_project_prefix}{crate_project}/{crate_name}"
 
           trigger-on:
             - patchset-created-event:
@@ -63,13 +64,13 @@
 
     parameters:
       - tf-a-clone-parameters:
-          projects: "tf-a-ci-scripts,firmware-development-guide"
+          projects: "tf-a-ci-scripts,{crate_name}"
 
       # GERRIT_{PROJECT,BRANCH,REFSPEC} are set when triggered by a Gerrit
       # patchset - defaults below are for manual triggers
       - string:
           name: "GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}rust-spmc/firmware-development-guide"
+          default: "{gerrit_project_prefix}{crate_project}/{crate_name}"
 
       - string:
           name: "GERRIT_BRANCH"
@@ -83,11 +84,11 @@
             'e.g. refs/changes/13/31138/1'
 
       - string:
-          name: "ARM_FW_DEV_GUIDE_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}rust-spmc/firmware-development-guide"
+          name: "{crate_env_prefix}_GERRIT_PROJECT"
+          default: "{gerrit_project_prefix}{crate_project}/{crate_name}"
 
       - string:
-          name: "ARM_FW_DEV_GUIDE_GERRIT_REFSPEC"
+          name: "{crate_env_prefix}_GERRIT_REFSPEC"
           default: "${{GERRIT_REFSPEC}}"
 
           description: |
@@ -117,7 +118,8 @@
 
       - string:
           name: "TEST_FEATURES"
-          description: "Features the firmware-development-guide crate will be tested against"
+          default: "{default_test_features}"
+          description: "Features the {crate_name} crate will be tested against"
 
     wrappers:
       - credentials-binding:
@@ -134,8 +136,8 @@
           #!/bin/bash
           set -e
           cat << EOF > tf-a-env.param
-          ARM_FW_DEV_GUIDE_GERRIT_PROJECT=${{GERRIT_PROJECT}}
-          ARM_FW_DEV_GUIDE_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
+          {crate_env_prefix}_GERRIT_PROJECT=${{GERRIT_PROJECT}}
+          {crate_env_prefix}_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
           EOF
 
       - multijob:
@@ -148,8 +150,8 @@
               kill-phase-on: "NEVER"
 
               predefined-parameters: |
-                TEST_REPO_NAME=firmware-development-guide
-                TEST_REPO_PROJECT=rust-spmc
+                TEST_REPO_NAME={crate_name}
+                TEST_REPO_PROJECT={crate_project}
                 TEST_FEATURES=${{TEST_FEATURES}}
 
               property-file: "tf-a-env.param"

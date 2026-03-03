@@ -6,3 +6,119 @@
           name: "Arm-Firmware-Crates"
           description: "Arm Firmware crates"
           regex: "^rf-a-crate(-.*)?$"
+
+    crate:
+      - "arm-xlat":
+          crate_name: "arm-xlat"
+          crate_project: "rust-spmc"
+          crate_env_prefix: "ARM_XLAT"
+
+          default_test_features: ""
+
+      - "cci":
+          crate_name: "arm-cci"
+          crate_project: "arm-firmware-crates"
+          crate_env_prefix: "ARM_CCI"
+
+          default_test_features: ""
+
+      - "ffa":
+          crate_name: "arm-ffa"
+          crate_project: "arm-firmware-crates"
+          crate_env_prefix: "ARM_FFA"
+
+          default_test_features: ""
+
+      - "firmware-development-guide":
+          crate_name: "firmware-development-guide"
+          crate_project: "rust-spmc"
+          crate_env_prefix: "ARM_FW_DEV_GUIDE"
+
+          default_test_features: ""
+
+      - "fvp-base-pac":
+          crate_name: "arm-fvp-base-pac"
+          crate_project: "arm-firmware-crates"
+          crate_env_prefix: "ARM_FVP_BASE_PAC"
+
+          default_test_features: ""
+
+      - "generic-timer":
+          crate_name: "arm-generic-timer"
+          crate_project: "arm-firmware-crates"
+          crate_env_prefix: "ARM_GENERIC_TIMER"
+
+          default_test_features: ""
+
+      - "gic":
+          crate_name: "arm-gic"
+          crate_project: "arm-firmware-crates"
+          crate_env_prefix: "ARM_GIC"
+
+          default_test_features: "fakes"
+
+      - "mhu":
+          crate_name: "arm-mhu"
+          crate_project: "arm-firmware-crates"
+          crate_env_prefix: "ARM_MHU"
+
+          default_test_features: ""
+
+      - "pl011-uart":
+          crate_name: "arm-pl011-uart"
+          crate_project: "arm-firmware-crates"
+          crate_env_prefix: "ARM_PL011_UART"
+
+          default_test_features: ""
+
+      - "pl061":
+          crate_name: "arm-pl061"
+          crate_project: "arm-firmware-crates"
+          crate_env_prefix: "ARM_PL061"
+
+          default_test_features: ""
+
+      - "psci":
+          crate_name: "arm-psci"
+          crate_project: "arm-firmware-crates"
+          crate_env_prefix: "ARM_PSCI"
+
+          default_test_features: ""
+
+      - "scmi":
+          crate_name: "arm-scmi"
+          crate_project: "arm-firmware-crates"
+          crate_env_prefix: "ARM_SCMI"
+
+          default_test_features: ""
+
+      - "sp805":
+          crate_name: "arm-sp805"
+          crate_project: "arm-firmware-crates"
+          crate_env_prefix: "ARM_SP805"
+
+          default_test_features: ""
+
+      - "sysregs":
+          crate_name: "arm-sysregs"
+          crate_project: "arm-firmware-crates"
+          crate_env_prefix: "ARM_SYSREGS"
+
+          default_test_features: "fakes,el3"
+
+      - "tf-firmware-handoff":
+          crate_name: "tf-firmware-handoff"
+          crate_project: "shared"
+          crate_env_prefix: "TF_FIRMWARE_HANDOFF"
+
+          default_test_features: ""
+
+      - "tzc":
+          crate_name: "arm-tzc"
+          crate_project: "arm-firmware-crates"
+          crate_env_prefix: "ARM_TZC"
+
+          default_test_features: ""
+
+    jobs:
+      - "rf-a-crate-main"
