@@ -210,6 +210,7 @@
 
       - archive:
           artifacts: "report.json, report.html, merge/outdir/**"
+          follow-symlinks: true
 
       - groovy-postbuild:
           script: !include-raw-verbatim:
