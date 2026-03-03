@@ -27,10 +27,16 @@
           name: "TEST_GROUPS"
           default: "{default_groups}"
 
-          description: |
-            White space separated list of test configs: can be mix of specific
-            test configs (e.g., <code>l1/fvp-default:fvp-linux-default</code>) and
-            group names (e.g., <code>l1 l2</code>).
+          description: >
+            Whitespace-separated list of test configurations and/or pre-defined
+            test groups to run, e.g.:
+
+            <ul>
+              <li><code>tf-l1-build-fvp</code></li>
+              <li><code>tf-l1-build-fvp tftf-l1-fvp</code></li>
+              <li><code>tf-l1-build-fvp tftf-l1-fvp/fvp-default,fvp-default:fvp-tftf-fip.tftf-aemva</code></li>
+              <li><code>tf-l1-build-fvp/fvp-default:nil tftf-l1-fvp/fvp-default,fvp-default:fvp-tftf-fip.tftf-aemva</code></li>
+            </ul>
 
       - tf-a-builder-parameters:
           default_config: "{default_config}"
