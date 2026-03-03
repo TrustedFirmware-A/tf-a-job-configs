@@ -46,9 +46,6 @@
           basedir: "tf-a-ci-scripts"
 
     builders:
-      - tf-a-clone:
-          projects: "${{CLONE_REPOS}}"
-
       - shell: |
           mkdir -p output
 
@@ -59,5 +56,3 @@
     publishers:
       - archive:
           artifacts: "output.*"
-
-    wrappers:
