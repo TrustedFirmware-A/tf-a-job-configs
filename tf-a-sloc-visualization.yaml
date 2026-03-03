@@ -13,9 +13,6 @@
           days-to-keep: 30
 
     parameters:
-      - tf-a-clone-parameters:
-          projects: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
-
       - string:
           name: "GERRIT_PROJECT"
           default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
@@ -25,40 +22,28 @@
           default: "master"
 
       - string:
-          name: "CI_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}ci/tf-a-ci-scripts"
-
-      - string:
-          name: "CI_REFSPEC"
-          default: "master"
-
-      - string:
-          name: "JOBS_PROJECT"
-          default: "{gerrit_project_prefix}ci/tf-a-job-configs.git"
-
-      - string:
-          name: "JOBS_REFSPEC"
-          default: "master"
-
-          description: |
-            tf-a-job-configs refspec to use. The master branch is used by default.
-
-      - string:
-          name: "TF_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
-
-      - string:
-          name: "TF_GERRIT_BRANCH"
-          default: "master"
-
-      - string:
-          name: "TF_GERRIT_REFSPEC"
-          default: "master"
-
-      - string:
           name: "DIRECTORIES"
           default: ". ./drivers ./plat ./tools"
           description: "List of directories to analyze."
+
+    scm:
+      - git:
+          url: "ssh://review.trustedfirmware.org:29418/${{GERRIT_PROJECT}}"
+          credentials-id: "TFA_CI_BOT_USER_SSH_KEY"
+
+          refspec: "+${{GERRIT_REFSPEC}}:refs/remotes/origin/${{GERRIT_REFSPEC}}"
+          branches: ["refs/remotes/origin/${{GERRIT_REFSPEC}}"]
+          basedir: "trusted-firmware-a"
+
+          extensions:
+            - honor-refspec: true
+
+      - git:
+          url: "ssh://review.trustedfirmware.org:29418/ci/tf-a-ci-scripts"
+          credentials-id: "TFA_CI_BOT_USER_SSH_KEY"
+
+          branches: ["master"]
+          basedir: "tf-a-ci-scripts"
 
     builders:
       - tf-a-clone:
