@@ -13,44 +13,19 @@
           days-to-keep: 30
 
     parameters:
-      - tf-a-clone-parameters:
-          projects: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
-
-      - string:
-          name: "GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
-
-      - string:
-          name: "GERRIT_REFSPEC"
-          default: "master"
-
-      - string:
-          name: "CI_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}ci/tf-a-ci-scripts"
-
-      - string:
-          name: "CI_REFSPEC"
-          default: "master"
-
-      - string:
-          name: "JOBS_PROJECT"
-          default: "{gerrit_project_prefix}ci/tf-a-job-configs.git"
-
-      - string:
-          name: "JOBS_REFSPEC"
-          default: "master"
-
-          description: |
-            tf-a-job-configs refspec to use. The master branch is used by default.
-
       - string:
           name: "FILTER"
           description: "Optional job/group filter string (e.g. <code>juno</code>)."
 
-    builders:
-      - tf-a-clone:
-          projects: "${{CLONE_REPOS}}"
+    scm:
+      - git:
+          url: "ssh://review.trustedfirmware.org:29418/ci/tf-a-ci-scripts"
+          credentials-id: "TFA_CI_BOT_USER_SSH_KEY"
 
+          branches: ["master"]
+          basedir: "tf-a-ci-scripts"
+
+    builders:
       - shell: |
           mkdir -p output
 
@@ -61,5 +36,3 @@
     publishers:
       - archive:
           artifacts: "output.*"
-
-    wrappers:
