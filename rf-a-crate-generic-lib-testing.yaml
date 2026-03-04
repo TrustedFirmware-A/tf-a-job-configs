@@ -15,9 +15,6 @@
           days-to-keep: 14
 
     parameters:
-      - tf-a-clone-parameters:
-          projects: "tf-a-ci-scripts,rusted-firmware-a"
-
       - string:
           name: "GERRIT_PROJECT"
           default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
