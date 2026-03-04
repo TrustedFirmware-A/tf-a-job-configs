@@ -27,14 +27,6 @@
           default: "main"
 
       - string:
-          name: "RF_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
-
-      - string:
-          name: "RFA_REFSPEC"
-          default: "main"
-
-      - string:
           name: "CI_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}ci/tf-a-ci-scripts"
 
