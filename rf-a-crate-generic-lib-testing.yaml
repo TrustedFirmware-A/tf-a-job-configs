@@ -35,10 +35,6 @@
           default: "master"
 
       - string:
-          name: "GERRIT_BRANCH"
-          default: "main"
-
-      - string:
           name: "TEST_REPO_PROJECT"
           default: "arm-firmware-crates"
           description: "Name of the project where the remote repository is located."
