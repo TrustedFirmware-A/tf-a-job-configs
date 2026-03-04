@@ -79,17 +79,6 @@
             'e.g. refs/changes/13/31138/1'
 
       - string:
-          name: "{crate_env_prefix}_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}{crate_project}/{crate_name}"
-
-      - string:
-          name: "{crate_env_prefix}_GERRIT_REFSPEC"
-          default: "${{GERRIT_REFSPEC}}"
-
-          description: |
-            'do-not-amend: used by scripts/clone.sh to fetch the correct Gerrit patchset - use GERRIT_REFSPEC instead'
-
-      - string:
           name: "CI_GERRIT_PROJECT"
           default: "{gerrit_project_prefix}ci/tf-a-ci-scripts"
 
