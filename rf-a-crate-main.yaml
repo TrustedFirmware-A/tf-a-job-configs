@@ -61,15 +61,11 @@
           silent-start: false
 
     parameters:
-      # GERRIT_{PROJECT,BRANCH,REFSPEC} are set when triggered by a Gerrit
+      # GERRIT_{PROJECT,REFSPEC} are set when triggered by a Gerrit
       # patchset - defaults below are for manual triggers
       - string:
           name: "GERRIT_PROJECT"
           default: "{gerrit_project_prefix}{crate_project}/{crate_name}"
-
-      - string:
-          name: "GERRIT_BRANCH"
-          default: "main"
 
       - string:
           name: "GERRIT_REFSPEC"
