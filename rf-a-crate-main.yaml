@@ -8,8 +8,6 @@
     description: "Main CI job for the {crate_name} crate"
 
     properties:
-      - "tf-a-clone-properties"
-
       - tf-a-ci-scripts:
           download_server_url: "https://downloads.trustedfirmware.org"
           download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a"
@@ -63,9 +61,6 @@
           silent-start: false
 
     parameters:
-      - tf-a-clone-parameters:
-          projects: "tf-a-ci-scripts,{crate_name}"
-
       # GERRIT_{PROJECT,BRANCH,REFSPEC} are set when triggered by a Gerrit
       # patchset - defaults below are for manual triggers
       - string:
