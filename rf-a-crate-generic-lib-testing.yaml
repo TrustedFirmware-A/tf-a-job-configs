@@ -70,14 +70,30 @@
           name: "TEST_FEATURES"
           description: "Features against which the library will be tested"
 
-    wrappers:
-      - credentials-binding:
-          - ssh-user-private-key:
-              credential-id: "TFA_CI_BOT_USER_SSH_KEY"
-              key-file-variable: "CI_BOT_KEY"
-              username-variable: "CI_BOT_USERNAME"
-              passphrase-variable: ""
+    scm:
+      - git:
+          url: "ssh://review.trustedfirmware.org:29418/${{CI_GERRIT_PROJECT}}"
+          credentials-id: "TFA_CI_BOT_USER_SSH_KEY"
+          basedir: "tf-a-ci-scripts"
 
+          refspec: "+${{CI_REFSPEC}}:refs/remotes/origin/${{CI_REFSPEC}}"
+          branches: ["refs/remotes/origin/${{CI_REFSPEC}}"]
+
+          extensions:
+            - honor-refspec: true
+
+      - git:
+          url: "ssh://review.trustedfirmware.org:29418/${{GERRIT_PROJECT}}"
+          credentials-id: "TFA_CI_BOT_USER_SSH_KEY"
+          basedir: "${{TEST_REPO_NAME}}"
+
+          refspec: "+${{GERRIT_REFSPEC}}:refs/remotes/origin/${{GERRIT_REFSPEC}}"
+          branches: ["refs/remotes/origin/${{GERRIT_REFSPEC}}"]
+
+          extensions:
+            - honor-refspec: true
+
+    wrappers:
       - "timestamps"
 
       - timeout:
@@ -85,17 +101,9 @@
           fail: true
 
     builders:
-      - tf-a-clone:
-          projects: "${{CLONE_REPOS}}"
-
       - shell: |
           #!/bin/bash
           set -e
-          cat << EOF > env.param
-          GERRIT_PROJECT=${{RF_GERRIT_PROJECT}}
-          GERRIT_BRANCH=${{GERRIT_BRANCH}}
-          GERRIT_REFSPEC=${{RFA_REFSPEC}}
-          EOF
 
           cd ${{WORKSPACE}}
           # Executed project-related next checks: platform independent tests with a generic platform.
