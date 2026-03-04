@@ -109,14 +109,6 @@
       - "timestamps"
 
     builders:
-      - shell: |
-          #!/bin/bash
-          set -e
-          cat << EOF > tf-a-env.param
-          {crate_env_prefix}_GERRIT_PROJECT=${{GERRIT_PROJECT}}
-          {crate_env_prefix}_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
-          EOF
-
       - multijob:
           name: "Platform independent tests"
           condition: "COMPLETED"
@@ -130,5 +122,3 @@
                 TEST_REPO_NAME={crate_name}
                 TEST_REPO_PROJECT={crate_project}
                 TEST_FEATURES=${{TEST_FEATURES}}
-
-              property-file: "tf-a-env.param"
