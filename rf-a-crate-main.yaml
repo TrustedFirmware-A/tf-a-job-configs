@@ -100,10 +100,13 @@
 
           projects:
             - name: "rf-a-crate-generic-lib-testing"
-              current-parameters: true
               kill-phase-on: "NEVER"
 
               predefined-parameters: |
+                GERRIT_PROJECT=${{GERRIT_PROJECT}}
+                GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
+                CI_GERRIT_PROJECT=${{CI_GERRIT_PROJECT}}
+                CI_REFSPEC=${{CI_REFSPEC}}
                 TEST_REPO_NAME={crate_name}
                 TEST_REPO_PROJECT={crate_project}
                 TEST_FEATURES=${{TEST_FEATURES}}
