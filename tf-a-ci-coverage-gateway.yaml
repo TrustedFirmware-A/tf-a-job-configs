@@ -16,12 +16,6 @@
       - build-discarder:
           days-to-keep: 30
 
-      - throttle:
-          option: "project"
-          enabled: true
-          max-per-node: 3
-          max-total: 10
-
     wrappers:
       - credentials-binding:
           - ssh-user-private-key:
