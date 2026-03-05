@@ -93,11 +93,7 @@
       - shell: |
           #!/bin/bash
           set -e
-          cat << EOF > env.param
-          RFA_REFSPEC=${{RFA_REFSPEC}}
-          GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
-          GERRIT_BRANCH=${{GERRIT_BRANCH}}
-          EOF
+
           cd ${{WORKSPACE}}/rusted-firmware-a
           # Executed project-related static checks: copyright, unix line endings,
           # formatting and lints

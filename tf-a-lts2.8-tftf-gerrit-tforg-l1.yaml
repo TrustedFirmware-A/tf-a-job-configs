@@ -78,18 +78,6 @@
       - "timestamps"
 
     builders:
-      - shell: |
-          #!/bin/bash
-          set -e
-          cat << EOF > env.param
-          GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
-          GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}}
-          GERRIT_HOST=${{GERRIT_HOST}}
-          TFTF_GERRIT_PROJECT=${{GERRIT_PROJECT}}
-          TFTF_GERRIT_BRANCH=${{GERRIT_BRANCH}}
-          TFTF_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
-          EOF
-
       - multijob:
           condition: "COMPLETED"
           name: "Build and static checks"
@@ -98,7 +86,6 @@
             - kill-phase-on: "NEVER"
               name: "tf-a-static-checks"
               current-parameters: true
-              property-file: "env.param"
 
       - multijob:
           condition: "COMPLETED"
@@ -112,8 +99,6 @@
               predefined-parameters: |
                 TEST_GROUPS=tftf-l1-check-docs
 
-              property-file: "env.param"
-
       - multijob:
           condition: "COMPLETED"
           name: "Build TF-A-Tests"
@@ -126,8 +111,6 @@
               predefined-parameters: |
                 TEST_GROUPS=tftf-l1-build
 
-              property-file: "env.param"
-
       - multijob:
           condition: "COMPLETED"
           name: "Basic TF-A-Tests test cases"
@@ -139,8 +122,6 @@
 
               predefined-parameters: |
                 TEST_GROUPS=tftf-l1-fvp-lts-v2.8
-
-              property-file: "env.param"
 
     triggers:
       - gerrit:

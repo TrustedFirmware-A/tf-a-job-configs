@@ -117,10 +117,6 @@
       - shell: |
           #!/bin/bash
           set -ex
-          cat << EOF > tf-a-env.param
-          RF_GERRIT_PROJECT=${{GERRIT_PROJECT}}
-          RFA_REFSPEC=${{GERRIT_REFSPEC}}
-          EOF
 
           cd ${{WORKSPACE}}/rusted-firmware-a
 

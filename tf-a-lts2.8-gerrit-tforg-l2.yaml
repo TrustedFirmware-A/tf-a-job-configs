@@ -77,18 +77,6 @@
       - "timestamps"
 
     builders:
-      - shell: |
-          #!/bin/bash
-          set -e
-          cat << EOF > env.param
-          GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
-          GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}}
-          GERRIT_HOST=${{GERRIT_HOST}}
-          TF_GERRIT_PROJECT=${{GERRIT_PROJECT}}
-          TF_GERRIT_BRANCH=${{GERRIT_BRANCH}}
-          TF_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
-          EOF
-
       - multijob:
           condition: "COMPLETED"
           name: "Carry out level 1 tests"
@@ -97,7 +85,6 @@
             - kill-phase-on: "NEVER"
               name: "tf-a-lts2.8-gerrit-tforg-l1"
               current-parameters: true
-              property-file: "env.param"
 
       - multijob:
           condition: "COMPLETED"
@@ -111,8 +98,6 @@
               predefined-parameters: |
                 TEST_GROUPS=tf-l2-build-fvp-lts-v2.8 tf-l2-build-juno-lts-v2.8
 
-              property-file: "env.param"
-
       - multijob:
           condition: "COMPLETED"
           name: "TFTF tests"
@@ -125,8 +110,6 @@
               predefined-parameters: |
                 TEST_GROUPS=tftf-l1-fvp-lts-v2.8 tftf-l1-juno-lts-v2.8 tftf-l2-fvp-auxiliary-lts-v2.8 tftf-l2-fvp-dynamiq-lts-v2.8 tftf-l2-fwu-lts-v2.8 tftf-l2-fvp-lts-v2.8
 
-              property-file: "env.param"
-
       - multijob:
           condition: "COMPLETED"
           name: "Boot up to the Linux shell prompt"
@@ -138,8 +121,6 @@
 
               predefined-parameters: |
                 TEST_GROUPS=tf-l2-boot-tests-aarch32-lts-v2.8 tf-l2-boot-tests-bl2_el3-lts-v2.8 tf-l2-boot-tests-cortex-lts-v2.8 tf-l2-boot-tests-juno-lts-v2.8 tf-l2-boot-tests-latest-lts-v2.8 tf-l2-boot-tests-misc-lts-v2.8 tf-l2-boot-tests-rootfs-lts-v2.8 tf-l2-boot-tests-spm-mm-lts-v2.8 spm-l2-boot-tests-lts-v2.8
-
-              property-file: "env.param"
 
       - conditional-step:
           condition-command: '[ "$NOMINATION_FILE" ]'
@@ -158,8 +139,6 @@
 
                     predefined-parameters: |
                       TEST_GROUPS=@$NOMINATION_FILE
-
-                    property-file: "env.param"
 
     triggers:
       - gerrit:

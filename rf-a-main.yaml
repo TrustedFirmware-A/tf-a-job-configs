@@ -102,18 +102,6 @@
       - "timestamps"
 
     builders:
-      - shell: |
-          #!/bin/bash
-          set -e
-          cat << EOF > tf-a-env.param
-          RF_GERRIT_PROJECT=${{GERRIT_PROJECT}}
-          RFA_REFSPEC=${{RFA_REFSPEC}}
-          GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
-          GERRIT_BRANCH=${{GERRIT_BRANCH}}
-          TF_GERRIT_PROJECT=${{GERRIT_PROJECT_PREFIX:-}}TF-A/trusted-firmware-a
-          TF_GERRIT_REFSPEC=${{TF_GERRIT_REFSPEC}}
-          EOF
-
       - multijob:
           name: "Lint commit messages"
           condition: "COMPLETED"
@@ -136,26 +124,16 @@
               current-parameters: true
               kill-phase-on: "NEVER"
 
-              predefined-parameters: |
-                GERRIT_BRANCH=${{GERRIT_BRANCH}}
-                RFA_REFSPEC=${{RFA_REFSPEC}}
-                GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
-
-              property-file: "tf-a-env.param"
-
       - multijob:
           name: "Platform independent tests"
           condition: "COMPLETED"
 
           projects:
             - name: "rf-a-crate-generic-lib-testing"
+              current-parameters: true
               kill-phase-on: "NEVER"
 
               predefined-parameters: |
-                GERRIT_PROJECT=${{GERRIT_PROJECT}}
-                GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
-                CI_GERRIT_PROJECT=${{CI_GERRIT_PROJECT}}
-                CI_REFSPEC=${{CI_REFSPEC}}
                 TEST_REPO_NAME=rusted-firmware-a
                 TEST_REPO_PROJECT=RF-A
 
@@ -171,9 +149,6 @@
 
               predefined-parameters: |
                 TEST_GROUPS=rfa-build
-                RFA_REFSPEC=$RFA_REFSPEC
-
-              property-file: "tf-a-env.param"
 
       - multijob:
           name: "FVP Tests"
@@ -187,6 +162,3 @@
 
               predefined-parameters: |
                 TEST_GROUPS=rfa-fvp
-                RFA_REFSPEC=$RFA_REFSPEC
-
-              property-file: "tf-a-env.param"

@@ -84,9 +84,6 @@
           set -e
           if [[ "${{GERRIT_PROJECT}}" =~ (next/)?TF-A/trusted-firmware-a ]]; then
           cat <<EOF > env.param
-          GERRIT_PROJECT=${{TF_GERRIT_PROJECT}}
-          GERRIT_BRANCH=${{TF_GERRIT_BRANCH}}
-          GERRIT_REFSPEC=${{TF_GERRIT_REFSPEC}}
           TEST_GROUPS=tf-l2-scan-build
           EOF
           fi

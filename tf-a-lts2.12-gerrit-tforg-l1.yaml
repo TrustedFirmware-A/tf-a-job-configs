@@ -78,18 +78,6 @@
       - "timestamps"
 
     builders:
-      - shell: |
-          #!/bin/bash
-          set -e
-          cat << EOF > env.param
-          GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
-          GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}}
-          GERRIT_HOST=${{GERRIT_HOST}}
-          TF_GERRIT_PROJECT=${{GERRIT_PROJECT}}
-          TF_GERRIT_BRANCH=${{GERRIT_BRANCH}}
-          TF_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
-          EOF
-
       - multijob:
           name: "Lint commit messages"
           condition: "COMPLETED"
@@ -116,8 +104,6 @@
               predefined-parameters: |-
                 TEST_GROUPS=tf-l2-scan-build-lts-v2.12
 
-              property-file: "env.param"
-
       - multijob:
           condition: "COMPLETED"
           name: "Run doc build check"
@@ -130,8 +116,6 @@
               predefined-parameters: |
                 TEST_GROUPS=tf-l1-check-docs-lts-v2.12
 
-              property-file: "env.param"
-
       - multijob:
           condition: "COMPLETED"
           name: "Run build tests"
@@ -143,8 +127,6 @@
 
               predefined-parameters: |
                 TEST_GROUPS=tf-l1-build-fvp-lts-v2.12 tf-l1-build-juno-lts-v2.12 tf-l1-build-clang-lts-v2.12 tf-l1-build-plat-lts-v2.12 spm-l1-build-tests-lts-v2.12
-
-              property-file: "env.param"
 
     triggers:
       - gerrit:

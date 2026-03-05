@@ -66,20 +66,6 @@
       - "timestamps"
 
     builders:
-      - shell: |
-          #!/bin/bash
-          set -e
-          cat << EOF > tf-a-env.param
-          GERRIT_PROJECT=${{TF_GERRIT_PROJECT}}
-          GERRIT_BRANCH=${{TF_GERRIT_BRANCH}}
-          GERRIT_REFSPEC=${{TF_GERRIT_REFSPEC}}
-          EOF
-          cat << EOF > tf-a-tests-env.param
-          GERRIT_PROJECT=${{TFTF_GERRIT_PROJECT}}
-          GERRIT_BRANCH=${{TFTF_GERRIT_BRANCH}}
-          GERRIT_REFSPEC=${{TFTF_GERRIT_REFSPEC}}
-          EOF
-
       - multijob:
           name: "TFTF Fuzzing"
           condition: "COMPLETED"
@@ -90,7 +76,6 @@
               current-parameters: true
               kill-phase-on: "NEVER"
               predefined-parameters: "TEST_GROUPS=tf-l3-fuzzing"
-              property-file: "tf-a-tests-env.param"
 
       - multijob:
           name: "TFTF Fuzzing FFA"
@@ -102,7 +87,6 @@
               current-parameters: true
               kill-phase-on: "NEVER"
               predefined-parameters: "TEST_GROUPS=tf-l3-fuzzing-ffa"
-              property-file: "tf-a-tests-env.param"
 
       # participate in the job's success/failure.
       - trigger-builds:

@@ -79,18 +79,6 @@
       - "timestamps"
 
     builders:
-      - shell: |
-          #!/bin/bash
-          set -e
-          cat << EOF > env.param
-          GERRIT_PATCHSET_NUMBER=${{GERRIT_PATCHSET_NUMBER}}
-          GERRIT_CHANGE_NUMBER=${{GERRIT_CHANGE_NUMBER}}
-          GERRIT_HOST=${{GERRIT_HOST}}
-          TFTF_GERRIT_PROJECT=${{GERRIT_PROJECT}}
-          TFTF_GERRIT_BRANCH=${{GERRIT_BRANCH}}
-          TFTF_GERRIT_REFSPEC=${{GERRIT_REFSPEC}}
-          EOF
-
       - multijob:
           condition: "COMPLETED"
           name: "Carry out level 1 tests"
@@ -99,7 +87,6 @@
             - kill-phase-on: "NEVER"
               name: "tf-a-tftf-gerrit-tforg-l1"
               current-parameters: true
-              property-file: "env.param"
 
       - multijob:
           condition: "COMPLETED"
@@ -113,8 +100,6 @@
               predefined-parameters: |-
                 TEST_GROUPS=tftf-l2-fwu-lts-v2.14
 
-              property-file: "env.param"
-
       - multijob:
           condition: "COMPLETED"
           name: "Run Level 2 testing of TF-A-Tests"
@@ -127,8 +112,6 @@
               predefined-parameters: |-
                 TEST_GROUPS=tftf-l2-fvp-auxiliary-lts-v2.14 tftf-l2-juno-lts-v2.14 tf-l2-boot-tests-spm-mm-lts-v2.14 tftf-l2-fvp-dynamiq-lts-v2.14 spm-l2-boot-tests-lts-v2.14
 
-              property-file: "env.param"
-
       - multijob:
           condition: "COMPLETED"
           name: "Run extensive TF-A-Tests"
@@ -140,8 +123,6 @@
 
               predefined-parameters: |-
                 TEST_GROUPS=tftf-l2-extensive-tests-fvp-lts-v2.14
-
-              property-file: "env.param"
 
     triggers:
       - gerrit:
