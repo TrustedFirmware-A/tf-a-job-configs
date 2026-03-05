@@ -61,9 +61,6 @@
           silent-start: false
 
     parameters:
-      - tf-a-clone-parameters:
-          projects: "tf-a-job-configs,tf-a-ci-scripts,trusted-firmware-a,rusted-firmware-a"
-
       - tf-a-builder-parameters:
           default_gerrit_project: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
           default_gerrit_branch: "main"

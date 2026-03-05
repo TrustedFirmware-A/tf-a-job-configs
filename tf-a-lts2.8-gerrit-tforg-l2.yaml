@@ -25,9 +25,6 @@
           days-to-keep: 30
 
     parameters:
-      - tf-a-clone-parameters:
-          projects: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
-
       - tf-a-builder-parameters:
           default_gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
           default_gerrit_branch: "lts-v2.8"
