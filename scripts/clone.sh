@@ -10,6 +10,7 @@ set -ex
 
 git config --global --add url."https://review.trustedfirmware.org/mirror/mbed-tls.git".insteadOf "https://github.com/Mbed-TLS/mbedtls.git"
 git config --global --add url."https://review.trustedfirmware.org/mirror/mbed-tls.git".insteadOf "https://github.com/ARMmbed/mbedtls.git"
+git config --global --add url."https://review.trustedfirmware.org/mirror/mbed-tls-framework.git".insteadOf "https://github.com/Mbed-TLS/mbedtls-framework.git"
 
 : "${CLONE_REPOS:?}"
 
