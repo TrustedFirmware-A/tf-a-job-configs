@@ -22,7 +22,7 @@
           max-total: 5
 
       - build-discarder:
-          days-to-keep: 15
+          days-to-keep: 30
 
     parameters:
       - tf-a-clone-parameters:

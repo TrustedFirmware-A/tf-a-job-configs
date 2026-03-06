@@ -12,7 +12,7 @@
           download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a"
 
       - build-discarder:
-          days-to-keep: 14
+          days-to-keep: 30
 
     parameters:
       - tf-a-clone-parameters:
