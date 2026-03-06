@@ -65,66 +65,40 @@
       - tf-a-clone-parameters:
           projects: "tf-a-job-configs,tf-a-ci-scripts,trusted-firmware-a,rusted-firmware-a"
 
-      # GERRIT_{PROJECT,BRANCH,REFSPEC} are set when triggered by a Gerrit
-      # patchset - defaults below are for manual triggers
-      - string:
-          name: "GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
+      - tf-a-builder-parameters:
+          default_gerrit_project: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
+          default_gerrit_branch: "main"
 
-      - string:
-          name: "GERRIT_BRANCH"
-          default: "main"
+          default_tf_a_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+          default_tf_a_branch: "master"
+          default_tf_a_mbedtls_version: "3.6.5"
 
-      - string:
-          name: "GERRIT_REFSPEC"
-          default: "main"
+          default_rf_a_project: "${{GERRIT_PROJECT}}"
+          default_rf_a_branch: "${{GERRIT_REFSPEC}}"
 
-          description: |
-            'e.g. refs/changes/13/31138/1'
+          default_tftf_project: "{gerrit_project_prefix}TF-A/tf-a-tests"
+          default_tftf_branch: "master"
 
-      - string:
-          name: "RF_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
+          default_tf_m_tests_project: "{gerrit_project_prefix}TF-M/tf-m-tests"
+          default_tf_m_tests_branch: "tfa_ci_dep_revision"
 
-      - string:
-          name: "RFA_REFSPEC"
-          default: "${{GERRIT_REFSPEC}}"
+          default_tf_m_extras_project: "{gerrit_project_prefix}TF-M/tf-m-extras"
+          default_tf_m_extras_branch: "tfa_ci_dep_revision"
 
-          description: |
-            'do-not-amend: used by scripts/clone.sh to fetch the correct Gerrit patchset - use GERRIT_REFSPEC instead'
+          default_hafnium_project: "{gerrit_project_prefix}hafnium/hafnium"
+          default_hafnium_branch: "master"
 
-      - string:
-          name: "TF_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+          default_tf_rmm_project: "{gerrit_project_prefix}TF-RMM/tf-rmm"
+          default_tf_rmm_branch: "main"
 
-      - string:
-          name: "TF_GERRIT_REFSPEC"
-          default: "master"
+          default_tfut_project: "{gerrit_project_prefix}TF-A/tf-a-unit-tests"
+          default_tfut_branch: "main"
 
-          description: |
-            'Used by scripts/clone.sh to fetch the correct Gerrit patchset'
+          default_tf_a_ci_scripts_project: "{gerrit_project_prefix}ci/tf-a-ci-scripts"
+          default_tf_a_ci_scripts_branch: "master"
 
-      - string:
-          name: "CI_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}ci/tf-a-ci-scripts"
-
-      - string:
-          name: "CI_REFSPEC"
-          default: "master"
-
-          description: |
-            'Refs to fetch for the tf-a-ci-scripts repo e.g. refs/changes/13/31138/1'
-
-      - string:
-          name: "JOBS_PROJECT"
-          default: "{gerrit_project_prefix}ci/tf-a-job-configs.git"
-
-      - string:
-          name: "JOBS_REFSPEC"
-          default: "master"
-
-          description: |
-            tf-a-job-configs refspec to use. The master branch is used by default.
+          default_tf_a_ci_jobs_project: "{gerrit_project_prefix}ci/tf-a-job-configs.git"
+          default_tf_a_ci_jobs_branch: "master"
 
     wrappers:
       - credentials-binding:
