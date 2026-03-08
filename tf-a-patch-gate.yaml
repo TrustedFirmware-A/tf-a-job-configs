@@ -38,6 +38,12 @@
           gerrit-build-unstable-codereview-value: 0
           gerrit-build-unstable-verified-value: -1
 
+    parameters:
+      - tf-a-gerrit-comment-added-parameters:
+          gerrit_project: "{gerrit_project_prefix}{project}"
+          gerrit_branch: "{branch}"
+          gerrit_refspec: "{branch}"
+
     properties:
       - build-discarder:
           days-to-keep: 30

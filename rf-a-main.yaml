@@ -57,9 +57,6 @@
 
     parameters:
       - tf-a-builder-parameters:
-          default_gerrit_project: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
-          default_gerrit_branch: "main"
-
           default_tf_a_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
           default_tf_a_branch: "master"
           default_tf_a_mbedtls_version: "3.6.5"
@@ -90,6 +87,11 @@
 
           default_tf_a_ci_jobs_project: "{gerrit_project_prefix}ci/tf-a-job-configs.git"
           default_tf_a_ci_jobs_branch: "master"
+
+      - tf-a-gerrit-comment-added-contains-parameters:
+          gerrit_project: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
+          gerrit_branch: "main"
+          gerrit_refspec: "main"
 
     wrappers:
       - credentials-binding:

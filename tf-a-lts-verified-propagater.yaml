@@ -71,6 +71,10 @@
           days-to-keep: 60
           num-to-keep: 10
 
+    parameters:
+      - tf-a-gerrit-comment-added-parameters:
+          gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
     triggers:
       - gerrit:
           silent: true

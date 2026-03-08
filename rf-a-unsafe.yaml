@@ -46,22 +46,10 @@
       - tf-a-clone-parameters:
           projects: "tf-a-ci-scripts,rusted-firmware-a"
 
-      # GERRIT_{PROJECT,BRANCH,REFSPEC} are set when triggered by a Gerrit
-      # patchset - defaults below are for manual triggers
-      - string:
-          name: "GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
-
-      - string:
-          name: "GERRIT_BRANCH"
-          default: "main"
-
-      - string:
-          name: "GERRIT_REFSPEC"
-          default: "main"
-
-          description: |
-            'e.g. refs/changes/13/31138/1'
+      - tf-a-gerrit-comment-added-contains-parameters:
+          gerrit_project: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
+          gerrit_branch: "main"
+          gerrit_refspec: "main"
 
       - string:
           name: "RF_GERRIT_PROJECT"

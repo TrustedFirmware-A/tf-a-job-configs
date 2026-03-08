@@ -7,6 +7,11 @@
     disabled: false
 
     parameters:
+      - tf-a-gerrit-comment-added-parameters:
+          gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+          gerrit_branch: "lts-v2.8"
+          gerrit_refspec: "lts-v2.8"
+
       - bool:
           name: "ENABLE_PATCH_AUTO_SUBMISSION"
 

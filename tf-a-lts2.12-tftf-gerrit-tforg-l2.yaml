@@ -21,9 +21,6 @@
 
     parameters:
       - tf-a-builder-parameters:
-          default_gerrit_project: "{gerrit_project_prefix}TF-A/tf-a-tests"
-          default_gerrit_branch: "lts-v2.12"
-
           default_tf_a_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
           default_tf_a_branch: "lts-v2.12"
           default_tf_a_mbedtls_version: "3.6.3"
@@ -55,13 +52,10 @@
           default_tf_a_ci_jobs_project: "{gerrit_project_prefix}ci/tf-a-job-configs.git"
           default_tf_a_ci_jobs_branch: "master"
 
-      - string:
-          name: "GERRIT_PATCHSET_NUMBER"
-          default: ""
-
-      - string:
-          name: "GERRIT_CHANGE_NUMBER"
-          default: ""
+      - tf-a-gerrit-comment-added-parameters:
+          gerrit_project: "{gerrit_project_prefix}TF-A/tf-a-tests"
+          gerrit_branch: "lts-v2.12"
+          gerrit_refspec: "lts-v2.12"
 
       - string:
           name: "TF_GERRIT_BRANCH"

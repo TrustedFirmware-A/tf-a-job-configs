@@ -48,35 +48,10 @@
           description: |
             TF-A make DEBUG setting
 
-      - string:
-          name: "GERRIT_HOST"
-          default: "review.trustedfirmware.org"
-
-      - string:
-          name: "GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
-
-          description: |
-            Git project to build (also set by Gerrit trigger)
-
-      - string:
-          name: "GERRIT_BRANCH"
-          default: "master"
-
-          description: |
-            Git branch to build (also set by Gerrit trigger)
-
-      - string:
-          name: "GERRIT_REFSPEC"
-          default: "master"
-
-      - string:
-          name: "GERRIT_CHANGE_NUMBER"
-          default: ""
-
-      - string:
-          name: "GERRIT_PATCHSET_NUMBER"
-          default: ""
+      - tf-a-gerrit-comment-added-parameters:
+          gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+          gerrit_branch: "master"
+          gerrit_refspec: "master"
 
       - string:
           name: "MBEDTLS_URL"

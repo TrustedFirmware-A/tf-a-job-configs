@@ -45,13 +45,6 @@
             the <code>gen_test_desc.py</code> script.
 
       - tf-a-builder-parameters:
-          default_config: "{default_config}"
-          default_config_desc: "{default_config_desc}"
-          default_clones: "{default_clones}"
-
-          default_gerrit_project: "{default_gerrit_project}"
-          default_gerrit_branch: "{default_gerrit_branch}"
-
           default_tf_a_project: "{default_tf_a_project}"
           default_tf_a_branch: "{default_tf_a_branch}"
           default_tf_a_mbedtls_version: "{default_tf_a_mbedtls_version}"
@@ -82,6 +75,11 @@
 
           default_tf_a_ci_jobs_project: "{default_tf_a_ci_jobs_project}"
           default_tf_a_ci_jobs_branch: "{default_tf_a_ci_jobs_branch}"
+
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_project: "{default_gerrit_project}"
+          gerrit_branch: "{default_gerrit_branch}"
+          gerrit_refspec: "{default_gerrit_branch}"
 
     wrappers:
       - "timestamps"
@@ -264,46 +262,6 @@
     name: "tf-a-builder-parameters"
 
     parameters:
-      - string:
-          name: "GERRIT_PROJECT"
-          default: "{default_gerrit_project}"
-
-          description: >
-            Gerrit project that triggered the job, e.g.:
-
-            <ul>
-              <li><code>TF-A/trusted-firmware-a</code></li>
-              <li><code>TF-A/tf-a-tests</code></li>
-              <li><code>RF-A/rusted-firmware-a</code></li>
-            </ul>
-
-      - string:
-          name: "GERRIT_BRANCH"
-          default: "{default_gerrit_branch}"
-
-          description: >
-            Git branch targeted by the change under test, e.g.:
-
-            <ul>
-              <li><code>master</code></li>
-              <li><code>integration</code></li>
-              <li><code>main</code></li>
-            </ul>
-
-      - string:
-          name: "GERRIT_REFSPEC"
-          default: "{default_gerrit_branch}"
-
-          description: >
-            Git revision under test, e.g.:
-
-            <ul>
-              <li><code>refs/heads/master</code> (or <code>master</code>)</li>
-              <li><code>refs/tags/v2.14.0</code> (or <code>v2.14.0</code>)</li>
-              <li><code>refs/changes/09/45309/12</code></li>
-              <li><code>1c26b186</code></li>
-            </ul>
-
       - string:
           name: "TF_GERRIT_PROJECT"
           default: "{default_tf_a_project}"

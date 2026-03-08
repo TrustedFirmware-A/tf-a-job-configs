@@ -19,6 +19,9 @@
           days-to-keep: 15
 
     parameters:
+      - tf-a-gerrit-ref-updated-parameters:
+          gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
       - string:
           name: "EMAIL_RECIPIENT"
 

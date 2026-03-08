@@ -39,6 +39,10 @@
           trigger-on:
             - "ref-updated-event"
 
+    parameters:
+      - tf-a-gerrit-ref-updated-parameters:
+          gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+
     wrappers:
       - "timestamps"
 

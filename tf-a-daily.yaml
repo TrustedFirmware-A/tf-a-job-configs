@@ -19,9 +19,6 @@
           projects: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
 
       - tf-a-builder-parameters:
-          default_gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
-          default_gerrit_branch: "integration"
-
           default_tf_a_project: "${{GERRIT_PROJECT}}"
           default_tf_a_branch: "${{GERRIT_REFSPEC}}"
           default_tf_a_mbedtls_version: "3.6.5"
@@ -52,6 +49,11 @@
 
           default_tf_a_ci_jobs_project: "{gerrit_project_prefix}ci/tf-a-job-configs.git"
           default_tf_a_ci_jobs_branch: "master"
+
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+          gerrit_branch: "master"
+          gerrit_refspec: "integration"
 
       - string:
           name: "TF_GERRIT_BRANCH"

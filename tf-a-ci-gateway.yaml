@@ -43,9 +43,6 @@
           default_config_desc: "{default_config_desc}"
           default_clones: "{default_clones}"
 
-          default_gerrit_project: "{default_gerrit_project}"
-          default_gerrit_branch: "{default_gerrit_branch}"
-
           default_tf_a_project: "{default_tf_a_project}"
           default_tf_a_branch: "{default_tf_a_branch}"
           default_tf_a_mbedtls_version: "{default_tf_a_mbedtls_version}"
@@ -76,6 +73,11 @@
 
           default_tf_a_ci_jobs_project: "{default_tf_a_ci_jobs_project}"
           default_tf_a_ci_jobs_branch: "{default_tf_a_ci_jobs_branch}"
+
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_project: "{default_gerrit_project}"
+          gerrit_branch: "{default_gerrit_branch}"
+          gerrit_refspec: "{default_gerrit_branch}"
 
     scm:
       - git:
