@@ -5,6 +5,9 @@
     gerrit_branch: "master"
     gerrit_refspec: "integration"
 
+    tf_a_project: "${{GERRIT_PROJECT}}"
+    tf_a_branch: "${{GERRIT_REFSPEC}}"
+
     base:
       - "tf-a":
           label: "TF-A"
@@ -29,13 +32,13 @@
           default_config: "fvp-default-lts-v2.8:nil"
           default_config_desc: "0000%tf-l1-build-fvp-lts-v2.8%fvp-default-lts-v2.8,nil,nil,nil,nil,nil:nil.test"
 
-          gerrit_project: "TF-A/trusted-firmware-a"
           gerrit_branch: "lts-v2.8"
           gerrit_refspec: "lts-v2.8"
 
           tftf_branch: "lts-v2.8"
           hafnium_branch: "v2.8"
 
+          tf_a_ci_scripts_test_suffix: "-lts-v2.8"
           tf_a_ci_scripts_mbed_tls_version: "3.6.4"
 
       - "tf-a-lts2.10":
@@ -51,7 +54,6 @@
           default_config: "fvp-default-lts-v2.10:nil"
           default_config_desc: "0000%tf-l1-build-fvp-lts-v2.10%fvp-default-lts-v2.10,nil,nil,nil,nil,nil:nil.test"
 
-          gerrit_project: "TF-A/trusted-firmware-a"
           gerrit_branch: "lts-v2.10"
           gerrit_refspec: "lts-v2.10"
 
@@ -59,6 +61,7 @@
           tf_m_tests_branch: "95d3407a65e26fb3a4319ab38c257e50c9ee804f"
           hafnium_branch: "v2.10"
 
+          tf_a_ci_scripts_test_suffix: "-lts-v2.10"
           tf_a_ci_scripts_mbed_tls_version: "3.6.4"
 
       - "tf-a-lts2.12":
@@ -74,7 +77,6 @@
           default_config: "fvp-default-lts-v2.12:nil"
           default_config_desc: "0000%tf-l1-build-fvp-lts-v2.12%fvp-default-lts-v2.12,nil,nil,nil,nil,nil:nil.test"
 
-          gerrit_project: "TF-A/trusted-firmware-a"
           gerrit_branch: "lts-v2.12"
           gerrit_refspec: "lts-v2.12"
 
@@ -83,6 +85,7 @@
           tf_m_extras_branch: "3ff04e40ff7f66c8cee087b6e5cbd8fb8c1bec01"
           hafnium_branch: "v2.12"
 
+          tf_a_ci_scripts_test_suffix: "-lts-v2.12"
           tf_a_ci_scripts_mbed_tls_version: "3.6.3"
 
       - "tf-a-lts2.14":
@@ -98,7 +101,6 @@
           default_config: "fvp-default-lts-v2.14:nil"
           default_config_desc: "0000%tf-l1-build-fvp-lts-v2.14%fvp-default-lts-v2.14,nil,nil,nil,nil,nil:nil.test"
 
-          gerrit_project: "TF-A/trusted-firmware-a"
           gerrit_branch: "lts-v2.14"
           gerrit_refspec: "lts-v2.14"
 
@@ -109,6 +111,7 @@
           tf_rmm_branch: "tf-rmm-v0.8.0"
           tfut_branch: "tfaut-v0.1"
 
+          tf_a_ci_scripts_test_suffix: "-lts-v2.14"
           tf_a_ci_scripts_mbed_tls_version: "3.6.5"
 
     views:
@@ -143,11 +146,10 @@
           regex: "^tf-a-lts2[.]14(-.*)?$"
 
     jobs:
+      - tf-a-gerrit-tforg-l1:
+
       - tf-a-gateway-chain:
           default_clones: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
-
-          tf_a_project: "${{GERRIT_PROJECT}}"
-          tf_a_branch: "${{GERRIT_REFSPEC}}"
 
 - builder:
     name: "tf-a-clone"
