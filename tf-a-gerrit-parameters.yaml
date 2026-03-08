@@ -1,0 +1,1631 @@
+- parameter:
+    name: "tf-a-gerrit-event-type-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_EVENT_TYPE"
+          default: "{gerrit_event_type|}"
+
+          description: >
+            Gerrit event type, e.g.:
+
+            <ul>
+              <li><code>comment-added</code></li>
+              <li><code>patchset-created</code></li>
+              <li><code>ref-updated</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-event-hash-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_EVENT_HASH"
+          default: "{gerrit_event_hash|}"
+
+          description: >
+            Hashcode of the Gerrit event object, e.g.:
+
+            <ul>
+              <li><code>396308401</code></li>
+              <li><code>-1454080179</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-name-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_NAME"
+          default: "{gerrit_name|}"
+
+          description: >
+            Gerrit server name configured in Jenkins, e.g.:
+
+            <ul>
+              <li><code>review.trustedfirmware.org</code></li>
+              <li><code>gerrit.example.org</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-host-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_HOST"
+          default: "{gerrit_host|}"
+
+          description: >
+            Gerrit hostname, e.g.:
+
+            <ul>
+              <li><code>review.trustedfirmware.org</code></li>
+              <li><code>gerrit.example.org</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-port-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_PORT"
+          default: "{gerrit_port|}"
+
+          description: >
+            Gerrit port, e.g.:
+
+            <ul>
+              <li><code>29418</code></li>
+              <li><code>35234</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-scheme-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_SCHEME"
+          default: "{gerrit_scheme|}"
+
+          description: >
+            Gerrit URL scheme, e.g.:
+
+            <ul>
+              <li><code>https</code></li>
+              <li><code>http</code></li>
+              <li><code>ssh</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-version-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_VERSION"
+          default: "{gerrit_version|}"
+
+          description: >
+            Gerrit server version string, e.g.:
+
+            <ul>
+              <li><code>3.9.1</code></li>
+              <li><code>3.11.0</code></li>
+              <li><code>3.12.2-27-gcf7d13a276</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-project-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_PROJECT"
+          default: "{gerrit_project|}"
+
+          description: >
+            Gerrit project containing the change, e.g.:
+
+            <ul>
+              <li><code>TF-A/trusted-firmware-a</code></li>
+              <li><code>TF-A/tf-a-tests</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-ref-updated-refname-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_REFNAME"
+          default: "{gerrit_refname|}"
+
+          description: >
+            Name of the updated ref, e.g.:
+
+            <ul>
+              <li><code>master</code></li>
+              <li><code>refs/tags/lts-v2.14.1</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-ref-updated-oldrev-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_OLDREV"
+          default: "{gerrit_oldrev|}"
+
+          description: >
+            Revision before the ref update, e.g.:
+
+            <ul>
+              <li><code>0000000000000000000000000000000000000000</code></li>
+              <li><code>8d5b6f6c7f1a2d9b4e6c8a0f3e2d1c4b5a697887</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-newrev-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_NEWREV"
+          default: "{gerrit_newrev|}"
+
+          description: >
+            New revision associated with the event, e.g.:
+
+            <ul>
+              <li><code>1c26b1869f517d9726f6f0f6c7e8fa2050b6d924</code></li>
+              <li><code>f4ab901257f8c2d2f7a3d8c95cc91d4a34f67120</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-branch-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_BRANCH"
+          default: "{gerrit_branch|}"
+
+          description: >
+            Git branch targeted by the change under test, e.g.:
+
+            <ul>
+              <li><code>master</code></li>
+              <li><code>integration</code></li>
+              <li><code>lts-v2.14</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-topic-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_TOPIC"
+          default: "{gerrit_topic|}"
+
+          description: >
+            Gerrit topic of the change, e.g.:
+
+            <ul>
+              <li><code>spm-fwu-series</code></li>
+              <li><code>rme-ci-fixes</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-old-topic-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_OLD_TOPIC"
+          default: "{gerrit_old_topic|}"
+
+          description: >
+            Topic before the change, e.g.:
+
+            <ul>
+              <li><code>spm-fwu-series</code></li>
+              <li><code>rme-ci-fixes</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-patchset-refspec-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_REFSPEC"
+          default: "{gerrit_refspec|}"
+
+          description: >
+            Gerrit refspec of the patch set, e.g.:
+
+            <ul>
+              <li><code>refs/changes/09/45309/12</code></li>
+              <li><code>refs/changes/23/47123/3</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-patchset-revision-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_PATCHSET_REVISION"
+          default: "{gerrit_patchset_revision|}"
+
+          description: >
+            Git revision of the patch set, e.g.:
+
+            <ul>
+              <li><code>1c26b1869f517d9726f6f0f6c7e8fa2050b6d924</code></li>
+              <li><code>f4ab901257f8c2d2f7a3d8c95cc91d4a34f67120</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-patchset-number-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_PATCHSET_NUMBER"
+          default: "{gerrit_patchset_number|}"
+
+          description: >
+            Patch set number, e.g.:
+
+            <ul>
+              <li><code>1</code></li>
+              <li><code>12</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-number-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_CHANGE_NUMBER"
+          default: "{gerrit_change_number|}"
+
+          description: >
+            Numeric Gerrit change number, e.g.:
+
+            <ul>
+              <li><code>45309</code></li>
+              <li><code>47123</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-id-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_CHANGE_ID"
+          default: "{gerrit_change_id|}"
+
+          description: >
+            Gerrit Change-Id from the commit message footer, e.g.:
+
+            <ul>
+              <li><code>Iabc123def4567890abc123def4567890abc123de</code></li>
+              <li><code>I0123456789abcdef0123456789abcdef01234567</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-subject-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_CHANGE_SUBJECT"
+          default: "{gerrit_change_subject|}"
+          description: "One-line subject of the change (first line of the commit message)."
+
+- parameter:
+    name: "tf-a-gerrit-change-url-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_CHANGE_URL"
+          default: "{gerrit_change_url|}"
+
+          description: >
+            Web URL of the Gerrit change, e.g.:
+
+            <ul>
+              <li><code>https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/49026</code></li>
+              <li><code>https://review.trustedfirmware.org/c/TF-A/tf-a-tests/+/48738</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-hashtags-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_HASHTAGS"
+          default: "{gerrit_hashtags|}"
+
+          description: >
+            Change hashtags, e.g.:
+
+            <ul>
+              <li><code>security,ci</code></li>
+              <li><code>rme,tests</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-added-hashtags-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_ADDED_HASHTAGS"
+          default: "{gerrit_added_hashtags|}"
+
+          description: >
+            Hashtags added by the hashtags-changed event, e.g.:
+
+            <ul>
+              <li><code>security,ci</code></li>
+              <li><code>release,rme</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-removed-hashtags-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_REMOVED_HASHTAGS"
+          default: "{gerrit_removed_hashtags|}"
+
+          description: >
+            Hashtags removed by the hashtags-changed event, e.g.:
+
+            <ul>
+              <li><code>security,ci</code></li>
+              <li><code>release,rme</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-wip-state-parameter"
+
+    parameters:
+      - bool:
+          name: "GERRIT_CHANGE_WIP_STATE"
+          default: "{gerrit_change_wip_state|}"
+          description: "Work-in-progress state of the change."
+
+- parameter:
+    name: "tf-a-gerrit-change-private-state-parameter"
+
+    parameters:
+      - bool:
+          name: "GERRIT_CHANGE_PRIVATE_STATE"
+          default: "{gerrit_change_private_state|}"
+          description: "Private state of the change."
+
+- parameter:
+    name: "tf-a-gerrit-event-account-name-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_EVENT_ACCOUNT_NAME"
+          default: "{gerrit_event_account_name|}"
+
+          description: >
+            Display name of the event account, e.g.:
+
+            <ul>
+              <li><code>Jane Doe</code></li>
+              <li><code>John Doe</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-event-account-username-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_EVENT_ACCOUNT_USERNAME"
+          default: "{gerrit_event_account_username|}"
+
+          description: >
+            Gerrit username of the event account, e.g.:
+
+            <ul>
+              <li><code>jane-doe</code></li>
+              <li><code>john-doe</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-event-account-email-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_EVENT_ACCOUNT_EMAIL"
+          default: "{gerrit_event_account_email|}"
+
+          description: >
+            Email address of the event account, e.g.:
+
+            <ul>
+              <li><code>jane.doe@example.com</code></li>
+              <li><code>john.doe@example.org</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-event-account-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_EVENT_ACCOUNT"
+          default: "{gerrit_event_account|}"
+
+          description: >
+            Event account identity string, e.g.:
+
+            <ul>
+              <li><code>"Jane Doe" &lt;jane.doe@example.com&gt;</code></li>
+              <li><code>"John Doe" &lt;john.doe@example.org&gt;</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-owner-name-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_CHANGE_OWNER_NAME"
+          default: "{gerrit_change_owner_name|}"
+
+          description: >
+            Display name of the change owner, e.g.:
+
+            <ul>
+              <li><code>Jane Doe</code></li>
+              <li><code>John Doe</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-owner-username-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_CHANGE_OWNER_USERNAME"
+          default: "{gerrit_change_owner_username|}"
+
+          description: >
+            Gerrit username of the change owner, e.g.:
+
+            <ul>
+              <li><code>jane-doe</code></li>
+              <li><code>john-doe</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-owner-email-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_CHANGE_OWNER_EMAIL"
+          default: "{gerrit_change_owner_email|}"
+
+          description: >
+            Email address of the change owner, e.g.:
+
+            <ul>
+              <li><code>jane.doe@example.com</code></li>
+              <li><code>john.doe@example.org</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-owner-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_CHANGE_OWNER"
+          default: "{gerrit_change_owner|}"
+
+          description: >
+            Change owner identity string, e.g.:
+
+            <ul>
+              <li><code>"Jane Doe" &lt;jane.doe@example.com&gt;</code></li>
+              <li><code>"John Doe" &lt;john.doe@example.org&gt;</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-patchset-uploader-name-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_PATCHSET_UPLOADER_NAME"
+          default: "{gerrit_patchset_uploader_name|}"
+
+          description: >
+            Display name of the patch set uploader, e.g.:
+
+            <ul>
+              <li><code>Jane Doe</code></li>
+              <li><code>John Doe</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-patchset-uploader-username-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_PATCHSET_UPLOADER_USERNAME"
+          default: "{gerrit_patchset_uploader_username|}"
+
+          description: >
+            Gerrit username of the patch set uploader, e.g.:
+
+            <ul>
+              <li><code>jane-doe</code></li>
+              <li><code>john-doe</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-patchset-uploader-email-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_PATCHSET_UPLOADER_EMAIL"
+          default: "{gerrit_patchset_uploader_email|}"
+
+          description: >
+            Email address of the patch set uploader, e.g.:
+
+            <ul>
+              <li><code>jane.doe@example.com</code></li>
+              <li><code>john.doe@example.org</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-patchset-uploader-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_PATCHSET_UPLOADER"
+          default: "{gerrit_patchset_uploader|}"
+
+          description: >
+            Patch set uploader identity string, e.g.:
+
+            <ul>
+              <li><code>"Jane Doe" &lt;jane.doe@example.com&gt;</code></li>
+              <li><code>"John Doe" &lt;john.doe@example.org&gt;</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-abandoner-name-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_CHANGE_ABANDONER_NAME"
+          default: "{gerrit_change_abandoner_name|}"
+
+          description: >
+            Display name of the account that abandoned the change, e.g.:
+
+            <ul>
+              <li><code>Jane Doe</code></li>
+              <li><code>John Doe</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-abandoner-username-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_CHANGE_ABANDONER_USERNAME"
+          default: "{gerrit_change_abandoner_username|}"
+
+          description: >
+            Gerrit username of the account that abandoned the change, e.g.:
+
+            <ul>
+              <li><code>jane-doe</code></li>
+              <li><code>john-doe</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-abandoner-email-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_CHANGE_ABANDONER_EMAIL"
+          default: "{gerrit_change_abandoner_email|}"
+
+          description: >
+            Email of the account that abandoned the change, e.g.:
+
+            <ul>
+              <li><code>jane.doe@example.com</code></li>
+              <li><code>john.doe@example.org</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-abandoner-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_CHANGE_ABANDONER"
+          default: "{gerrit_change_abandoner|}"
+
+          description: >
+            Identity string of the account that abandoned the change, e.g.:
+
+            <ul>
+              <li><code>"Jane Doe" &lt;jane.doe@example.com&gt;</code></li>
+              <li><code>"John Doe" &lt;john.doe@example.org&gt;</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-restorer-name-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_CHANGE_RESTORER_NAME"
+          default: "{gerrit_change_restorer_name|}"
+
+          description: >
+            Display name of the account that restored the change, e.g.:
+
+            <ul>
+              <li><code>Jane Doe</code></li>
+              <li><code>John Doe</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-restorer-username-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_CHANGE_RESTORER_USERNAME"
+          default: "{gerrit_change_restorer_username|}"
+
+          description: >
+            Gerrit username of the account that restored the change, e.g.:
+
+            <ul>
+              <li><code>jane-doe</code></li>
+              <li><code>john-doe</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-restorer-email-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_CHANGE_RESTORER_EMAIL"
+          default: "{gerrit_change_restorer_email|}"
+
+          description: >
+            Email of the account that restored the change, e.g.:
+
+            <ul>
+              <li><code>jane.doe@example.com</code></li>
+              <li><code>john.doe@example.org</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-restorer-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_CHANGE_RESTORER"
+          default: "{gerrit_change_restorer|}"
+
+          description: >
+            Identity string of the account that restored the change, e.g.:
+
+            <ul>
+              <li><code>"Jane Doe" &lt;jane.doe@example.com&gt;</code></li>
+              <li><code>"John Doe" &lt;john.doe@example.org&gt;</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-topic-changer-name-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_TOPIC_CHANGER_NAME"
+          default: "{gerrit_topic_changer_name|}"
+
+          description: >
+            Display name of the account that changed the topic, e.g.:
+
+            <ul>
+              <li><code>Jane Doe</code></li>
+              <li><code>John Doe</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-topic-changer-username-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_TOPIC_CHANGER_USERNAME"
+          default: "{gerrit_topic_changer_username|}"
+
+          description: >
+            Gerrit username of the account that changed the topic, e.g.:
+
+            <ul>
+              <li><code>jane-doe</code></li>
+              <li><code>john-doe</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-topic-changer-email-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_TOPIC_CHANGER_EMAIL"
+          default: "{gerrit_topic_changer_email|}"
+
+          description: >
+            Email of the account that changed the topic, e.g.:
+
+            <ul>
+              <li><code>jane.doe@example.com</code></li>
+              <li><code>john.doe@example.org</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-topic-changer-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_TOPIC_CHANGER"
+          default: "{gerrit_topic_changer|}"
+
+          description: >
+            Identity string of the account that changed the topic, e.g.:
+
+            <ul>
+              <li><code>"Jane Doe" &lt;jane.doe@example.com&gt;</code></li>
+              <li><code>"John Doe" &lt;john.doe@example.org&gt;</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-change-commit-message-parameter"
+
+    parameters:
+      - text:
+          name: "GERRIT_CHANGE_COMMIT_MESSAGE"
+          default: "{gerrit_change_commit_message|}"
+          description: "Full commit message of the patch set."
+
+- parameter:
+    name: "tf-a-gerrit-event-comment-text-parameter"
+
+    parameters:
+      - text:
+          name: "GERRIT_EVENT_COMMENT_TEXT"
+          default: "{gerrit_event_comment_text|}"
+          description: "Comment text on the event."
+
+- parameter:
+    name: "tf-a-gerrit-event-updated-approvals-parameter"
+
+    parameters:
+      - string:
+          name: "GERRIT_EVENT_UPDATED_APPROVALS"
+          default: "{gerrit_event_updated_approvals|}"
+
+          description: >
+            Updated approvals carried by the comment-added event, in JSON
+            object format keyed by approval type, e.g.:
+
+            <ul>
+              <li><code>{{"Allow-CI":{{"value":"2","oldValue":"0"}}}}</code></li>
+              <li><code>{{"Allow-CI":{{"value":"2","oldValue":"1"}},"Code-Owner-Review":{{"value":"1","oldValue":"0"}}}}</code></li>
+            </ul>
+
+- parameter:
+    name: "tf-a-gerrit-parameters"
+
+    parameters:
+      - tf-a-gerrit-event-type-parameter:
+          gerrit_event_type: "{gerrit_event_type|}"
+
+      - tf-a-gerrit-event-hash-parameter:
+          gerrit_event_hash: "{gerrit_event_hash|}"
+
+      - tf-a-gerrit-name-parameter:
+          gerrit_name: "{gerrit_name|}"
+
+      - tf-a-gerrit-host-parameter:
+          gerrit_host: "{gerrit_host|}"
+
+      - tf-a-gerrit-port-parameter:
+          gerrit_port: "{gerrit_port|}"
+
+      - tf-a-gerrit-scheme-parameter:
+          gerrit_scheme: "{gerrit_scheme|}"
+
+      - tf-a-gerrit-version-parameter:
+          gerrit_version: "{gerrit_version|}"
+
+      - tf-a-gerrit-event-account-name-parameter:
+          gerrit_event_account_name: "{gerrit_event_account_name|}"
+
+      - tf-a-gerrit-event-account-username-parameter:
+          gerrit_event_account_username: "{gerrit_event_account_username|}"
+
+      - tf-a-gerrit-event-account-email-parameter:
+          gerrit_event_account_email: "{gerrit_event_account_email|}"
+
+      - tf-a-gerrit-event-account-parameter:
+          gerrit_event_account: "{gerrit_event_account|}"
+
+- parameter:
+    name: "tf-a-gerrit-change-core-parameters"
+
+    parameters:
+      - tf-a-gerrit-project-parameter:
+          gerrit_project: "{gerrit_project|}"
+
+      - tf-a-gerrit-change-branch-parameter:
+          gerrit_branch: "{gerrit_branch|}"
+
+      - tf-a-gerrit-change-topic-parameter:
+          gerrit_topic: "{gerrit_topic|}"
+
+      - tf-a-gerrit-change-number-parameter:
+          gerrit_change_number: "{gerrit_change_number|}"
+
+      - tf-a-gerrit-change-id-parameter:
+          gerrit_change_id: "{gerrit_change_id|}"
+
+      - tf-a-gerrit-change-subject-parameter:
+          gerrit_change_subject: "{gerrit_change_subject|}"
+
+      - tf-a-gerrit-change-url-parameter:
+          gerrit_change_url: "{gerrit_change_url|}"
+
+      - tf-a-gerrit-change-hashtags-parameter:
+          gerrit_hashtags: "{gerrit_hashtags|}"
+
+      - tf-a-gerrit-change-wip-state-parameter:
+          gerrit_change_wip_state: "{gerrit_change_wip_state|}"
+
+      - tf-a-gerrit-change-private-state-parameter:
+          gerrit_change_private_state: "{gerrit_change_private_state|}"
+
+      - tf-a-gerrit-change-owner-name-parameter:
+          gerrit_change_owner_name: "{gerrit_change_owner_name|}"
+
+      - tf-a-gerrit-change-owner-username-parameter:
+          gerrit_change_owner_username: "{gerrit_change_owner_username|}"
+
+      - tf-a-gerrit-change-owner-email-parameter:
+          gerrit_change_owner_email: "{gerrit_change_owner_email|}"
+
+      - tf-a-gerrit-change-owner-parameter:
+          gerrit_change_owner: "{gerrit_change_owner|}"
+
+      - tf-a-gerrit-patchset-uploader-name-parameter:
+          gerrit_patchset_uploader_name: "{gerrit_patchset_uploader_name|}"
+
+      - tf-a-gerrit-patchset-uploader-username-parameter:
+          gerrit_patchset_uploader_username: "{gerrit_patchset_uploader_username|}"
+
+      - tf-a-gerrit-patchset-uploader-email-parameter:
+          gerrit_patchset_uploader_email: "{gerrit_patchset_uploader_email|}"
+
+      - tf-a-gerrit-patchset-uploader-parameter:
+          gerrit_patchset_uploader: "{gerrit_patchset_uploader|}"
+
+- parameter:
+    name: "tf-a-gerrit-patchset-core-parameters"
+
+    parameters:
+      - tf-a-gerrit-patchset-refspec-parameter:
+          gerrit_refspec: "{gerrit_refspec|}"
+
+      - tf-a-gerrit-patchset-revision-parameter:
+          gerrit_patchset_revision: "{gerrit_patchset_revision|}"
+
+      - tf-a-gerrit-patchset-number-parameter:
+          gerrit_patchset_number: "{gerrit_patchset_number|}"
+
+- parameter:
+    name: "tf-a-gerrit-ref-updated-core-parameters"
+
+    parameters:
+      - tf-a-gerrit-project-parameter:
+          gerrit_project: "{gerrit_project|}"
+
+      - tf-a-gerrit-ref-updated-refname-parameter:
+          gerrit_refname: "{gerrit_refname|}"
+
+      - tf-a-gerrit-ref-updated-oldrev-parameter:
+          gerrit_oldrev: "{gerrit_oldrev|}"
+
+      - tf-a-gerrit-newrev-parameter:
+          gerrit_newrev: "{gerrit_newrev|}"
+
+- parameter:
+    name: "tf-a-gerrit-commit-message-parameters"
+
+    parameters:
+      - tf-a-gerrit-change-commit-message-parameter:
+          gerrit_change_commit_message: "{gerrit_change_commit_message|}"
+
+- parameter:
+    name: "tf-a-gerrit-comment-extras-parameters"
+
+    parameters:
+      - tf-a-gerrit-event-comment-text-parameter:
+          gerrit_event_comment_text: "{gerrit_event_comment_text|}"
+
+      - tf-a-gerrit-event-updated-approvals-parameter:
+          gerrit_event_updated_approvals: "{gerrit_event_updated_approvals|}"
+
+- parameter:
+    name: "tf-a-gerrit-change-abandoned-extras-parameters"
+
+    parameters:
+      - tf-a-gerrit-change-abandoner-name-parameter:
+          gerrit_change_abandoner_name: "{gerrit_change_abandoner_name|}"
+
+      - tf-a-gerrit-change-abandoner-username-parameter:
+          gerrit_change_abandoner_username: "{gerrit_change_abandoner_username|}"
+
+      - tf-a-gerrit-change-abandoner-email-parameter:
+          gerrit_change_abandoner_email: "{gerrit_change_abandoner_email|}"
+
+      - tf-a-gerrit-change-abandoner-parameter:
+          gerrit_change_abandoner: "{gerrit_change_abandoner|}"
+
+- parameter:
+    name: "tf-a-gerrit-change-restored-extras-parameters"
+
+    parameters:
+      - tf-a-gerrit-change-restorer-name-parameter:
+          gerrit_change_restorer_name: "{gerrit_change_restorer_name|}"
+
+      - tf-a-gerrit-change-restorer-username-parameter:
+          gerrit_change_restorer_username: "{gerrit_change_restorer_username|}"
+
+      - tf-a-gerrit-change-restorer-email-parameter:
+          gerrit_change_restorer_email: "{gerrit_change_restorer_email|}"
+
+      - tf-a-gerrit-change-restorer-parameter:
+          gerrit_change_restorer: "{gerrit_change_restorer|}"
+
+- parameter:
+    name: "tf-a-gerrit-topic-changed-extras-parameters"
+
+    parameters:
+      - tf-a-gerrit-old-topic-parameter:
+          gerrit_old_topic: "{gerrit_old_topic|}"
+
+      - tf-a-gerrit-topic-changer-name-parameter:
+          gerrit_topic_changer_name: "{gerrit_topic_changer_name|}"
+
+      - tf-a-gerrit-topic-changer-username-parameter:
+          gerrit_topic_changer_username: "{gerrit_topic_changer_username|}"
+
+      - tf-a-gerrit-topic-changer-email-parameter:
+          gerrit_topic_changer_email: "{gerrit_topic_changer_email|}"
+
+      - tf-a-gerrit-topic-changer-parameter:
+          gerrit_topic_changer: "{gerrit_topic_changer|}"
+
+- parameter:
+    name: "tf-a-gerrit-change-merged-extras-parameters"
+
+    parameters:
+      - tf-a-gerrit-newrev-parameter:
+          gerrit_newrev: "{gerrit_newrev|}"
+
+- parameter:
+    name: "tf-a-gerrit-hashtags-changed-extras-parameters"
+
+    parameters:
+      - tf-a-gerrit-added-hashtags-parameter:
+          gerrit_added_hashtags: "{gerrit_added_hashtags|}"
+
+      - tf-a-gerrit-removed-hashtags-parameter:
+          gerrit_removed_hashtags: "{gerrit_removed_hashtags|}"
+
+- parameter:
+    name: "tf-a-gerrit-change-based-parameters"
+
+    parameters:
+      - tf-a-gerrit-parameters:
+          gerrit_event_type: "{gerrit_event_type|}"
+          gerrit_event_hash: "{gerrit_event_hash|}"
+          gerrit_name: "{gerrit_name|}"
+          gerrit_host: "{gerrit_host|}"
+          gerrit_port: "{gerrit_port|}"
+          gerrit_scheme: "{gerrit_scheme|}"
+          gerrit_version: "{gerrit_version|}"
+          gerrit_event_account_name: "{gerrit_event_account_name|}"
+          gerrit_event_account_username: "{gerrit_event_account_username|}"
+          gerrit_event_account_email: "{gerrit_event_account_email|}"
+          gerrit_event_account: "{gerrit_event_account|}"
+
+      - tf-a-gerrit-change-core-parameters:
+          gerrit_project: "{gerrit_project|}"
+          gerrit_branch: "{gerrit_branch|}"
+          gerrit_topic: "{gerrit_topic|}"
+          gerrit_change_number: "{gerrit_change_number|}"
+          gerrit_change_id: "{gerrit_change_id|}"
+          gerrit_change_subject: "{gerrit_change_subject|}"
+          gerrit_change_url: "{gerrit_change_url|}"
+          gerrit_hashtags: "{gerrit_hashtags|}"
+          gerrit_change_wip_state: "{gerrit_change_wip_state|}"
+          gerrit_change_private_state: "{gerrit_change_private_state|}"
+          gerrit_change_owner_name: "{gerrit_change_owner_name|}"
+          gerrit_change_owner_username: "{gerrit_change_owner_username|}"
+          gerrit_change_owner_email: "{gerrit_change_owner_email|}"
+          gerrit_change_owner: "{gerrit_change_owner|}"
+          gerrit_patchset_uploader_name: "{gerrit_patchset_uploader_name|}"
+          gerrit_patchset_uploader_username: "{gerrit_patchset_uploader_username|}"
+          gerrit_patchset_uploader_email: "{gerrit_patchset_uploader_email|}"
+          gerrit_patchset_uploader: "{gerrit_patchset_uploader|}"
+
+- parameter:
+    name: "tf-a-gerrit-change-based-patchset-parameters"
+
+    parameters:
+      - tf-a-gerrit-change-based-parameters:
+          gerrit_event_type: "{gerrit_event_type|}"
+          gerrit_event_hash: "{gerrit_event_hash|}"
+          gerrit_name: "{gerrit_name|}"
+          gerrit_host: "{gerrit_host|}"
+          gerrit_port: "{gerrit_port|}"
+          gerrit_scheme: "{gerrit_scheme|}"
+          gerrit_version: "{gerrit_version|}"
+          gerrit_event_account_name: "{gerrit_event_account_name|}"
+          gerrit_event_account_username: "{gerrit_event_account_username|}"
+          gerrit_event_account_email: "{gerrit_event_account_email|}"
+          gerrit_event_account: "{gerrit_event_account|}"
+          gerrit_project: "{gerrit_project|}"
+          gerrit_branch: "{gerrit_branch|}"
+          gerrit_topic: "{gerrit_topic|}"
+          gerrit_change_number: "{gerrit_change_number|}"
+          gerrit_change_id: "{gerrit_change_id|}"
+          gerrit_change_subject: "{gerrit_change_subject|}"
+          gerrit_change_url: "{gerrit_change_url|}"
+          gerrit_hashtags: "{gerrit_hashtags|}"
+          gerrit_change_wip_state: "{gerrit_change_wip_state|}"
+          gerrit_change_private_state: "{gerrit_change_private_state|}"
+          gerrit_change_owner_name: "{gerrit_change_owner_name|}"
+          gerrit_change_owner_username: "{gerrit_change_owner_username|}"
+          gerrit_change_owner_email: "{gerrit_change_owner_email|}"
+          gerrit_change_owner: "{gerrit_change_owner|}"
+          gerrit_patchset_uploader_name: "{gerrit_patchset_uploader_name|}"
+          gerrit_patchset_uploader_username: "{gerrit_patchset_uploader_username|}"
+          gerrit_patchset_uploader_email: "{gerrit_patchset_uploader_email|}"
+          gerrit_patchset_uploader: "{gerrit_patchset_uploader|}"
+
+      - tf-a-gerrit-patchset-core-parameters:
+          gerrit_refspec: "{gerrit_refspec|}"
+          gerrit_patchset_revision: "{gerrit_patchset_revision|}"
+          gerrit_patchset_number: "{gerrit_patchset_number|}"
+
+      - tf-a-gerrit-commit-message-parameters:
+          gerrit_change_commit_message: "{gerrit_change_commit_message|}"
+
+- parameter:
+    name: "tf-a-gerrit-change-abandoned-parameters"
+
+    parameters:
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_event_type: "{gerrit_event_type|}"
+          gerrit_event_hash: "{gerrit_event_hash|}"
+          gerrit_name: "{gerrit_name|}"
+          gerrit_host: "{gerrit_host|}"
+          gerrit_port: "{gerrit_port|}"
+          gerrit_scheme: "{gerrit_scheme|}"
+          gerrit_version: "{gerrit_version|}"
+          gerrit_event_account_name: "{gerrit_event_account_name|}"
+          gerrit_event_account_username: "{gerrit_event_account_username|}"
+          gerrit_event_account_email: "{gerrit_event_account_email|}"
+          gerrit_event_account: "{gerrit_event_account|}"
+          gerrit_project: "{gerrit_project|}"
+          gerrit_branch: "{gerrit_branch|}"
+          gerrit_topic: "{gerrit_topic|}"
+          gerrit_change_number: "{gerrit_change_number|}"
+          gerrit_change_id: "{gerrit_change_id|}"
+          gerrit_change_subject: "{gerrit_change_subject|}"
+          gerrit_change_url: "{gerrit_change_url|}"
+          gerrit_hashtags: "{gerrit_hashtags|}"
+          gerrit_change_wip_state: "{gerrit_change_wip_state|}"
+          gerrit_change_private_state: "{gerrit_change_private_state|}"
+          gerrit_change_owner_name: "{gerrit_change_owner_name|}"
+          gerrit_change_owner_username: "{gerrit_change_owner_username|}"
+          gerrit_change_owner_email: "{gerrit_change_owner_email|}"
+          gerrit_change_owner: "{gerrit_change_owner|}"
+          gerrit_patchset_uploader_name: "{gerrit_patchset_uploader_name|}"
+          gerrit_patchset_uploader_username: "{gerrit_patchset_uploader_username|}"
+          gerrit_patchset_uploader_email: "{gerrit_patchset_uploader_email|}"
+          gerrit_patchset_uploader: "{gerrit_patchset_uploader|}"
+          gerrit_refspec: "{gerrit_refspec|}"
+          gerrit_patchset_revision: "{gerrit_patchset_revision|}"
+          gerrit_patchset_number: "{gerrit_patchset_number|}"
+          gerrit_change_commit_message: "{gerrit_change_commit_message|}"
+
+      - tf-a-gerrit-change-abandoned-extras-parameters:
+          gerrit_change_abandoner_name: "{gerrit_change_abandoner_name|}"
+          gerrit_change_abandoner_username: "{gerrit_change_abandoner_username|}"
+          gerrit_change_abandoner_email: "{gerrit_change_abandoner_email|}"
+          gerrit_change_abandoner: "{gerrit_change_abandoner|}"
+
+- parameter:
+    name: "tf-a-gerrit-change-merged-parameters"
+
+    parameters:
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_event_type: "{gerrit_event_type|}"
+          gerrit_event_hash: "{gerrit_event_hash|}"
+          gerrit_name: "{gerrit_name|}"
+          gerrit_host: "{gerrit_host|}"
+          gerrit_port: "{gerrit_port|}"
+          gerrit_scheme: "{gerrit_scheme|}"
+          gerrit_version: "{gerrit_version|}"
+          gerrit_event_account_name: "{gerrit_event_account_name|}"
+          gerrit_event_account_username: "{gerrit_event_account_username|}"
+          gerrit_event_account_email: "{gerrit_event_account_email|}"
+          gerrit_event_account: "{gerrit_event_account|}"
+          gerrit_project: "{gerrit_project|}"
+          gerrit_branch: "{gerrit_branch|}"
+          gerrit_topic: "{gerrit_topic|}"
+          gerrit_change_number: "{gerrit_change_number|}"
+          gerrit_change_id: "{gerrit_change_id|}"
+          gerrit_change_subject: "{gerrit_change_subject|}"
+          gerrit_change_url: "{gerrit_change_url|}"
+          gerrit_hashtags: "{gerrit_hashtags|}"
+          gerrit_change_wip_state: "{gerrit_change_wip_state|}"
+          gerrit_change_private_state: "{gerrit_change_private_state|}"
+          gerrit_change_owner_name: "{gerrit_change_owner_name|}"
+          gerrit_change_owner_username: "{gerrit_change_owner_username|}"
+          gerrit_change_owner_email: "{gerrit_change_owner_email|}"
+          gerrit_change_owner: "{gerrit_change_owner|}"
+          gerrit_patchset_uploader_name: "{gerrit_patchset_uploader_name|}"
+          gerrit_patchset_uploader_username: "{gerrit_patchset_uploader_username|}"
+          gerrit_patchset_uploader_email: "{gerrit_patchset_uploader_email|}"
+          gerrit_patchset_uploader: "{gerrit_patchset_uploader|}"
+          gerrit_refspec: "{gerrit_refspec|}"
+          gerrit_patchset_revision: "{gerrit_patchset_revision|}"
+          gerrit_patchset_number: "{gerrit_patchset_number|}"
+          gerrit_change_commit_message: "{gerrit_change_commit_message|}"
+
+      - tf-a-gerrit-change-merged-extras-parameters:
+          gerrit_newrev: "{gerrit_newrev|}"
+
+- parameter:
+    name: "tf-a-gerrit-change-restored-parameters"
+
+    parameters:
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_event_type: "{gerrit_event_type|}"
+          gerrit_event_hash: "{gerrit_event_hash|}"
+          gerrit_name: "{gerrit_name|}"
+          gerrit_host: "{gerrit_host|}"
+          gerrit_port: "{gerrit_port|}"
+          gerrit_scheme: "{gerrit_scheme|}"
+          gerrit_version: "{gerrit_version|}"
+          gerrit_event_account_name: "{gerrit_event_account_name|}"
+          gerrit_event_account_username: "{gerrit_event_account_username|}"
+          gerrit_event_account_email: "{gerrit_event_account_email|}"
+          gerrit_event_account: "{gerrit_event_account|}"
+          gerrit_project: "{gerrit_project|}"
+          gerrit_branch: "{gerrit_branch|}"
+          gerrit_topic: "{gerrit_topic|}"
+          gerrit_change_number: "{gerrit_change_number|}"
+          gerrit_change_id: "{gerrit_change_id|}"
+          gerrit_change_subject: "{gerrit_change_subject|}"
+          gerrit_change_url: "{gerrit_change_url|}"
+          gerrit_hashtags: "{gerrit_hashtags|}"
+          gerrit_change_wip_state: "{gerrit_change_wip_state|}"
+          gerrit_change_private_state: "{gerrit_change_private_state|}"
+          gerrit_change_owner_name: "{gerrit_change_owner_name|}"
+          gerrit_change_owner_username: "{gerrit_change_owner_username|}"
+          gerrit_change_owner_email: "{gerrit_change_owner_email|}"
+          gerrit_change_owner: "{gerrit_change_owner|}"
+          gerrit_patchset_uploader_name: "{gerrit_patchset_uploader_name|}"
+          gerrit_patchset_uploader_username: "{gerrit_patchset_uploader_username|}"
+          gerrit_patchset_uploader_email: "{gerrit_patchset_uploader_email|}"
+          gerrit_patchset_uploader: "{gerrit_patchset_uploader|}"
+          gerrit_refspec: "{gerrit_refspec|}"
+          gerrit_patchset_revision: "{gerrit_patchset_revision|}"
+          gerrit_patchset_number: "{gerrit_patchset_number|}"
+          gerrit_change_commit_message: "{gerrit_change_commit_message|}"
+
+      - tf-a-gerrit-change-restored-extras-parameters:
+          gerrit_change_restorer_name: "{gerrit_change_restorer_name|}"
+          gerrit_change_restorer_username: "{gerrit_change_restorer_username|}"
+          gerrit_change_restorer_email: "{gerrit_change_restorer_email|}"
+          gerrit_change_restorer: "{gerrit_change_restorer|}"
+
+- parameter:
+    name: "tf-a-gerrit-comment-added-parameters"
+
+    parameters:
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_event_type: "{gerrit_event_type|}"
+          gerrit_event_hash: "{gerrit_event_hash|}"
+          gerrit_name: "{gerrit_name|}"
+          gerrit_host: "{gerrit_host|}"
+          gerrit_port: "{gerrit_port|}"
+          gerrit_scheme: "{gerrit_scheme|}"
+          gerrit_version: "{gerrit_version|}"
+          gerrit_event_account_name: "{gerrit_event_account_name|}"
+          gerrit_event_account_username: "{gerrit_event_account_username|}"
+          gerrit_event_account_email: "{gerrit_event_account_email|}"
+          gerrit_event_account: "{gerrit_event_account|}"
+          gerrit_project: "{gerrit_project|}"
+          gerrit_branch: "{gerrit_branch|}"
+          gerrit_topic: "{gerrit_topic|}"
+          gerrit_change_number: "{gerrit_change_number|}"
+          gerrit_change_id: "{gerrit_change_id|}"
+          gerrit_change_subject: "{gerrit_change_subject|}"
+          gerrit_change_url: "{gerrit_change_url|}"
+          gerrit_hashtags: "{gerrit_hashtags|}"
+          gerrit_change_wip_state: "{gerrit_change_wip_state|}"
+          gerrit_change_private_state: "{gerrit_change_private_state|}"
+          gerrit_change_owner_name: "{gerrit_change_owner_name|}"
+          gerrit_change_owner_username: "{gerrit_change_owner_username|}"
+          gerrit_change_owner_email: "{gerrit_change_owner_email|}"
+          gerrit_change_owner: "{gerrit_change_owner|}"
+          gerrit_patchset_uploader_name: "{gerrit_patchset_uploader_name|}"
+          gerrit_patchset_uploader_username: "{gerrit_patchset_uploader_username|}"
+          gerrit_patchset_uploader_email: "{gerrit_patchset_uploader_email|}"
+          gerrit_patchset_uploader: "{gerrit_patchset_uploader|}"
+          gerrit_refspec: "{gerrit_refspec|}"
+          gerrit_patchset_revision: "{gerrit_patchset_revision|}"
+          gerrit_patchset_number: "{gerrit_patchset_number|}"
+          gerrit_change_commit_message: "{gerrit_change_commit_message|}"
+
+      - tf-a-gerrit-comment-extras-parameters:
+          gerrit_event_comment_text: "{gerrit_event_comment_text|}"
+          gerrit_event_updated_approvals: "{gerrit_event_updated_approvals|}"
+
+- parameter:
+    name: "tf-a-gerrit-comment-added-contains-parameters"
+
+    parameters:
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_event_type: "{gerrit_event_type|}"
+          gerrit_event_hash: "{gerrit_event_hash|}"
+          gerrit_name: "{gerrit_name|}"
+          gerrit_host: "{gerrit_host|}"
+          gerrit_port: "{gerrit_port|}"
+          gerrit_scheme: "{gerrit_scheme|}"
+          gerrit_version: "{gerrit_version|}"
+          gerrit_event_account_name: "{gerrit_event_account_name|}"
+          gerrit_event_account_username: "{gerrit_event_account_username|}"
+          gerrit_event_account_email: "{gerrit_event_account_email|}"
+          gerrit_event_account: "{gerrit_event_account|}"
+          gerrit_project: "{gerrit_project|}"
+          gerrit_branch: "{gerrit_branch|}"
+          gerrit_topic: "{gerrit_topic|}"
+          gerrit_change_number: "{gerrit_change_number|}"
+          gerrit_change_id: "{gerrit_change_id|}"
+          gerrit_change_subject: "{gerrit_change_subject|}"
+          gerrit_change_url: "{gerrit_change_url|}"
+          gerrit_hashtags: "{gerrit_hashtags|}"
+          gerrit_change_wip_state: "{gerrit_change_wip_state|}"
+          gerrit_change_private_state: "{gerrit_change_private_state|}"
+          gerrit_change_owner_name: "{gerrit_change_owner_name|}"
+          gerrit_change_owner_username: "{gerrit_change_owner_username|}"
+          gerrit_change_owner_email: "{gerrit_change_owner_email|}"
+          gerrit_change_owner: "{gerrit_change_owner|}"
+          gerrit_patchset_uploader_name: "{gerrit_patchset_uploader_name|}"
+          gerrit_patchset_uploader_username: "{gerrit_patchset_uploader_username|}"
+          gerrit_patchset_uploader_email: "{gerrit_patchset_uploader_email|}"
+          gerrit_patchset_uploader: "{gerrit_patchset_uploader|}"
+          gerrit_refspec: "{gerrit_refspec|}"
+          gerrit_patchset_revision: "{gerrit_patchset_revision|}"
+          gerrit_patchset_number: "{gerrit_patchset_number|}"
+          gerrit_change_commit_message: "{gerrit_change_commit_message|}"
+
+      - tf-a-gerrit-comment-extras-parameters:
+          gerrit_event_comment_text: "{gerrit_event_comment_text|}"
+          gerrit_event_updated_approvals: "{gerrit_event_updated_approvals|}"
+
+- parameter:
+    name: "tf-a-gerrit-draft-published-parameters"
+
+    parameters:
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_event_type: "{gerrit_event_type|}"
+          gerrit_event_hash: "{gerrit_event_hash|}"
+          gerrit_name: "{gerrit_name|}"
+          gerrit_host: "{gerrit_host|}"
+          gerrit_port: "{gerrit_port|}"
+          gerrit_scheme: "{gerrit_scheme|}"
+          gerrit_version: "{gerrit_version|}"
+          gerrit_event_account_name: "{gerrit_event_account_name|}"
+          gerrit_event_account_username: "{gerrit_event_account_username|}"
+          gerrit_event_account_email: "{gerrit_event_account_email|}"
+          gerrit_event_account: "{gerrit_event_account|}"
+          gerrit_project: "{gerrit_project|}"
+          gerrit_branch: "{gerrit_branch|}"
+          gerrit_topic: "{gerrit_topic|}"
+          gerrit_change_number: "{gerrit_change_number|}"
+          gerrit_change_id: "{gerrit_change_id|}"
+          gerrit_change_subject: "{gerrit_change_subject|}"
+          gerrit_change_url: "{gerrit_change_url|}"
+          gerrit_hashtags: "{gerrit_hashtags|}"
+          gerrit_change_wip_state: "{gerrit_change_wip_state|}"
+          gerrit_change_private_state: "{gerrit_change_private_state|}"
+          gerrit_change_owner_name: "{gerrit_change_owner_name|}"
+          gerrit_change_owner_username: "{gerrit_change_owner_username|}"
+          gerrit_change_owner_email: "{gerrit_change_owner_email|}"
+          gerrit_change_owner: "{gerrit_change_owner|}"
+          gerrit_patchset_uploader_name: "{gerrit_patchset_uploader_name|}"
+          gerrit_patchset_uploader_username: "{gerrit_patchset_uploader_username|}"
+          gerrit_patchset_uploader_email: "{gerrit_patchset_uploader_email|}"
+          gerrit_patchset_uploader: "{gerrit_patchset_uploader|}"
+          gerrit_refspec: "{gerrit_refspec|}"
+          gerrit_patchset_revision: "{gerrit_patchset_revision|}"
+          gerrit_patchset_number: "{gerrit_patchset_number|}"
+          gerrit_change_commit_message: "{gerrit_change_commit_message|}"
+
+- parameter:
+    name: "tf-a-gerrit-patchset-created-parameters"
+
+    parameters:
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_event_type: "{gerrit_event_type|}"
+          gerrit_event_hash: "{gerrit_event_hash|}"
+          gerrit_name: "{gerrit_name|}"
+          gerrit_host: "{gerrit_host|}"
+          gerrit_port: "{gerrit_port|}"
+          gerrit_scheme: "{gerrit_scheme|}"
+          gerrit_version: "{gerrit_version|}"
+          gerrit_event_account_name: "{gerrit_event_account_name|}"
+          gerrit_event_account_username: "{gerrit_event_account_username|}"
+          gerrit_event_account_email: "{gerrit_event_account_email|}"
+          gerrit_event_account: "{gerrit_event_account|}"
+          gerrit_project: "{gerrit_project|}"
+          gerrit_branch: "{gerrit_branch|}"
+          gerrit_topic: "{gerrit_topic|}"
+          gerrit_change_number: "{gerrit_change_number|}"
+          gerrit_change_id: "{gerrit_change_id|}"
+          gerrit_change_subject: "{gerrit_change_subject|}"
+          gerrit_change_url: "{gerrit_change_url|}"
+          gerrit_hashtags: "{gerrit_hashtags|}"
+          gerrit_change_wip_state: "{gerrit_change_wip_state|}"
+          gerrit_change_private_state: "{gerrit_change_private_state|}"
+          gerrit_change_owner_name: "{gerrit_change_owner_name|}"
+          gerrit_change_owner_username: "{gerrit_change_owner_username|}"
+          gerrit_change_owner_email: "{gerrit_change_owner_email|}"
+          gerrit_change_owner: "{gerrit_change_owner|}"
+          gerrit_patchset_uploader_name: "{gerrit_patchset_uploader_name|}"
+          gerrit_patchset_uploader_username: "{gerrit_patchset_uploader_username|}"
+          gerrit_patchset_uploader_email: "{gerrit_patchset_uploader_email|}"
+          gerrit_patchset_uploader: "{gerrit_patchset_uploader|}"
+          gerrit_refspec: "{gerrit_refspec|}"
+          gerrit_patchset_revision: "{gerrit_patchset_revision|}"
+          gerrit_patchset_number: "{gerrit_patchset_number|}"
+          gerrit_change_commit_message: "{gerrit_change_commit_message|}"
+
+- parameter:
+    name: "tf-a-gerrit-patchset-uploaded-parameters"
+
+    parameters:
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_event_type: "{gerrit_event_type|}"
+          gerrit_event_hash: "{gerrit_event_hash|}"
+          gerrit_name: "{gerrit_name|}"
+          gerrit_host: "{gerrit_host|}"
+          gerrit_port: "{gerrit_port|}"
+          gerrit_scheme: "{gerrit_scheme|}"
+          gerrit_version: "{gerrit_version|}"
+          gerrit_event_account_name: "{gerrit_event_account_name|}"
+          gerrit_event_account_username: "{gerrit_event_account_username|}"
+          gerrit_event_account_email: "{gerrit_event_account_email|}"
+          gerrit_event_account: "{gerrit_event_account|}"
+          gerrit_project: "{gerrit_project|}"
+          gerrit_branch: "{gerrit_branch|}"
+          gerrit_topic: "{gerrit_topic|}"
+          gerrit_change_number: "{gerrit_change_number|}"
+          gerrit_change_id: "{gerrit_change_id|}"
+          gerrit_change_subject: "{gerrit_change_subject|}"
+          gerrit_change_url: "{gerrit_change_url|}"
+          gerrit_hashtags: "{gerrit_hashtags|}"
+          gerrit_change_wip_state: "{gerrit_change_wip_state|}"
+          gerrit_change_private_state: "{gerrit_change_private_state|}"
+          gerrit_change_owner_name: "{gerrit_change_owner_name|}"
+          gerrit_change_owner_username: "{gerrit_change_owner_username|}"
+          gerrit_change_owner_email: "{gerrit_change_owner_email|}"
+          gerrit_change_owner: "{gerrit_change_owner|}"
+          gerrit_patchset_uploader_name: "{gerrit_patchset_uploader_name|}"
+          gerrit_patchset_uploader_username: "{gerrit_patchset_uploader_username|}"
+          gerrit_patchset_uploader_email: "{gerrit_patchset_uploader_email|}"
+          gerrit_patchset_uploader: "{gerrit_patchset_uploader|}"
+          gerrit_refspec: "{gerrit_refspec|}"
+          gerrit_patchset_revision: "{gerrit_patchset_revision|}"
+          gerrit_patchset_number: "{gerrit_patchset_number|}"
+          gerrit_change_commit_message: "{gerrit_change_commit_message|}"
+
+- parameter:
+    name: "tf-a-gerrit-private-state-changed-parameters"
+
+    parameters:
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_event_type: "{gerrit_event_type|}"
+          gerrit_event_hash: "{gerrit_event_hash|}"
+          gerrit_name: "{gerrit_name|}"
+          gerrit_host: "{gerrit_host|}"
+          gerrit_port: "{gerrit_port|}"
+          gerrit_scheme: "{gerrit_scheme|}"
+          gerrit_version: "{gerrit_version|}"
+          gerrit_event_account_name: "{gerrit_event_account_name|}"
+          gerrit_event_account_username: "{gerrit_event_account_username|}"
+          gerrit_event_account_email: "{gerrit_event_account_email|}"
+          gerrit_event_account: "{gerrit_event_account|}"
+          gerrit_project: "{gerrit_project|}"
+          gerrit_branch: "{gerrit_branch|}"
+          gerrit_topic: "{gerrit_topic|}"
+          gerrit_change_number: "{gerrit_change_number|}"
+          gerrit_change_id: "{gerrit_change_id|}"
+          gerrit_change_subject: "{gerrit_change_subject|}"
+          gerrit_change_url: "{gerrit_change_url|}"
+          gerrit_hashtags: "{gerrit_hashtags|}"
+          gerrit_change_wip_state: "{gerrit_change_wip_state|}"
+          gerrit_change_private_state: "{gerrit_change_private_state|}"
+          gerrit_change_owner_name: "{gerrit_change_owner_name|}"
+          gerrit_change_owner_username: "{gerrit_change_owner_username|}"
+          gerrit_change_owner_email: "{gerrit_change_owner_email|}"
+          gerrit_change_owner: "{gerrit_change_owner|}"
+          gerrit_patchset_uploader_name: "{gerrit_patchset_uploader_name|}"
+          gerrit_patchset_uploader_username: "{gerrit_patchset_uploader_username|}"
+          gerrit_patchset_uploader_email: "{gerrit_patchset_uploader_email|}"
+          gerrit_patchset_uploader: "{gerrit_patchset_uploader|}"
+          gerrit_refspec: "{gerrit_refspec|}"
+          gerrit_patchset_revision: "{gerrit_patchset_revision|}"
+          gerrit_patchset_number: "{gerrit_patchset_number|}"
+          gerrit_change_commit_message: "{gerrit_change_commit_message|}"
+
+- parameter:
+    name: "tf-a-gerrit-hashtags-changed-parameters"
+
+    parameters:
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_event_type: "{gerrit_event_type|}"
+          gerrit_event_hash: "{gerrit_event_hash|}"
+          gerrit_name: "{gerrit_name|}"
+          gerrit_host: "{gerrit_host|}"
+          gerrit_port: "{gerrit_port|}"
+          gerrit_scheme: "{gerrit_scheme|}"
+          gerrit_version: "{gerrit_version|}"
+          gerrit_event_account_name: "{gerrit_event_account_name|}"
+          gerrit_event_account_username: "{gerrit_event_account_username|}"
+          gerrit_event_account_email: "{gerrit_event_account_email|}"
+          gerrit_event_account: "{gerrit_event_account|}"
+          gerrit_project: "{gerrit_project|}"
+          gerrit_branch: "{gerrit_branch|}"
+          gerrit_topic: "{gerrit_topic|}"
+          gerrit_change_number: "{gerrit_change_number|}"
+          gerrit_change_id: "{gerrit_change_id|}"
+          gerrit_change_subject: "{gerrit_change_subject|}"
+          gerrit_change_url: "{gerrit_change_url|}"
+          gerrit_hashtags: "{gerrit_hashtags|}"
+          gerrit_change_wip_state: "{gerrit_change_wip_state|}"
+          gerrit_change_private_state: "{gerrit_change_private_state|}"
+          gerrit_change_owner_name: "{gerrit_change_owner_name|}"
+          gerrit_change_owner_username: "{gerrit_change_owner_username|}"
+          gerrit_change_owner_email: "{gerrit_change_owner_email|}"
+          gerrit_change_owner: "{gerrit_change_owner|}"
+          gerrit_patchset_uploader_name: "{gerrit_patchset_uploader_name|}"
+          gerrit_patchset_uploader_username: "{gerrit_patchset_uploader_username|}"
+          gerrit_patchset_uploader_email: "{gerrit_patchset_uploader_email|}"
+          gerrit_patchset_uploader: "{gerrit_patchset_uploader|}"
+          gerrit_refspec: "{gerrit_refspec|}"
+          gerrit_patchset_revision: "{gerrit_patchset_revision|}"
+          gerrit_patchset_number: "{gerrit_patchset_number|}"
+          gerrit_change_commit_message: "{gerrit_change_commit_message|}"
+
+      - tf-a-gerrit-hashtags-changed-extras-parameters:
+          gerrit_added_hashtags: "{gerrit_added_hashtags|}"
+          gerrit_removed_hashtags: "{gerrit_removed_hashtags|}"
+
+- parameter:
+    name: "tf-a-gerrit-ref-updated-parameters"
+
+    parameters:
+      - tf-a-gerrit-parameters:
+          gerrit_event_type: "{gerrit_event_type|}"
+          gerrit_event_hash: "{gerrit_event_hash|}"
+          gerrit_name: "{gerrit_name|}"
+          gerrit_host: "{gerrit_host|}"
+          gerrit_port: "{gerrit_port|}"
+          gerrit_scheme: "{gerrit_scheme|}"
+          gerrit_version: "{gerrit_version|}"
+          gerrit_event_account_name: "{gerrit_event_account_name|}"
+          gerrit_event_account_username: "{gerrit_event_account_username|}"
+          gerrit_event_account_email: "{gerrit_event_account_email|}"
+          gerrit_event_account: "{gerrit_event_account|}"
+
+      - tf-a-gerrit-ref-updated-core-parameters:
+          gerrit_project: "{gerrit_project|}"
+          gerrit_refname: "{gerrit_refname|}"
+          gerrit_oldrev: "{gerrit_oldrev|}"
+          gerrit_newrev: "{gerrit_newrev|}"
+
+- parameter:
+    name: "tf-a-gerrit-topic-changed-parameters"
+
+    parameters:
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_event_type: "{gerrit_event_type|}"
+          gerrit_event_hash: "{gerrit_event_hash|}"
+          gerrit_name: "{gerrit_name|}"
+          gerrit_host: "{gerrit_host|}"
+          gerrit_port: "{gerrit_port|}"
+          gerrit_scheme: "{gerrit_scheme|}"
+          gerrit_version: "{gerrit_version|}"
+          gerrit_event_account_name: "{gerrit_event_account_name|}"
+          gerrit_event_account_username: "{gerrit_event_account_username|}"
+          gerrit_event_account_email: "{gerrit_event_account_email|}"
+          gerrit_event_account: "{gerrit_event_account|}"
+          gerrit_project: "{gerrit_project|}"
+          gerrit_branch: "{gerrit_branch|}"
+          gerrit_topic: "{gerrit_topic|}"
+          gerrit_change_number: "{gerrit_change_number|}"
+          gerrit_change_id: "{gerrit_change_id|}"
+          gerrit_change_subject: "{gerrit_change_subject|}"
+          gerrit_change_url: "{gerrit_change_url|}"
+          gerrit_hashtags: "{gerrit_hashtags|}"
+          gerrit_change_wip_state: "{gerrit_change_wip_state|}"
+          gerrit_change_private_state: "{gerrit_change_private_state|}"
+          gerrit_change_owner_name: "{gerrit_change_owner_name|}"
+          gerrit_change_owner_username: "{gerrit_change_owner_username|}"
+          gerrit_change_owner_email: "{gerrit_change_owner_email|}"
+          gerrit_change_owner: "{gerrit_change_owner|}"
+          gerrit_patchset_uploader_name: "{gerrit_patchset_uploader_name|}"
+          gerrit_patchset_uploader_username: "{gerrit_patchset_uploader_username|}"
+          gerrit_patchset_uploader_email: "{gerrit_patchset_uploader_email|}"
+          gerrit_patchset_uploader: "{gerrit_patchset_uploader|}"
+          gerrit_refspec: "{gerrit_refspec|}"
+          gerrit_patchset_revision: "{gerrit_patchset_revision|}"
+          gerrit_patchset_number: "{gerrit_patchset_number|}"
+          gerrit_change_commit_message: "{gerrit_change_commit_message|}"
+
+      - tf-a-gerrit-topic-changed-extras-parameters:
+          gerrit_old_topic: "{gerrit_old_topic|}"
+          gerrit_topic_changer_name: "{gerrit_topic_changer_name|}"
+          gerrit_topic_changer_username: "{gerrit_topic_changer_username|}"
+          gerrit_topic_changer_email: "{gerrit_topic_changer_email|}"
+          gerrit_topic_changer: "{gerrit_topic_changer|}"
+
+- parameter:
+    name: "tf-a-gerrit-wip-state-changed-parameters"
+
+    parameters:
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_event_type: "{gerrit_event_type|}"
+          gerrit_event_hash: "{gerrit_event_hash|}"
+          gerrit_name: "{gerrit_name|}"
+          gerrit_host: "{gerrit_host|}"
+          gerrit_port: "{gerrit_port|}"
+          gerrit_scheme: "{gerrit_scheme|}"
+          gerrit_version: "{gerrit_version|}"
+          gerrit_event_account_name: "{gerrit_event_account_name|}"
+          gerrit_event_account_username: "{gerrit_event_account_username|}"
+          gerrit_event_account_email: "{gerrit_event_account_email|}"
+          gerrit_event_account: "{gerrit_event_account|}"
+          gerrit_project: "{gerrit_project|}"
+          gerrit_branch: "{gerrit_branch|}"
+          gerrit_topic: "{gerrit_topic|}"
+          gerrit_change_number: "{gerrit_change_number|}"
+          gerrit_change_id: "{gerrit_change_id|}"
+          gerrit_change_subject: "{gerrit_change_subject|}"
+          gerrit_change_url: "{gerrit_change_url|}"
+          gerrit_hashtags: "{gerrit_hashtags|}"
+          gerrit_change_wip_state: "{gerrit_change_wip_state|}"
+          gerrit_change_private_state: "{gerrit_change_private_state|}"
+          gerrit_change_owner_name: "{gerrit_change_owner_name|}"
+          gerrit_change_owner_username: "{gerrit_change_owner_username|}"
+          gerrit_change_owner_email: "{gerrit_change_owner_email|}"
+          gerrit_change_owner: "{gerrit_change_owner|}"
+          gerrit_patchset_uploader_name: "{gerrit_patchset_uploader_name|}"
+          gerrit_patchset_uploader_username: "{gerrit_patchset_uploader_username|}"
+          gerrit_patchset_uploader_email: "{gerrit_patchset_uploader_email|}"
+          gerrit_patchset_uploader: "{gerrit_patchset_uploader|}"
+          gerrit_refspec: "{gerrit_refspec|}"
+          gerrit_patchset_revision: "{gerrit_patchset_revision|}"
+          gerrit_patchset_number: "{gerrit_patchset_number|}"
+          gerrit_change_commit_message: "{gerrit_change_commit_message|}"
