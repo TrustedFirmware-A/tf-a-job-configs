@@ -67,7 +67,7 @@
           tf_a_ci_scripts_branch: "{tf_a_ci_scripts_branch|master}"
           tf_a_ci_scripts_mbed_tls_version: "{tf_a_ci_scripts_mbed_tls_version|3.6.5}"
 
-          tf_a_ci_jobs_project: "{tf_a_ci_jobs_project|ci/tf-a-job-configs.git}"
+          tf_a_ci_jobs_project: "{tf_a_ci_jobs_project|ci/tf-a-job-configs}"
           tf_a_ci_jobs_branch: "{tf_a_ci_jobs_branch|master}"
 
       - tf-a-gerrit-change-based-patchset-parameters:
