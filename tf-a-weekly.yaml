@@ -26,14 +26,6 @@
 
           lava_priority: "low"
 
-      - string:
-          name: "TF_GERRIT_BRANCH"
-          default: "master"
-
-      - string:
-          name: "TFTF_GERRIT_BRANCH"
-          default: "master"
-
     wrappers:
       - "timestamps"
 

@@ -34,10 +34,6 @@
 
           tf_a_ci_scripts_mbed_tls_version: "3.6.4"
 
-      - string:
-          name: "TFTF_GERRIT_BRANCH"
-          default: "lts-v2.10"
-
     wrappers:
       - credentials-binding:
           - ssh-user-private-key:

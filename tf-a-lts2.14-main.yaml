@@ -32,14 +32,6 @@
 
           tf_a_ci_scripts_mbed_tls_version: "3.6.5"
 
-      - string:
-          name: "TF_GERRIT_BRANCH"
-          default: "lts-v2.14"
-
-      - string:
-          name: "TFTF_GERRIT_BRANCH"
-          default: "lts-v2.14"
-
       - bool:
           name: "FORCE_TO_BUILD"
           default: false

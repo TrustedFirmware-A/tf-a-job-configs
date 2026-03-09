@@ -27,14 +27,6 @@
           tf_a_project: "${{GERRIT_PROJECT}}"
           tf_a_branch: "${{GERRIT_REFSPEC}}"
 
-      - string:
-          name: "TF_GERRIT_BRANCH"
-          default: "master"
-
-      - string:
-          name: "TFTF_GERRIT_BRANCH"
-          default: "master"
-
     wrappers:
       - credentials-binding:
           - ssh-user-private-key:
