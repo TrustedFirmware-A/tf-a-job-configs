@@ -45,6 +45,8 @@
     tf_a_ci_jobs_project: "ci/tf-a-job-configs"
     tf_a_ci_jobs_branch: "master"
 
+    lava_priority: "medium"
+
     properties:
       - tf-a-ci-scripts:
           download_server_url: "https://downloads.trustedfirmware.org"
@@ -325,6 +327,8 @@
 
     tf_a_ci_jobs_project: "ci/tf-a-job-configs"
     tf_a_ci_jobs_branch: "master"
+
+    lava_priority: "medium"
 
     parameters:
       - string:
@@ -629,3 +633,15 @@
           description: >
             Number of times jobs should be submitted to LAVA upon failure, as a
             temporary mitigation against non-deterministic LAVA failures.
+
+      - choice:
+          name: "LAVA_PRIORITY"
+          default: "{lava_priority}"
+
+          description: >
+            Priority to use when submitting jobs to LAVA.
+
+          choices:
+            - "low"
+            - "medium"
+            - "high"

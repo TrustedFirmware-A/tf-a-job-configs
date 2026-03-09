@@ -27,6 +27,8 @@
           tf_a_project: "${{GERRIT_PROJECT}}"
           tf_a_branch: "${{GERRIT_REFSPEC}}"
 
+          lava_priority: "low"
+
       - string:
           name: "TF_GERRIT_BRANCH"
           default: "integration"
@@ -34,10 +36,6 @@
       - string:
           name: "TFTF_GERRIT_BRANCH"
           default: "master"
-
-      - string:
-          name: "LAVA_PRIORITY"
-          default: "low"
 
     wrappers:
       - credentials-binding:
