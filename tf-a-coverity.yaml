@@ -101,7 +101,8 @@
             Therefore, if you don't need the results to be analysed, please UNTICK this box!<b>
 
     wrappers:
-      - "timestamps"
+      - tf-a-clone-wrappers:
+      - timestamps:
 
       - credentials-binding:
           - text:

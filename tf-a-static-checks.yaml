@@ -28,14 +28,8 @@
           tf_a_branch: "${{GERRIT_REFSPEC}}"
 
     wrappers:
-      - credentials-binding:
-          - ssh-user-private-key:
-              credential-id: "TFA_CI_BOT_USER_SSH_KEY"
-              key-file-variable: "CI_BOT_KEY"
-              username-variable: "CI_BOT_USERNAME"
-              passphrase-variable: ""
-
-      - "timestamps"
+      - tf-a-clone-wrappers:
+      - timestamps:
 
       - timeout:
           timeout: 240

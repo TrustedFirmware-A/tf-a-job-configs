@@ -175,6 +175,16 @@
           script-content: !include-raw-verbatim: "scripts/clone-properties.sh"
           override-build-parameters: true
 
+- wrapper:
+    name: "tf-a-clone-wrappers"
+
+    wrappers:
+      - credentials-binding:
+          - ssh-user-private-key:
+              credential-id: "TFA_CI_BOT_USER_SSH_KEY"
+              username-variable: "CI_BOT_USERNAME"
+              key-file-variable: "CI_BOT_KEY"
+
 - property:
     name: "tf-a-ci-scripts"
 

@@ -118,7 +118,8 @@
           tf_a_ci_jobs_branch: "{tf_a_ci_jobs_branch}"
 
     wrappers:
-      - "timestamps"
+      - tf-a-clone-wrappers:
+      - timestamps:
 
       - timeout:
           timeout: 120

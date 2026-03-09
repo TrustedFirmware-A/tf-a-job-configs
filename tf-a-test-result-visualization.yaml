@@ -74,6 +74,10 @@
           default: "tf-a-main/1"
           description: "Target build to analyze."
 
+    wrappers:
+      - tf-a-clone-wrappers:
+      - timestamps:
+
     builders:
       - tf-a-clone:
           projects: "${{CLONE_REPOS}}"
@@ -108,5 +112,3 @@
       - groovy-postbuild:
           script: !include-raw-verbatim:
             - "tf-a-ci-gateway/postbuild.groovy"
-
-    wrappers:
