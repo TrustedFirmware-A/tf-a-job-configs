@@ -18,14 +18,14 @@
       - tf-a-clone-parameters:
           projects: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
 
-      - tf-a-builder-parameters:
-          tf_a_project: "${{GERRIT_PROJECT}}"
-          tf_a_branch: "${{GERRIT_REFSPEC}}"
-
       - tf-a-gerrit-change-based-patchset-parameters:
           gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
           gerrit_branch: "master"
           gerrit_refspec: "integration"
+
+      - tf-a-builder-parameters:
+          tf_a_project: "${{GERRIT_PROJECT}}"
+          tf_a_branch: "${{GERRIT_REFSPEC}}"
 
       - string:
           name: "TF_GERRIT_BRANCH"

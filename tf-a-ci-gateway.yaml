@@ -38,6 +38,11 @@
               <li><code>tf-l1-build-fvp/fvp-default:nil tftf-l1-fvp/fvp-default,fvp-default:fvp-tftf-fip.tftf-aemva</code></li>
             </ul>
 
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_project: "{gerrit_project}"
+          gerrit_branch: "{gerrit_branch}"
+          gerrit_refspec: "{gerrit_branch}"
+
       - tf-a-builder-parameters:
           tf_a_project: "{tf_a_project|TF-A/trusted-firmware-a}"
           tf_a_branch: "{tf_a_branch|master}"
@@ -69,11 +74,6 @@
 
           tf_a_ci_jobs_project: "{tf_a_ci_jobs_project|ci/tf-a-job-configs}"
           tf_a_ci_jobs_branch: "{tf_a_ci_jobs_branch|master}"
-
-      - tf-a-gerrit-change-based-patchset-parameters:
-          gerrit_project: "{gerrit_project}"
-          gerrit_branch: "{gerrit_branch}"
-          gerrit_refspec: "{gerrit_branch}"
 
     scm:
       - git:

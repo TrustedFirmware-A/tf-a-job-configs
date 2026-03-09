@@ -56,14 +56,14 @@
           silent-start: false
 
     parameters:
-      - tf-a-builder-parameters:
-          rf_a_project: "${{GERRIT_PROJECT}}"
-          rf_a_branch: "${{GERRIT_REFSPEC}}"
-
       - tf-a-gerrit-comment-added-contains-parameters:
           gerrit_project: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
           gerrit_branch: "main"
           gerrit_refspec: "main"
+
+      - tf-a-builder-parameters:
+          rf_a_project: "${{GERRIT_PROJECT}}"
+          rf_a_branch: "${{GERRIT_REFSPEC}}"
 
     wrappers:
       - credentials-binding:

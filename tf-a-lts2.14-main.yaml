@@ -18,6 +18,11 @@
       - tf-a-clone-parameters:
           projects: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
 
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+          gerrit_branch: "lts-v2.14"
+          gerrit_refspec: "lts-v2.14"
+
       - tf-a-builder-parameters:
           tf_a_project: "${{GERRIT_PROJECT}}"
           tf_a_branch: "${{GERRIT_REFSPEC}}"
@@ -26,11 +31,6 @@
           tftf_branch: "lts-v2.14"
 
           tf_a_ci_scripts_mbed_tls_version: "3.6.5"
-
-      - tf-a-gerrit-change-based-patchset-parameters:
-          gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
-          gerrit_branch: "lts-v2.14"
-          gerrit_refspec: "lts-v2.14"
 
       - string:
           name: "TF_GERRIT_BRANCH"

@@ -34,15 +34,6 @@
       - tf-a-clone-parameters:
           projects: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
 
-      - tf-a-builder-parameters:
-          tf_a_project: "${{GERRIT_PROJECT}}"
-          tf_a_branch: "${{GERRIT_REFSPEC}}"
-
-      - tf-a-gerrit-change-based-patchset-parameters:
-          gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
-          gerrit_branch: "master"
-          gerrit_refspec: "master"
-
       - string:
           name: "TEST_GROUPS"
           default: "tf-l3-code-coverage"
@@ -51,6 +42,15 @@
             White space separated list of test configs: can be mix of specific
             test configs (e.g., <code>l1/fvp-default:fvp-linux-default</code>) and
             group names (e.g., <code>l1 l2</code>).
+
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+          gerrit_branch: "master"
+          gerrit_refspec: "master"
+
+      - tf-a-builder-parameters:
+          tf_a_project: "${{GERRIT_PROJECT}}"
+          tf_a_branch: "${{GERRIT_REFSPEC}}"
 
     scm:
       - git:

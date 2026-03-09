@@ -20,14 +20,14 @@
           days-to-keep: 30
 
     parameters:
-      - tf-a-builder-parameters:
-          tf_a_project: "${{GERRIT_PROJECT}}"
-          tf_a_branch: "${{GERRIT_REFSPEC}}"
-
       - tf-a-gerrit-comment-added-parameters:
           gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
           gerrit_branch: "master"
           gerrit_refspec: "master"
+
+      - tf-a-builder-parameters:
+          tf_a_project: "${{GERRIT_PROJECT}}"
+          tf_a_branch: "${{GERRIT_REFSPEC}}"
 
       - string:
           name: "TFTF_GERRIT_BRANCH"

@@ -78,6 +78,11 @@
             Expanded and normalized test configuration descriptor produced by
             the <code>gen_test_desc.py</code> script.
 
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_project: "{gerrit_project}"
+          gerrit_branch: "{gerrit_branch}"
+          gerrit_refspec: "{gerrit_refspec}"
+
       - tf-a-builder-parameters:
           tf_a_project: "{tf_a_project}"
           tf_a_branch: "{tf_a_branch}"
@@ -109,11 +114,6 @@
 
           tf_a_ci_jobs_project: "{tf_a_ci_jobs_project}"
           tf_a_ci_jobs_branch: "{tf_a_ci_jobs_branch}"
-
-      - tf-a-gerrit-change-based-patchset-parameters:
-          gerrit_project: "{gerrit_project}"
-          gerrit_branch: "{gerrit_branch}"
-          gerrit_refspec: "{gerrit_refspec}"
 
     wrappers:
       - "timestamps"

@@ -20,6 +20,11 @@
           days-to-keep: 30
 
     parameters:
+      - tf-a-gerrit-comment-added-parameters:
+          gerrit_project: "{gerrit_project_prefix}TF-A/tf-a-tests"
+          gerrit_branch: "lts-v2.10"
+          gerrit_refspec: "lts-v2.10"
+
       - tf-a-builder-parameters:
           tf_a_branch: "lts-v2.10"
 
@@ -27,11 +32,6 @@
           tftf_branch: "${{GERRIT_REFSPEC}}"
 
           tf_a_ci_scripts_mbed_tls_version: "3.6.4"
-
-      - tf-a-gerrit-comment-added-parameters:
-          gerrit_project: "{gerrit_project_prefix}TF-A/tf-a-tests"
-          gerrit_branch: "lts-v2.10"
-          gerrit_refspec: "lts-v2.10"
 
       - string:
           name: "TF_GERRIT_BRANCH"
