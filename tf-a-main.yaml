@@ -16,8 +16,8 @@
 
     parameters:
       - tf-a-builder-parameters:
-          default_tf_a_project: "${{GERRIT_PROJECT}}"
-          default_tf_a_branch: "${{GERRIT_REFSPEC}}"
+          tf_a_project: "${{GERRIT_PROJECT}}"
+          tf_a_branch: "${{GERRIT_REFSPEC}}"
 
       - tf-a-gerrit-change-based-patchset-parameters:
           gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"

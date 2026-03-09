@@ -21,12 +21,13 @@
 
     parameters:
       - tf-a-builder-parameters:
-          default_tf_a_project: "${{GERRIT_PROJECT}}"
-          default_tf_a_branch: "${{GERRIT_REFSPEC}}"
-          default_tf_a_mbedtls_version: "3.6.5"
+          tf_a_project: "${{GERRIT_PROJECT}}"
+          tf_a_branch: "${{GERRIT_REFSPEC}}"
 
-          default_tftf_project: "{gerrit_project_prefix}TF-A/tf-a-tests"
-          default_tftf_branch: "lts-v2.14"
+          tftf_project: "{gerrit_project_prefix}TF-A/tf-a-tests"
+          tftf_branch: "lts-v2.14"
+
+          tf_a_ci_scripts_mbed_tls_version: "3.6.5"
 
       - tf-a-gerrit-comment-added-parameters:
           gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"

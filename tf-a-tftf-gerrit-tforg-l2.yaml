@@ -21,8 +21,8 @@
 
     parameters:
       - tf-a-builder-parameters:
-          default_tftf_project: "${{GERRIT_PROJECT}}"
-          default_tftf_branch: "${{GERRIT_REFSPEC}}"
+          tftf_project: "${{GERRIT_PROJECT}}"
+          tftf_branch: "${{GERRIT_REFSPEC}}"
 
       - tf-a-gerrit-comment-added-parameters:
           gerrit_project: "{gerrit_project_prefix}TF-A/tf-a-tests"

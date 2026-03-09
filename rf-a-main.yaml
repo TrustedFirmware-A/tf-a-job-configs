@@ -57,8 +57,8 @@
 
     parameters:
       - tf-a-builder-parameters:
-          default_rf_a_project: "${{GERRIT_PROJECT}}"
-          default_rf_a_branch: "${{GERRIT_REFSPEC}}"
+          rf_a_project: "${{GERRIT_PROJECT}}"
+          rf_a_branch: "${{GERRIT_REFSPEC}}"
 
       - tf-a-gerrit-comment-added-contains-parameters:
           gerrit_project: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
