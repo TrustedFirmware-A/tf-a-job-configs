@@ -57,36 +57,8 @@
 
     parameters:
       - tf-a-builder-parameters:
-          default_tf_a_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
-          default_tf_a_branch: "master"
-          default_tf_a_mbedtls_version: "3.6.5"
-
           default_rf_a_project: "${{GERRIT_PROJECT}}"
           default_rf_a_branch: "${{GERRIT_REFSPEC}}"
-
-          default_tftf_project: "{gerrit_project_prefix}TF-A/tf-a-tests"
-          default_tftf_branch: "master"
-
-          default_tf_m_tests_project: "{gerrit_project_prefix}TF-M/tf-m-tests"
-          default_tf_m_tests_branch: "tfa_ci_dep_revision"
-
-          default_tf_m_extras_project: "{gerrit_project_prefix}TF-M/tf-m-extras"
-          default_tf_m_extras_branch: "tfa_ci_dep_revision"
-
-          default_hafnium_project: "{gerrit_project_prefix}hafnium/hafnium"
-          default_hafnium_branch: "master"
-
-          default_tf_rmm_project: "{gerrit_project_prefix}TF-RMM/tf-rmm"
-          default_tf_rmm_branch: "main"
-
-          default_tfut_project: "{gerrit_project_prefix}TF-A/tf-a-unit-tests"
-          default_tfut_branch: "main"
-
-          default_tf_a_ci_scripts_project: "{gerrit_project_prefix}ci/tf-a-ci-scripts"
-          default_tf_a_ci_scripts_branch: "master"
-
-          default_tf_a_ci_jobs_project: "{gerrit_project_prefix}ci/tf-a-job-configs.git"
-          default_tf_a_ci_jobs_branch: "master"
 
       - tf-a-gerrit-comment-added-contains-parameters:
           gerrit_project: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
