@@ -2,6 +2,10 @@
     name: "rf-a"
     base: "rf-a"
 
+    gerrit_project: "RF-A/rusted-firmware-a"
+    gerrit_branch: "main"
+    gerrit_refspec: "main"
+
     views:
       - tf-a-view:
           name: "RF-A"
@@ -23,10 +27,6 @@
           default_groups: "rfa-fvp/fvp,nil,fvp-rfa:fvp-rfa-fip.rfa"
           default_config: "fvp,nil,fvp-rfa:fvp-rfa-fip.rfa"
           default_config_desc: "0000%rfa-fvp%fvp-rfa,nil,nil,nil,fvp,nil:fvp-rfa-fip.rfa.test"
-
-          gerrit_project: "RF-A/rusted-firmware-a"
-          gerrit_branch: "main"
-          gerrit_refspec: "main"
 
           tf_a_project: "TF-A/trusted-firmware-a"
           tf_a_branch: "master"

@@ -1,6 +1,10 @@
 - project:
     name: "tf-a"
 
+    gerrit_project: "TF-A/trusted-firmware-a"
+    gerrit_branch: "master"
+    gerrit_refspec: "integration"
+
     base:
       - "tf-a":
           label: "TF-A"
@@ -14,10 +18,6 @@
           default_groups: "tf-l1-build-fvp/fvp-default:nil"
           default_config: "fvp-default:nil"
           default_config_desc: "0000%tf-l1-build-fvp%fvp-default,nil,nil,nil,nil,nil:nil.test"
-
-          gerrit_project: "TF-A/trusted-firmware-a"
-          gerrit_branch: "master"
-          gerrit_refspec: "integration"
 
           tftf_project: "TF-A/tf-a-tests"
           tftf_branch: "master"
