@@ -2,9 +2,47 @@
     name: "rf-a"
     base: "rf-a"
 
+    label: "RF-A"
+
+    node: "docker-amd64-tf-a-jammy"
+    downloads_space: "tf-a"
+
     gerrit_project: "RF-A/rusted-firmware-a"
     gerrit_branch: "main"
     gerrit_refspec: "main"
+
+    armclang_version: "6.23"
+    armclang_warehouse_version: "6.23/37"
+
+    tf_a_project: "TF-A/trusted-firmware-a"
+    tf_a_branch: "master"
+
+    rf_a_project: "${{GERRIT_PROJECT}}"
+    rf_a_branch: "${{GERRIT_REFSPEC}}"
+
+    tftf_project: "TF-A/tf-a-tests"
+    tftf_branch: "master"
+
+    tf_m_tests_project: "TF-M/tf-m-tests"
+    tf_m_tests_branch: "tfa_ci_dep_revision"
+
+    tf_m_extras_project: "TF-M/tf-m-extras"
+    tf_m_extras_branch: "tfa_ci_dep_revision"
+
+    hafnium_project: "hafnium/hafnium"
+    hafnium_branch: "master"
+
+    tf_rmm_project: "TF-RMM/tf-rmm"
+    tf_rmm_branch: "main"
+
+    tfut_project: "TF-A/tf-a-unit-tests"
+    tfut_branch: "main"
+
+    tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
+    tf_a_ci_scripts_branch: "master"
+    tf_a_ci_scripts_mbed_tls_version: "3.6.5"
+
+    tf_a_ci_scripts_test_suffix: ""
 
     views:
       - tf-a-view:
@@ -14,16 +52,8 @@
 
     jobs:
       - tf-a-gateway-chain:
-          node: "docker-amd64-tf-a-jammy"
-
-          label: "RF-A"
-
-          downloads_space: "tf-a"
           default_clones: "tf-a-ci-scripts,trusted-firmware-a,rusted-firmware-a"
 
           default_groups: "rfa-fvp/fvp,nil,fvp-rfa:fvp-rfa-fip.rfa"
           default_config: "fvp,nil,fvp-rfa:fvp-rfa-fip.rfa"
           default_config_desc: "0000%rfa-fvp%fvp-rfa,nil,nil,nil,fvp,nil:fvp-rfa-fip.rfa.test"
-
-          rf_a_project: "${{GERRIT_PROJECT}}"
-          rf_a_branch: "${{GERRIT_REFSPEC}}"

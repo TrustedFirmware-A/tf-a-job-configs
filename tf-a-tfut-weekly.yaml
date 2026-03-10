@@ -24,6 +24,31 @@
           tf_a_project: "${{GERRIT_PROJECT}}"
           tf_a_branch: "${{GERRIT_REFSPEC}}"
 
+          rf_a_project: "RF-A/rusted-firmware-a"
+          rf_a_branch: "main"
+
+          tftf_project: "TF-A/tf-a-tests"
+          tftf_branch: "master"
+
+          tf_m_tests_project: "TF-M/tf-m-tests"
+          tf_m_tests_branch: "tfa_ci_dep_revision"
+
+          tf_m_extras_project: "TF-M/tf-m-extras"
+          tf_m_extras_branch: "tfa_ci_dep_revision"
+
+          hafnium_project: "hafnium/hafnium"
+          hafnium_branch: "master"
+
+          tf_rmm_project: "TF-RMM/tf-rmm"
+          tf_rmm_branch: "main"
+
+          tfut_project: "TF-A/tf-a-unit-tests"
+          tfut_branch: "main"
+
+          tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
+          tf_a_ci_scripts_branch: "master"
+          tf_a_ci_scripts_mbed_tls_version: "3.6.5"
+
           lava_priority: "low"
 
     wrappers:

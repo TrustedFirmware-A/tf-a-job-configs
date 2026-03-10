@@ -83,6 +83,7 @@
           tf_a_ci_scripts_branch: "{tf_a_ci_scripts_branch}"
           tf_a_ci_scripts_mbed_tls_version: "{tf_a_ci_scripts_mbed_tls_version}"
 
+          lava_priority: "medium"
 
     wrappers:
       - timestamps:
