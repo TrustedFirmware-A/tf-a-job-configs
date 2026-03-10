@@ -42,9 +42,6 @@
     tf_a_ci_scripts_branch: "master"
     tf_a_ci_scripts_mbed_tls_version: "3.6.5"
 
-    tf_a_ci_jobs_project: "ci/tf-a-job-configs"
-    tf_a_ci_jobs_branch: "master"
-
     lava_priority: "medium"
 
     properties:
@@ -114,8 +111,6 @@
           tf_a_ci_scripts_branch: "{tf_a_ci_scripts_branch}"
           tf_a_ci_scripts_mbed_tls_version: "{tf_a_ci_scripts_mbed_tls_version}"
 
-          tf_a_ci_jobs_project: "{tf_a_ci_jobs_project}"
-          tf_a_ci_jobs_branch: "{tf_a_ci_jobs_branch}"
 
     wrappers:
       - tf-a-clone-wrappers:
@@ -325,9 +320,6 @@
     tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
     tf_a_ci_scripts_branch: "master"
     tf_a_ci_scripts_mbed_tls_version: "3.6.5"
-
-    tf_a_ci_jobs_project: "ci/tf-a-job-configs"
-    tf_a_ci_jobs_branch: "master"
 
     lava_priority: "medium"
 
@@ -568,7 +560,7 @@
 
       - string:
           name: "JOBS_PROJECT"
-          default: "{tf_a_ci_jobs_project}"
+          default: "ci/tf-a-job-configs"
 
           description: >
             Gerrit project of the TF-A CI jobs revision to build, e.g.:
@@ -580,7 +572,7 @@
 
       - string:
           name: "JOBS_REFSPEC"
-          default: "{tf_a_ci_jobs_branch}"
+          default: "master"
 
           description: >
             Git revision of the TF-A CI jobs to build, e.g.:
