@@ -68,6 +68,18 @@
 
       - multijob:
           condition: "COMPLETED"
+          name: "Run platform boot tests"
+
+          projects:
+            - kill-phase-on: "NEVER"
+              name: "tf-a-lts2.8-ci-gateway"
+              current-parameters: true
+
+              predefined-parameters: |
+                TEST_GROUPS=tf-l2-boot-tests-arm-plats-lts-v2.8 tf-l2-boot-tests-partner-boards-lts-v2.8
+
+      - multijob:
+          condition: "COMPLETED"
           name: "TFTF tests"
 
           projects:
