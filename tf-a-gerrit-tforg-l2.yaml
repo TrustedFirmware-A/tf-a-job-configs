@@ -1,20 +1,52 @@
-- job:
-    name: "tf-a-gerrit-tforg-l2"
-    node: "docker-amd64-tf-a-jammy"
+- job-template:
+    id: "tf-a-gerrit-tforg-l2"
     project-type: "multijob"
+
+    name: "{base}-gerrit-tforg-l2"
+    node: "{node}"
+
+    description: >
+      Automated validation for patches submitted to <strong>{label}</strong>,
+      limited to low- and medium-intensity test suites only.
+
     concurrent: true
     disabled: false
 
-    description: |
-      Job that triggers for every TF-A patch approved with the Allow-CI+2
-      label on review.trustedfirmware.org.
+    rf_a_project: "RF-A/rusted-firmware-a"
+    rf_a_branch: "main"
+
+    tftf_project: "TF-A/tf-a-tests"
+    tftf_branch: "master"
+
+    tf_m_tests_project: "TF-M/tf-m-tests"
+    tf_m_tests_branch: "tfa_ci_dep_revision"
+
+    tf_m_extras_project: "TF-M/tf-m-extras"
+    tf_m_extras_branch: "tfa_ci_dep_revision"
+
+    hafnium_project: "hafnium/hafnium"
+    hafnium_branch: "master"
+
+    tf_rmm_project: "TF-RMM/tf-rmm"
+    tf_rmm_branch: "main"
+
+    tfut_project: "TF-A/tf-a-unit-tests"
+    tfut_branch: "main"
+
+    tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
+    tf_a_ci_scripts_branch: "master"
+    tf_a_ci_scripts_mbed_tls_version: "3.6.5"
+    tf_a_ci_scripts_test_suffix: ""
+
+    tf_a_ci_jobs_project: "ci/tf-a-job-configs"
+    tf_a_ci_jobs_branch: "master"
 
     properties:
       - "tf-a-clone-properties"
 
       - tf-a-ci-scripts:
           download_server_url: "https://downloads.trustedfirmware.org"
-          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a"
+          download_server_tf_a_url: "https://downloads.trustedfirmware.org/{downloads_space}"
 
       - build-discarder:
           days-to-keep: 30
@@ -22,12 +54,40 @@
     parameters:
       - tf-a-gerrit-comment-added-parameters:
           gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
-          gerrit_branch: "master"
-          gerrit_refspec: "master"
+          gerrit_branch: "{gerrit_branch}"
+          gerrit_refspec: "{gerrit_refspec}"
 
       - tf-a-builder-parameters:
           tf_a_project: "${{GERRIT_PROJECT}}"
           tf_a_branch: "${{GERRIT_REFSPEC}}"
+
+          rf_a_project: "{rf_a_project}"
+          rf_a_branch: "{rf_a_branch}"
+
+          tftf_project: "{tftf_project}"
+          tftf_branch: "{tftf_branch}"
+
+          tf_m_tests_project: "{tf_m_tests_project}"
+          tf_m_tests_branch: "{tf_m_tests_branch}"
+
+          tf_m_extras_project: "{tf_m_extras_project}"
+          tf_m_extras_branch: "{tf_m_extras_branch}"
+
+          hafnium_project: "{hafnium_project}"
+          hafnium_branch: "{hafnium_branch}"
+
+          tf_rmm_project: "{tf_rmm_project}"
+          tf_rmm_branch: "{tf_rmm_branch}"
+
+          tfut_project: "{tfut_project}"
+          tfut_branch: "{tfut_branch}"
+
+          tf_a_ci_scripts_project: "{tf_a_ci_scripts_project}"
+          tf_a_ci_scripts_branch: "{tf_a_ci_scripts_branch}"
+          tf_a_ci_scripts_mbed_tls_version: "{tf_a_ci_scripts_mbed_tls_version}"
+
+          tf_a_ci_jobs_project: "{tf_a_ci_jobs_project}"
+          tf_a_ci_jobs_branch: "{tf_a_ci_jobs_branch}"
 
     wrappers:
       - credentials-binding:
@@ -37,7 +97,7 @@
               username-variable: "CI_BOT_USERNAME"
               passphrase-variable: ""
 
-      - "timestamps"
+      - timestamps:
 
     builders:
       - multijob:
@@ -46,7 +106,7 @@
 
           projects:
             - kill-phase-on: "NEVER"
-              name: "tf-a-gerrit-tforg-l1"
+              name: "{base}-gerrit-tforg-l1"
               current-parameters: true
 
       - multijob:
@@ -55,11 +115,11 @@
 
           projects:
             - kill-phase-on: "NEVER"
-              name: "tf-a-ci-gateway"
+              name: "{base}-ci-gateway"
               current-parameters: true
 
               predefined-parameters: |
-                TEST_GROUPS=tf-l2-build-fvp tf-l2-build-juno
+                TEST_GROUPS=tf-l2-build-fvp{tf_a_ci_scripts_test_suffix} tf-l2-build-juno{tf_a_ci_scripts_test_suffix}
 
       - multijob:
           condition: "COMPLETED"
@@ -67,11 +127,11 @@
 
           projects:
             - kill-phase-on: "NEVER"
-              name: "tf-a-ci-gateway"
+              name: "{base}-ci-gateway"
               current-parameters: true
 
               predefined-parameters: |
-                TEST_GROUPS=tf-l2-boot-tests-arm-plats tf-l2-boot-tests-partner-boards
+                TEST_GROUPS=tf-l2-boot-tests-arm-plats{tf_a_ci_scripts_test_suffix} tf-l2-boot-tests-partner-boards{tf_a_ci_scripts_test_suffix}
 
       - multijob:
           condition: "COMPLETED"
@@ -79,11 +139,11 @@
 
           projects:
             - kill-phase-on: "NEVER"
-              name: "tf-a-ci-gateway"
+              name: "{base}-ci-gateway"
               current-parameters: true
 
               predefined-parameters: |
-                TEST_GROUPS=tftf-l1-fvp tftf-l1-juno tftf-l2-fvp-auxiliary tftf-l2-fvp-dynamiq tftf-l2-fwu tftf-l2-fvp
+                TEST_GROUPS=tftf-l1-fvp{tf_a_ci_scripts_test_suffix} tftf-l1-juno{tf_a_ci_scripts_test_suffix} tftf-l2-fvp-auxiliary{tf_a_ci_scripts_test_suffix} tftf-l2-fvp-dynamiq{tf_a_ci_scripts_test_suffix} tftf-l2-fwu{tf_a_ci_scripts_test_suffix} tftf-l2-fvp{tf_a_ci_scripts_test_suffix}
 
       - multijob:
           condition: "COMPLETED"
@@ -91,11 +151,11 @@
 
           projects:
             - kill-phase-on: "NEVER"
-              name: "tf-a-ci-gateway"
+              name: "{base}-ci-gateway"
               current-parameters: true
 
               predefined-parameters: |
-                TEST_GROUPS=tf-l2-boot-tests-aarch32 tf-l2-boot-tests-bl2_el3 tf-l2-boot-tests-cortex tf-l2-boot-tests-juno tf-l2-boot-tests-latest tf-l2-boot-tests-misc tf-l2-boot-tests-rootfs tf-l2-boot-tests-spm-mm spm-l2-boot-tests
+                TEST_GROUPS=tf-l2-boot-tests-aarch32{tf_a_ci_scripts_test_suffix} tf-l2-boot-tests-bl2_el3{tf_a_ci_scripts_test_suffix} tf-l2-boot-tests-cortex{tf_a_ci_scripts_test_suffix} tf-l2-boot-tests-juno{tf_a_ci_scripts_test_suffix} tf-l2-boot-tests-latest{tf_a_ci_scripts_test_suffix} tf-l2-boot-tests-misc{tf_a_ci_scripts_test_suffix} tf-l2-boot-tests-rootfs{tf_a_ci_scripts_test_suffix} tf-l2-boot-tests-spm-mm{tf_a_ci_scripts_test_suffix} spm-l2-boot-tests{tf_a_ci_scripts_test_suffix}
 
     triggers:
       - gerrit:
@@ -112,7 +172,7 @@
 
               branches:
                 - branch-compare-type: "PLAIN"
-                  branch-pattern: "integration"
+                  branch-pattern: "{gerrit_refspec}"
 
           override-votes: true
           gerrit-build-started-verified-value: 0

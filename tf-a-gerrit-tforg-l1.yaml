@@ -116,8 +116,8 @@
               name: "tf-a-static-checks"
               current-parameters: true
 
-              predefined-parameters: |-
-                TEST_GROUPS=tf-l2-scan-build{tf_a_ci_scripts_test_suffix|}
+              predefined-parameters: |
+                TEST_GROUPS=tf-l2-scan-build{tf_a_ci_scripts_test_suffix}
 
       - multijob:
           condition: "COMPLETED"
@@ -129,7 +129,7 @@
               current-parameters: true
 
               predefined-parameters: |
-                TEST_GROUPS=tf-l1-check-docs{tf_a_ci_scripts_test_suffix|}
+                TEST_GROUPS=tf-l1-check-docs{tf_a_ci_scripts_test_suffix}
 
       - multijob:
           condition: "COMPLETED"
@@ -141,7 +141,7 @@
               current-parameters: true
 
               predefined-parameters: |
-                TEST_GROUPS=tf-l1-build-fvp{tf_a_ci_scripts_test_suffix|} tf-l1-build-juno{tf_a_ci_scripts_test_suffix|} tf-l1-build-clang{tf_a_ci_scripts_test_suffix|} tf-l1-build-plat{tf_a_ci_scripts_test_suffix|} spm-l1-build-tests{tf_a_ci_scripts_test_suffix|}
+                TEST_GROUPS=tf-l1-build-fvp{tf_a_ci_scripts_test_suffix} tf-l1-build-juno{tf_a_ci_scripts_test_suffix} tf-l1-build-clang{tf_a_ci_scripts_test_suffix} tf-l1-build-plat{tf_a_ci_scripts_test_suffix} spm-l1-build-tests{tf_a_ci_scripts_test_suffix}
 
     triggers:
       - gerrit:

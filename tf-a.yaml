@@ -147,6 +147,7 @@
 
     jobs:
       - tf-a-gerrit-tforg-l1:
+      - tf-a-gerrit-tforg-l2:
 
       - tf-a-gateway-chain:
           default_clones: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
