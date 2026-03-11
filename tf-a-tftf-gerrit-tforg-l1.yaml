@@ -7,7 +7,7 @@
 
     description: >
       Automated validation for patches submitted to <strong>{label}</strong>,
-      limited to medium- and low-intensity test suites only.
+      limited to low-intensity test suites only.
 
     concurrent: true
     disabled: false

@@ -187,3 +187,4 @@
 
     jobs:
       - tf-a-tftf-gerrit-tforg-l1:
+      - tf-a-tftf-gerrit-tforg-l2:
