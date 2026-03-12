@@ -40,65 +40,10 @@
           make -j $(nproc) CROSS_COMPILE=aarch64-none-elf- PLAT=fvp DEBUG=$DEBUG V=1 all
 
     parameters:
-      - string:
-          name: "TF_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
-
-      - string:
-          name: "TF_GERRIT_BRANCH"
-          default: "master"
-
-      - string:
-          name: "TF_SRC_REPO_URL"
-          default: "https://review.trustedfirmware.org/{gerrit_project_prefix}TF-A/trusted-firmware-a"
-
-      - string:
-          name: "TF_GERRIT_REFSPEC"
-          default: "master"
-
-      - string:
-          name: "TFTF_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}TF-A/tf-a-tests"
-
-      - string:
-          name: "TFTF_GERRIT_REFSPEC"
-          default: "master"
-
-      - string:
-          name: "SPM_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}hafnium/hafnium"
-
-      - string:
-          name: "SPM_REFSPEC"
-          default: "master"
-
-      - string:
-          name: "RMM_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}TF-RMM/tf-rmm"
-
-      - string:
-          name: "RMM_REFSPEC"
-          default: "main"
-
-      - string:
-          name: "CI_GERRIT_PROJECT"
-          default: "{gerrit_project_prefix}ci/tf-a-ci-scripts"
-
-      - string:
-          name: "CI_REFSPEC"
-          default: "master"
-
-      - string:
-          name: "JOBS_PROJECT"
-          default: "{gerrit_project_prefix}ci/tf-a-job-configs.git"
-
-      - string:
-          name: "JOBS_REFSPEC"
-          default: "master"
-
-      - string:
-          name: "MBEDTLS_URL"
-          default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz"
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_project: "TF-A/trusted-firmware-a"
+          gerrit_branch: "master"
+          gerrit_refspec: "master"
 
       - string:
           name: "PARAMS"
@@ -118,11 +63,14 @@
 
     scm:
       - git:
-          url: "${{TF_SRC_REPO_URL}}"
-          refspec: "${{TF_GERRIT_REFSPEC}}"
+          url: "ssh://review.trustedfirmware.org:29418/${{GERRIT_PROJECT}}"
+          credentials-id: "TFA_CI_BOT_USER_SSH_KEY"
 
-          branches:
-            - "${{TF_GERRIT_BRANCH}}"
+          refspec: "+${{GERRIT_REFSPEC}}:refs/remotes/origin/${{GERRIT_REFSPEC}}"
+          branches: ["refs/remotes/origin/${{GERRIT_REFSPEC}}"]
+
+          extensions:
+            - honor-refspec: true
 
           choosing-strategy: "gerrit"
           skip-tag: true
