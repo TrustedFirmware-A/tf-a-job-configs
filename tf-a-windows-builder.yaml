@@ -63,8 +63,7 @@
 
     scm:
       - git:
-          url: "ssh://review.trustedfirmware.org:29418/${{GERRIT_PROJECT}}"
-          credentials-id: "TFA_CI_BOT_USER_SSH_KEY"
+          url: "https://review.trustedfirmware.org/${{GERRIT_PROJECT}}"
 
           refspec: "+${{GERRIT_REFSPEC}}:refs/remotes/origin/${{GERRIT_REFSPEC}}"
           branches: ["refs/remotes/origin/${{GERRIT_REFSPEC}}"]
