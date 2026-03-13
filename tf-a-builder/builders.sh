@@ -94,11 +94,6 @@ ln -s \
    ${TOOLS_DIR}/gnu-rm/bin \
    /arm/pdsw/downloads/scp-models/tools/gcc-arm-none-eabi-10-2020-q4-major/bin
 
-# /arm/pdsw/tools/gcc-linaro-6.2.1-2016.11-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
-mkdir -p /arm/pdsw/tools/gcc-linaro-6.2.1-2016.11-x86_64_aarch64-linux-gnu
-ln -s ${TOOLS_DIR}/gcc-linaro-6.2.1-2016.11-x86_64_aarch64-linux-gnu/bin \
-   /arm/pdsw/tools/gcc-linaro-6.2.1-2016.11-x86_64_aarch64-linux-gnu/bin
-
 # CC=/arm/warehouse/Distributions/FA/ARMCompiler/${BUILDERS_SH_ARMCLANG_WAREHOUSE_VERSION}/standalone-linux-x86_64-rel/bin/armclang
 mkdir -p "/arm/warehouse/Distributions/FA/ARMCompiler/${BUILDERS_SH_ARMCLANG_WAREHOUSE_VERSION}/standalone-linux-x86_64-rel"
 ln -s "${TOOLS_DIR}/armclang-${BUILDERS_SH_ARMCLANG_VERSION}/bin" \
