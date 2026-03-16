@@ -110,5 +110,7 @@
           artifacts: "report.html, tf-a-main*.png, tf-a-main*.csv"
 
       - groovy-postbuild:
+          sandbox: true
+
           script: !include-raw-verbatim:
             - "tf-a-ci-gateway/postbuild.groovy"

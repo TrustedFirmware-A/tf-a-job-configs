@@ -96,5 +96,7 @@
           artifacts: "${{GERRIT_PROJECT}}/static-checks.log"
 
       - groovy-postbuild:
+          sandbox: true
+
           script: !include-raw-verbatim:
             - "tf-a-static-checks/postbuild.groovy"

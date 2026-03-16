@@ -89,5 +89,7 @@
           artifacts: "next-generic-checks.log"
 
       - groovy-postbuild:
+          sandbox: true
+
           script: !include-raw-verbatim:
             - "rf-a-crate-generic-lib-testing/postbuild.groovy"

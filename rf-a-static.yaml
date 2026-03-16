@@ -99,5 +99,7 @@
           follow-symlinks: true
 
       - groovy-postbuild:
+          sandbox: true
+
           script: !include-raw-verbatim:
             - "rf-a-static/postbuild.groovy"

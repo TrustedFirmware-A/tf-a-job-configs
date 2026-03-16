@@ -157,5 +157,7 @@
           follow-symlinks: true
 
       - groovy-postbuild:
+          sandbox: true
+
           script: !include-raw-verbatim:
             - "tf-a-coverity/postbuild.groovy"

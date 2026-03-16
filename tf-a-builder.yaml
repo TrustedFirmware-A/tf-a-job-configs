@@ -286,6 +286,8 @@
           follow-symlinks: true
 
       - groovy-postbuild:
+          sandbox: true
+
           script: !include-raw-verbatim:
             - "tf-a-builder/postbuild.groovy"
 

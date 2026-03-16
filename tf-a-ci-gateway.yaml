@@ -142,5 +142,7 @@
           artifacts: "report.json, report.html, merge/outdir/**"
 
       - groovy-postbuild:
+          sandbox: true
+
           script: !include-raw-verbatim:
             - "tf-a-ci-gateway/postbuild.groovy"
