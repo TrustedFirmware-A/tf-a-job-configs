@@ -15,9 +15,6 @@
           days-to-keep: 30
 
     parameters:
-      - tf-a-clone-parameters:
-          projects: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
-
       - tf-a-gerrit-change-based-patchset-parameters:
           gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
           gerrit_branch: "lts-v2.12"
@@ -54,301 +51,266 @@
 
           lava_priority: "medium"
 
-      - bool:
-          name: "FORCE_TO_BUILD"
-          default: false
-
-          description: |
-            If there are no new commits in trusted-firmware-a tf-a-tests, or tf-a-ci-scripts the build will be sikpped.
-            However, you can always force to run the build
-
     triggers:
       - timed: "H H(0-7) * * 1,3,5"
 
     wrappers:
-      - tf-a-clone-wrappers:
       - timestamps:
 
     builders:
-      - tf-a-clone:
-          projects: "${{CLONE_REPOS}}"
+      - multijob:
+          name: "Run static checks on the code"
+          condition: "COMPLETED"
 
-      - shell: !include-raw-verbatim: "scripts/lts-check-last-commit.sh"
+          projects:
+            - name: "tf-a-static-checks"
+              current-parameters: true
+              kill-phase-on: "NEVER"
 
-      - conditional-step:
-          condition-kind: "file-exists"
-          condition-filename: "TO_BUILD"
-          condition-basedir: "workspace"
+      - multijob:
+          name: "Build Trusted Firmware"
+          condition: "COMPLETED"
 
-          steps:
-            - multijob:
-                name: "Run static checks on the code"
-                condition: "COMPLETED"
+          projects:
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l1-build-fvp tf-l2-build-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
 
-                projects:
-                  - name: "tf-a-static-checks"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
+              predefined-parameters: |
+                TEST_GROUPS=tf-l1-build-fvp-lts-v2.12 tf-l2-build-fvp-lts-v2.12
 
-            - multijob:
-                name: "Build Trusted Firmware"
-                condition: "COMPLETED"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l1-build-juno tf-l2-build-juno"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l1-build-juno-lts-v2.12 tf-l2-build-juno-lts-v2.12"
 
-                projects:
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l1-build-fvp tf-l2-build-fvp"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l1-build-plat"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l1-build-plat-lts-v2.12"
 
-                    predefined-parameters: |
-                      TEST_GROUPS=tf-l1-build-fvp-lts-v2.12 tf-l2-build-fvp-lts-v2.12
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l1-build-clang"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l1-build-clang-lts-v2.12"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l1-build-juno tf-l2-build-juno"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l1-build-juno-lts-v2.12 tf-l2-build-juno-lts-v2.12"
+      - multijob:
+          name: "TFTF Tests for FVP"
+          condition: "COMPLETED"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l1-build-plat"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l1-build-plat-lts-v2.12"
+          projects:
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tftf-l2-fwu"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tftf-l2-fwu-lts-v2.12"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l1-build-clang"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l1-build-clang-lts-v2.12"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tftf-l1-fvp tftf-l2-fvp-auxiliary"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tftf-l1-fvp-lts-v2.12 tftf-l2-fvp-auxiliary-lts-v2.12"
 
-            - multijob:
-                name: "TFTF Tests for FVP"
-                condition: "COMPLETED"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tftf-l2-fvp tftf-l2-fvp-dynamiq"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tftf-l2-fvp-lts-v2.12 tftf-l2-fvp-dynamiq-lts-v2.12"
 
-                projects:
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tftf-l2-fwu"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tftf-l2-fwu-lts-v2.12"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tftf-l2-extensive-tests-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tftf-l2-extensive-tests-fvp-lts-v2.12"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tftf-l1-fvp tftf-l2-fvp-auxiliary"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tftf-l1-fvp-lts-v2.12 tftf-l2-fvp-auxiliary-lts-v2.12"
+      - multijob:
+          name: "Boot up to the Linux shell prompt"
+          condition: "COMPLETED"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tftf-l2-fvp tftf-l2-fvp-dynamiq"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tftf-l2-fvp-lts-v2.12 tftf-l2-fvp-dynamiq-lts-v2.12"
+          projects:
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l2-boot-tests-aarch32"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-aarch32-lts-v2.12"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tftf-l2-extensive-tests-fvp"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tftf-l2-extensive-tests-fvp-lts-v2.12"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l2-boot-tests-rootfs"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-rootfs-lts-v2.12"
 
-            - multijob:
-                name: "Boot up to the Linux shell prompt"
-                condition: "COMPLETED"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l2-boot-tests-spm-mm"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-spm-mm-lts-v2.12"
 
-                projects:
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l2-boot-tests-aarch32"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-aarch32-lts-v2.12"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "spm-l2-boot-tests"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=spm-l2-boot-tests-lts-v2.12"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l2-boot-tests-rootfs"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-rootfs-lts-v2.12"
+      - multijob:
+          name: "Boot up to the Linux shell prompt - Part 2"
+          condition: "COMPLETED"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l2-boot-tests-spm-mm"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-spm-mm-lts-v2.12"
+          projects:
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l2-boot-tests-misc"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-misc-lts-v2.12"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "spm-l2-boot-tests"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=spm-l2-boot-tests-lts-v2.12"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l2-boot-tests-latest"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-latest-lts-v2.12"
 
-            - multijob:
-                name: "Boot up to the Linux shell prompt - Part 2"
-                condition: "COMPLETED"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l2-boot-tests-cortex"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-cortex-lts-v2.12"
 
-                projects:
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l2-boot-tests-misc"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-misc-lts-v2.12"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l2-boot-tests-gicv2"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-gicv2-lts-v2.12"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l2-boot-tests-latest"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-latest-lts-v2.12"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l2-boot-tests-bl2_el3"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-bl2_el3-lts-v2.12"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l2-boot-tests-cortex"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-cortex-lts-v2.12"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "qemu-boot-tests"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=qemu-boot-tests-lts-v2.12"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l2-boot-tests-gicv2"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-gicv2-lts-v2.12"
+      - multijob:
+          name: "Juno Boot Tests"
+          condition: "COMPLETED"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l2-boot-tests-bl2_el3"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-bl2_el3-lts-v2.12"
+          projects:
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l2-boot-tests-juno"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-juno-lts-v2.12"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "qemu-boot-tests"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=qemu-boot-tests-lts-v2.12"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tftf-l1-juno"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tftf-l1-juno-lts-v2.12"
 
-            - multijob:
-                name: "Juno Boot Tests"
-                condition: "COMPLETED"
+      - multijob:
+          name: "Miscellaneous tests"
+          condition: "COMPLETED"
 
-                projects:
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l2-boot-tests-juno"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-juno-lts-v2.12"
+          projects:
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l3-boot-tests-css"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-css-lts-v2.12"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tftf-l1-juno"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tftf-l1-juno-lts-v2.12"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l3-boot-tests-spm-mm"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-spm-mm-lts-v2.12"
 
-            - multijob:
-                name: "Miscellaneous tests"
-                condition: "COMPLETED"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l3-boot-tests-ras"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-ras-lts-v2.12"
 
-                projects:
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l3-boot-tests-css"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-css-lts-v2.12"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l3-boot-tests-misc"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-misc-lts-v2.12"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l3-boot-tests-spm-mm"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-spm-mm-lts-v2.12"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l3-boot-tests-n1sdp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-n1sdp-lts-v2.12"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l3-boot-tests-ras"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-ras-lts-v2.12"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "spm-l3-boot-tests"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=spm-l3-boot-tests-lts-v2.12"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l3-boot-tests-misc"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-misc-lts-v2.12"
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l2-boot-tests-partner-boards"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-partner-boards-lts-v2.12"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l3-boot-tests-n1sdp"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-n1sdp-lts-v2.12"
+            # Platform-specific self-tests.
+            # These tests run from the BL31 image then halt the target.
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l2-boot-tests-arm-plats"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-arm-plats-lts-v2.12"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "spm-l3-boot-tests"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=spm-l3-boot-tests-lts-v2.12"
+      - multijob:
+          name: "Run doc build check"
+          condition: "COMPLETED"
 
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l2-boot-tests-partner-boards"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-partner-boards-lts-v2.12"
+          projects:
+            - name: "tf-a-lts2.12-ci-gateway"
+              alias: "tf-l1-check-docs"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-l1-check-docs-lts-v2.12"
 
-                  # Platform-specific self-tests.
-                  # These tests run from the BL31 image then halt the target.
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l2-boot-tests-arm-plats"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-arm-plats-lts-v2.12"
+      - multijob:
+          name: "Generate visualizations"
+          condition: "COMPLETED"
 
-            - multijob:
-                name: "Run doc build check"
-                condition: "COMPLETED"
+          projects:
+            - name: "tf-a-sloc-visualization"
+              current-parameters: true
+              kill-phase-on: "NEVER"
 
-                projects:
-                  - name: "tf-a-lts2.12-ci-gateway"
-                    alias: "tf-l1-check-docs"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TEST_GROUPS=tf-l1-check-docs-lts-v2.12"
+            - name: "tf-a-test-category-visualization"
+              current-parameters: true
+              kill-phase-on: "NEVER"
 
-            - multijob:
-                name: "Generate visualizations"
-                condition: "COMPLETED"
+            - name: "tf-a-test-result-visualization"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TARGET_BUILD=${{JOB_NAME}}/${{BUILD_NUMBER}}"
 
-                projects:
-                  - name: "tf-a-sloc-visualization"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
+      # Run the unstable TF-A Tests at the end but do not let their results
+      # participate in the job's success/failure.
+      - trigger-builds:
+          - project: "tf-a-lts2.12-ci-gateway"
+            current-parameters: True
+            predefined-parameters: "TEST_GROUPS=tftf-unstable-lts-v2.12"
+            block: True
 
-                  - name: "tf-a-test-category-visualization"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-
-                  - name: "tf-a-test-result-visualization"
-                    current-parameters: true
-                    kill-phase-on: "NEVER"
-                    predefined-parameters: "TARGET_BUILD=${{JOB_NAME}}/${{BUILD_NUMBER}}"
-
-            # Run the unstable TF-A Tests at the end but do not let their results
-            # participate in the job's success/failure.
-            - trigger-builds:
-                - project: "tf-a-lts2.12-ci-gateway"
-                  current-parameters: True
-                  predefined-parameters: "TEST_GROUPS=tftf-unstable-lts-v2.12"
-                  block: True
-
-                  block-thresholds:
-                    build-step-failure-threshold: "never"
-                    unstable-threshold: "never"
-                    failure-threshold: "never"
+            block-thresholds:
+              build-step-failure-threshold: "never"
+              unstable-threshold: "never"
+              failure-threshold: "never"
 
     publishers:
-      - conditional-publisher:
-          - condition-kind: "shell"
-
-            condition-command: |
-              ! test -f ${{WORKSPACE}}/TO_BUILD
-
-            action:
-              - groovy-postbuild:
-                  script: |
-                    def currentBuild = Thread.currentThread().executable
-                    currentBuild.result = hudson.model.Result.SUCCESS
-                    currentBuild.setDescription("There are no new commits in the repositories, skip the build!")
-
-                  on-failure: "nothing"
-
       - email:
           recipients: "bipin.ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, jidong@google.com, govindraj.raja@arm.com"
