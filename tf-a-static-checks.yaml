@@ -69,24 +69,27 @@
       - shell: |
           #!/bin/bash
           set -e
-          if [[ "${{GERRIT_PROJECT}}" =~ (next/)?TF-A/trusted-firmware-a ]]; then
-          cat <<EOF > env.param
-          TEST_GROUPS=tf-l2-scan-build
-          EOF
-          fi
+
           cd ${{WORKSPACE}}/${{GERRIT_PROJECT}}
           # Executed project-related static checks: copyright presence, headers in alphabetical order,
           # line endings, coding style and banned API.
           IS_CONTINUOUS_INTEGRATION=1 ${{WORKSPACE}}/tf-a-ci-scripts/script/static-checks/static-checks.sh
 
-      - trigger-builds:
-          - project: "tf-a-ci-gateway"
-            block: true
-            property-file: "env.param"
-            current-parameters: true
-            # Do not trigger tf-a-ci-gateway if env.param file does not exist,
-            # which is the case here for TF-A Tests repository
-            property-file-fail-on-missing: True
+      - conditional-step:
+          on-evaluation-failure: "dont-run"
+
+          condition-kind: "shell"
+          condition-command: |
+            echo "${{GERRIT_PROJECT}}" | grep -Eqx "(next/)?TF-A/trusted-firmware-a"
+
+          steps:
+            - trigger-builds:
+                - project: "tf-a-ci-gateway"
+                  block: true
+
+                  current-parameters: true
+                  predefined-parameters: |
+                    TEST_GROUPS=tf-l2-scan-build
 
     publishers:
       - archive:
