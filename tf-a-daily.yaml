@@ -1,95 +1,128 @@
-- job:
-    name: "tf-a-daily"
-    node: "docker-amd64-tf-a-jammy"
+- job-template:
+    id: "tf-a-daily"
     project-type: "freestyle"
+
+    name: "{base}-daily"
+    node: "{node}"
+
+    description: >
+      Run daily validation of <strong>{label}</strong>.
+
     concurrent: false
     disabled: false
-    description: "Triggers tf-a-windows-builder, tf-main and tf-coverity for the TF-A project."
 
     properties:
       - tf-a-ci-scripts:
           download_server_url: "https://downloads.trustedfirmware.org"
-          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a"
+          download_server_tf_a_url: "https://downloads.trustedfirmware.org/{downloads_space}"
 
       - build-discarder:
           days-to-keep: 30
 
     parameters:
-      - tf-a-clone-parameters:
-          projects: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
-
       - tf-a-gerrit-change-based-patchset-parameters:
-          gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
-          gerrit_branch: "master"
-          gerrit_refspec: "integration"
+          gerrit_project: "{gerrit_project_prefix}{gerrit_project}"
+          gerrit_branch: "{gerrit_branch}"
+          gerrit_refspec: "{gerrit_refspec}"
 
       - tf-a-builder-parameters:
           tf_a_project: "${{GERRIT_PROJECT}}"
           tf_a_branch: "${{GERRIT_REFSPEC}}"
 
-          rf_a_project: "RF-A/rusted-firmware-a"
-          rf_a_branch: "main"
+          rf_a_project: "{rf_a_project}"
+          rf_a_branch: "{rf_a_branch}"
 
-          tftf_project: "TF-A/tf-a-tests"
-          tftf_branch: "master"
+          tftf_project: "{tftf_project}"
+          tftf_branch: "{tftf_branch}"
 
-          tf_m_tests_project: "TF-M/tf-m-tests"
-          tf_m_tests_branch: "tfa_ci_dep_revision"
+          tf_m_tests_project: "{tf_m_tests_project}"
+          tf_m_tests_branch: "{tf_m_tests_branch}"
 
-          tf_m_extras_project: "TF-M/tf-m-extras"
-          tf_m_extras_branch: "tfa_ci_dep_revision"
+          tf_m_extras_project: "{tf_m_extras_project}"
+          tf_m_extras_branch: "{tf_m_extras_branch}"
 
-          hafnium_project: "hafnium/hafnium"
-          hafnium_branch: "master"
+          hafnium_project: "{hafnium_project}"
+          hafnium_branch: "{hafnium_branch}"
 
-          tf_rmm_project: "TF-RMM/tf-rmm"
-          tf_rmm_branch: "main"
+          tf_rmm_project: "{tf_rmm_project}"
+          tf_rmm_branch: "{tf_rmm_branch}"
 
-          tfut_project: "TF-A/tf-a-unit-tests"
-          tfut_branch: "main"
+          tfut_project: "{tfut_project}"
+          tfut_branch: "{tfut_branch}"
 
-          tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
-          tf_a_ci_scripts_branch: "master"
-          tf_a_ci_scripts_mbed_tls_version: "3.6.5"
+          tf_a_ci_scripts_project: "{tf_a_ci_scripts_project}"
+          tf_a_ci_scripts_branch: "{tf_a_ci_scripts_branch}"
+          tf_a_ci_scripts_mbed_tls_version: "{tf_a_ci_scripts_mbed_tls_version}"
 
           lava_priority: "low"
+
+    scm:
+      - git:
+          url: "ssh://review.trustedfirmware.org:29418/ci/tf-a-ci-scripts"
+          credentials-id: "TFA_CI_BOT_USER_SSH_KEY"
+          basedir: "tf-a-ci-scripts"
+
+          refspec: "+${{CI_REFSPEC}}:refs/remotes/origin/${{CI_REFSPEC}}"
+          branches: ["refs/remotes/origin/${{CI_REFSPEC}}"]
+
+          extensions:
+            - honor-refspec: true
 
     wrappers:
       - tf-a-clone-wrappers:
       - timestamps:
 
     builders:
-      - tf-a-clone:
-          projects: "${{CLONE_REPOS}}"
-
-      - shell: |
-          #!/bin/bash
-          set -e
-
       - trigger-builds:
           - project:
-              - "tf-a-main"
+              - "{base}-main"
 
             block: true
+            block-thresholds:
+              build-step-failure-threshold: "never"
+
             current-parameters: true
 
-          - project:
-              - "tf-a-coverity"
-
-            block: true
-            current-parameters: true
-
-          - project:
-              - "tf-a-windows-builder"
-
-            block: true
-            current-parameters: true
-
-      # If all tests passed, catch up the master branch with integration
       - conditional-step:
-          condition-kind: "current-status"
-          condition-best: "SUCCESS"
-          condition-worst: "SUCCESS"
+          condition-kind: "not"
+          on-evaluation-failure: "dont-run"
+
+          condition-operand:
+            condition-kind: "regex-match"
+            regex: "^lts-v.*$"
+            label: "{gerrit_branch}"
+
+          steps:
+            - trigger-builds:
+                - project:
+                    - "tf-a-coverity"
+
+                  block: true
+                  block-thresholds:
+                    build-step-failure-threshold: "never"
+
+                  current-parameters: true
+
+                - project:
+                    - "tf-a-windows-builder"
+
+                  block: true
+                  block-thresholds:
+                    build-step-failure-threshold: "never"
+
+                  current-parameters: true
+
+      - conditional-step:
+          condition-kind: "and"
+
+          condition-operands:
+            - condition-kind: "current-status"
+              condition-best: "SUCCESS"
+              condition-worst: "SUCCESS"
+
+            - condition-kind: "strings-match"
+              condition-string1: "{gerrit_refspec}"
+              condition-string2: "integration"
 
           steps:
             - shell: |-
