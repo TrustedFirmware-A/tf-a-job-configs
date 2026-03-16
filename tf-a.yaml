@@ -237,6 +237,7 @@
           regex: "^tf-a-lts2[.]14(-.*)?$"
 
     jobs:
+      - tf-a-main:
       - tf-a-gerrit-tforg-l1:
       - tf-a-gerrit-tforg-l2:
 

@@ -1,58 +1,63 @@
-- job:
-    name: "tf-a-main"
-    node: "docker-amd64-tf-a-jammy"
+- job-template:
+    id: "tf-a-main"
     project-type: "multijob"
+
+    name: "{base}-main"
+    node: "{node}"
+
+    description: |
+      Run all <strong>{label}</strong> validation.
+
     concurrent: true
     disabled: false
-    description: "Main CI job for Trusted Firmware."
 
     properties:
       - tf-a-ci-scripts:
           download_server_url: "https://downloads.trustedfirmware.org"
-          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a"
+          download_server_tf_a_url: "https://downloads.trustedfirmware.org/{downloads_space}"
 
       - build-discarder:
           days-to-keep: 30
 
     parameters:
       - tf-a-gerrit-change-based-patchset-parameters:
-          gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
-          gerrit_branch: "master"
-          gerrit_refspec: "master"
+          gerrit_project: "TF-A/trusted-firmware-a"
+          gerrit_branch: "{gerrit_branch}"
+          gerrit_refspec: "{gerrit_refspec}"
 
       - tf-a-builder-parameters:
           tf_a_project: "${{GERRIT_PROJECT}}"
           tf_a_branch: "${{GERRIT_REFSPEC}}"
 
-          rf_a_project: "RF-A/rusted-firmware-a"
-          rf_a_branch: "main"
+          rf_a_project: "{rf_a_project}"
+          rf_a_branch: "{rf_a_branch}"
 
-          tftf_project: "TF-A/tf-a-tests"
-          tftf_branch: "master"
+          tftf_project: "{tftf_project}"
+          tftf_branch: "{tftf_branch}"
 
-          tf_m_tests_project: "TF-M/tf-m-tests"
-          tf_m_tests_branch: "tfa_ci_dep_revision"
+          tf_m_tests_project: "{tf_m_tests_project}"
+          tf_m_tests_branch: "{tf_m_tests_branch}"
 
-          tf_m_extras_project: "TF-M/tf-m-extras"
-          tf_m_extras_branch: "tfa_ci_dep_revision"
+          tf_m_extras_project: "{tf_m_extras_project}"
+          tf_m_extras_branch: "{tf_m_extras_branch}"
 
-          hafnium_project: "hafnium/hafnium"
-          hafnium_branch: "master"
+          hafnium_project: "{hafnium_project}"
+          hafnium_branch: "{hafnium_branch}"
 
-          tf_rmm_project: "TF-RMM/tf-rmm"
-          tf_rmm_branch: "main"
+          tf_rmm_project: "{tf_rmm_project}"
+          tf_rmm_branch: "{tf_rmm_branch}"
 
-          tfut_project: "TF-A/tf-a-unit-tests"
-          tfut_branch: "main"
+          tfut_project: "{tfut_project}"
+          tfut_branch: "{tfut_branch}"
 
-          tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
-          tf_a_ci_scripts_branch: "master"
-          tf_a_ci_scripts_mbed_tls_version: "3.6.5"
+          tf_a_ci_scripts_project: "{tf_a_ci_scripts_project}"
+          tf_a_ci_scripts_branch: "{tf_a_ci_scripts_branch}"
+          tf_a_ci_scripts_mbed_tls_version: "{tf_a_ci_scripts_mbed_tls_version}"
 
           lava_priority: "medium"
 
     wrappers:
-      - "timestamps"
+      - timestamps:
 
     builders:
       - multijob:
@@ -69,31 +74,31 @@
           condition: "COMPLETED"
 
           projects:
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l1-build-fvp tf-l2-build-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
 
               predefined-parameters: |
-                TEST_GROUPS=tf-l1-build-fvp tf-l2-build-fvp
+                TEST_GROUPS=tf-l1-build-fvp{tf_a_ci_scripts_test_suffix} tf-l2-build-fvp{tf_a_ci_scripts_test_suffix}
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l1-build-juno tf-l2-build-juno"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l1-build-juno tf-l2-build-juno"
+              predefined-parameters: "TEST_GROUPS=tf-l1-build-juno{tf_a_ci_scripts_test_suffix} tf-l2-build-juno{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l1-build-plat"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l1-build-plat"
+              predefined-parameters: "TEST_GROUPS=tf-l1-build-plat{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l1-build-clang"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l1-build-clang"
+              predefined-parameters: "TEST_GROUPS=tf-l1-build-clang{tf_a_ci_scripts_test_suffix}"
 
       - multijob:
           name: "Build Trusted Firmware Test Framework"
@@ -102,197 +107,198 @@
           projects:
             - current-parameters: true
               kill-phase-on: "NEVER"
-              name: "tf-a-ci-gateway"
+              name: "{base}-ci-gateway"
               alias: "tftf-l1-build"
-              predefined-parameters: "TEST_GROUPS=tftf-l1-build"
+              predefined-parameters: "TEST_GROUPS=tftf-l1-build{tf_a_ci_scripts_test_suffix}"
 
       - multijob:
           name: "TFTF Tests for FVP"
           condition: "COMPLETED"
 
           projects:
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tftf-l2-fwu"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tftf-l2-fwu"
+              predefined-parameters: "TEST_GROUPS=tftf-l2-fwu{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tftf-l1-fvp tftf-l2-fvp-auxiliary"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tftf-l1-fvp tftf-l2-fvp-auxiliary"
+              predefined-parameters: "TEST_GROUPS=tftf-l1-fvp{tf_a_ci_scripts_test_suffix} tftf-l2-fvp-auxiliary{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tftf-l2-fvp tftf-l2-fvp-dynamiq"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tftf-l2-fvp tftf-l2-fvp-dynamiq"
+              predefined-parameters: "TEST_GROUPS=tftf-l2-fvp{tf_a_ci_scripts_test_suffix} tftf-l2-fvp-dynamiq{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tftf-l2-extensive-tests-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tftf-l2-extensive-tests-fvp"
+              predefined-parameters: "TEST_GROUPS=tftf-l2-extensive-tests-fvp{tf_a_ci_scripts_test_suffix}"
 
       - multijob:
           name: "Boot up to the Linux shell prompt"
           condition: "COMPLETED"
 
           projects:
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l2-boot-tests-aarch32"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-aarch32"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-aarch32{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l2-boot-tests-rootfs"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-rootfs"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-rootfs{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l2-boot-tests-spm-mm"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-spm-mm"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-spm-mm{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "spm-l2-boot-tests"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=spm-l2-boot-tests"
+              predefined-parameters: "TEST_GROUPS=spm-l2-boot-tests{tf_a_ci_scripts_test_suffix}"
 
       - multijob:
           name: "Boot up to the Linux shell prompt - Part 2"
           condition: "COMPLETED"
 
           projects:
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l2-boot-tests-misc"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-misc"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-misc{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l2-boot-tests-latest"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-latest"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-latest{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l2-boot-tests-cortex"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-cortex"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-cortex{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l2-boot-tests-gicv2"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-gicv2"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-gicv2{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l2-boot-tests-bl2_el3"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-bl2_el3"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-bl2_el3{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "qemu-boot-tests"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=qemu-boot-tests"
+              predefined-parameters: "TEST_GROUPS=qemu-boot-tests{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "rmm-l2-boot-tests"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=rmm-l2-boot-tests"
+              enable-condition: "!('{gerrit_branch}' ==~ /^lts-v2[.](8|10|12)$/)"
+              predefined-parameters: "TEST_GROUPS=rmm-l2-boot-tests{tf_a_ci_scripts_test_suffix}"
 
       - multijob:
           name: "Juno Boot Tests"
           condition: "COMPLETED"
 
           projects:
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l2-boot-tests-juno"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-juno"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-juno{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tftf-l1-juno"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tftf-l1-juno"
+              predefined-parameters: "TEST_GROUPS=tftf-l1-juno{tf_a_ci_scripts_test_suffix}"
 
       - multijob:
           name: "Miscellaneous tests"
           condition: "COMPLETED"
 
           projects:
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l3-boot-tests-css"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-css"
+              predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-css{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l3-boot-tests-spm-mm"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-spm-mm"
+              predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-spm-mm{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l3-boot-tests-ras"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-ras"
+              predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-ras{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l3-boot-tests-misc"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-misc"
+              predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-misc{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l3-boot-tests-n1sdp"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-n1sdp"
+              predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-n1sdp{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "spm-l3-boot-tests"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=spm-l3-boot-tests"
+              predefined-parameters: "TEST_GROUPS=spm-l3-boot-tests{tf_a_ci_scripts_test_suffix}"
 
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l2-boot-tests-partner-boards"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-partner-boards"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-partner-boards{tf_a_ci_scripts_test_suffix}"
 
             # Platform-specific self-tests.
             # These tests run from the BL31 image then halt the target.
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l2-boot-tests-arm-plats"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-arm-plats"
+              predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-arm-plats{tf_a_ci_scripts_test_suffix}"
 
       - multijob:
           name: "Run doc build check"
           condition: "COMPLETED"
 
           projects:
-            - name: "tf-a-ci-gateway"
+            - name: "{base}-ci-gateway"
               alias: "tf-l1-check-docs"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l1-check-docs"
+              predefined-parameters: "TEST_GROUPS=tf-l1-check-docs{tf_a_ci_scripts_test_suffix}"
 
       - multijob:
           name: "Generate visualizations"
@@ -315,9 +321,9 @@
       # Run the unstable TF-A Tests at the end but do not let their results
       # participate in the job's success/failure.
       - trigger-builds:
-          - project: "tf-a-ci-gateway"
+          - project: "{base}-ci-gateway"
             current-parameters: True
-            predefined-parameters: "TEST_GROUPS=tftf-unstable"
+            predefined-parameters: "TEST_GROUPS=tftf-unstable{tf_a_ci_scripts_test_suffix}"
             block: True
 
             block-thresholds:
