@@ -99,6 +99,17 @@
               predefined-parameters: "TEST_GROUPS=tf-l1-build-clang-lts-v2.8"
 
       - multijob:
+          name: "Build Trusted Firmware Test Framework"
+          condition: "COMPLETED"
+
+          projects:
+            - current-parameters: true
+              kill-phase-on: "NEVER"
+              name: "tf-a-lts2.8-ci-gateway"
+              alias: "tftf-l1-build"
+              predefined-parameters: "TEST_GROUPS=tftf-l1-build-lts-v2.8"
+
+      - multijob:
           name: "TFTF Tests for FVP"
           condition: "COMPLETED"
 

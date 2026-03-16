@@ -107,7 +107,7 @@
               kill-phase-on: "NEVER"
               name: "tf-a-lts2.14-ci-gateway"
               alias: "tftf-l1-build"
-              predefined-parameters: "TEST_GROUPS=tftf-l1-build"
+              predefined-parameters: "TEST_GROUPS=tftf-l1-build-lts-v2.14"
 
       - multijob:
           name: "TFTF Tests for FVP"
