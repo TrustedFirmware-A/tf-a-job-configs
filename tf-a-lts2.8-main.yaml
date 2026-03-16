@@ -295,7 +295,3 @@
               build-step-failure-threshold: "never"
               unstable-threshold: "never"
               failure-threshold: "never"
-
-    publishers:
-      - email:
-          recipients: "bipin.ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, jidong@google.com, govindraj.raja@arm.com"
