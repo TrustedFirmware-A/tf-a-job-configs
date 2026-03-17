@@ -3,3 +3,7 @@ root = true
 [*.{yml,yaml}]
 indent_style = space
 indent_size = 2
+
+[{Jenkinsfile,*.groovy}]
+indent_style = space
+indent_size = 4
