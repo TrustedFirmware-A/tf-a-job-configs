@@ -142,6 +142,7 @@
           artifacts: "report.json, report.html, merge/outdir/**"
 
       - groovy-postbuild:
+          on-failure: "failed"
           sandbox: true
 
           script: !include-raw-verbatim:
