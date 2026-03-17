@@ -1,44 +1,23 @@
-import hudson.model.*
+def project = manager.getEnvVariable('GERRIT_PROJECT')
+def logPath = "${project}/static-checks.log"
 
-void log(msg) {
-  manager.listener.logger.println(msg)
+def html = (manager.getResult() == 'SUCCESS')
+    ? '<h1 style="color: green;">No errors detected</h1>'
+    : '<h1 style="color: red;">Errors detected</h1>'
+
+try {
+    def artifacts = manager.build
+        .getArtifactManager()
+        .root()
+
+    def log = artifacts
+        .child(project)
+        .child('static-checks.log')
+
+    html += "<pre><code>${log.open().text}</code></pre>"
+} catch (IOException e) {
+    html += "<strong>Could not read static checks log: <code>${logPath}</code></strong>"
+    manager.listener.logger.println("Could not read static checks log (`${logPath}`): ${e.message}")
 }
 
-def findRealUrl(url) {
-  def connection = url.openConnection()
-  connection.followRedirects = false
-  connection.requestMethod = "GET"
-  connection.connect()
-  if (connection.responseCode == 302) {
-    if (connection.headerFields.'Location') {
-      return findRealUrl(connection.headerFields.Location.first().toURL())
-    } else {
-      log('Failed to follow redirect')
-    }
-  }
-  return url
-}
-
-def repo_under_test = manager.build.buildVariables.get('GERRIT_PROJECT')
-def artifact = "${repo_under_test}/static-checks.log"
-def jobUrl = manager.hudson.getRootUrl() + "${manager.build.url}artifact/${artifact}"
-def url = new URL(jobUrl)
-def realUrl = findRealUrl(url)
-def connection = realUrl.openConnection()
-connection.requestMethod = "GET"
-if (connection.responseCode == 200) {
-  def summaryContent = connection.content.text
-  def summary = manager.createSummary("clipboard.gif")
-  def buildResult = manager.build.getResult()
-  def summaryHeader = ""
-  if (buildResult == Result.SUCCESS) {
-    summaryHeader = '<h1 style="color:green;">All good! Here\'s a summary of the static checks warnings (if any):</h1>'
-  } else {
-    summaryHeader = '<h1 style="color:red;">Some static checks failed!</h1>'
-  }
-  summary.appendText(summaryHeader, false)
-  summary.appendText("Here's a summary of the static check analysis :", false)
-  summary.appendText("<pre>" + summaryContent + "</pre>", false)
-} else {
-  log("Connection response code: ${connection.responseCode}")
-}
+manager.createSummary('clipboard.gif').appendText(html, false)
