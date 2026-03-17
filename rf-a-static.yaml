@@ -84,22 +84,30 @@
       - tf-a-clone:
           projects: "${{CLONE_REPOS}}"
 
+      - inject:
+          properties-content: |
+            TF_A_STATIC_CHECKS_LOG_PATH=${{GERRIT_PROJECT}}/next-checks.log
+
       - shell: |
           #!/bin/bash
-          set -e
 
-          cd ${{WORKSPACE}}/rusted-firmware-a
+          set -eux
+
+          export IS_CONTINUOUS_INTEGRATION=1
+          export LOG_TEST_FILENAME="${{WORKSPACE}}/${{TF_A_STATIC_CHECKS_LOG_PATH}}"
+
           # Executed project-related static checks: copyright, unix line endings,
           # formatting and lints
-          IS_CONTINUOUS_INTEGRATION=1 ${{WORKSPACE}}/tf-a-ci-scripts/script/next-checks/next-checks.sh
+          cd "${{WORKSPACE}}/${{GERRIT_PROJECT}}"
+          bash "${{WORKSPACE}}/tf-a-ci-scripts/script/next-checks/next-checks.sh"
 
     publishers:
       - archive:
-          artifacts: "rusted-firmware-a/next-checks.log"
+          artifacts: "${{TF_A_STATIC_CHECKS_LOG_PATH}}"
           follow-symlinks: true
 
       - groovy-postbuild:
           sandbox: true
 
           script: !include-raw-verbatim:
-            - "rf-a-static/postbuild.groovy"
+            - "tf-a-static-checks/postbuild.groovy"

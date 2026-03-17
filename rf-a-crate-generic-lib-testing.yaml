@@ -75,21 +75,28 @@
           fail: true
 
     builders:
+      - inject:
+          properties-content: |
+            TF_A_STATIC_CHECKS_LOG_PATH=next-generic-checks.log
+
       - shell: |
           #!/bin/bash
-          set -e
 
-          cd ${{WORKSPACE}}
+          set -eux
+
+          export IS_CONTINUOUS_INTEGRATION=1
+          export LOG_TEST_FILENAME="${{WORKSPACE}}/${{TF_A_STATIC_CHECKS_LOG_PATH}}"
+
           # Executed project-related next checks: platform independent tests with a generic platform.
-          IS_CONTINUOUS_INTEGRATION=1 ${{WORKSPACE}}/tf-a-ci-scripts/script/next-checks/next-checks-generic-tests.sh \
-            ${{TEST_REPO_PROJECT}} ${{TEST_REPO_NAME}}
+          bash "${{WORKSPACE}}/tf-a-ci-scripts/script/next-checks/next-checks-generic-tests.sh" \
+            "${{TEST_REPO_PROJECT}}" "${{TEST_REPO_NAME}}"
 
     publishers:
       - archive:
-          artifacts: "next-generic-checks.log"
+          artifacts: "${{TF_A_STATIC_CHECKS_LOG_PATH}}"
 
       - groovy-postbuild:
           sandbox: true
 
           script: !include-raw-verbatim:
-            - "rf-a-crate-generic-lib-testing/postbuild.groovy"
+            - "tf-a-static-checks/postbuild.groovy"

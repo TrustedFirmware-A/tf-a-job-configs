@@ -66,14 +66,22 @@
       - tf-a-clone:
           projects: "${{CLONE_REPOS}}"
 
+      - inject:
+          properties-content: |
+            TF_A_STATIC_CHECKS_LOG_PATH=${{GERRIT_PROJECT}}/static-checks.log
+
       - shell: |
           #!/bin/bash
-          set -e
 
-          cd ${{WORKSPACE}}/${{GERRIT_PROJECT}}
+          set -eux
+
+          export IS_CONTINUOUS_INTEGRATION=1
+          export LOG_TEST_FILENAME="${{WORKSPACE}}/${{TF_A_STATIC_CHECKS_LOG_PATH}}"
+
           # Executed project-related static checks: copyright presence, headers in alphabetical order,
           # line endings, coding style and banned API.
-          IS_CONTINUOUS_INTEGRATION=1 ${{WORKSPACE}}/tf-a-ci-scripts/script/static-checks/static-checks.sh
+          cd "${{WORKSPACE}}/${{GERRIT_PROJECT}}"
+          bash "${{WORKSPACE}}/tf-a-ci-scripts/script/static-checks/static-checks.sh"
 
       - conditional-step:
           on-evaluation-failure: "dont-run"
@@ -93,7 +101,7 @@
 
     publishers:
       - archive:
-          artifacts: "${{GERRIT_PROJECT}}/static-checks.log"
+          artifacts: "${{TF_A_STATIC_CHECKS_LOG_PATH}}"
 
       - groovy-postbuild:
           sandbox: true
