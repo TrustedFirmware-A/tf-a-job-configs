@@ -6,7 +6,7 @@
 #
 # Clones and checkout TF-A related repositories into the current workspace.
 
-set -ex
+set -ex -o pipefail
 
 git config --global --add url."https://review.trustedfirmware.org/mirror/mbed-tls.git".insteadOf "https://github.com/Mbed-TLS/mbedtls"
 git config --global --add url."https://review.trustedfirmware.org/mirror/mbed-tls.git".insteadOf "https://github.com/Mbed-TLS/mbedtls.git"
@@ -28,8 +28,29 @@ GIT_REPO="https://git.trustedfirmware.org"
 GERRIT_HOST="https://review.trustedfirmware.org"
 SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -p 29418 -i ${CI_BOT_KEY}"
 GERRIT_QUERY_PARAMS="--format=JSON --patch-sets --current-patch-set status:open"
+GERRIT_QUERY_RETRIES="${GERRIT_QUERY_RETRIES:-3}"
+GERRIT_QUERY_RETRY_DELAY="${GERRIT_QUERY_RETRY_DELAY:-2}"
 
 export GIT_SSH_COMMAND="ssh ${SSH_PARAMS}"
+
+gerrit_query_with_retry() {
+    local attempt=1
+
+    while true; do
+        if ssh ${SSH_PARAMS} "${CI_BOT_USERNAME}@${GERRIT_HOST#https://}" gerrit query "${GERRIT_QUERY_PARAMS}" "$@"; then
+            return 0
+        fi
+
+        if (( attempt >= GERRIT_QUERY_RETRIES )); then
+            echo "Gerrit query failed after ${attempt} attempts." >&2
+            return 1
+        fi
+
+        echo "Gerrit query failed on attempt ${attempt}/${GERRIT_QUERY_RETRIES}; retrying in ${GERRIT_QUERY_RETRY_DELAY}s..." >&2
+        sleep "${GERRIT_QUERY_RETRY_DELAY}"
+        attempt=$((attempt + 1))
+    done
+}
 
 # Defaults Projects
 TF_GERRIT_PROJECT="${TF_GERRIT_PROJECT:-${GERRIT_PROJECT_PREFIX}TF-A/trusted-firmware-a}"
@@ -168,8 +189,8 @@ for repo in ${!repos_map[@]}; do
     # If the Gerrit review that triggered the CI had a topic, it will be used to synchronize the other repositories
     if [ -n "${GERRIT_TOPIC}" -a "${REPO_HOST}" = "${GERRIT_HOST}" -a "${GERRIT_PROJECT}" != "${REPO_PROJECT}" ]; then
         echo "Got Gerrit Topic: ${GERRIT_TOPIC}"
-        REPO_REFSPEC="$(ssh ${SSH_PARAMS} ${CI_BOT_USERNAME}@${REPO_HOST#https://} gerrit query ${GERRIT_QUERY_PARAMS} \
-                        project:${REPO_PROJECT} topic:${GERRIT_TOPIC} | ${JOBS_REPO_NAME}/scripts/parse_refspec.py)"
+        QUERY_OUTPUT="$(gerrit_query_with_retry project:${REPO_PROJECT} topic:${GERRIT_TOPIC})"
+        REPO_REFSPEC="$(printf '%s\n' "${QUERY_OUTPUT}" | "${JOBS_REPO_NAME}/scripts/parse_refspec.py")"
         if [ -z "${REPO_REFSPEC}" ]; then
             REPO_REFSPEC="${REPO_DEFAULT_REFSPEC}"
             echo "Roll back to \"${REPO_REFSPEC}\" for \"${REPO_PROJECT}\""

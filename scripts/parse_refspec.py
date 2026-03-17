@@ -42,6 +42,9 @@ try:
 except:
     raise Exception("Input error, it's not a JSON string!")
 
+if not changes:
+    raise Exception("No input received from Gerrit query.")
+
 # The last object is a summary; drop it as it's not of interest to us.
 changes.pop()
 
