@@ -157,6 +157,7 @@
           follow-symlinks: true
 
       - groovy-postbuild:
+          on-failure: "failed"
           sandbox: true
 
           script: !include-raw-verbatim:
