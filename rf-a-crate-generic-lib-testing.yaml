@@ -96,6 +96,7 @@
           artifacts: "${{TF_A_STATIC_CHECKS_LOG_PATH}}"
 
       - groovy-postbuild:
+          on-failure: "failed"
           sandbox: true
 
           script: !include-raw-verbatim:
