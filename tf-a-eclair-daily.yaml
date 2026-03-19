@@ -81,7 +81,7 @@
             URL of mbedTLS library to use in build (only for some configurations)
 
     triggers:
-      - timed: "H 2 * * *"
+      - timed: "0 2 * * *"
         #    - gerrit:
         #        silent: true
         #        server-name: 'review.trustedfirmware.org'

@@ -67,4 +67,4 @@
               predefined-parameters: "TEST_GROUPS=tfut"
 
     triggers:
-      - timed: "59 23 * * 7"
+      - timed: "0 16 * * 7"

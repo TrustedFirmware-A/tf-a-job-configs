@@ -73,4 +73,4 @@
             current-parameters: true
 
     triggers:
-      - timed: "59 23 * * 7"
+      - timed: "0 14 * * 7"

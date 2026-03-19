@@ -45,6 +45,8 @@
           tf_a_ci_scripts_mbed_tls_version: "3.6.5"
           tf_a_ci_scripts_test_suffix: ""
 
+          daily_schedule: "0 22 * * *"
+
       - "tf-a-lts2.8":
           label: "TF-A LTS v2.8"
 
@@ -84,6 +86,8 @@
           tf_a_ci_scripts_branch: "master"
           tf_a_ci_scripts_mbed_tls_version: "3.6.4"
           tf_a_ci_scripts_test_suffix: "-lts-v2.8"
+
+          daily_schedule: "0 02 * * *"
 
       - "tf-a-lts2.10":
           label: "TF-A LTS v2.10"
@@ -125,6 +129,8 @@
           tf_a_ci_scripts_mbed_tls_version: "3.6.4"
           tf_a_ci_scripts_test_suffix: "-lts-v2.10"
 
+          daily_schedule: "0 01 * * *"
+
       - "tf-a-lts2.12":
           label: "TF-A LTS v2.12"
 
@@ -165,6 +171,8 @@
           tf_a_ci_scripts_mbed_tls_version: "3.6.3"
           tf_a_ci_scripts_test_suffix: "-lts-v2.12"
 
+          daily_schedule: "0 00 * * *"
+
       - "tf-a-lts2.14":
           label: "TF-A LTS v2.14"
 
@@ -204,6 +212,8 @@
           tf_a_ci_scripts_branch: "master"
           tf_a_ci_scripts_mbed_tls_version: "3.6.5"
           tf_a_ci_scripts_test_suffix: "-lts-v2.14"
+
+          daily_schedule: "0 23 * * *"
 
     views:
       - tf-a-view:

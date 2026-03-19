@@ -131,4 +131,4 @@
                 bash "${{WORKSPACE}}/tf-a-ci-scripts/script/scratch_scripts/fast-forward-master.sh"
 
     triggers:
-      - timed: "H 22 * * *"
+      - timed: "{daily_schedule}"
