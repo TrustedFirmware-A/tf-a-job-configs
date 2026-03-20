@@ -84,7 +84,7 @@
 
           tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
           tf_a_ci_scripts_branch: "master"
-          tf_a_ci_scripts_mbed_tls_version: "3.6.4"
+          tf_a_ci_scripts_mbed_tls_version: "3.6.3"
           tf_a_ci_scripts_test_suffix: "-lts-v2.8"
 
           daily_schedule: "0 02 * * *"
