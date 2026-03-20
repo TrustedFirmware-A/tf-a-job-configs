@@ -99,9 +99,17 @@
             - kill-phase-on: "NEVER"
               name: "{base}-ci-gateway"
               current-parameters: true
+              enable-condition: "!('{gerrit_branch}' ==~ /^lts-v2[.](8|10)$/)"
 
               predefined-parameters: |
-                TEST_GROUPS=tf-l2-boot-tests-arm-plats{tf_a_ci_scripts_test_suffix} tf-l2-boot-tests-partner-boards{tf_a_ci_scripts_test_suffix}
+                TEST_GROUPS=tf-l2-boot-tests-arm-plats{tf_a_ci_scripts_test_suffix}
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              current-parameters: true
+
+              predefined-parameters: |
+                TEST_GROUPS=tf-l2-boot-tests-partner-boards{tf_a_ci_scripts_test_suffix}
 
       - multijob:
           condition: "COMPLETED"

@@ -243,6 +243,7 @@
               alias: "tf-l3-boot-tests-css"
               current-parameters: true
               kill-phase-on: "NEVER"
+              enable-condition: "!('{gerrit_branch}' ==~ /^lts-v2[.](8|10)$/)"
               predefined-parameters: "TEST_GROUPS=tf-l3-boot-tests-css{tf_a_ci_scripts_test_suffix}"
 
             - name: "{base}-ci-gateway"
@@ -287,6 +288,7 @@
               alias: "tf-l2-boot-tests-arm-plats"
               current-parameters: true
               kill-phase-on: "NEVER"
+              enable-condition: "!('{gerrit_branch}' ==~ /^lts-v2[.](8|10)$/)"
               predefined-parameters: "TEST_GROUPS=tf-l2-boot-tests-arm-plats{tf_a_ci_scripts_test_suffix}"
 
       - multijob:
