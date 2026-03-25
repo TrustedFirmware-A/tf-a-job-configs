@@ -319,16 +319,3 @@
               current-parameters: true
               kill-phase-on: "NEVER"
               predefined-parameters: "TARGET_BUILD=${{JOB_NAME}}/${{BUILD_NUMBER}}"
-
-      # Run the unstable TF-A Tests at the end but do not let their results
-      # participate in the job's success/failure.
-      - trigger-builds:
-          - project: "{base}-ci-gateway"
-            current-parameters: True
-            predefined-parameters: "TEST_GROUPS=tftf-unstable{tf_a_ci_scripts_test_suffix}"
-            block: True
-
-            block-thresholds:
-              build-step-failure-threshold: "never"
-              unstable-threshold: "never"
-              failure-threshold: "never"
