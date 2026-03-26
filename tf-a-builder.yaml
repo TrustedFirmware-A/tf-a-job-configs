@@ -63,7 +63,7 @@
 
             <ul>
               <li><code>fvp-no-cohmem,fvp-default:fvp-tftf-fip.tftf-aemva</code></li>
-              <li><code>fvp,nil,fvp-rfa:fvp-rfa-fip.rfa</code></li>
+              <li><code>fvp-rfa,nil,nil,nil,fvp:fvp-rfa-fip.rfa</code></li>
               <li><code>juno-default:juno-linux.uboot</code></li>
             </ul>
 

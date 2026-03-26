@@ -54,6 +54,6 @@
       - tf-a-gateway-chain:
           default_clones: "tf-a-ci-scripts,trusted-firmware-a,rusted-firmware-a"
 
-          default_groups: "rfa-fvp/fvp,nil,fvp-rfa:fvp-rfa-fip.rfa"
-          default_config: "fvp,nil,fvp-rfa:fvp-rfa-fip.rfa"
+          default_groups: "rfa-fvp/fvp-rfa,nil,nil,nil,fvp:fvp-rfa-fip.rfa"
+          default_config: "fvp-rfa,nil,nil,nil,fvp:fvp-rfa-fip.rfa"
           default_config_desc: "0000%rfa-fvp%fvp-rfa,nil,nil,nil,fvp,nil:fvp-rfa-fip.rfa.test"
