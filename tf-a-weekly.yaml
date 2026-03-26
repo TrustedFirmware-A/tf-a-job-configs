@@ -4,7 +4,7 @@
     project-type: "multijob"
     concurrent: true
     disabled: false
-    description: "Main CI job for Trusted Firmware."
+    description: "Weekly TF-A campaign tests."
 
     properties:
       - tf-a-ci-scripts:
@@ -56,32 +56,37 @@
 
     builders:
       - multijob:
-          name: "TFTF Fuzzing"
+          name: "Run integration tests"
           condition: "COMPLETED"
 
           projects:
             - name: "tf-a-ci-gateway"
-              alias: "tf-l3-fuzzing SDEI"
+              alias: "tf-a-l3-integration-tests-tftf-ras-base-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l3-fuzzing"
+              predefined-parameters: "TEST_GROUPS=tf-a-l3-integration-tests-tftf-ras-base-fvp"
 
       - multijob:
-          name: "TFTF Fuzzing FFA"
+          name: "Run coverage tests"
+          condition: "COMPLETED"
+
+          projects:
+            - name: "tf-a-ci-coverage-gateway"
+              alias: "tf-a-l3-coverage-tests-tftf-base-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-a-l3-coverage-tests-tftf-base-fvp"
+
+      - multijob:
+          name: "Run fuzz tests"
           condition: "COMPLETED"
 
           projects:
             - name: "tf-a-ci-gateway"
-              alias: "tf-l3-fuzzing FFA"
+              alias: "tf-a-l3-fuzz-tests-tftf-base-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l3-fuzzing-ffa"
-
-      # participate in the job's success/failure.
-      - trigger-builds:
-          - project: "tf-a-ci-coverage-gateway"
-            block: true
-            current-parameters: true
+              predefined-parameters: "TEST_GROUPS=tf-a-l3-fuzz-tests-tftf-base-fvp"
 
     triggers:
       - timed: "0 12 * * 7"

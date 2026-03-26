@@ -57,7 +57,7 @@
 
     parameters:
       - tf-a-gerrit-comment-added-contains-parameters:
-          gerrit_project: "{gerrit_project_prefix}RF-A/rusted-firmware-a"
+          gerrit_project: "RF-A/rusted-firmware-a"
           gerrit_branch: "main"
           gerrit_refspec: "main"
 
@@ -139,27 +139,40 @@
                 TEST_REPO_PROJECT=RF-A
 
       - multijob:
-          name: "Build Rusted Firmware A"
+          name: "Run build tests"
           condition: "COMPLETED"
 
           projects:
             - name: "rf-a-ci-gateway"
-              alias: "rfa-build"
+              alias: "rf-a-l1-build-tests"
               current-parameters: true
               kill-phase-on: "NEVER"
 
               predefined-parameters: |
-                TEST_GROUPS=rfa-build
+                TEST_GROUPS=rf-a-l1-build-tests
 
       - multijob:
-          name: "FVP Tests"
+          name: "Run functional tests"
           condition: "COMPLETED"
 
           projects:
             - name: "rf-a-ci-gateway"
-              alias: "rfa-fvp"
+              alias: "rf-a-l2-functional-tests-base-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
 
               predefined-parameters: |
-                TEST_GROUPS=rfa-fvp
+                TEST_GROUPS=rf-a-l2-functional-tests-base-fvp
+
+      - multijob:
+          name: "Run integration tests"
+          condition: "COMPLETED"
+
+          projects:
+            - name: "rf-a-ci-gateway"
+              alias: "rf-a-l2-integration-tests-tftf-base-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+
+              predefined-parameters: |
+                TEST_GROUPS=rf-a-l2-integration-tests-tftf-base-fvp

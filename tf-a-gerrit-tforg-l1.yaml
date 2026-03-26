@@ -79,7 +79,7 @@
 
       - multijob:
           condition: "COMPLETED"
-          name: "Build and static checks"
+          name: "Run static checks"
 
           projects:
             - kill-phase-on: "NEVER"
@@ -88,7 +88,7 @@
 
       - multijob:
           condition: "COMPLETED"
-          name: "Run doc build check"
+          name: "Run documentation tests"
 
           projects:
             - kill-phase-on: "NEVER"
@@ -96,7 +96,7 @@
               current-parameters: true
 
               predefined-parameters: |
-                TEST_GROUPS=tf-l1-check-docs{tf_a_ci_scripts_test_suffix}
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-docs-tests
 
       - multijob:
           condition: "COMPLETED"
@@ -105,10 +105,48 @@
           projects:
             - kill-phase-on: "NEVER"
               name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-tests-clang"
               current-parameters: true
 
               predefined-parameters: |
-                TEST_GROUPS=tf-l1-build-fvp{tf_a_ci_scripts_test_suffix} tf-l1-build-juno{tf_a_ci_scripts_test_suffix} tf-l1-build-clang{tf_a_ci_scripts_test_suffix} tf-l1-build-plat{tf_a_ci_scripts_test_suffix} spm-l1-build-tests{tf_a_ci_scripts_test_suffix}
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-tests-clang
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-tests-juno"
+              current-parameters: true
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-tests-juno
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-tests-base-fvp"
+              current-parameters: true
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-tests-base-fvp
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-tests-platforms"
+              current-parameters: true
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-tests-platforms
+
+      - multijob:
+          condition: "COMPLETED"
+          name: "Run unit tests"
+
+          projects:
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              current-parameters: true
+              enable-condition: "'{gerrit_branch}' ==~ /^(master|lts-v2[.]14)$/"
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-unit-tests-tfut
 
     triggers:
       - gerrit:

@@ -36,7 +36,7 @@
 
       - string:
           name: "TEST_GROUPS"
-          default: "tf-l3-code-coverage"
+          default: "tf-a-l3-coverage-tests-tftf-base-fvp"
 
           description: |
             White space separated list of test configs: can be mix of specific
@@ -44,7 +44,7 @@
             group names (e.g., <code>l1 l2</code>).
 
       - tf-a-gerrit-change-based-patchset-parameters:
-          gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
+          gerrit_project: "TF-A/trusted-firmware-a"
           gerrit_branch: "master"
           gerrit_refspec: "master"
 

@@ -4,7 +4,7 @@
     project-type: "multijob"
     concurrent: true
     disabled: false
-    description: "CI job for weekly runs of TF-A Unit Testing"
+    description: "Weekly TFUT coverage tests."
 
     properties:
       - tf-a-ci-scripts:
@@ -56,15 +56,15 @@
 
     builders:
       - multijob:
-          name: "TFA UNIT TESTS"
+          name: "Run coverage tests"
           condition: "COMPLETED"
 
           projects:
-            - name: "tf-a-ci-gateway"
-              alias: "tfut"
+            - name: "tf-a-ci-coverage-gateway"
+              alias: "tf-a-l3-coverage-tests-tfut"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tfut"
+              predefined-parameters: "TEST_GROUPS=tf-a-l3-coverage-tests-tfut"
 
     triggers:
       - timed: "0 16 * * 7"

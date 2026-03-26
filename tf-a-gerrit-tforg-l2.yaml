@@ -72,7 +72,7 @@
     builders:
       - multijob:
           condition: "COMPLETED"
-          name: "Carry out level 1 tests"
+          name: "Run level 1 tests"
 
           projects:
             - kill-phase-on: "NEVER"
@@ -81,59 +81,152 @@
 
       - multijob:
           condition: "COMPLETED"
-          name: "Build Trusted Firmware"
+          name: "Run functional tests"
 
           projects:
             - kill-phase-on: "NEVER"
               name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-spm-base-fvp"
               current-parameters: true
 
               predefined-parameters: |
-                TEST_GROUPS=tf-l2-build-fvp{tf_a_ci_scripts_test_suffix} tf-l2-build-juno{tf_a_ci_scripts_test_suffix}
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-spm-base-fvp
 
-      - multijob:
-          condition: "COMPLETED"
-          name: "Run platform boot tests"
-
-          projects:
             - kill-phase-on: "NEVER"
               name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-spm-mm-base-fvp"
+              current-parameters: true
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-spm-mm-base-fvp
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-linux-aarch32-base-fvp"
+              current-parameters: true
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-linux-aarch32-base-fvp
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-linux-base-fvp"
+              current-parameters: true
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-linux-base-fvp
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-linux-juno"
+              current-parameters: true
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-linux-juno
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-linux-n1sdp"
+              current-parameters: true
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-linux-n1sdp
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-linux-lumex-1"
               current-parameters: true
               enable-condition: "!('{gerrit_branch}' ==~ /^lts-v2[.](8|10)$/)"
 
               predefined-parameters: |
-                TEST_GROUPS=tf-l2-boot-tests-arm-plats{tf_a_ci_scripts_test_suffix}
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-linux-lumex-1
 
             - kill-phase-on: "NEVER"
               name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-platforms"
               current-parameters: true
 
               predefined-parameters: |
-                TEST_GROUPS=tf-l2-boot-tests-partner-boards{tf_a_ci_scripts_test_suffix}
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-platforms
 
       - multijob:
           condition: "COMPLETED"
-          name: "TFTF tests"
+          name: "Run integration tests"
 
           projects:
             - kill-phase-on: "NEVER"
               name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-fwu"
               current-parameters: true
 
               predefined-parameters: |
-                TEST_GROUPS=tftf-l1-fvp{tf_a_ci_scripts_test_suffix} tftf-l1-juno{tf_a_ci_scripts_test_suffix} tftf-l2-fvp-auxiliary{tf_a_ci_scripts_test_suffix} tftf-l2-fvp-dynamiq{tf_a_ci_scripts_test_suffix} tftf-l2-fwu{tf_a_ci_scripts_test_suffix} tftf-l2-fvp{tf_a_ci_scripts_test_suffix}
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-fwu
 
-      - multijob:
-          condition: "COMPLETED"
-          name: "Boot up to the Linux shell prompt"
-
-          projects:
             - kill-phase-on: "NEVER"
               name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-spm-base-fvp"
               current-parameters: true
 
               predefined-parameters: |
-                TEST_GROUPS=tf-l2-boot-tests-aarch32{tf_a_ci_scripts_test_suffix} tf-l2-boot-tests-bl2_el3{tf_a_ci_scripts_test_suffix} tf-l2-boot-tests-cortex{tf_a_ci_scripts_test_suffix} tf-l2-boot-tests-juno{tf_a_ci_scripts_test_suffix} tf-l2-boot-tests-latest{tf_a_ci_scripts_test_suffix} tf-l2-boot-tests-misc{tf_a_ci_scripts_test_suffix} tf-l2-boot-tests-rootfs{tf_a_ci_scripts_test_suffix} tf-l2-boot-tests-spm-mm{tf_a_ci_scripts_test_suffix} spm-l2-boot-tests{tf_a_ci_scripts_test_suffix}
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-spm-base-fvp
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-spm-mm-base-fvp"
+              current-parameters: true
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-spm-mm-base-fvp
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-rmm-base-fvp"
+              current-parameters: true
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-rmm-base-fvp
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-dynamiq-base-fvp"
+              current-parameters: true
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-dynamiq-base-fvp
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-juno"
+              current-parameters: true
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-juno
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-lumex-1"
+              current-parameters: true
+              enable-condition: "!('{gerrit_branch}' ==~ /^lts-v2[.](8|10|12)$/)"
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-lumex-1
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-spm-lumex-1"
+              current-parameters: true
+              enable-condition: "!('{gerrit_branch}' ==~ /^lts-v2[.](8|10|12)$/)"
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-spm-lumex-1
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-base-fvp"
+              current-parameters: true
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-base-fvp
 
     triggers:
       - gerrit:

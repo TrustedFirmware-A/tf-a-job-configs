@@ -72,48 +72,12 @@
     builders:
       - multijob:
           condition: "COMPLETED"
-          name: "Carry out level 1 tests"
+          name: "Run level 1 tests"
 
           projects:
             - kill-phase-on: "NEVER"
               name: "{base}-gerrit-tforg-l1"
               current-parameters: true
-
-      - multijob:
-          condition: "COMPLETED"
-          name: "Run Firmware Update Tests"
-
-          projects:
-            - kill-phase-on: "NEVER"
-              name: "{base}-ci-gateway"
-              current-parameters: true
-
-              predefined-parameters: |
-                TEST_GROUPS=tftf-l2-fwu{tf_a_ci_scripts_test_suffix}
-
-      - multijob:
-          condition: "COMPLETED"
-          name: "Run Level 2 testing of TF-A-Tests"
-
-          projects:
-            - kill-phase-on: "NEVER"
-              name: "{base}-ci-gateway"
-              current-parameters: true
-
-              predefined-parameters: |
-                TEST_GROUPS=tftf-l2-fvp-auxiliary{tf_a_ci_scripts_test_suffix} tftf-l2-juno{tf_a_ci_scripts_test_suffix} tf-l2-boot-tests-spm-mm{tf_a_ci_scripts_test_suffix} tftf-l2-fvp-dynamiq{tf_a_ci_scripts_test_suffix} spm-l2-boot-tests{tf_a_ci_scripts_test_suffix}
-
-      - multijob:
-          condition: "COMPLETED"
-          name: "Run extensive TF-A-Tests"
-
-          projects:
-            - kill-phase-on: "NEVER"
-              name: "{base}-ci-gateway"
-              current-parameters: true
-
-              predefined-parameters: |
-                TEST_GROUPS=tftf-l2-extensive-tests-fvp{tf_a_ci_scripts_test_suffix}
 
     triggers:
       - gerrit:

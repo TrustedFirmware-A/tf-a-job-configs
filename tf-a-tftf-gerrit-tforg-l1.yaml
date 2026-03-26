@@ -72,7 +72,7 @@
     builders:
       - multijob:
           condition: "COMPLETED"
-          name: "Build and static checks"
+          name: "Run static checks"
 
           projects:
             - kill-phase-on: "NEVER"
@@ -81,7 +81,7 @@
 
       - multijob:
           condition: "COMPLETED"
-          name: "Run doc build check"
+          name: "Run documentation tests"
 
           projects:
             - kill-phase-on: "NEVER"
@@ -89,11 +89,11 @@
               current-parameters: true
 
               predefined-parameters: |
-                TEST_GROUPS=tftf-l1-check-docs{tf_a_ci_scripts_test_suffix}
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-docs-tests
 
       - multijob:
           condition: "COMPLETED"
-          name: "Build TF-A-Tests"
+          name: "Run build tests"
 
           projects:
             - kill-phase-on: "NEVER"
@@ -101,19 +101,7 @@
               current-parameters: true
 
               predefined-parameters: |
-                TEST_GROUPS=tftf-l1-build{tf_a_ci_scripts_test_suffix}
-
-      - multijob:
-          condition: "COMPLETED"
-          name: "Basic TF-A-Tests test cases"
-
-          projects:
-            - kill-phase-on: "NEVER"
-              name: "{base}-ci-gateway"
-              current-parameters: true
-
-              predefined-parameters: |
-                TEST_GROUPS=tftf-l1-fvp{tf_a_ci_scripts_test_suffix}
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-tests
 
     triggers:
       - gerrit:

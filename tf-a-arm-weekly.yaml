@@ -4,7 +4,7 @@
     project-type: "multijob"
     concurrent: true
     disabled: false
-    description: "CI job for both coverage and fuzzing."
+    description: "Weekly TF-A instrumentation tests."
 
     properties:
       - tf-a-ci-scripts:
@@ -56,21 +56,21 @@
 
     builders:
       - multijob:
-          name: "TFTF Fuzzing"
+          name: "Run instrumentation tests"
           condition: "COMPLETED"
 
           projects:
             - name: "tf-a-ci-gateway"
-              alias: "tf-l3-fuzzing SDEI"
+              alias: "tf-a-l3-instrumentation-tests-simd-crypto"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-l3-fuzzing"
+              predefined-parameters: "TEST_GROUPS=tf-a-l3-instrumentation-tests-simd-crypto"
 
-      # participate in the job's success/failure.
-      - trigger-builds:
-          - project: "tf-a-ci-coverage-gateway"
-            block: true
-            current-parameters: true
+            - name: "tf-a-ci-gateway"
+              alias: "tf-a-l3-instrumentation-tests-psci"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-a-l3-instrumentation-tests-psci"
 
     triggers:
       - timed: "0 14 * * 7"
