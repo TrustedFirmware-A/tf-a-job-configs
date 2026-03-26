@@ -65,7 +65,7 @@
           condition: "COMPLETED"
 
           projects:
-            - name: "tf-a-static-checks"
+            - name: "{base}-static-checks"
               current-parameters: true
               kill-phase-on: "NEVER"
 

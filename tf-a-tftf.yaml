@@ -5,11 +5,15 @@
     rf_a_branch: "main"
 
     base:
-      - "tf-a":
+      - "tf-a-tftf":
           label: "TFTF"
 
           node: "docker-amd64-tf-a-jammy"
           downloads_space: "tf-a"
+
+          default_groups: "tftf-l1-build-tests/nil,fvp-default:nil"
+          default_config: "nil,fvp-default:nil"
+          default_config_desc: "0000%tftf-l1-build-tests%nil,fvp-default,nil,nil,nil,nil:nil.test"
 
           gerrit_project: "TF-A/tf-a-tests"
           gerrit_branch: "master"
@@ -41,11 +45,15 @@
           tf_a_ci_scripts_mbed_tls_version: "3.6.5"
           tf_a_ci_scripts_test_suffix: ""
 
-      - "tf-a-lts2.8":
+      - "tf-a-lts2.8-tftf":
           label: "TFTF LTS v2.8"
 
           node: "docker-amd64-tf-a-lts2.8-jammy"
           downloads_space: "tf-a-lts-v2.8"
+
+          default_groups: "tftf-l1-build-tests-lts-v2.8/nil,fvp-default-lts-v2.8:nil"
+          default_config: "nil,fvp-default-lts-v2.8:nil"
+          default_config_desc: "0000%tftf-l1-build-tests-lts-v2.8%nil,fvp-default-lts-v2.8,nil,nil,nil,nil:nil.test"
 
           gerrit_project: "TF-A/tf-a-tests"
           gerrit_branch: "lts-v2.8"
@@ -77,11 +85,15 @@
           tf_a_ci_scripts_mbed_tls_version: "3.6.3"
           tf_a_ci_scripts_test_suffix: "-lts-v2.8"
 
-      - "tf-a-lts2.10":
+      - "tf-a-lts2.10-tftf":
           label: "TFTF LTS v2.10"
 
           node: "docker-amd64-tf-a-lts2.10-jammy"
           downloads_space: "tf-a-lts-v2.10"
+
+          default_groups: "tftf-l1-build-tests-lts-v2.10/nil,fvp-default-lts-v2.10:nil"
+          default_config: "nil,fvp-default-lts-v2.10:nil"
+          default_config_desc: "0000%tftf-l1-build-tests-lts-v2.10%nil,fvp-default-lts-v2.10,nil,nil,nil,nil:nil.test"
 
           gerrit_project: "TF-A/tf-a-tests"
           gerrit_branch: "lts-v2.10"
@@ -113,11 +125,15 @@
           tf_a_ci_scripts_mbed_tls_version: "3.6.4"
           tf_a_ci_scripts_test_suffix: "-lts-v2.10"
 
-      - "tf-a-lts2.12":
+      - "tf-a-lts2.12-tftf":
           label: "TFTF LTS v2.12"
 
           node: "docker-amd64-tf-a-lts2.12-jammy"
           downloads_space: "tf-a-lts-v2.12"
+
+          default_groups: "tftf-l1-build-tests-lts-v2.12/nil,fvp-default-lts-v2.12:nil"
+          default_config: "nil,fvp-default-lts-v2.12:nil"
+          default_config_desc: "0000%tftf-l1-build-tests-lts-v2.12%nil,fvp-default-lts-v2.12,nil,nil,nil,nil:nil.test"
 
           gerrit_project: "TF-A/tf-a-tests"
           gerrit_branch: "lts-v2.12"
@@ -149,11 +165,15 @@
           tf_a_ci_scripts_mbed_tls_version: "3.6.3"
           tf_a_ci_scripts_test_suffix: "-lts-v2.12"
 
-      - "tf-a-lts2.14":
+      - "tf-a-lts2.14-tftf":
           label: "TFTF LTS v2.14"
 
           node: "docker-amd64-tf-a-lts2.14-jammy"
           downloads_space: "tf-a-lts-v2.14"
+
+          default_groups: "tftf-l1-build-tests-lts-v2.14/nil,fvp-default-lts-v2.14:nil"
+          default_config: "nil,fvp-default-lts-v2.14:nil"
+          default_config_desc: "0000%tftf-l1-build-tests-lts-v2.14%nil,fvp-default-lts-v2.14,nil,nil,nil,nil:nil.test"
 
           gerrit_project: "TF-A/tf-a-tests"
           gerrit_branch: "lts-v2.14"
@@ -188,3 +208,13 @@
     jobs:
       - tf-a-tftf-gerrit-tforg-l1:
       - tf-a-tftf-gerrit-tforg-l2:
+
+      - tf-a-static-checks:
+          tftf_project: "${{GERRIT_PROJECT}}"
+          tftf_branch: "${{GERRIT_REFSPEC}}"
+
+      - tf-a-gateway-chain:
+          default_clones: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
+
+          tftf_project: "${{GERRIT_PROJECT}}"
+          tftf_branch: "${{GERRIT_REFSPEC}}"

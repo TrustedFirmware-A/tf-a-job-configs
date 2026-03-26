@@ -2,7 +2,7 @@
     id: "tf-a-tftf-gerrit-tforg-l1"
     project-type: "multijob"
 
-    name: "{base}-tftf-gerrit-tforg-l1"
+    name: "{base}-gerrit-tforg-l1"
     node: "{node}"
 
     description: >
@@ -76,7 +76,7 @@
 
           projects:
             - kill-phase-on: "NEVER"
-              name: "tf-a-static-checks"
+              name: "{base}-static-checks"
               current-parameters: true
 
       - multijob:

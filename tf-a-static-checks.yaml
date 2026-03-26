@@ -1,61 +1,88 @@
-- job:
-    name: "tf-a-static-checks"
-    node: "docker-amd64-tf-a-jammy"
+- job-template:
+    id: "tf-a-static-checks"
     project-type: "freestyle"
+
+    name: "{base}-static-checks"
+    node: "{node}"
+
+    description: |
+      Miscellaneous static analysis checks for <strong>{label}</strong>.
+
     concurrent: true
     disabled: false
-    description: "Run static checks on Git repository"
 
     properties:
       - tf-a-ci-scripts:
           download_server_url: "https://downloads.trustedfirmware.org"
-          download_server_tf_a_url: "https://downloads.trustedfirmware.org/tf-a"
+          download_server_tf_a_url: "https://downloads.trustedfirmware.org/{downloads_space}"
 
       - build-discarder:
           days-to-keep: 30
 
     parameters:
-      - tf-a-clone-parameters:
-          projects: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"
-
       - tf-a-gerrit-change-based-patchset-parameters:
-          gerrit_project: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
-          gerrit_branch: "master"
-          gerrit_refspec: "master"
+          gerrit_project: "{gerrit_project}"
+          gerrit_branch: "{gerrit_branch}"
+          gerrit_refspec: "{gerrit_refspec}"
 
       - tf-a-builder-parameters:
-          tf_a_project: "${{GERRIT_PROJECT}}"
-          tf_a_branch: "${{GERRIT_REFSPEC}}"
+          tf_a_project: "{tf_a_project}"
+          tf_a_branch: "{tf_a_branch}"
 
-          rf_a_project: "RF-A/rusted-firmware-a"
-          rf_a_branch: "main"
+          rf_a_project: "{rf_a_project}"
+          rf_a_branch: "{rf_a_branch}"
 
-          tftf_project: "TF-A/tf-a-tests"
-          tftf_branch: "master"
+          tftf_project: "{tftf_project}"
+          tftf_branch: "{tftf_branch}"
 
-          tf_m_tests_project: "TF-M/tf-m-tests"
-          tf_m_tests_branch: "tfa_ci_dep_revision"
+          tf_m_tests_project: "{tf_m_tests_project}"
+          tf_m_tests_branch: "{tf_m_tests_branch}"
 
-          tf_m_extras_project: "TF-M/tf-m-extras"
-          tf_m_extras_branch: "tfa_ci_dep_revision"
+          tf_m_extras_project: "{tf_m_extras_project}"
+          tf_m_extras_branch: "{tf_m_extras_branch}"
 
-          hafnium_project: "hafnium/hafnium"
-          hafnium_branch: "master"
+          hafnium_project: "{hafnium_project}"
+          hafnium_branch: "{hafnium_branch}"
 
-          tf_rmm_project: "TF-RMM/tf-rmm"
-          tf_rmm_branch: "main"
+          tf_rmm_project: "{tf_rmm_project}"
+          tf_rmm_branch: "{tf_rmm_branch}"
 
-          tfut_project: "TF-A/tf-a-unit-tests"
-          tfut_branch: "main"
+          tfut_project: "{tfut_project}"
+          tfut_branch: "{tfut_branch}"
 
-          tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
-          tf_a_ci_scripts_branch: "master"
-          tf_a_ci_scripts_mbed_tls_version: "3.6.5"
+          tf_a_ci_scripts_project: "{tf_a_ci_scripts_project}"
+          tf_a_ci_scripts_branch: "{tf_a_ci_scripts_branch}"
+          tf_a_ci_scripts_mbed_tls_version: "{tf_a_ci_scripts_mbed_tls_version}"
 
           lava_priority: "medium"
 
+    scm:
+      - git:
+          url: "ssh://review.trustedfirmware.org:29418/${{GERRIT_PROJECT}}"
+          credentials-id: "TFA_CI_BOT_USER_SSH_KEY"
+
+          refspec: "+${{GERRIT_REFSPEC}}:refs/remotes/origin/${{GERRIT_REFSPEC}}"
+          branches: ["refs/remotes/origin/${{GERRIT_REFSPEC}}"]
+          basedir: "${{GERRIT_PROJECT}}"
+
+          extensions:
+            - honor-refspec: true
+
+      - git:
+          url: "ssh://review.trustedfirmware.org:29418/${{CI_GERRIT_PROJECT}}"
+          credentials-id: "TFA_CI_BOT_USER_SSH_KEY"
+          basedir: "tf-a-ci-scripts"
+
+          refspec: "+${{CI_REFSPEC}}:refs/remotes/origin/${{CI_REFSPEC}}"
+          branches: ["refs/remotes/origin/${{CI_REFSPEC}}"]
+
+          changelog-against:
+            branch: "master"
+
+          extensions:
+            - honor-refspec: true
+
     wrappers:
-      - tf-a-clone-wrappers:
       - timestamps:
 
       - timeout:
@@ -63,9 +90,6 @@
           fail: true
 
     builders:
-      - tf-a-clone:
-          projects: "${{CLONE_REPOS}}"
-
       - inject:
           properties-content: |
             TF_A_STATIC_CHECKS_LOG_PATH=${{GERRIT_PROJECT}}/static-checks.log
@@ -92,12 +116,12 @@
 
           steps:
             - trigger-builds:
-                - project: "tf-a-ci-gateway"
+                - project: "{base}-ci-gateway"
                   block: true
 
                   current-parameters: true
                   predefined-parameters: |
-                    TEST_GROUPS=tf-l2-scan-build
+                    TEST_GROUPS=tf-l2-scan-build{tf_a_ci_scripts_test_suffix}
 
     publishers:
       - archive:

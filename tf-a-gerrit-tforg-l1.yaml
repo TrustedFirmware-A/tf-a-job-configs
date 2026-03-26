@@ -83,11 +83,8 @@
 
           projects:
             - kill-phase-on: "NEVER"
-              name: "tf-a-static-checks"
+              name: "{base}-static-checks"
               current-parameters: true
-
-              predefined-parameters: |
-                TEST_GROUPS=tf-l2-scan-build{tf_a_ci_scripts_test_suffix}
 
       - multijob:
           condition: "COMPLETED"
