@@ -143,6 +143,14 @@
 
             - kill-phase-on: "NEVER"
               name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-linux-shutdown-juno"
+              current-parameters: true
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-linux-shutdown-juno
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-platforms"
               current-parameters: true
 
@@ -201,6 +209,22 @@
 
               predefined-parameters: |
                 TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-juno
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-power-cycle-juno"
+              current-parameters: true
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-power-cycle-juno
+
+            - kill-phase-on: "NEVER"
+              name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-reset2-juno"
+              current-parameters: true
+
+              predefined-parameters: |
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-reset2-juno
 
             - kill-phase-on: "NEVER"
               name: "{base}-ci-gateway"

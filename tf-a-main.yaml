@@ -188,6 +188,12 @@
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-linux-reboot-juno"
 
             - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-linux-shutdown-juno"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-linux-shutdown-juno"
+
+            - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-platforms"
               current-parameters: true
               kill-phase-on: "NEVER"
@@ -235,6 +241,18 @@
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-juno"
 
             - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-power-cycle-juno"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-power-cycle-juno"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-reset2-juno"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-reset2-juno"
+
+            - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-lumex-1"
               current-parameters: true
               kill-phase-on: "NEVER"
@@ -259,12 +277,6 @@
               current-parameters: true
               kill-phase-on: "NEVER"
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-reboot-base-fvp"
-
-            - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-reboot-juno"
-              current-parameters: true
-              kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-reboot-juno"
 
             - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-extensive-base-fvp"
