@@ -61,10 +61,10 @@
 
           projects:
             - name: "tf-a-ci-gateway"
-              alias: "tf-a-l3-functional-tests-tftf-ras-base-fvp"
+              alias: "tf-a-l3-functional-tftf-ras-arm-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-a-l3-functional-tests-tftf-ras-base-fvp"
+              predefined-parameters: "TEST_GROUPS=tf-a-l3-functional-tftf-ras-arm-fvp"
 
       - multijob:
           name: "Run coverage tests"
@@ -72,10 +72,10 @@
 
           projects:
             - name: "tf-a-ci-coverage-gateway"
-              alias: "tf-a-l3-coverage-tests-tftf-base-fvp"
+              alias: "tf-a-l3-coverage-tftf-arm-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-a-l3-coverage-tests-tftf-base-fvp"
+              predefined-parameters: "TEST_GROUPS=tf-a-l3-coverage-tftf-arm-fvp"
 
       - multijob:
           name: "Run fuzz tests"
@@ -83,10 +83,10 @@
 
           projects:
             - name: "tf-a-ci-gateway"
-              alias: "tf-a-l3-fuzz-tests-tftf-base-fvp"
+              alias: "tf-a-l3-fuzz-tftf-arm-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-a-l3-fuzz-tests-tftf-base-fvp"
+              predefined-parameters: "TEST_GROUPS=tf-a-l3-fuzz-tftf-arm-fvp"
 
     triggers:
       - timed: "0 12 * * 7"

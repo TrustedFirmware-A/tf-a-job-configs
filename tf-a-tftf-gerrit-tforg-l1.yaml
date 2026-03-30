@@ -89,19 +89,87 @@
               current-parameters: true
 
               predefined-parameters: |
-                TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-docs-tests
+                TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-docs
 
       - multijob:
           condition: "COMPLETED"
           name: "Run build tests"
 
           projects:
-            - kill-phase-on: "NEVER"
-              name: "{base}-ci-gateway"
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-arm-corstone-1000"
               current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-arm-corstone-1000"
 
-              predefined-parameters: |
-                TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-tests
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-arm-fvp"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-arm-juno"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-arm-juno"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-arm-n1sdp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-arm-n1sdp"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-arm-rd-n2"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-arm-rd-n2"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-arm-rd-v3"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              enable-condition: "'{gerrit_branch}' ==~ /^(master|lts-v2[.]14)$/"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-arm-rd-v3"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-hisilicon-hikey-960"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-hisilicon-hikey-960"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-nvidia-tegra-186"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-nvidia-tegra-186"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-nvidia-tegra-194"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-nvidia-tegra-194"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-nvidia-tegra-210"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-nvidia-tegra-210"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-xilinx-versal"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              enable-condition: "'{gerrit_branch}' ==~ /^(master|lts-v2[.]10|lts-v2[.]12|lts-v2[.]14)$/"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-xilinx-versal"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-xilinx-versal-net"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              enable-condition: "'{gerrit_branch}' ==~ /^(master|lts-v2[.]10|lts-v2[.]12|lts-v2[.]14)$/"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-xilinx-versal-net"
 
     triggers:
       - gerrit:

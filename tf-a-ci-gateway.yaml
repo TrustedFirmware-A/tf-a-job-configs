@@ -32,10 +32,10 @@
             test groups to run, e.g.:
 
             <ul>
-              <li><code>tf-a-l1-build-tests-base-fvp</code></li>
-              <li><code>tf-a-l1-build-tests-base-fvp tf-a-l2-functional-tests-tftf-base-fvp</code></li>
-              <li><code>tf-a-l1-build-tests-base-fvp tf-a-l2-functional-tests-tftf-base-fvp/fvp-default,fvp-default:fvp-tftf-fip.tftf-aemv8a-debug</code></li>
-              <li><code>tf-a-l1-build-tests-base-fvp/fvp-default:nil tf-a-l2-functional-tests-tftf-base-fvp/fvp-default,fvp-default:fvp-tftf-fip.tftf-aemv8a-debug</code></li>
+              <li><code>tf-a-l1-build-arm-fvp</code></li>
+              <li><code>tf-a-l1-build-arm-fvp tf-a-l2-functional-tftf-arm-fvp</code></li>
+              <li><code>tf-a-l1-build-arm-fvp tf-a-l2-functional-tftf-arm-fvp/fvp-default,fvp-default:fvp-tftf-fip.tftf-aemva-debug</code></li>
+              <li><code>tf-a-l1-build-arm-fvp/fvp-default:nil tf-a-l2-functional-tftf-arm-fvp/fvp-default,fvp-default:fvp-tftf-fip.tftf-aemva-debug</code></li>
             </ul>
 
       - tf-a-gerrit-change-based-patchset-parameters:

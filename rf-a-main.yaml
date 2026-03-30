@@ -144,12 +144,20 @@
 
           projects:
             - name: "rf-a-ci-gateway"
-              alias: "rf-a-l1-build-tests"
+              alias: "rf-a-l1-build-arm-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
 
               predefined-parameters: |
-                TEST_GROUPS=rf-a-l1-build-tests
+                TEST_GROUPS=rf-a-l1-build-arm-fvp
+
+            - name: "rf-a-ci-gateway"
+              alias: "rf-a-l1-build-qemu"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+
+              predefined-parameters: |
+                TEST_GROUPS=rf-a-l1-build-qemu
 
       - multijob:
           name: "Run integration tests"
@@ -157,12 +165,28 @@
 
           projects:
             - name: "rf-a-ci-gateway"
-              alias: "rf-a-l2-integration-tests-base-fvp"
+              alias: "rf-a-l2-integration-arm-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
 
               predefined-parameters: |
-                TEST_GROUPS=rf-a-l2-integration-tests-base-fvp
+                TEST_GROUPS=rf-a-l2-integration-arm-fvp
+
+            - name: "rf-a-ci-gateway"
+              alias: "rf-a-l2-integration-bti-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+
+              predefined-parameters: |
+                TEST_GROUPS=rf-a-l2-integration-bti-arm-fvp
+
+            - name: "rf-a-ci-gateway"
+              alias: "rf-a-l2-integration-rme-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+
+              predefined-parameters: |
+                TEST_GROUPS=rf-a-l2-integration-rme-arm-fvp
 
       - multijob:
           name: "Run functional tests"
@@ -170,9 +194,17 @@
 
           projects:
             - name: "rf-a-ci-gateway"
-              alias: "rf-a-l2-functional-tests-tftf-base-fvp"
+              alias: "rf-a-l2-functional-tftf-arm-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
 
               predefined-parameters: |
-                TEST_GROUPS=rf-a-l2-functional-tests-tftf-base-fvp
+                TEST_GROUPS=rf-a-l2-functional-tftf-arm-fvp
+
+            - name: "rf-a-ci-gateway"
+              alias: "rf-a-l2-functional-tftf-undef-injection-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+
+              predefined-parameters: |
+                TEST_GROUPS=rf-a-l2-functional-tftf-undef-injection-arm-fvp

@@ -121,7 +121,7 @@
 
                   current-parameters: true
                   predefined-parameters: |
-                    TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-analysis-tests-scan-build
+                    TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-analysis-scan-build-arm-fvp {tf_a_ci_scripts_test_project}-l2-analysis-scan-build-arm-juno
 
     publishers:
       - archive:

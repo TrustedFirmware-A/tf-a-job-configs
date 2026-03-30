@@ -11,9 +11,9 @@
           node: "docker-amd64-tf-a-jammy"
           downloads_space: "tf-a"
 
-          default_groups: "{tf_a_ci_scripts_test_project}-l1-build-tests/nil,fvp-default:nil"
+          default_groups: "{tf_a_ci_scripts_test_project}-l1-build-arm-fvp/nil,fvp-default:nil"
           default_config: "nil,fvp-default:nil"
-          default_config_desc: "0000%{tf_a_ci_scripts_test_project}-l1-build-tests%nil,fvp-default,nil,nil,nil,nil:nil.test"
+          default_config_desc: "0000%{tf_a_ci_scripts_test_project}-l1-build-arm-fvp%nil,fvp-default,nil,nil,nil,nil:nil.test"
 
           gerrit_project: "TF-A/tf-a-tests"
           gerrit_branch: "master"
@@ -51,9 +51,9 @@
           node: "docker-amd64-tf-a-lts2.8-jammy"
           downloads_space: "tf-a-lts-v2.8"
 
-          default_groups: "{tf_a_ci_scripts_test_project}-l1-build-tests/nil,fvp-default-lts-v2.8:nil"
+          default_groups: "{tf_a_ci_scripts_test_project}-l1-build-arm-fvp/nil,fvp-default-lts-v2.8:nil"
           default_config: "nil,fvp-default-lts-v2.8:nil"
-          default_config_desc: "0000%{tf_a_ci_scripts_test_project}-l1-build-tests%nil,fvp-default-lts-v2.8,nil,nil,nil,nil:nil.test"
+          default_config_desc: "0000%{tf_a_ci_scripts_test_project}-l1-build-arm-fvp%nil,fvp-default-lts-v2.8,nil,nil,nil,nil:nil.test"
 
           gerrit_project: "TF-A/tf-a-tests"
           gerrit_branch: "lts-v2.8"
@@ -91,9 +91,9 @@
           node: "docker-amd64-tf-a-lts2.10-jammy"
           downloads_space: "tf-a-lts-v2.10"
 
-          default_groups: "{tf_a_ci_scripts_test_project}-l1-build-tests/nil,fvp-default-lts-v2.10:nil"
+          default_groups: "{tf_a_ci_scripts_test_project}-l1-build-arm-fvp/nil,fvp-default-lts-v2.10:nil"
           default_config: "nil,fvp-default-lts-v2.10:nil"
-          default_config_desc: "0000%{tf_a_ci_scripts_test_project}-l1-build-tests%nil,fvp-default-lts-v2.10,nil,nil,nil,nil:nil.test"
+          default_config_desc: "0000%{tf_a_ci_scripts_test_project}-l1-build-arm-fvp%nil,fvp-default-lts-v2.10,nil,nil,nil,nil:nil.test"
 
           gerrit_project: "TF-A/tf-a-tests"
           gerrit_branch: "lts-v2.10"
@@ -131,9 +131,9 @@
           node: "docker-amd64-tf-a-lts2.12-jammy"
           downloads_space: "tf-a-lts-v2.12"
 
-          default_groups: "{tf_a_ci_scripts_test_project}-l1-build-tests/nil,fvp-default-lts-v2.12:nil"
+          default_groups: "{tf_a_ci_scripts_test_project}-l1-build-arm-fvp/nil,fvp-default-lts-v2.12:nil"
           default_config: "nil,fvp-default-lts-v2.12:nil"
-          default_config_desc: "0000%{tf_a_ci_scripts_test_project}-l1-build-tests%nil,fvp-default-lts-v2.12,nil,nil,nil,nil:nil.test"
+          default_config_desc: "0000%{tf_a_ci_scripts_test_project}-l1-build-arm-fvp%nil,fvp-default-lts-v2.12,nil,nil,nil,nil:nil.test"
 
           gerrit_project: "TF-A/tf-a-tests"
           gerrit_branch: "lts-v2.12"
@@ -171,9 +171,9 @@
           node: "docker-amd64-tf-a-lts2.14-jammy"
           downloads_space: "tf-a-lts-v2.14"
 
-          default_groups: "{tf_a_ci_scripts_test_project}-l1-build-tests/nil,fvp-default-lts-v2.14:nil"
+          default_groups: "{tf_a_ci_scripts_test_project}-l1-build-arm-fvp/nil,fvp-default-lts-v2.14:nil"
           default_config: "nil,fvp-default-lts-v2.14:nil"
-          default_config_desc: "0000%{tf_a_ci_scripts_test_project}-l1-build-tests%nil,fvp-default-lts-v2.14,nil,nil,nil,nil:nil.test"
+          default_config_desc: "0000%{tf_a_ci_scripts_test_project}-l1-build-arm-fvp%nil,fvp-default-lts-v2.14,nil,nil,nil,nil:nil.test"
 
           gerrit_project: "TF-A/tf-a-tests"
           gerrit_branch: "lts-v2.14"

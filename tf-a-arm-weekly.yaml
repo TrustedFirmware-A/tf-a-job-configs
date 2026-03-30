@@ -61,16 +61,28 @@
 
           projects:
             - name: "tf-a-ci-gateway"
-              alias: "tf-a-l3-instrumentation-tests-simd-crypto"
+              alias: "tf-a-l3-instrumentation-psci-arm-juno"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-a-l3-instrumentation-tests-simd-crypto"
+              predefined-parameters: "TEST_GROUPS=tf-a-l3-instrumentation-psci-arm-juno"
 
             - name: "tf-a-ci-gateway"
-              alias: "tf-a-l3-instrumentation-tests-psci"
+              alias: "tf-a-l3-instrumentation-psci-arm-n1sdp"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-a-l3-instrumentation-tests-psci"
+              predefined-parameters: "TEST_GROUPS=tf-a-l3-instrumentation-psci-arm-n1sdp"
+
+            - name: "tf-a-ci-gateway"
+              alias: "tf-a-l3-instrumentation-simd-crypto-arm-juno"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-a-l3-instrumentation-simd-crypto-arm-juno"
+
+            - name: "tf-a-ci-gateway"
+              alias: "tf-a-l3-instrumentation-simd-crypto-arm-n1sdp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-a-l3-instrumentation-simd-crypto-arm-n1sdp"
 
     triggers:
       - timed: "0 14 * * 7"

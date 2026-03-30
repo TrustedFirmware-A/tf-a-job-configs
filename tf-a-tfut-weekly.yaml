@@ -61,10 +61,10 @@
 
           projects:
             - name: "tf-a-ci-coverage-gateway"
-              alias: "tf-a-l3-coverage-tests-tfut"
+              alias: "tf-a-l3-coverage-tfut"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-a-l3-coverage-tests-tfut"
+              predefined-parameters: "TEST_GROUPS=tf-a-l3-coverage-tfut"
 
     triggers:
       - timed: "0 16 * * 7"

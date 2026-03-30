@@ -36,7 +36,7 @@
 
       - string:
           name: "TEST_GROUPS"
-          default: "tf-a-l3-coverage-tests-tftf-base-fvp"
+          default: "tf-a-l3-coverage-tftf-arm-fvp"
 
           description: |
             White space separated list of test configs: can be mix of specific
