@@ -101,7 +101,9 @@ if [ "${DEVICE}" == "fvp" ]; then
     echo ${TUXID} > ${WORKSPACE}/tux.id
     tuxsuite test logs --raw ${TUXID} > ${WORKSPACE}/lava-raw.log
 
-    if tuxsuite test results ${TUXID} | grep -v "lava.http-download" | grep -q 'fail'; then
+    TUX_TEST_URL="https://tuxapi.tuxsuite.com/v1/groups/${TUXSUITE_GROUP}/projects/${TUXSUITE_PROJECT}/tests/${TUXID}"
+
+    if ! curl -gfsSL "${TUX_TEST_URL}" | jq -e '.state == "finished" and .result == "pass"' > /dev/null; then
         echo "tuxsuite test submit status was: ${status}, failing testcases found, setting as 1 (failed)"
         status=1
     fi
