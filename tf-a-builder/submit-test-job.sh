@@ -5,7 +5,7 @@ set -xe
 # Get LAVA device type from a job file
 get_lava_device_type() {
     local job_file=$1
-    awk '/^device_type:/ {print $2}' ${job_file}
+    awk '/^device_type:/ { gsub(/^["'"'"']|["'"'"']$/, "", $2); print $2; exit }' ${job_file}
 }
 
 setup_tuxsuite() {
