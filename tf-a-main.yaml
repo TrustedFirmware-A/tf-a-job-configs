@@ -972,20 +972,6 @@
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-tbb-arm-rdn1edge"
 
             - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l1-build-tbb-arm-tc0"
-              current-parameters: true
-              kill-phase-on: "NEVER"
-              enable-condition: "'{gerrit_branch}' ==~ /^(lts-v2[.]8)$/"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-tbb-arm-tc0"
-
-            - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l1-build-tbb-arm-tc1"
-              current-parameters: true
-              kill-phase-on: "NEVER"
-              enable-condition: "'{gerrit_branch}' ==~ /^(lts-v2[.]8|lts-v2[.]10)$/"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-tbb-arm-tc1"
-
-            - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l1-build-tbb-arm-tc3"
               current-parameters: true
               kill-phase-on: "NEVER"
