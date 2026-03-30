@@ -65,17 +65,17 @@
 
     builders:
       - multijob:
-          name: "Run RF-A integration tests"
+          name: "Run RF-A functional tests"
           condition: "COMPLETED"
 
           projects:
             - name: "rf-a-ci-gateway"
-              alias: "rf-a-l2-integration-tests-tftf-base-fvp"
+              alias: "rf-a-l2-functional-tests-tftf-base-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
 
               predefined-parameters: |
-                TEST_GROUPS=rf-a-l2-integration-tests-tftf-base-fvp
+                TEST_GROUPS=rf-a-l2-functional-tests-tftf-base-fvp
 
     triggers:
       - gerrit:

@@ -122,173 +122,173 @@
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-unit-tests-tfut"
 
       - multijob:
-          name: "Run functional tests"
-          condition: "COMPLETED"
-
-          projects:
-            - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-spm-base-fvp"
-              current-parameters: true
-              kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-spm-base-fvp"
-
-            - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-spm-mm-base-fvp"
-              current-parameters: true
-              kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-spm-mm-base-fvp"
-
-            - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-linux-uefi-base-fvp"
-              current-parameters: true
-              kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-linux-uefi-base-fvp"
-
-            - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-linux-aarch32-base-fvp"
-              current-parameters: true
-              kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-linux-aarch32-base-fvp"
-
-            - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-linux-base-fvp"
-              current-parameters: true
-              kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-linux-base-fvp"
-
-            - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-linux-qemu"
-              current-parameters: true
-              kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-linux-qemu"
-
-            - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-linux-juno"
-              current-parameters: true
-              kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-linux-juno"
-
-            - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-linux-n1sdp"
-              current-parameters: true
-              kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-linux-n1sdp"
-
-            - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-linux-lumex-1"
-              current-parameters: true
-              kill-phase-on: "NEVER"
-              enable-condition: "!('{gerrit_branch}' ==~ /^lts-v2[.](8|10)$/)"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-linux-lumex-1"
-
-            - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-linux-reboot-juno"
-              current-parameters: true
-              kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-linux-reboot-juno"
-
-            - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-linux-shutdown-juno"
-              current-parameters: true
-              kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-linux-shutdown-juno"
-
-            - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-platforms"
-              current-parameters: true
-              kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-platforms"
-
-      - multijob:
           name: "Run integration tests"
           condition: "COMPLETED"
 
           projects:
             - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-fwu"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-spm-base-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-fwu"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-spm-base-fvp"
 
             - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-spm-base-fvp"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-spm-mm-base-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-spm-base-fvp"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-spm-mm-base-fvp"
 
             - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-spm-mm-base-fvp"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-linux-uefi-base-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-spm-mm-base-fvp"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-linux-uefi-base-fvp"
 
             - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-rmm-base-fvp"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-linux-aarch32-base-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-rmm-base-fvp"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-linux-aarch32-base-fvp"
 
             - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-dynamiq-base-fvp"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-linux-base-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-dynamiq-base-fvp"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-linux-base-fvp"
 
             - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-juno"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-linux-qemu"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-juno"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-linux-qemu"
 
             - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-power-cycle-juno"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-linux-juno"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-power-cycle-juno"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-linux-juno"
 
             - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-reset2-juno"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-linux-n1sdp"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-reset2-juno"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-linux-n1sdp"
 
             - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-lumex-1"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-linux-lumex-1"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              enable-condition: "!('{gerrit_branch}' ==~ /^lts-v2[.](8|10)$/)"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-linux-lumex-1"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-linux-reboot-juno"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-linux-reboot-juno"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-linux-shutdown-juno"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-linux-shutdown-juno"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-platforms"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-platforms"
+
+      - multijob:
+          name: "Run functional tests"
+          condition: "COMPLETED"
+
+          projects:
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-fwu"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-fwu"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-spm-base-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-spm-base-fvp"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-spm-mm-base-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-spm-mm-base-fvp"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-rmm-base-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-rmm-base-fvp"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-dynamiq-base-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-dynamiq-base-fvp"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-juno"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-juno"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-psci-system-off-juno"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-psci-system-off-juno"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-psci-system-reset2-juno"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-psci-system-reset2-juno"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-lumex-1"
               current-parameters: true
               kill-phase-on: "NEVER"
               enable-condition: "!('{gerrit_branch}' ==~ /^lts-v2[.](8|10|12)$/)"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-lumex-1"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-lumex-1"
 
             - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-spm-lumex-1"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-spm-lumex-1"
               current-parameters: true
               kill-phase-on: "NEVER"
               enable-condition: "!('{gerrit_branch}' ==~ /^lts-v2[.](8|10|12)$/)"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-spm-lumex-1"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-spm-lumex-1"
 
             - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-base-fvp"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-base-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-base-fvp"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-base-fvp"
 
             - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-reboot-base-fvp"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-reboot-base-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-reboot-base-fvp"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-reboot-base-fvp"
 
             - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-extensive-base-fvp"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-extensive-base-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-extensive-base-fvp"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-extensive-base-fvp"
 
             - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-extensive-juno"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-extensive-juno"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-tests-tftf-extensive-juno"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tests-tftf-extensive-juno"
 
       - multijob:
           name: "Generate visualizations"

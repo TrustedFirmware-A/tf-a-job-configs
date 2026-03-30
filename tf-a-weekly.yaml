@@ -56,15 +56,15 @@
 
     builders:
       - multijob:
-          name: "Run integration tests"
+          name: "Run functional tests"
           condition: "COMPLETED"
 
           projects:
             - name: "tf-a-ci-gateway"
-              alias: "tf-a-l3-integration-tests-tftf-ras-base-fvp"
+              alias: "tf-a-l3-functional-tests-tftf-ras-base-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS=tf-a-l3-integration-tests-tftf-ras-base-fvp"
+              predefined-parameters: "TEST_GROUPS=tf-a-l3-functional-tests-tftf-ras-base-fvp"
 
       - multijob:
           name: "Run coverage tests"
