@@ -205,6 +205,18 @@
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-arm-rd-aspen"
 
             - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-armclang-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-armclang-arm-fvp"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-armclang-arm-juno"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-armclang-arm-juno"
+
+            - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l1-build-aspeed-ast2700"
               current-parameters: true
               kill-phase-on: "NEVER"
@@ -761,6 +773,12 @@
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-reset-arm-juno"
 
             - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-reset-sp-min-arm-juno"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-reset-sp-min-arm-juno"
+
+            - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l1-build-rme-arm-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
@@ -1125,6 +1143,23 @@
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-unit-tfut"
 
       - multijob:
+          name: "Run analysis tests"
+          condition: "COMPLETED"
+
+          projects:
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-analysis-scan-build-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-analysis-scan-build-arm-fvp"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-analysis-scan-build-arm-juno"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-analysis-scan-build-arm-juno"
+
+      - multijob:
           name: "Run integration tests"
           condition: "COMPLETED"
 
@@ -1192,6 +1227,12 @@
               current-parameters: true
               kill-phase-on: "NEVER"
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-linux-bl2-el3-arm-fvp"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-linux-bl33-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-linux-bl33-arm-fvp"
 
             - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l2-integration-linux-drtm-arm-fvp"
@@ -1266,6 +1307,13 @@
               current-parameters: true
               kill-phase-on: "NEVER"
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-linux-shutdown-arm-juno"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-integration-linux-spm-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              enable-condition: "'{gerrit_branch}' ==~ /^(lts-v2[.]8|lts-v2[.]10)$/"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-linux-spm-arm-fvp"
 
             - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l2-integration-linux-tbb-arm-fvp"
@@ -1353,10 +1401,30 @@
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-arm-tc"
 
             - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-cactus-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              enable-condition: "'{gerrit_branch}' ==~ /^(master|lts-v2[.]12|lts-v2[.]14)$/"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-cactus-arm-fvp"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-crash-report-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              enable-condition: "'{gerrit_branch}' ==~ /^(master|lts-v2[.]10|lts-v2[.]12|lts-v2[.]14)$/"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-crash-report-arm-fvp"
+
+            - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-dynamiq-arm-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-dynamiq-arm-fvp"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-el3-payload-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-el3-payload-arm-fvp"
 
             - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-extensive-arm-fvp"
@@ -1400,6 +1468,13 @@
               kill-phase-on: "NEVER"
               enable-condition: "'{gerrit_branch}' ==~ /^(master|lts-v2[.]10|lts-v2[.]12|lts-v2[.]14)$/"
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-handoff-arm-fvp"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-invalid-io-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              enable-condition: "'{gerrit_branch}' ==~ /^(master)$/"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-invalid-io-arm-fvp"
 
             - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-optee-arm-fvp"
@@ -1450,6 +1525,30 @@
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-rmm-arm-fvp"
 
             - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-roxlattables-aarch32-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-roxlattables-aarch32-arm-fvp"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-roxlattables-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-roxlattables-arm-fvp"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-roxlattables-tspd-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-roxlattables-tspd-arm-fvp"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-runtime-instr-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-runtime-instr-arm-fvp"
+
+            - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-sdei-arm-juno"
               current-parameters: true
               kill-phase-on: "NEVER"
@@ -1475,6 +1574,25 @@
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-spm-mm-arm-fvp"
 
             - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-spm-optee-sp-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-spm-optee-sp-arm-fvp"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-spm-rme-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-spm-rme-arm-fvp"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-spmd-crash-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              enable-condition: "'{gerrit_branch}' ==~ /^(master|lts-v2[.]14)$/"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-spmd-crash-arm-fvp"
+
+            - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-tbb-arm-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
@@ -1485,6 +1603,12 @@
               current-parameters: true
               kill-phase-on: "NEVER"
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-tbb-arm-juno"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-tbb-disable-dyn-auth-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-tbb-disable-dyn-auth-arm-fvp"
 
             - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-trng-arm-juno"
@@ -1509,6 +1633,12 @@
               current-parameters: true
               kill-phase-on: "NEVER"
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-tspd-arm-juno"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-ubsan-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-ubsan-arm-fvp"
 
       - multijob:
           name: "Generate visualizations"

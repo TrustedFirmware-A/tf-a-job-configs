@@ -223,6 +223,18 @@
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-arm-rd-aspen"
 
             - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-armclang-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-armclang-arm-fvp"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-armclang-arm-juno"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-armclang-arm-juno"
+
+            - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l1-build-aspeed-ast2700"
               current-parameters: true
               kill-phase-on: "NEVER"
@@ -777,6 +789,12 @@
               current-parameters: true
               kill-phase-on: "NEVER"
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-reset-arm-juno"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-reset-sp-min-arm-juno"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-reset-sp-min-arm-juno"
 
             - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l1-build-rme-arm-fvp"

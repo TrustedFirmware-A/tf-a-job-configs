@@ -66,6 +66,12 @@
               kill-phase-on: "NEVER"
               predefined-parameters: "TEST_GROUPS=tf-a-l3-functional-tftf-ras-arm-fvp"
 
+            - name: "tf-a-ci-gateway"
+              alias: "tf-a-l3-functional-tftf-ras-uncontainable-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              predefined-parameters: "TEST_GROUPS=tf-a-l3-functional-tftf-ras-uncontainable-arm-fvp"
+
       - multijob:
           name: "Run coverage tests"
           condition: "COMPLETED"

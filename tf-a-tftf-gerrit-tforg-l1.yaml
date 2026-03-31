@@ -134,6 +134,13 @@
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-arm-rd-v3"
 
             - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-clang-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              enable-condition: "'{gerrit_branch}' ==~ /^(master|lts-v2[.]10|lts-v2[.]12|lts-v2[.]14)$/"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-clang-arm-fvp"
+
+            - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l1-build-hisilicon-hikey-960"
               current-parameters: true
               kill-phase-on: "NEVER"
@@ -156,6 +163,13 @@
               current-parameters: true
               kill-phase-on: "NEVER"
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-nvidia-tegra-210"
+
+            - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-rme-arm-fvp"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              enable-condition: "'{gerrit_branch}' ==~ /^(master|lts-v2[.]10|lts-v2[.]12|lts-v2[.]14)$/"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-rme-arm-fvp"
 
             - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l1-build-xilinx-versal"
