@@ -557,13 +557,6 @@
             </ul>
 
       - string:
-          name: "JUNO_ROOTFS_URL"
-          default: "https://downloads.trustedfirmware.org/infra-assets/linaro_artifacts/releases/openembedded/aarch64/17.01/linaro-image-minimal-genericarmv8-20170127-888.rootfs.tar.gz"
-
-          description: >
-            URL of the RootFS to use for Juno FVP/LAVA runs.
-
-      - string:
           name: "MBEDTLS_URL"
           default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-{tf_a_ci_scripts_mbed_tls_version}.tar.gz"
 

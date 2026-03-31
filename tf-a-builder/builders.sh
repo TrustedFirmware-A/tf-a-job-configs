@@ -137,7 +137,6 @@ export skip_runs="${skip_runs:-1}"
 export linaro_2001_release="file://${linaro_2001_release}"
 
 export docker_registry="${DOCKER_REGISTRY}"
-export juno_rootfs_url="${JUNO_ROOTFS_URL}"
 
 # Parse TEST_DESC and export test_group & tf_config and & run_config
 test_desc="${test_desc:-$TEST_DESC}"
