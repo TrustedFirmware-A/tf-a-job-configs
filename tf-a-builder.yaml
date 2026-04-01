@@ -181,7 +181,7 @@
     publishers:
       - archive:
           artifacts: "artefacts/**, lava-binmode.txt"
-          excludes: "**/*.o,**/*.d,**/*.a"
+          excludes: "**/*.o, **/*.d, **/*.a, **/*.dump"
 
           latest-only: false
           allow-empty: true
