@@ -9,7 +9,7 @@
       Run daily validation of <strong>{label}</strong>.
 
     concurrent: false
-    disabled: false
+    disabled: "{obj:jenkins_site_is_staging}"
 
     properties:
       - tf-a-ci-scripts:

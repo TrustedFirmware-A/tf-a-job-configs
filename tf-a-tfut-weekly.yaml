@@ -3,7 +3,7 @@
     node: "docker-amd64-tf-a-jammy"
     project-type: "multijob"
     concurrent: true
-    disabled: false
+    disabled: "{obj:jenkins_site_is_staging}"
     description: "Weekly TFUT coverage tests."
 
     properties:
