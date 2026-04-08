@@ -680,6 +680,13 @@
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-qemu-sbsa"
 
             - name: "{base}-ci-gateway"
+              alias: "{tf_a_ci_scripts_test_project}-l1-build-qti-lemans-evk"
+              current-parameters: true
+              kill-phase-on: "NEVER"
+              enable-condition: "'{gerrit_branch}' ==~ /^(master)$/"
+              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-qti-lemans-evk"
+
+            - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l1-build-qti-mdm9607"
               current-parameters: true
               kill-phase-on: "NEVER"
@@ -1046,13 +1053,6 @@
               kill-phase-on: "NEVER"
               enable-condition: "'{gerrit_branch}' ==~ /^(master|lts-v2[.]14)$/"
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-ti-k3low"
-
-            - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l1-build-ti-lemans-evk"
-              current-parameters: true
-              kill-phase-on: "NEVER"
-              enable-condition: "'{gerrit_branch}' ==~ /^(master)$/"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l1-build-ti-lemans-evk"
 
             - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l1-build-trusty-arm-fvp"
