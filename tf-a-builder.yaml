@@ -48,8 +48,7 @@
           download_server_tf_a_url: "https://downloads.trustedfirmware.org/{downloads_space}"
 
       - build-discarder:
-          artifact-days-to-keep: 7
-          days-to-keep: 30
+          days-to-keep: 7
 
     parameters:
       - tf-a-clone-parameters:
