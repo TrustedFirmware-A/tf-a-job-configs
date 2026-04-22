@@ -1322,12 +1322,6 @@
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-linux-tbb-arm-fvp"
 
             - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-integration-linux-tbb-arm-juno"
-              current-parameters: true
-              kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-integration-linux-tbb-arm-juno"
-
-            - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l2-integration-linux-tspd-arm-fvp"
               current-parameters: true
               kill-phase-on: "NEVER"
@@ -1597,12 +1591,6 @@
               current-parameters: true
               kill-phase-on: "NEVER"
               predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-tbb-arm-fvp"
-
-            - name: "{base}-ci-gateway"
-              alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-tbb-arm-juno"
-              current-parameters: true
-              kill-phase-on: "NEVER"
-              predefined-parameters: "TEST_GROUPS={tf_a_ci_scripts_test_project}-l2-functional-tftf-tbb-arm-juno"
 
             - name: "{base}-ci-gateway"
               alias: "{tf_a_ci_scripts_test_project}-l2-functional-tftf-tbb-disable-dyn-auth-arm-fvp"
