@@ -50,6 +50,10 @@
       - build-discarder:
           days-to-keep: 7
 
+      - throttle:
+          option: "project"
+          max-total: 25
+
     parameters:
       - tf-a-clone-parameters:
           projects: "{default_clones}"
