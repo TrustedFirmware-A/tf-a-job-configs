@@ -10,6 +10,7 @@
     scm:
       - gerrit:
           url: 'https://{gerrit_host}/{gerrit_project_prefix}ci/tf-a-ci-scripts'
+          credentials-id: 'TFA_CI_BOT_USER_SSH_KEY'
           shallow-clone: true # no need for Git history
 
           ignore-on-push-notifications: false
