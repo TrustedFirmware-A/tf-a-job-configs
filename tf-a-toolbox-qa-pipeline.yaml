@@ -5,7 +5,7 @@
     description: 'Runs the in-tree TF-A Toolbox QA pipeline (<code>tf-a-toolbox/Jenkinsfile</code>) on changes to the TF-A CI scripts.'
 
     script-path: 'tf-a-toolbox/Jenkinsfile'
-    periodic-folder-trigger: '15m'
+    periodic-folder-trigger: '1m'
 
     scm:
       - gerrit:
@@ -13,11 +13,11 @@
           shallow-clone: true # no need for Git history
 
           ignore-on-push-notifications: false
-          change-discovery: # prevent untrusted triggers
+          change-discovery: # prevent untrusted code execution
             query-string: 'label:Allow-CI>=1 branch:master'
 
           build-strategies:
-            - change-request: {} # trigger on patch updates
+            - change-request: {} # run on Gerrit changes
 
             - named-branches:
               - exact-name:
