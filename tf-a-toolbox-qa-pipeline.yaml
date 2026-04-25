@@ -1,0 +1,25 @@
+- job:
+    project-type: 'multibranch'
+
+    name: 'tf-a-toolbox-qa-pipeline'
+    description: 'Runs the in-tree TF-A Toolbox QA pipeline (<code>tf-a-toolbox/Jenkinsfile</code>) on changes to the TF-A CI scripts.'
+
+    script-path: 'tf-a-toolbox/Jenkinsfile'
+    periodic-folder-trigger: '15m'
+
+    scm:
+      - gerrit:
+          url: 'https://{gerrit_host}/{gerrit_project_prefix}ci/tf-a-ci-scripts'
+          shallow-clone: true # no need for Git history
+
+          ignore-on-push-notifications: false
+          change-discovery: # prevent untrusted triggers
+            query-string: 'label:Allow-CI>=1 branch:master'
+
+          build-strategies:
+            - change-request: {} # trigger on patch updates
+
+            - named-branches:
+              - exact-name:
+                  name: 'master'
+                  case-sensitive: true
