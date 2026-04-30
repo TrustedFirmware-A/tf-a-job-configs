@@ -1,0 +1,91 @@
+- job-template:
+    id: 'tf-a-gateway-pipeline'
+    project-type: 'pipeline'
+
+    name: '{base}-gateway-pipeline'
+    description: 'Run one or more <strong>{label}</strong> test configurations.'
+
+    concurrent: true
+    sandbox: true
+
+    properties:
+      - build-discarder:
+          days-to-keep: 3
+
+      - throttle:
+          option: 'project'
+          max-total: 25
+
+    parameters:
+      - string:
+          name: 'TESTS'
+          default: '{default_groups}'
+
+          description: >
+            Whitespace-separated list of test configurations and/or pre-defined test groups to run, e.g.:
+
+            <ul>
+              <li><code>tf-a-l1-build-arm-fvp</code></li>
+              <li><code>tf-a-l1-build-arm-fvp tf-a-l2-functional-tftf-arm-fvp</code></li>
+              <li><code>tf-a-l1-build-arm-fvp tf-a-l2-functional-tftf-arm-fvp/fvp-default,fvp-default:fvp-tftf-fip.tftf-aemva-debug</code></li>
+              <li><code>tf-a-l1-build-arm-fvp/fvp-default:nil tf-a-l2-functional-tftf-arm-fvp/fvp-default,fvp-default:fvp-tftf-fip.tftf-aemva-debug</code></li>
+            </ul>
+
+      - string:
+          name: 'TEST_GLOBS'
+          default: ''
+
+          description: >
+            Whitespace-separated list of test group glob patterns to run, e.g.:
+
+            <ul>
+              <li><code>tf-a-l1-*</code></li>
+              <li><code>tf-a-l1-* tf-a-l2-*</code></li>
+              <li><code>tftf-l1-build-*</code></li>
+            </ul>
+
+      - tf-a-clone-parameters:
+          projects: '{default_clones}'
+
+      - tf-a-gerrit-change-based-patchset-parameters:
+          gerrit_project: '{gerrit_project}'
+          gerrit_branch: '{gerrit_branch}'
+          gerrit_refspec: '{gerrit_branch}'
+
+      - tf-a-builder-parameters:
+          tf_a_project: '{tf_a_project}'
+          tf_a_branch: '{tf_a_branch}'
+
+          rf_a_project: '{rf_a_project}'
+          rf_a_branch: '{rf_a_branch}'
+
+          tftf_project: '{tftf_project}'
+          tftf_branch: '{tftf_branch}'
+
+          tf_m_tests_project: '{tf_m_tests_project}'
+          tf_m_tests_branch: '{tf_m_tests_branch}'
+
+          tf_m_extras_project: '{tf_m_extras_project}'
+          tf_m_extras_branch: '{tf_m_extras_branch}'
+
+          hafnium_project: '{hafnium_project}'
+          hafnium_branch: '{hafnium_branch}'
+
+          tf_rmm_project: '{tf_rmm_project}'
+          tf_rmm_branch: '{tf_rmm_branch}'
+
+          tfut_project: '{tfut_project}'
+          tfut_branch: '{tfut_branch}'
+
+          tf_a_ci_scripts_project: '{tf_a_ci_scripts_project}'
+          tf_a_ci_scripts_branch: '{tf_a_ci_scripts_branch}'
+          tf_a_ci_scripts_mbed_tls_version: '{tf_a_ci_scripts_mbed_tls_version}'
+
+          lava_priority: 'medium'
+
+    dsl: !include-raw-verbatim:
+      - 'vars/core/Container.groovy'
+      - 'vars/core/Gerrit.groovy'
+      - 'vars/core/ShellQuote.groovy'
+      - 'vars/pipelines/GatewayPipeline.groovy'
+      - '{base}-gateway-pipeline/Jenkinsfile'

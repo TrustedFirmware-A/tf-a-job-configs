@@ -4,3 +4,4 @@
     jobs:
       - tf-a-builder:
       - tf-a-ci-gateway:
+      - tf-a-gateway-pipeline:

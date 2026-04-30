@@ -1,0 +1,1 @@
+gatewayPipeline(builderJob: 'tf-a-lts2.10-builder')
