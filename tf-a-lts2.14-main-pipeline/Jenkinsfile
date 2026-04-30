@@ -1,0 +1,6 @@
+mainPipeline(
+    builderJob: 'tf-a-lts2.14-builder',
+    builderNode: 'docker-amd64-tf-a-lts2.14-jammy',
+
+    testGroups: ['tf-a-lts-v2.14-l1-*', 'tf-a-lts-v2.14-l2-*'],
+)
