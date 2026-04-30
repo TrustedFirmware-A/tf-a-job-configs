@@ -206,12 +206,7 @@
           tf_a_ci_scripts_test_project: "tftf-lts-v2.14"
 
     jobs:
-      - tf-a-tftf-gerrit-tforg-l1:
-      - tf-a-tftf-gerrit-tforg-l2:
-
-      - tf-a-static-checks:
-          tftf_project: "${{GERRIT_PROJECT}}"
-          tftf_branch: "${{GERRIT_REFSPEC}}"
+      - tf-a-gerrit-pipeline:
 
       - tf-a-gateway-chain:
           default_clones: "trusted-firmware-a,tf-a-ci-scripts,tf-a-tests,tf-m-extras,tf-m-tests,tf-rmm,spm"

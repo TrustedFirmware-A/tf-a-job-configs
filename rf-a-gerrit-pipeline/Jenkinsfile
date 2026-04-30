@@ -1,0 +1,45 @@
+gerritPipeline(
+    builderJob: 'rf-a-builder',
+    builderNode: 'docker-amd64-tf-a-jammy',
+
+    commitLint: true,
+    staticChecks: [
+        script: 'script/next-checks/next-checks.sh',
+        log: 'next-checks.log',
+    ],
+
+    gerrit: [
+        project: params.GERRIT_PROJECT,
+        refspec: params.GERRIT_REFSPEC,
+        branch: params.GERRIT_BRANCH,
+        revision: params.GERRIT_PATCHSET_REVISION,
+    ],
+
+    tfa: [project: 'TF-A/trusted-firmware-a', refspec: 'master'],
+    rfa: [project: params.GERRIT_PROJECT, refspec: params.GERRIT_REFSPEC],
+
+    tfut: [project: 'TF-A/tf-a-unit-tests', refspec: 'main'],
+    tftf: [project: 'TF-A/tf-a-tests', refspec: 'master'],
+
+    tfmTests: [project: 'TF-M/tf-m-tests', refspec: 'tfa_ci_dep_revision'],
+    tfmExtras: [project: 'TF-M/tf-m-extras', refspec: 'tfa_ci_dep_revision'],
+
+    hafnium: [project: 'hafnium/hafnium', refspec: 'master'],
+    rmm: [project: 'TF-RMM/tf-rmm', refspec: 'main'],
+
+    ciScripts: [project: 'ci/tf-a-ci-scripts', refspec: 'master'],
+    ciScriptsTestPrefix: 'rf-a',
+
+    mbedtlsUrl: 'https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz',
+)
+
+cratePipeline(
+    name: 'rusted-firmware-a',
+    project: 'RF-A',
+
+    gerrit: [
+        project: params.GERRIT_PROJECT,
+        refspec: params.GERRIT_REFSPEC,
+        branch: params.GERRIT_BRANCH,
+    ],
+)

@@ -1,0 +1,30 @@
+gerritPipeline(
+    builderJob: 'tf-a-lts2.12-builder',
+    builderNode: 'docker-amd64-tf-a-lts2.12-jammy',
+
+    commitLint: true,
+
+    gerrit: [
+        project: params.GERRIT_PROJECT,
+        refspec: params.GERRIT_REFSPEC,
+        branch: params.GERRIT_BRANCH,
+        revision: params.GERRIT_PATCHSET_REVISION,
+    ],
+
+    tfa: [project: params.GERRIT_PROJECT, refspec: params.GERRIT_REFSPEC],
+    rfa: [project: 'RF-A/rusted-firmware-a', refspec: 'main'],
+
+    tfut: [project: 'TF-A/tf-a-unit-tests', refspec: 'main'],
+    tftf: [project: 'TF-A/tf-a-tests', refspec: 'lts-v2.12'],
+
+    tfmTests: [project: 'TF-M/tf-m-tests', refspec: '53ddc58dcd57e1f5cf658b316d7d735335d58570'],
+    tfmExtras: [project: 'TF-M/tf-m-extras', refspec: '3ff04e40ff7f66c8cee087b6e5cbd8fb8c1bec01'],
+
+    hafnium: [project: 'hafnium/hafnium', refspec: 'v2.12'],
+    rmm: [project: 'TF-RMM/tf-rmm', refspec: 'main'],
+
+    ciScripts: [project: 'ci/tf-a-ci-scripts', refspec: 'master'],
+    ciScriptsTestPrefix: 'tf-a-lts-v2.12',
+
+    mbedtlsUrl: 'https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.3.tar.gz',
+)

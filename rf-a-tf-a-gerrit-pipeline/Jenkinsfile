@@ -1,0 +1,36 @@
+gatewayPipeline(
+    builderJob: 'rf-a-builder',
+
+    builderParams: [
+        TF_GERRIT_PROJECT: params.GERRIT_PROJECT,
+        TF_GERRIT_REFSPEC: params.GERRIT_REFSPEC,
+
+        RF_GERRIT_PROJECT: 'RF-A/rusted-firmware-a',
+        RFA_REFSPEC: 'main',
+
+        TFUT_GERRIT_PROJECT: 'TF-A/tf-a-unit-tests',
+        TFUT_GERRIT_REFSPEC: 'main',
+
+        TFTF_GERRIT_PROJECT: 'TF-A/tf-a-tests',
+        TFTF_GERRIT_REFSPEC: 'master',
+
+        TF_M_TESTS_GERRIT_PROJECT: 'TF-M/tf-m-tests',
+        TF_M_TESTS_GERRIT_REFSPEC: 'tfa_ci_dep_revision',
+
+        TF_M_EXTRAS_GERRIT_PROJECT: 'TF-M/tf-m-extras',
+        TF_M_EXTRAS_GERRIT_REFSPEC: 'tfa_ci_dep_revision',
+
+        SPM_GERRIT_PROJECT: 'hafnium/hafnium',
+        SPM_REFSPEC: 'master',
+
+        RMM_GERRIT_PROJECT: 'TF-RMM/tf-rmm',
+        RMM_REFSPEC: 'main',
+
+        CI_GERRIT_PROJECT: 'ci/tf-a-ci-scripts',
+        CI_REFSPEC: 'master',
+
+        MBEDTLS_URL: 'https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz',
+    ],
+
+    testGroups: ['rf-a-l2-functional-*'],
+)

@@ -37,3 +37,9 @@ def gerrit(Map args = [:]) {
         extensions: extensions,
     )
 }
+
+def gerritLabel(label) {
+    def approvals = readJSON text: params.GERRIT_EVENT_UPDATED_APPROVALS
+
+    (approvals[label].value).toInteger()
+}

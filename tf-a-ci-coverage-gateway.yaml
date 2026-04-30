@@ -142,4 +142,4 @@
           sandbox: true
 
           script: !include-raw-verbatim:
-            - "tf-a-ci-gateway/postbuild.groovy"
+            - "tf-a-ci-report/postbuild.groovy"

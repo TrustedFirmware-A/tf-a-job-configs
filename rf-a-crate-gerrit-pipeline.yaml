@@ -1,0 +1,63 @@
+- job-template:
+    id: 'rf-a-crate-gerrit-pipeline'
+
+    name: 'rf-a-crate-{crate}-gerrit-pipeline'
+    description: 'Run validation tests for the {crate_name} crate in response to Gerrit change updates.'
+
+    project-type: 'pipeline'
+
+    concurrent: true
+    sandbox: true
+
+    properties:
+      - throttle:
+          option: 'project'
+          enabled: true
+          max-total: 5
+
+      - build-discarder:
+          days-to-keep: 7
+
+    triggers:
+      - gerrit:
+          server-name: '{gerrit_host}'
+
+          trigger-on:
+            - comment-added-event:
+                approval-category: 'Allow-CI'
+                approval-value: 1
+
+            - comment-added-event:
+                approval-category: 'Allow-CI'
+                approval-value: 2
+
+          projects:
+            - project-compare-type: 'PLAIN'
+              project-pattern: '{gerrit_project_prefix}{crate_project}/{crate_name}'
+
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: 'main'
+
+          override-votes: true
+
+          gerrit-build-started-verified-value: 0
+          gerrit-build-started-codereview-value: 0
+
+          gerrit-build-successful-verified-value: 1
+          gerrit-build-successful-codereview-value: 0
+
+          gerrit-build-failed-verified-value: -1
+          gerrit-build-failed-codereview-value: 0
+
+          gerrit-build-unstable-verified-value: -1
+          gerrit-build-unstable-codereview-value: 0
+
+          gerrit-build-notbuilt-verified-value: 0
+          gerrit-build-notbuilt-codereview-value: 0
+
+    dsl: !include-raw-verbatim:
+      - 'vars/core/Gerrit.groovy'
+      - 'vars/components/CrateTests.groovy'
+      - 'vars/pipelines/CratePipeline.groovy'
+      - 'rf-a-crate-{crate}-gerrit-pipeline/Jenkinsfile'

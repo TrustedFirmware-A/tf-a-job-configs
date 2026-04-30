@@ -1,0 +1,10 @@
+cratePipeline(
+    name: 'tf-firmware-handoff',
+    project: 'shared',
+
+    gerrit: [
+        project: params.GERRIT_PROJECT,
+        refspec: params.GERRIT_REFSPEC,
+        branch: params.GERRIT_BRANCH,
+    ],
+)

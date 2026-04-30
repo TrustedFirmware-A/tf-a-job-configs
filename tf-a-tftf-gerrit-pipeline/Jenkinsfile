@@ -1,0 +1,28 @@
+gerritPipeline(
+    builderJob: 'tf-a-tftf-builder',
+    builderNode: 'docker-amd64-tf-a-jammy',
+
+    gerrit: [
+        project: params.GERRIT_PROJECT,
+        refspec: params.GERRIT_REFSPEC,
+        branch: params.GERRIT_BRANCH,
+        revision: params.GERRIT_PATCHSET_REVISION,
+    ],
+
+    tfa: [project: 'TF-A/trusted-firmware-a', refspec: 'master'],
+    rfa: [project: 'RF-A/rusted-firmware-a', refspec: 'main'],
+
+    tfut: [project: 'TF-A/tf-a-unit-tests', refspec: 'main'],
+    tftf: [project: params.GERRIT_PROJECT, refspec: params.GERRIT_REFSPEC],
+
+    tfmTests: [project: 'TF-M/tf-m-tests', refspec: 'tfa_ci_dep_revision'],
+    tfmExtras: [project: 'TF-M/tf-m-extras', refspec: 'tfa_ci_dep_revision'],
+
+    hafnium: [project: 'hafnium/hafnium', refspec: 'master'],
+    rmm: [project: 'TF-RMM/tf-rmm', refspec: 'main'],
+
+    ciScripts: [project: 'ci/tf-a-ci-scripts', refspec: 'master'],
+    ciScriptsTestPrefix: 'tftf',
+
+    mbedtlsUrl: 'https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz',
+)

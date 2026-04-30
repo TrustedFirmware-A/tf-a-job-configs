@@ -105,4 +105,4 @@
           default_test_features: ""
 
     jobs:
-      - "rf-a-crate-main"
+      - "rf-a-crate-gerrit-pipeline"

@@ -1,0 +1,58 @@
+- job:
+    name: 'rf-a-gerrit-pipeline'
+    description: 'Run RF-A validation tests in response to Gerrit change updates.'
+
+    project-type: 'pipeline'
+
+    concurrent: true
+    sandbox: true
+
+    triggers:
+      - gerrit:
+          server-name: '{gerrit_host}'
+
+          trigger-on:
+            - comment-added-event:
+                approval-category: 'Allow-CI'
+                approval-value: 1
+
+            - comment-added-event:
+                approval-category: 'Allow-CI'
+                approval-value: 2
+
+          projects:
+            - project-compare-type: 'PLAIN'
+              project-pattern: '{gerrit_project_prefix}RF-A/rusted-firmware-a'
+
+              branches:
+                - branch-compare-type: 'PLAIN'
+                  branch-pattern: 'main'
+
+          override-votes: true
+
+          gerrit-build-started-verified-value: 0
+          gerrit-build-started-codereview-value: 0
+
+          gerrit-build-successful-verified-value: 1
+          gerrit-build-successful-codereview-value: 0
+
+          gerrit-build-failed-verified-value: -1
+          gerrit-build-failed-codereview-value: 0
+
+          gerrit-build-unstable-verified-value: -1
+          gerrit-build-unstable-codereview-value: 0
+
+          gerrit-build-notbuilt-verified-value: 0
+          gerrit-build-notbuilt-codereview-value: 0
+
+    dsl: !include-raw-verbatim:
+      - 'vars/core/Gerrit.groovy'
+      - 'vars/core/Container.groovy'
+      - 'vars/core/ShellQuote.groovy'
+      - 'vars/components/CrateTests.groovy'
+      - 'vars/components/Commitlint.groovy'
+      - 'vars/components/StaticChecks.groovy'
+      - 'vars/pipelines/GatewayPipeline.groovy'
+      - 'vars/pipelines/CratePipeline.groovy'
+      - 'vars/pipelines/GerritPipeline.groovy'
+      - 'rf-a-gerrit-pipeline/Jenkinsfile'

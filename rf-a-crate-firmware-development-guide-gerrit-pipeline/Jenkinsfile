@@ -1,0 +1,10 @@
+cratePipeline(
+    name: 'firmware-development-guide',
+    project: 'rust-spmc',
+
+    gerrit: [
+        project: params.GERRIT_PROJECT,
+        refspec: params.GERRIT_REFSPEC,
+        branch: params.GERRIT_BRANCH,
+    ],
+)

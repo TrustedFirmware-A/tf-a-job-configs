@@ -1,0 +1,11 @@
+cratePipeline(
+    name: 'arm-gic',
+    project: 'arm-firmware-crates',
+    features: ['fakes'],
+
+    gerrit: [
+        project: params.GERRIT_PROJECT,
+        refspec: params.GERRIT_REFSPEC,
+        branch: params.GERRIT_BRANCH,
+    ],
+)

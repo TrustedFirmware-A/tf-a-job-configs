@@ -1,0 +1,10 @@
+cratePipeline(
+    name: 'arm-cci',
+    project: 'arm-firmware-crates',
+
+    gerrit: [
+        project: params.GERRIT_PROJECT,
+        refspec: params.GERRIT_REFSPEC,
+        branch: params.GERRIT_BRANCH,
+    ],
+)
