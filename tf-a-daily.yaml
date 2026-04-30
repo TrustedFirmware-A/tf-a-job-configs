@@ -75,13 +75,26 @@
     builders:
       - trigger-builds:
           - project:
-              - "{base}-main"
+              - "{base}-main-pipeline"
 
             block: true
             block-thresholds:
               build-step-failure-threshold: "never"
 
             current-parameters: true
+
+      - trigger-builds:
+          - project:
+              - "{base}-gateway-pipeline"
+
+            block: true
+            block-thresholds:
+              build-step-failure-threshold: "never"
+
+            current-parameters: true
+            predefined-parameters: |
+              TESTS=
+              TEST_GLOBS={tf_a_ci_scripts_test_project}-l3-*
 
       - conditional-step:
           condition-kind: "not"

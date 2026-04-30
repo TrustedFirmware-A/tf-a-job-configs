@@ -71,7 +71,7 @@
 
       - string:
           name: "TARGET_BUILD"
-          default: "tf-a-main/1"
+          default: "tf-a-main-pipeline/1"
           description: "Target build to analyze."
 
     wrappers:
