@@ -25,8 +25,9 @@ def gerritPipeline(Map args) {
 
                 dir('tf-a-ci-scripts') {
                     checkout gerrit(
+                        host: gerritChange.host,
                         project: ciScriptsConfig.project,
-                        refspec: ciScriptsConfig.refspec,
+                        ref: ciScriptsConfig.refspec,
                     )
 
                     ciScripts = pwd()
@@ -34,9 +35,10 @@ def gerritPipeline(Map args) {
 
                 dir('source') {
                     checkout gerrit(
+                        host: gerritChange.host,
                         project: gerritChange.project,
+                        ref: gerritChange.refspec,
                         branch: gerritChange.branch,
-                        refspec: gerritChange.refspec,
                     )
 
                     staticChecks(staticChecksConfig + [

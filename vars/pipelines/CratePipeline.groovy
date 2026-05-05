@@ -7,8 +7,9 @@ def cratePipeline(Map args) {
 
             dir('tf-a-ci-scripts') {
                 checkout gerrit(
+                    host: args.gerrit.host,
                     project: 'ci/tf-a-ci-scripts',
-                    branch: 'master'
+                    ref: 'master',
                 )
 
                 ciScripts = pwd()
@@ -16,9 +17,10 @@ def cratePipeline(Map args) {
 
             dir(args.name) {
                 checkout gerrit(
+                    host: args.gerrit.host,
                     project: args.gerrit.project,
+                    ref: args.gerrit.refspec,
                     branch: args.gerrit.branch,
-                    refspec: args.gerrit.refspec,
                 )
             }
 

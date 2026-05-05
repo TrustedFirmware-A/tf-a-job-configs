@@ -6,20 +6,16 @@ def mainPipeline(Map args) {
 
                 dir('tf-a-ci-scripts') {
                     checkout gerrit(
+                        host: params.GERRIT_HOST ?: 'review.trustedfirmware.org',
                         project: params.CI_GERRIT_PROJECT,
-                        refspec: params.CI_REFSPEC,
+                        ref: params.CI_REFSPEC,
                     )
 
                     ciScripts = pwd()
                 }
 
                 dir('source') {
-                    checkout gerrit(
-                        host: 'review.trustedfirmware.org',
-
-                        project: params.GERRIT_PROJECT,
-                        refspec: params.GERRIT_REFSPEC,
-                    )
+                    checkout gerrit
 
                     staticChecks ciScripts: ciScripts, log: 'static-checks.log'
                 }

@@ -3,6 +3,7 @@ gerritPipeline(
     builderNode: 'docker-amd64-tf-a-jammy',
 
     gerrit: [
+        host: params.GERRIT_HOST,
         project: params.GERRIT_PROJECT,
         refspec: params.GERRIT_REFSPEC,
         branch: params.GERRIT_BRANCH,

@@ -168,7 +168,7 @@ def gatewayPipeline(Map args) {
                 host: 'review.trustedfirmware.org',
 
                 project: ciScriptsProject,
-                refspec: ciScriptsRefspec,
+                ref: ciScriptsRefspec,
             )
         }
 

@@ -4,6 +4,7 @@ cratePipeline(
     features: ['fakes,el3'],
 
     gerrit: [
+        host: params.GERRIT_HOST,
         project: params.GERRIT_PROJECT,
         refspec: params.GERRIT_REFSPEC,
         branch: params.GERRIT_BRANCH,

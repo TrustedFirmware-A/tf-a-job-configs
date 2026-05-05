@@ -3,6 +3,7 @@ cratePipeline(
     project: 'rust-spmc',
 
     gerrit: [
+        host: params.GERRIT_HOST,
         project: params.GERRIT_PROJECT,
         refspec: params.GERRIT_REFSPEC,
         branch: params.GERRIT_BRANCH,
