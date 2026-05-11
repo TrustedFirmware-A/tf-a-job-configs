@@ -42,7 +42,7 @@
 
           tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
           tf_a_ci_scripts_branch: "master"
-          tf_a_ci_scripts_mbed_tls_version: "3.6.5"
+          tf_a_ci_scripts_mbed_tls_version: "3.6.6"
           tf_a_ci_scripts_test_project: "tftf"
 
       - "tf-a-lts2.8-tftf":
