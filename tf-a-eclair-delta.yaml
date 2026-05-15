@@ -25,7 +25,7 @@
           name: "TF_CONFIG_LIST"
 
           default: |
-            fvp-tbb-mbedtls-rme-romlib fvp-spm-spmd-lsp fvp-pauth-bti-sdei fvp-aarch32-roxlattables
+            fvp-tbb-mbedtls-rmm-romlib fvp-spm-spmd-lsp fvp-pauth-bti-sdei fvp-aarch32-roxlattables
 
       - string:
           name: "MAKE_TARGET"
