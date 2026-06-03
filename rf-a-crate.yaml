@@ -50,6 +50,12 @@
 
           default_test_features: "fakes"
 
+       - "memory-usage-analyser":
+          crate_name: "memory-usage-analyser"
+          crate_project: "shared"
+
+          default_test_features: ""
+
       - "mhu":
           crate_name: "arm-mhu"
           crate_project: "arm-firmware-crates"
