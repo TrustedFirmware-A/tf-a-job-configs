@@ -26,7 +26,7 @@
           name: "EMAIL_RECIPIENT"
 
           default: |
-            bipin.ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, jidong@google.com, govindraj.raja@arm.com, arthur.she@linaro.org
+            bipin.ravi@arm.com, vwadekar@nvidia.com, yann.gautier@st.com, jamiefox@google.com, manish.badarkhe@arm.com, arthur.she@linaro.org
 
           description: |
             The notification recipients

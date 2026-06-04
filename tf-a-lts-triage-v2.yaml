@@ -101,7 +101,7 @@
 
               - email-ext:
                   always: true
-                  recipients: "arthur.she@linaro.org, bipin.ravi@arm.com, vwadekar@nvidia.com, joanna.farley@arm.com, lauren.wehrmeister@arm.com, yann.gautier@st.com, jidong@google.com, olivier.deprez@arm.com, Govindraj.Raja@arm.com"
+                  recipients: "arthur.she@linaro.org, bipin.ravi@arm.com, vwadekar@nvidia.com, joanna.farley@arm.com, lauren.wehrmeister@arm.com, yann.gautier@st.com, jamiefox@google.com, manish.badarkhe@arm.com, olivier.deprez@arm.com"
                   subject: "TF-A LTS Triage report"
                   body: "Attached is the CSV report from the TF-A LTS Triage job this week."
                   attachments: "*.csv"
