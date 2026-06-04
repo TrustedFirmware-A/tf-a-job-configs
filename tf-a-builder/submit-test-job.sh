@@ -83,12 +83,12 @@ ls -l ${WORKSPACE}
 
 DEVICE=$(get_lava_device_type artefacts-lava/job.yaml)
 
-if [ "${DEVICE}" == "fvp" ]; then
+if [ "${DEVICE}" == "fvp" -o "${DEVICE}" == "qemu" ]; then
     setup_tuxsuite
     set -o pipefail
     for i in $(seq 1 ${LAVA_RETRIES:-3}); do
         echo "# TuxSuite submission iteration #$i"
-        if python3 -u -m tuxsuite test submit --device fvp-lava --job-definition artefacts-lava/job.yaml | tee tuxsuite-submit.out; then
+        if python3 -u -m tuxsuite test submit --device "${DEVICE}-lava" --job-definition artefacts-lava/job.yaml | tee tuxsuite-submit.out; then
             status=0
             break
         else
