@@ -27,5 +27,5 @@ gerritPipeline(
     ciScripts: [project: 'ci/tf-a-ci-scripts', refspec: 'master'],
     ciScriptsTestPrefix: 'tf-a-lts-v2.14',
 
-    mbedtlsUrl: 'https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.5.tar.gz',
+    mbedtlsUrl: 'https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.6.tar.gz',
 )
