@@ -50,7 +50,7 @@
 
           default_test_features: "fakes"
 
-       - "memory-usage-analyser":
+      - "memory-usage-analyser":
           crate_name: "memory-usage-analyser"
           crate_project: "shared"
 
