@@ -7,8 +7,14 @@ def gatewayTests(Map args) {
                 "--include ${shellQuote(it)}"
             }.join(' ')
 
+            def excludes = (args.testGroupsExclude ?: []).collect {
+                "--exclude ${shellQuote(it)}"
+            }.join(' ')
+
+            def filters = [includes, excludes].findAll().join(' ')
+
             def output = sh(
-                script: "uv run --no-dev --extra cli -- tf-a-toolbox matrix groups ${includes}",
+                script: "uv run --no-dev --extra cli -- tf-a-toolbox matrix groups ${filters}",
                 returnStdout: true,
             ).trim()
 
@@ -151,6 +157,7 @@ def gatewayPipeline(Map args) {
 
     def testNames = args.getOrDefault('testNames', (params.TESTS ?: '').tokenize())
     def testGroups = args.getOrDefault('testGroups', (params.TEST_GLOBS ?: '').tokenize())
+    def testGroupsExclude = args.getOrDefault('testGroupsExclude', (params.TEST_GLOBS_EXCLUDE ?: '').tokenize())
 
     def builders = []
 
@@ -177,6 +184,7 @@ def gatewayPipeline(Map args) {
                 builders = gatewayTests(
                     testNames: testNames,
                     testGroups: testGroups,
+                    testGroupsExclude: testGroupsExclude,
                 )
             }
         }

@@ -44,6 +44,19 @@
               <li><code>tftf-l1-build-*</code></li>
             </ul>
 
+      - string:
+          name: 'TEST_GLOBS_EXCLUDE'
+          default: ''
+
+          description: >
+            Whitespace-separated list of test group glob patterns to exclude, e.g.:
+
+            <ul>
+              <li><code>tf-a-l1-*-deprecated</code></li>
+              <li><code>tf-a-l1-*-deprecated tf-a-l2-*-experimental</code></li>
+              <li><code>tftf-l1-build-*-debug</code></li>
+            </ul>
+
       - tf-a-clone-parameters:
           projects: '{default_clones}'
 
