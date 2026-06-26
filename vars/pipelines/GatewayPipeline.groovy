@@ -50,6 +50,36 @@ def gatewayBuilders(Map args) {
     }
 }
 
+def recordGatewayCoverage(Map args) {
+    def builderResults = args.builderResults
+
+    checkout gerrit(
+        host: 'review.trustedfirmware.org',
+        project: params.GERRIT_PROJECT,
+        ref: params.GERRIT_REFSPEC,
+    )
+
+    builderResults.each { _, run ->
+        copyArtifacts(
+            projectName: run.fullProjectName,
+            selector: specific(run.number.toString()),
+            filter: 'trace_report/coverage.info',
+            target: "coverage/${run.externalizableId}",
+            optional: true,
+        )
+    }
+
+    recordCoverage(
+        sourceDirectories: [[path: '.']],
+        sourceCodeRetention: 'EVERY_BUILD',
+
+        tools: [[
+            parser: 'LCOV',
+            pattern: 'coverage/**/trace_report/coverage.info'
+        ]],
+    )
+}
+
 def gatewayPipeline(Map args) {
     def gerritParamNames = [
         'GERRIT_EVENT_HASH',
@@ -191,10 +221,16 @@ def gatewayPipeline(Map args) {
     }
 
     stage('Tests') {
-        parallel gatewayBuilders(
+        def builderResults = parallel gatewayBuilders(
             builders: builders,
             builderJob: args.builderJob,
             builderParams: builderParams,
         )
+
+        node('docker-amd64-tf-a-jammy') {
+            recordGatewayCoverage(
+                builderResults: builderResults,
+            )
+        }
     }
 }
