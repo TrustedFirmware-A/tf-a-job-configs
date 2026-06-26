@@ -16,14 +16,22 @@ if [ -f "${WORKSPACE}/lava-raw.log" ]; then
 
                 # Generate Code Coverate Report in case there are traces available
                 if find covtrace-*.log; then
-                    if [ ! -d "${WORKSPACE}/qa-tools" ]; then
-                        git clone ${QA_TOOLS_REPO} -b ${QA_TOOLS_BRANCH:-master} ${WORKSPACE}/qa-tools
-                    fi
-                    cd ${WORKSPACE}/qa-tools/coverage-tool/coverage-reporting
-                    ./branch_coverage.sh \
-                                --config ${WORKSPACE}/config_file.json \
-                                --workspace ${PROJECT_WORKSPACE} \
-                                --outdir ${WORKSPACE}/trace_report
+                    reporting="${WORKSPACE}/tf-a-ci-scripts/contrib/qa-tools/coverage-tool/coverage-reporting"
+
+                    mkdir -p "${WORKSPACE}/trace_report"
+
+                    python3 "${reporting}/intermediate_layer.py" \
+                        --config-json "${WORKSPACE}/config_file.json" \
+                        --local-workspace "${PROJECT_WORKSPACE}"
+
+                    python3 "${reporting}/generate_info_file.py" \
+                        --workspace "${PROJECT_WORKSPACE}" \
+                        --json "${WORKSPACE}/output_file.json" \
+                        --info "${WORKSPACE}/trace_report/coverage.info"
+
+                    "${WORKSPACE}/tf-a-ci-scripts/script/relativize-lcov.sh" \
+                        "${WORKSPACE}/trace_report/coverage.info"
+
                     find ${WORKSPACE}/trace_report
                 fi
 

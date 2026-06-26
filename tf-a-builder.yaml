@@ -281,6 +281,16 @@
                   allow-empty: true
                   follow-symlinks: true
 
+      - postbuildscript:
+          builders:
+            - role: "SLAVE"
+
+              build-on:
+                - "SUCCESS"
+
+              build-steps:
+                - shell: "tf-a-ci-scripts/script/relativize-lcov.sh trace_report/coverage.info"
+
       - archive:
           artifacts: "lava.log, lava-*.log, tux.id, feedback.log, config_file.json, covtrace-*.log, trace_report/**"
           latest-only: false
