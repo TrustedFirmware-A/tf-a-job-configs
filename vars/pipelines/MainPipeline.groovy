@@ -45,26 +45,6 @@ def mainPipeline(Map args) {
                 'Test Category': {
                     build job: 'tf-a-test-category-visualization'
                 },
-
-                'Test Result': {
-                    build job: 'tf-a-test-result-visualization', parameters: [
-                        string(name: 'GERRIT_PROJECT', value: params.GERRIT_PROJECT),
-                        string(name: 'GERRIT_REFSPEC', value: params.GERRIT_REFSPEC),
-
-                        string(name: 'TF_GERRIT_PROJECT', value: params.TF_GERRIT_PROJECT),
-                        string(name: 'TF_GERRIT_BRANCH', value: params.TF_GERRIT_BRANCH),
-                        string(name: 'TF_GERRIT_REFSPEC', value: params.TF_GERRIT_REFSPEC),
-
-                        string(name: 'TFTF_GERRIT_PROJECT', value: params.TFTF_GERRIT_PROJECT),
-                        string(name: 'TFTF_GERRIT_BRANCH', value: params.TFTF_GERRIT_BRANCH),
-                        string(name: 'TFTF_GERRIT_REFSPEC', value: params.TFTF_GERRIT_REFSPEC),
-
-                        string(name: 'CI_GERRIT_PROJECT', value: params.CI_GERRIT_PROJECT),
-                        string(name: 'CI_REFSPEC', value: params.CI_REFSPEC),
-
-                        string(name: 'TARGET_BUILD', value: "${env.JOB_NAME}/${env.BUILD_NUMBER}"),
-                    ]
-                },
             ])
         }
     }
