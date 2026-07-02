@@ -63,11 +63,6 @@ export mbedtls_archive=${WORKSPACE}/nfs/downloads/mbedtls/$(ls -1 mbedtls-*.tar.
 # Path to root of CI repository
 ci_root="${WORKSPACE}/tf-a-ci-scripts"
 
-# Fetch required firmware/binaries and place it at proper location
-export nfs_volume="${WORKSPACE}/nfs"
-project_filer="${nfs_volume}/projectscratch/ssg/trusted-fw"
-mkdir -p ${project_filer}
-
 # fetch Juno rootfs, required by fvp
 linaro_2001_release="/nfs/downloads/linaro/20.01"
 cd ${linaro_2001_release}
