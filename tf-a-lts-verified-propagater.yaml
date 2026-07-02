@@ -88,6 +88,13 @@
               project-compare-type: "PLAIN"
               project-pattern: "{gerrit_project_prefix}TF-A/trusted-firmware-a"
 
+            - branches:
+                - branch-compare-type: "REG_EXP"
+                  branch-pattern: "lts-v.*"
+
+              project-compare-type: "PLAIN"
+              project-pattern: "{gerrit_project_prefix}hafnium/hafnium"
+
           trigger-on:
             - comment-added-event:
                 approval-category: "Verified"
