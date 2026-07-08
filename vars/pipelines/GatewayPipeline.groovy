@@ -1,3 +1,108 @@
+def parseTopicRefspec(String queryOutput) {
+    def jsonLines = queryOutput
+        .readLines()
+        .collect { it.trim() }
+        .findAll { it }
+
+    if (!jsonLines) {
+        throw new IllegalStateException(
+            'No input received from Gerrit query.'
+        )
+    }
+
+    def responses = readJSON(
+        text: "[${jsonLines.join(',')}]",
+        returnPojo: true,
+    )
+
+    // Gerrit appends a statistics record after the change records.
+    def changes = responses.findAll {
+        it.type != 'stats'
+    }
+
+    if (!changes) {
+        return null
+    }
+
+    if (changes.size() == 1) {
+        def refspec = changes.first().currentPatchSet?.ref
+
+        if (!refspec) {
+            throw new IllegalStateException(
+                'The Gerrit change does not contain currentPatchSet.ref.'
+            )
+        }
+
+        return refspec.toString()
+    }
+
+    return findTopicTipRefspec(changes)
+}
+
+def findTopicTipRefspec(List changes) {
+    def project = changes.first().project
+    def topic = changes.first().topic
+
+    def currentPatchSets = changes.collect { change ->
+        def patchSet = change.currentPatchSet
+
+        if (!patchSet) {
+            throw new IllegalStateException(
+                "A change in topic '${topic}' for project '${project}' " +
+                'does not contain a current patch set.'
+            )
+        }
+
+        if (!patchSet.revision) {
+            throw new IllegalStateException(
+                "A current patch set in topic '${topic}' for project '${project}' " +
+                'does not contain a revision.'
+            )
+        }
+
+        patchSet
+    }
+
+    def parentRevisions = currentPatchSets.collect { patchSet ->
+        def parents = patchSet.parents
+
+        if (parents?.size() != 1) {
+            throw new IllegalStateException(
+                "Patch set '${patchSet.revision}' in topic '${topic}' " +
+                "for project '${project}' must have exactly one parent."
+            )
+        }
+
+        parents.first().toString()
+    } as Set
+
+    def tips = currentPatchSets.findAll { patchSet ->
+        !parentRevisions.contains(patchSet.revision.toString())
+    }
+
+    if (tips.size() > 1) {
+        throw new IllegalStateException(
+            "${topic} in ${project} has no unique tip commit."
+        )
+    }
+
+    if (!tips) {
+        throw new IllegalStateException(
+            "No tip commit found for ${topic} in ${project}."
+        )
+    }
+
+    def refspec = tips.first().ref
+
+    if (!refspec) {
+        throw new IllegalStateException(
+            "The tip commit for ${topic} in ${project} has no refspec."
+        )
+    }
+
+    return refspec.toString()
+}
+
 def gatewayTests(Map args) {
     def tests = args.testNames
 
@@ -44,7 +149,9 @@ def gatewayBuilders(Map args) {
 
             build job: args.builderJob,
                 parameters: parameters.collect { key, value ->
-                    string(name: key.toString(), value: value.toString())
+                    value instanceof Boolean
+                        ? booleanParam(name: key.toString(), value: value)
+                        : string(name: key.toString(), value: value.toString())
                 }
         }]
     }
@@ -78,6 +185,57 @@ def recordGatewayCoverage(Map args) {
             pattern: 'coverage/**/trace_report/coverage.info'
         ]],
     )
+}
+
+def resolveTopicRefspec(String project, String defaultRefspec) {
+    if (!params.GERRIT_TOPIC) {
+        return defaultRefspec
+    }
+
+    if (params.GERRIT_PROJECT == project) {
+        return defaultRefspec
+    }
+
+    def query = [
+        'gerrit query',
+        '--format=JSON',
+        '--no-limit',
+        '--current-patch-set',
+        'status:open',
+        shellQuote("project:${project}".toString()),
+        shellQuote("topic:{${params.GERRIT_TOPIC}}".toString()),
+    ].join(' ')
+
+    def host = (params.GERRIT_HOST ?: 'review.trustedfirmware.org').replace('https://', '')
+    def queryOutput
+    withEnv(["GERRIT_QUERY_HOST=${host}", "GERRIT_QUERY_COMMAND=${query}"]) {
+        withCredentials([sshUserPrivateKey(
+            credentialsId: 'TFA_CI_BOT_USER_SSH_KEY',
+            keyFileVariable: 'CI_BOT_KEY',
+            usernameVariable: 'CI_BOT_USERNAME',
+        )]) {
+            queryOutput = sh(
+                script: 'ssh -o UserKnownHostsFile=/dev/null ' +
+                    '-o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa ' +
+                    '-p 29418 -i "$CI_BOT_KEY" ' +
+                    '"$CI_BOT_USERNAME@$GERRIT_QUERY_HOST" "$GERRIT_QUERY_COMMAND"',
+                returnStdout: true,
+            ).trim()
+        }
+    }
+
+    def refspec = parseTopicRefspec(queryOutput)
+
+    if (refspec == null) {
+        echo """
+            No open topic-linked change found for project '${project}'.
+            Using default refspec '${defaultRefspec}'.
+        """.stripIndent().trim()
+
+        return defaultRefspec
+    }
+
+    return refspec
 }
 
 def gatewayPipeline(Map args) {
@@ -178,7 +336,6 @@ def gatewayPipeline(Map args) {
     }
 
     def ciScriptsProject = builderParams.CI_GERRIT_PROJECT
-    def ciScriptsRefspec = builderParams.CI_REFSPEC
 
     def testNames = args.getOrDefault('testNames', (params.TESTS ?: '').tokenize())
     def testGroups = args.getOrDefault('testGroups', (params.TEST_GLOBS ?: '').tokenize())
@@ -196,6 +353,13 @@ def gatewayPipeline(Map args) {
         resourceLimitMemory: '256Mi',
     ) { containerName ->
         stage('Checkout') {
+            def ciScriptsRefspec = args.containsKey('ciScriptsRefspec')
+                ? args.ciScriptsRefspec
+                : resolveTopicRefspec(ciScriptsProject, builderParams.CI_REFSPEC)
+
+            builderParams.CI_REFSPEC = ciScriptsRefspec
+            builderParams.CI_REFSPEC_SELECTED = true
+
             checkout gerrit(
                 host: 'review.trustedfirmware.org',
 

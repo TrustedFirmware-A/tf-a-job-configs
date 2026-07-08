@@ -71,6 +71,14 @@
             Expanded and normalized test configuration descriptor produced by
             the <code>gen_test_desc.py</code> script.
 
+      - bool:
+          name: "CI_REFSPEC_SELECTED"
+          default: false
+
+          description: >
+            Use the CI scripts ref selected by the gateway without looking up
+            the Gerrit topic again for this repository.
+
       - tf-a-gerrit-change-based-patchset-parameters:
           gerrit_project: "{gerrit_project}"
           gerrit_branch: "{gerrit_branch}"

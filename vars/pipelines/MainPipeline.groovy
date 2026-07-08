@@ -1,14 +1,21 @@
 def mainPipeline(Map args) {
-    catchError {
-        stage('Static Checks') {
-            node(args.builderNode) {
+    def ciScriptsRefspec
+
+    stage('Static Checks') {
+        node(args.builderNode) {
+            ciScriptsRefspec = resolveTopicRefspec(
+                params.CI_GERRIT_PROJECT,
+                params.CI_REFSPEC,
+            )
+
+            catchError {
                 def ciScripts
 
                 dir('tf-a-ci-scripts') {
                     checkout gerrit(
                         host: params.GERRIT_HOST ?: 'review.trustedfirmware.org',
                         project: params.CI_GERRIT_PROJECT,
-                        ref: params.CI_REFSPEC,
+                        ref: ciScriptsRefspec,
                     )
 
                     ciScripts = pwd()
@@ -27,6 +34,7 @@ def mainPipeline(Map args) {
         stage('Gateway Tests') {
             gatewayPipeline(
                 builderJob: args.builderJob,
+                ciScriptsRefspec: ciScriptsRefspec,
                 testGroups: args.testGroups,
             )
         }

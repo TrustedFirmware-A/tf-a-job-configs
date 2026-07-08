@@ -1,6 +1,7 @@
 def gerritPipeline(Map args) {
     def ciScriptsConfig = args.ciScripts
     def gerritChange = args.gerrit
+    def ciScriptsRefspec
 
     if (args.commitLint) {
         stage('Commit Lint') {
@@ -17,8 +18,13 @@ def gerritPipeline(Map args) {
     }
 
     stage('Static Checks') {
-        catchError(catchInterruptions: false) {
-            node(args.builderNode) {
+        node(args.builderNode) {
+            ciScriptsRefspec = resolveTopicRefspec(
+                ciScriptsConfig.project,
+                ciScriptsConfig.refspec,
+            )
+
+            catchError(catchInterruptions: false) {
                 def staticChecksConfig = args.staticChecks ?: [:]
                 def staticChecksLog = staticChecksConfig.log ?: 'static-checks.log'
                 def ciScripts
@@ -27,7 +33,7 @@ def gerritPipeline(Map args) {
                     checkout gerrit(
                         host: gerritChange.host,
                         project: ciScriptsConfig.project,
-                        ref: ciScriptsConfig.refspec,
+                        ref: ciScriptsRefspec,
                     )
 
                     ciScripts = pwd()
@@ -56,6 +62,7 @@ def gerritPipeline(Map args) {
 
     gatewayPipeline(
         builderJob: args.builderJob,
+        ciScriptsRefspec: ciScriptsRefspec,
 
         builderParams: [
             TF_GERRIT_PROJECT: args.tfa.project,
@@ -80,7 +87,7 @@ def gerritPipeline(Map args) {
             RMM_REFSPEC: args.rmm.refspec,
 
             CI_GERRIT_PROJECT: args.ciScripts.project,
-            CI_REFSPEC: args.ciScripts.refspec,
+            CI_REFSPEC: ciScriptsRefspec,
         ],
 
         testGroups: testGroups,

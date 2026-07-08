@@ -193,7 +193,9 @@ for repo in ${!repos_map[@]}; do
     fi
 
     # If the Gerrit review that triggered the CI had a topic, it will be used to synchronize the other repositories
-    if [ -n "${GERRIT_TOPIC}" -a "${REPO_HOST}" = "${GERRIT_HOST}" -a "${GERRIT_PROJECT}" != "${REPO_PROJECT}" ]; then
+    if [[ -n "${GERRIT_TOPIC}" && "${REPO_HOST}" == "${GERRIT_HOST}" &&
+          "${GERRIT_PROJECT}" != "${REPO_PROJECT}" &&
+          ( "${REPO_NAME}" != "tf-a-ci-scripts" || "${CI_REFSPEC_SELECTED:-false}" != "true" ) ]]; then
         echo "Got Gerrit Topic: ${GERRIT_TOPIC}"
         QUERY_OUTPUT="$(gerrit_query_with_retry project:${REPO_PROJECT} topic:${GERRIT_TOPIC})"
         REPO_REFSPEC="$(printf '%s\n' "${QUERY_OUTPUT}" | "${JOBS_REPO_NAME}/scripts/parse_refspec.py")"
