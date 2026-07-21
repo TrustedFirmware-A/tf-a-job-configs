@@ -13,6 +13,7 @@ set -eux -o pipefail
 declare -A projects=(
     ["arm-firmware-crates/arm-cci"]="ARM_CCI_GERRIT_PROJECT"
     ["arm-firmware-crates/arm-ffa"]="ARM_FFA_GERRIT_PROJECT"
+    ["arm-firmware-crates/arm-firme"]="ARM_FIRME_GERRIT_PROJECT"
     ["arm-firmware-crates/arm-fvp-base-pac"]="ARM_FVP_BASE_PAC_GERRIT_PROJECT"
     ["arm-firmware-crates/arm-generic-timer"]="ARM_GENERIC_TIMER_GERRIT_PROJECT"
     ["arm-firmware-crates/arm-gic"]="ARM_GIC_GERRIT_PROJECT"
@@ -41,6 +42,7 @@ declare -A projects=(
 declare -A refspecs=(
     ["arm-firmware-crates/arm-cci"]="ARM_CCI_GERRIT_REFSPEC"
     ["arm-firmware-crates/arm-ffa"]="ARM_FFA_GERRIT_REFSPEC"
+    ["arm-firmware-crates/arm-firme"]="ARM_FIRME_GERRIT_REFSPEC"
     ["arm-firmware-crates/arm-fvp-base-pac"]="ARM_FVP_BASE_PAC_GERRIT_REFSPEC"
     ["arm-firmware-crates/arm-generic-timer"]="ARM_GENERIC_TIMER_GERRIT_REFSPEC"
     ["arm-firmware-crates/arm-gic"]="ARM_GIC_GERRIT_REFSPEC"

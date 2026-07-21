@@ -26,6 +26,12 @@
 
           default_test_features: ""
 
+      - "firme":
+          crate_name: "arm-firme"
+          crate_project: "arm-firmware-crates"
+
+          default_test_features: ""
+
       - "firmware-development-guide":
           crate_name: "firmware-development-guide"
           crate_project: "rust-spmc"
