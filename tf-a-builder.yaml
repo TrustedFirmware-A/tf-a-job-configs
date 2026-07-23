@@ -40,7 +40,6 @@
 
     tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
     tf_a_ci_scripts_branch: "master"
-    tf_a_ci_scripts_mbed_tls_version: "3.6.6"
 
     properties:
       - tf-a-ci-scripts:
@@ -107,7 +106,6 @@
 
           tf_a_ci_scripts_project: "{tf_a_ci_scripts_project}"
           tf_a_ci_scripts_branch: "{tf_a_ci_scripts_branch}"
-          tf_a_ci_scripts_mbed_tls_version: "{tf_a_ci_scripts_mbed_tls_version}"
 
           lava_priority: "medium"
 
@@ -567,13 +565,6 @@
               <li><code>refs/changes/97/45197/1</code></li>
               <li><code>77b067a4</code></li>
             </ul>
-
-      - string:
-          name: "MBEDTLS_URL"
-          default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-{tf_a_ci_scripts_mbed_tls_version}.tar.gz"
-
-          description: >
-            URL of the Mbed TLS tarball to use when building TF-A.
 
       - string:
           name: "DOCKER_REGISTRY"

@@ -158,8 +158,6 @@ def gatewayPipeline(Map args) {
         'TF_M_TESTS_GERRIT_PROJECT',
         'TF_M_TESTS_GERRIT_REFSPEC',
 
-        'MBEDTLS_URL',
-
         'QA_TOOLS_REPO',
         'QA_TOOLS_BRANCH',
 

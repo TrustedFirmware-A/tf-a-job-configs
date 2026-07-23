@@ -28,8 +28,6 @@ gatewayPipeline(
 
         CI_GERRIT_PROJECT: 'ci/tf-a-ci-scripts',
         CI_REFSPEC: 'master',
-
-        MBEDTLS_URL: 'https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.6.tar.gz',
     ],
 
     testGroups: ['rf-a-l2-functional-*'],

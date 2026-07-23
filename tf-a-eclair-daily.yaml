@@ -73,13 +73,6 @@
           description: |
             Git revision to build (also set by Gerrit ref-updated trigger)
 
-      - string:
-          name: "MBEDTLS_URL"
-          default: "https://github.com/Mbed-TLS/mbedtls/archive/mbedtls-3.6.6.tar.gz"
-
-          description: |
-            URL of mbedTLS library to use in build (only for some configurations)
-
     triggers:
       - timed: "0 2 * * *"
         #    - gerrit:

@@ -84,8 +84,6 @@ def gerritPipeline(Map args) {
 
             CI_GERRIT_PROJECT: args.ciScripts.project,
             CI_REFSPEC: args.ciScripts.refspec,
-
-            MBEDTLS_URL: args.mbedtlsUrl,
         ],
 
         testGroups: testGroups,

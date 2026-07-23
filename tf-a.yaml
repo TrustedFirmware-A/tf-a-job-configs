@@ -42,7 +42,6 @@
 
           tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
           tf_a_ci_scripts_branch: "master"
-          tf_a_ci_scripts_mbed_tls_version: "3.6.6"
           tf_a_ci_scripts_test_project: "tf-a"
 
           daily_schedule: "0 22 * * *"
@@ -84,7 +83,6 @@
 
           tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
           tf_a_ci_scripts_branch: "master"
-          tf_a_ci_scripts_mbed_tls_version: "3.6.3"
           tf_a_ci_scripts_test_project: "tf-a-lts-v2.8"
 
           daily_schedule: "0 02 * * *"
@@ -126,7 +124,6 @@
 
           tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
           tf_a_ci_scripts_branch: "master"
-          tf_a_ci_scripts_mbed_tls_version: "3.6.4"
           tf_a_ci_scripts_test_project: "tf-a-lts-v2.10"
 
           daily_schedule: "0 01 * * *"
@@ -168,7 +165,6 @@
 
           tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
           tf_a_ci_scripts_branch: "master"
-          tf_a_ci_scripts_mbed_tls_version: "3.6.3"
           tf_a_ci_scripts_test_project: "tf-a-lts-v2.12"
 
           daily_schedule: "0 00 * * *"
@@ -210,7 +206,6 @@
 
           tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
           tf_a_ci_scripts_branch: "master"
-          tf_a_ci_scripts_mbed_tls_version: "3.6.5"
           tf_a_ci_scripts_test_project: "tf-a-lts-v2.14"
 
           daily_schedule: "0 23 * * *"

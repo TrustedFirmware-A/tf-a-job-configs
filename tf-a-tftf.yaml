@@ -42,7 +42,6 @@
 
           tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
           tf_a_ci_scripts_branch: "master"
-          tf_a_ci_scripts_mbed_tls_version: "3.6.6"
           tf_a_ci_scripts_test_project: "tftf"
 
       - "tf-a-lts2.8-tftf":
@@ -82,7 +81,6 @@
 
           tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
           tf_a_ci_scripts_branch: "master"
-          tf_a_ci_scripts_mbed_tls_version: "3.6.3"
           tf_a_ci_scripts_test_project: "tftf-lts-v2.8"
 
       - "tf-a-lts2.10-tftf":
@@ -122,7 +120,6 @@
 
           tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
           tf_a_ci_scripts_branch: "master"
-          tf_a_ci_scripts_mbed_tls_version: "3.6.4"
           tf_a_ci_scripts_test_project: "tftf-lts-v2.10"
 
       - "tf-a-lts2.12-tftf":
@@ -162,7 +159,6 @@
 
           tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
           tf_a_ci_scripts_branch: "master"
-          tf_a_ci_scripts_mbed_tls_version: "3.6.3"
           tf_a_ci_scripts_test_project: "tftf-lts-v2.12"
 
       - "tf-a-lts2.14-tftf":
@@ -202,7 +198,6 @@
 
           tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
           tf_a_ci_scripts_branch: "master"
-          tf_a_ci_scripts_mbed_tls_version: "3.6.5"
           tf_a_ci_scripts_test_project: "tftf-lts-v2.14"
 
     jobs:
