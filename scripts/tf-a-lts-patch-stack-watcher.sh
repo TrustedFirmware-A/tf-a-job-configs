@@ -5,7 +5,7 @@ echo "########################################################################"
 echo "    Gerrit Environment"
 env |grep '^GERRIT'
 echo "########################################################################"
-SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -p 29418 -i ${CI_BOT_KEY}"
+SSH_PARAMS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=ERROR -o PubkeyAcceptedKeyTypes=+ssh-rsa -p 29418 -i ${CI_BOT_KEY}"
 GERRIT_URL="review.trustedfirmware.org"
 GERRIT_CHANGE_URL_BASE=${GERRIT_CHANGE_URL%/*}
 GERRIT_QUERY_PARAMS="--dependencies --current-patch-set --format=JSON change:"
@@ -28,9 +28,14 @@ function get_top_patch() {
     while [ -n "${neededBy}" ];
     do
         change_no=$(echo ${neededBy} | jq -r '.neededBy[0].number')
-        revision=$(echo ${neededBy} | jq -r '.neededBy[0].revision')
+        # Gerrit reports one neededBy entry per patch set of the dependent
+        # change, oldest first, so neededBy[].revision goes stale as soon as
+        # that change is re-uploaded. Ask the change itself for its current
+        # revision, otherwise --submit rejects it as "not current revision".
+        patch_info=$(ssh ${QUERY_DEPENDENCY_CMD}${change_no} 2>/dev/null | jq -n 'input')
+        revision=$(echo ${patch_info} | jq -r '.currentPatchSet.revision')
         ret=${change_no},${revision}
-        neededBy=$(ssh ${QUERY_DEPENDENCY_CMD}${change_no} 2>/dev/null | jq -c 'select(.neededBy)')
+        neededBy=$(echo ${patch_info} | jq -c 'select(.neededBy)')
     done
 
     echo ${ret}
@@ -89,9 +94,16 @@ function submit_patch_stack() {
         # Check the patch stack agein to ensure it hasn't been merged yet
         if [ $(ssh ${QUERY_DEPENDENCY_CMD}${top_patch_no} | jq -r 'select(.status)|.status') != "MERGED" ];then
             echo "The whole patch stack meets the submit requirements, merge it"
-            ssh ${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit review ${top_patch_rev} --message "\"${SUBMIT_COMMENT}\"" --submit 2>err.log || \
-            (ssh ${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit review ${top_patch_rev} \
-             --label Verified=-1 --message "\"$(cat err.log)\""; exit 1)
+            # Report a failed submit without touching Verified. Submit can
+            # fail for reasons that say nothing about the patches themselves,
+            # and clearing the Verified+1 would force the whole stack to be
+            # re-verified before it could be merged again.
+            if ! ssh ${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit review ${top_patch_rev} \
+                 --message "\"${SUBMIT_COMMENT}\"" --submit 2>err.log; then
+                ssh ${SSH_PARAMS} ${CI_BOT_USERNAME}@${GERRIT_URL} gerrit review ${top_patch_rev} \
+                 --message "\"Failed to submit the patch stack: $(cat err.log)\""
+                exit 1
+            fi
         else
             echo "The whole patch stack has been merged!"
         fi
