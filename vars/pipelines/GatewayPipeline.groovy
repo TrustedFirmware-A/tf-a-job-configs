@@ -149,9 +149,6 @@ def gatewayPipeline(Map args) {
         'TFTF_GERRIT_PROJECT',
         'TFTF_GERRIT_REFSPEC',
 
-        'TFUT_GERRIT_PROJECT',
-        'TFUT_GERRIT_REFSPEC',
-
         'TF_M_EXTRAS_GERRIT_PROJECT',
         'TF_M_EXTRAS_GERRIT_REFSPEC',
 

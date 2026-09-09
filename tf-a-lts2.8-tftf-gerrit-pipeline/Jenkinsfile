@@ -13,7 +13,6 @@ gerritPipeline(
     tfa: [project: 'TF-A/trusted-firmware-a', refspec: 'lts-v2.8'],
     rfa: [project: 'RF-A/rusted-firmware-a', refspec: 'main'],
 
-    tfut: [project: 'TF-A/tf-a-unit-tests', refspec: 'main'],
     tftf: [project: params.GERRIT_PROJECT, refspec: params.GERRIT_REFSPEC],
 
     tfmTests: [project: 'TF-M/tf-m-tests', refspec: 'tfa_ci_dep_revision'],

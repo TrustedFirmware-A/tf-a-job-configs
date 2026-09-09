@@ -19,7 +19,6 @@ gerritPipeline(
     tfa: [project: 'TF-A/trusted-firmware-a', refspec: 'master'],
     rfa: [project: params.GERRIT_PROJECT, refspec: params.GERRIT_REFSPEC],
 
-    tfut: [project: 'TF-A/tf-a-unit-tests', refspec: 'main'],
     tftf: [project: 'TF-A/tf-a-tests', refspec: 'master'],
 
     tfmTests: [project: 'TF-M/tf-m-tests', refspec: 'tfa_ci_dep_revision'],

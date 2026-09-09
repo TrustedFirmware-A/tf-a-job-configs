@@ -8,9 +8,6 @@ gatewayPipeline(
         RF_GERRIT_PROJECT: 'RF-A/rusted-firmware-a',
         RFA_REFSPEC: 'main',
 
-        TFUT_GERRIT_PROJECT: 'TF-A/tf-a-unit-tests',
-        TFUT_GERRIT_REFSPEC: 'main',
-
         TFTF_GERRIT_PROJECT: params.GERRIT_PROJECT,
         TFTF_GERRIT_REFSPEC: params.GERRIT_REFSPEC,
 

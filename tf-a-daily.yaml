@@ -47,9 +47,6 @@
           tf_rmm_project: "{tf_rmm_project}"
           tf_rmm_branch: "{tf_rmm_branch}"
 
-          tfut_project: "{tfut_project}"
-          tfut_branch: "{tfut_branch}"
-
           tf_a_ci_scripts_project: "{tf_a_ci_scripts_project}"
           tf_a_ci_scripts_branch: "{tf_a_ci_scripts_branch}"
 

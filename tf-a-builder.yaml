@@ -35,9 +35,6 @@
     tf_rmm_project: "TF-RMM/tf-rmm"
     tf_rmm_branch: "main"
 
-    tfut_project: "TF-A/tf-a-unit-tests"
-    tfut_branch: "main"
-
     tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
     tf_a_ci_scripts_branch: "master"
 
@@ -100,9 +97,6 @@
 
           tf_rmm_project: "{tf_rmm_project}"
           tf_rmm_branch: "{tf_rmm_branch}"
-
-          tfut_project: "{tfut_project}"
-          tfut_branch: "{tfut_branch}"
 
           tf_a_ci_scripts_project: "{tf_a_ci_scripts_project}"
           tf_a_ci_scripts_branch: "{tf_a_ci_scripts_branch}"
@@ -234,47 +228,12 @@
       - conditional-publisher:
           - condition-kind: "file-exists"
             on-evaluation-failure: "dont-run"
-            condition-filename: "artefacts/release/tfut_artefacts.txt"
-            condition-basedir: "workspace"
-
-            action:
-              - postbuildscript:
-                  builders:
-                    - role: "SLAVE"
-
-                      build-on:
-                        - "SUCCESS"
-
-                      build-steps:
-                        - shell: |
-                            #!/bin/bash -e
-                            echo "Found unit test executables, running unit tests now"
-                            export workspace="$(pwd)"
-                            export tfut_root="$(pwd)/tf-a-unit-tests"
-                            bash -x "$workspace/tf-a-ci-scripts/script/run_unit_tests.sh"
-
-      - conditional-publisher:
-          - condition-kind: "file-exists"
-            on-evaluation-failure: "dont-run"
             condition-filename: "lava-raw-debug.log"
             condition-basedir: "workspace"
 
             action:
               - archive:
                   artifacts: "lava-raw-debug.log"
-                  latest-only: false
-                  allow-empty: true
-                  follow-symlinks: true
-
-      - conditional-publisher:
-          - condition-kind: "file-exists"
-            on-evaluation-failure: "dont-run"
-            condition-filename: "unit_tests/run/run.sh"
-            condition-basedir: "workspace"
-
-            action:
-              - archive:
-                  artifacts: "unit_tests/**"
                   latest-only: false
                   allow-empty: true
                   follow-symlinks: true
@@ -486,32 +445,6 @@
               <li><code>refs/tags/tf-rmm-v0.8.0</code> (or <code>tf-rmm-v0.8.0</code>)</li>
               <li><code>refs/changes/52/45552/1</code></li>
               <li><code>bbb2c4fc</code></li>
-            </ul>
-
-      - string:
-          name: "TFUT_GERRIT_PROJECT"
-          default: "{tfut_project}"
-
-          description: >
-            Gerrit project of the TFUT revision to build, e.g.:
-
-            <ul>
-              <li><code>TF-A/tf-a-unit-tests</code></li>
-              <li><code>next/TF-A/tf-a-unit-tests</code></li>
-            </ul>
-
-      - string:
-          name: "TFUT_GERRIT_REFSPEC"
-          default: "{tfut_branch}"
-
-          description: >
-            Git revision of TFUT to build, e.g.:
-
-            <ul>
-              <li><code>refs/heads/main</code> (or <code>main</code>)</li>
-              <li><code>refs/tags/tfaut-v0.1</code> (or <code>tfaut-v0.1</code>)</li>
-              <li><code>refs/changes/39/41539/5</code></li>
-              <li><code>d864d80b</code></li>
             </ul>
 
       - string:

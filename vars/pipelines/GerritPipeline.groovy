@@ -64,9 +64,6 @@ def gerritPipeline(Map args) {
             RF_GERRIT_PROJECT: args.rfa.project,
             RFA_REFSPEC: args.rfa.refspec,
 
-            TFUT_GERRIT_PROJECT: args.tfut.project,
-            TFUT_GERRIT_REFSPEC: args.tfut.refspec,
-
             TFTF_GERRIT_PROJECT: args.tftf.project,
             TFTF_GERRIT_REFSPEC: args.tftf.refspec,
 

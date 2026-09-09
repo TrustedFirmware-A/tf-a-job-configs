@@ -37,9 +37,6 @@
           tf_rmm_project: "TF-RMM/tf-rmm"
           tf_rmm_branch: "main"
 
-          tfut_project: "TF-A/tf-a-unit-tests"
-          tfut_branch: "main"
-
           tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
           tf_a_ci_scripts_branch: "master"
           tf_a_ci_scripts_test_project: "tftf"
@@ -75,9 +72,6 @@
 
           tf_rmm_project: "TF-RMM/tf-rmm"
           tf_rmm_branch: "main"
-
-          tfut_project: "TF-A/tf-a-unit-tests"
-          tfut_branch: "main"
 
           tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
           tf_a_ci_scripts_branch: "master"
@@ -115,9 +109,6 @@
           tf_rmm_project: "TF-RMM/tf-rmm"
           tf_rmm_branch: "main"
 
-          tfut_project: "TF-A/tf-a-unit-tests"
-          tfut_branch: "main"
-
           tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
           tf_a_ci_scripts_branch: "master"
           tf_a_ci_scripts_test_project: "tftf-lts-v2.10"
@@ -154,9 +145,6 @@
           tf_rmm_project: "TF-RMM/tf-rmm"
           tf_rmm_branch: "main"
 
-          tfut_project: "TF-A/tf-a-unit-tests"
-          tfut_branch: "main"
-
           tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
           tf_a_ci_scripts_branch: "master"
           tf_a_ci_scripts_test_project: "tftf-lts-v2.12"
@@ -192,9 +180,6 @@
 
           tf_rmm_project: "TF-RMM/tf-rmm"
           tf_rmm_branch: "tf-rmm-v0.8.0"
-
-          tfut_project: "TF-A/tf-a-unit-tests"
-          tfut_branch: "main"
 
           tf_a_ci_scripts_project: "ci/tf-a-ci-scripts"
           tf_a_ci_scripts_branch: "master"
