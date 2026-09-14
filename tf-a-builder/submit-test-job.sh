@@ -118,30 +118,49 @@ function submit_via_lava() {
     LAVAJOB_ID=$(resilient_cmd lavacli jobs submit artefacts-lava/job.yaml)
 
     # check that rest query at least get non-empty value
-    if [ -n "${LAVAJOB_ID}" ]; then
-        echo "LAVA URL: https://${LAVA_SERVER}/scheduler/job/${LAVAJOB_ID} LAVA JOB ID: ${LAVAJOB_ID}"
-
-        # if timeout on waiting for LAVA to complete, create an 'artificial' lava.log indicating
-        # job ID and timeout seconds
-        if ! wait_lava_job ${LAVAJOB_ID}; then
-            echo "Stopped monitoring LAVA JOB ${LAVAJOB_ID}, likely stuck or timeout too short?" | tee "${WORKSPACE}/lava.log"
-            exit 1
-        else
-            # Retrieve the test job plain log which is a yaml format file from LAVA
-            resilient_cmd sh -c "lavacli jobs logs --raw ${LAVAJOB_ID} > ${WORKSPACE}/lava-raw.log"
-
-            # Fetch and store LAVA job result (1 failure, 0 success)
-            resilient_cmd lavacli results ${LAVAJOB_ID} | tee "${WORKSPACE}/lava.results"
-            if grep -q '\[fail\]' "${WORKSPACE}/lava.results"; then
-                return 1
-            else
-                return 0
-            fi
-        fi
-    else
+    if [ -z "${LAVAJOB_ID}" ]; then
         echo "LAVA Job ID could not be obtained"
-        exit 1
+        return 2
     fi
+
+    echo "LAVA URL: https://${LAVA_SERVER}/scheduler/job/${LAVAJOB_ID} LAVA JOB ID: ${LAVAJOB_ID}"
+
+    # if timeout on waiting for LAVA to complete, create an 'artificial' lava.log indicating
+    # job ID and timeout seconds
+    if ! wait_lava_job ${LAVAJOB_ID}; then
+        echo "Stopped monitoring LAVA JOB ${LAVAJOB_ID}, likely stuck or timeout too short?" | tee "${WORKSPACE}/lava.log"
+        return 2
+    fi
+
+    # Retrieve the test job plain log which is a yaml format file from LAVA
+    resilient_cmd sh -c "lavacli jobs logs --raw ${LAVAJOB_ID} > ${WORKSPACE}/lava-raw.log"
+
+    # LAVA marks a job Incomplete when it did not finish, which is worth
+    # retrying. A job that finished is judged on its test results.
+    health=$(awk -F':[[:space:]]*' '/^Health/ {print $2}' \
+        "${WORKSPACE}/lava-progress.show")
+    case "${health}" in
+        Complete)
+            echo "LAVA job ${LAVAJOB_ID} is Complete, checking test results"
+            ;;
+        Canceled)
+            echo "LAVA job ${LAVAJOB_ID} was Canceled"
+            return 2
+            ;;
+        *)
+            echo "LAVA job ${LAVAJOB_ID} did not complete, health is '${health}'"
+            return 1
+            ;;
+    esac
+
+    # Fetch and store LAVA job result (1 failure, 0 success).
+    # lava.read-feedback only reports on draining the other namespaces, and
+    # finalisation runs it in a block that survives errors, so a failure there
+    # says nothing about the firmware.
+    resilient_cmd lavacli results ${LAVAJOB_ID} | tee "${WORKSPACE}/lava.results"
+    awk '/^\* lava\.read-feedback / { next } /\[fail\]/ { rc = 1 } END { exit rc }' \
+        "${WORKSPACE}/lava.results"
+    return $?
 }
 
 # FIXME: Juno and FVP jobs may fail due to non-related users changes,
@@ -155,13 +174,15 @@ function submit_via_lava() {
 # but we want to start from clean page with TuxSuite, so don't
 # retry for it for now, and see how it goes.
 
+# submit_via_lava returns 0 on success, 1 for something worth retrying, and
+# 2 when retrying cannot help.
 status=1
 for i in $(seq 1 ${LAVA_RETRIES:-3}); do
     echo "# LAVA submission iteration #$i"
-    if submit_via_lava; then
-        status=0
-        break
-    fi
+    submit_via_lava && status=0 || status=$?
+    case ${status} in
+        0|2) break ;;
+    esac
 done
 
 exit ${status}
