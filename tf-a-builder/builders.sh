@@ -58,13 +58,6 @@ fi
 # Path to root of CI repository
 ci_root="${WORKSPACE}/tf-a-ci-scripts"
 
-# fetch Juno rootfs, required by fvp
-linaro_2001_release="/nfs/downloads/linaro/20.01"
-cd ${linaro_2001_release}
-resilient_cmd curl --connect-timeout 5 --retry 5 --retry-delay 1 -fsSLo \
-     lt-vexpress64-openembedded_minimal-armv8-gcc-5.2_20170127-761.img.gz \
-     https://downloads.trustedfirmware.org/infra-assets/linaro_artifacts/releases/openembedded/juno-lsk/latest/lt-vexpress64-openembedded_minimal-armv8-gcc-5.2_20170127-761.img.gz
-
 # export trace code coverage variable
 export coverage_trace_plugin="${DOWNLOAD_SERVER_URL}/coverage-plugin/qa-tools/coverage-tool/coverage-plugin/coverage_trace.so"
 
@@ -116,9 +109,6 @@ export test_run="${test_run:-1}"
 
 # By default, do not execute any run
 export skip_runs="${skip_runs:-1}"
-
-# set linaro platform release folder
-export linaro_2001_release="file://${linaro_2001_release}"
 
 export docker_registry="${DOCKER_REGISTRY}"
 
