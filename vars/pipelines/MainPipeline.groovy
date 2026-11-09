@@ -22,7 +22,16 @@ def mainPipeline(Map args) {
                 }
 
                 dir('source') {
-                    checkout gerrit
+                    checkout gerrit(
+                        host: params.GERRIT_HOST ?: 'review.trustedfirmware.org',
+                        project: params.GERRIT_PROJECT,
+                        ref: params.GERRIT_REFSPEC,
+                        branch: params.GERRIT_BRANCH,
+
+                        extensions: [
+                            submodule(recursiveSubmodules: true),
+                        ],
+                    )
 
                     staticChecks ciScripts: ciScripts, log: 'static-checks.log'
                 }

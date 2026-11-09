@@ -45,6 +45,10 @@ def gerritPipeline(Map args) {
                         project: gerritChange.project,
                         ref: gerritChange.refspec,
                         branch: gerritChange.branch,
+
+                        extensions: [
+                            submodule(recursiveSubmodules: true),
+                        ],
                     )
 
                     staticChecks(staticChecksConfig + [
