@@ -41,7 +41,7 @@
 
       - credentials-binding:
           - text:
-              credential-id: "Trusted_Firmware_Tests_ReadTheDocs_Token"
+              credential-id: "Trusted_Firmware_ReadTheDocs_Token"
               variable: "RTD_TOKEN"
 
     parameters:

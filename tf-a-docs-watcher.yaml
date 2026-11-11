@@ -42,7 +42,7 @@
 
       - credentials-binding:
           - text:
-              credential-id: "TF-A-RTD-API-TOKEN"
+              credential-id: "Trusted_Firmware_ReadTheDocs_Token"
               variable: "RTD_TOKEN"
 
     parameters:

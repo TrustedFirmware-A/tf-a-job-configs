@@ -48,14 +48,6 @@
           description: |
             Release git tag, e.g. 'lts-v2.8.10'
 
-      - bool:
-          name: "SANDBOX_RUN"
-          default: true
-
-          description: |
-            Run sandbox simulation of a release. Uncheck this only after
-            running simulation and checking that everything is correct!
-
     wrappers:
       - "timestamps"
 
@@ -65,24 +57,8 @@
 
       - credentials-binding:
           - text:
-              credential-id: "TF-A-RTD-API-TOKEN"
-              variable: "RTD_API_TOKEN"
-
-          - text:
               credential-id: "Trusted_Firmware_ReadTheDocs_Token"
-              variable: "RTD_WEBHOOK_SECRET"
-
-          - text:
-              credential-id: "TFA_SANDBOX_RTD_WEBHOOK_SECRET"
-              variable: "TFA_SANDBOX_RTD_WEBHOOK_SECRET"
-
-          - text:
-              credential-id: "PFALCON_RTD_API_TOKEN"
-              variable: "PFALCON_RTD_API_TOKEN"
-
-          - text:
-              credential-id: "PFALCON_RTD_WEBHOOK_SECRET"
-              variable: "PFALCON_RTD_WEBHOOK_SECRET"
+              variable: "RTD_API_TOKEN"
 
     builders:
       - shell: !include-raw-verbatim: "scripts/tf-a-lts-docs-watcher.sh"
