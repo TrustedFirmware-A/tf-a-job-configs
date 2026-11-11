@@ -77,3 +77,6 @@
           wipe-workspace: false
           honor-refspec: true
           allow-empty: true
+
+          submodule:
+            recursive: true
