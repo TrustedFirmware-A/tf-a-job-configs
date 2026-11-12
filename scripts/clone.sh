@@ -8,6 +8,9 @@
 
 set -ex -o pipefail
 
+git config --global --add url."https://review.trustedfirmware.org/mirror/dtc.git".insteadOf "https://git.kernel.org/pub/scm/utils/dtc/dtc"
+git config --global --add url."https://review.trustedfirmware.org/mirror/dtc.git".insteadOf "https://git.kernel.org/pub/scm/utils/dtc/dtc.git"
+
 git config --global --add url."https://review.trustedfirmware.org/mirror/mbed-tls.git".insteadOf "https://github.com/Mbed-TLS/mbedtls"
 git config --global --add url."https://review.trustedfirmware.org/mirror/mbed-tls.git".insteadOf "https://github.com/Mbed-TLS/mbedtls.git"
 
@@ -16,6 +19,12 @@ git config --global --add url."https://review.trustedfirmware.org/mirror/mbed-tl
 
 git config --global --add url."https://review.trustedfirmware.org/mirror/mbed-tls-framework.git".insteadOf "https://github.com/Mbed-TLS/mbedtls-framework"
 git config --global --add url."https://review.trustedfirmware.org/mirror/mbed-tls-framework.git".insteadOf "https://github.com/Mbed-TLS/mbedtls-framework.git"
+
+git config --global --add url."https://review.trustedfirmware.org/mirror/QCBOR.git".insteadOf "https://github.com/laurencelundblade/QCBOR"
+git config --global --add url."https://review.trustedfirmware.org/mirror/QCBOR.git".insteadOf "https://github.com/laurencelundblade/QCBOR.git"
+
+git config --global --add url."https://review.trustedfirmware.org/mirror/zlib.git".insteadOf "https://github.com/madler/zlib"
+git config --global --add url."https://review.trustedfirmware.org/mirror/zlib.git".insteadOf "https://github.com/madler/zlib.git"
 
 : "${CLONE_REPOS:?}"
 
