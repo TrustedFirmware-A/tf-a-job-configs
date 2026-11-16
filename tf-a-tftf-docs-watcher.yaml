@@ -4,7 +4,7 @@
     project-type: "freestyle"
     concurrent: false
     description: "Triggers whenever a code change is merged into the master branch of the TF-A-Tests repository. Executes a webhook to trigger the ReadTheDocs service to build a fresh copy of the documentation for one or more branches."
-    disabled: false
+    disabled: true
 
     builders:
       - shell: |-
