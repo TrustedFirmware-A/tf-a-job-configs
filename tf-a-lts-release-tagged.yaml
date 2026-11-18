@@ -58,13 +58,6 @@
           steps:
             - trigger-builds:
                 - project:
-                    - "tf-a-lts-release-docs"
-
-                  block: true
-                  current-parameters: true
-                  property-file: "subjob.param"
-
-                - project:
                     - "tf-a-lts-release-mail"
 
                   block: true
