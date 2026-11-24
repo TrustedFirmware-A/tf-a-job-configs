@@ -20,6 +20,9 @@ git config --global --add url."https://review.trustedfirmware.org/mirror/mbed-tl
 git config --global --add url."https://review.trustedfirmware.org/mirror/mbed-tls-framework.git".insteadOf "https://github.com/Mbed-TLS/mbedtls-framework"
 git config --global --add url."https://review.trustedfirmware.org/mirror/mbed-tls-framework.git".insteadOf "https://github.com/Mbed-TLS/mbedtls-framework.git"
 
+git config --global --add url."https://review.trustedfirmware.org/mirror/mcuboot.git".insteadOf "https://github.com/mcu-tools/mcuboot"
+git config --global --add url."https://review.trustedfirmware.org/mirror/mcuboot.git".insteadOf "https://github.com/mcu-tools/mcuboot.git"
+
 git config --global --add url."https://review.trustedfirmware.org/mirror/QCBOR.git".insteadOf "https://github.com/laurencelundblade/QCBOR"
 git config --global --add url."https://review.trustedfirmware.org/mirror/QCBOR.git".insteadOf "https://github.com/laurencelundblade/QCBOR.git"
 
