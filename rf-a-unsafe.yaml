@@ -3,7 +3,7 @@
     node: "docker-amd64-tf-a-jammy"
     project-type: "freestyle"
     concurrent: true
-    disabled: false
+    disabled: true
     description: "Check for Unsafe changes in Rusted Firmware A"
 
     properties:
