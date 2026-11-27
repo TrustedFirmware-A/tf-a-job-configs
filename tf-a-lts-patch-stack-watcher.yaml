@@ -4,7 +4,7 @@
     project-type: "freestyle"
     concurrent: false
     description: "This job will trigger Allow-CI job whenever a new patch is created. It also monitors all patches, if submit requirement is met, it will merge the patch"
-    disabled: false
+    disabled: true
 
     parameters:
       - tf-a-gerrit-comment-added-parameters:
